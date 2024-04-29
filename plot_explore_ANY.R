@@ -307,7 +307,7 @@ dev.off()
 
 
 
-pdf(file = "My Plot.pdf",   # The directory you want to save the file in
+pdf(file = "output/My Plot.pdf",   # The directory you want to save the file in
     width = 12, # The width of the plot in inches
     height = 7) # The height of the plot in inches
 
