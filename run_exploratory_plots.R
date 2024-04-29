@@ -22,6 +22,7 @@ loops <- TRUE
 
 
 if (loops == TRUE) {
+  max_time <- 5
   treatment_type = "F"  #F this means quick treatment
   N_wl <- c(0, 100, 250)
   treat.prop.vecA <- seq(0, 0.9, by = 0.2)      #full from 0-1
@@ -36,6 +37,7 @@ if (loops == TRUE) {
   dose.adj.vec <- 1#c(1, 0.9, 0.7, 0.4, 0.2)
   emergence.adj.vec <- 1
 } else {
+  max_time <- 5000
   treatment_type = "F" 
   N_wl <- 250
   treat.prop.vec <- 0.99
@@ -122,7 +124,7 @@ for (birth.adj in birth.adj.vec) {
                 
                 
                 ## Times ----
-                times <- seq(0, 5000, 1)
+                times <- seq(0, max_time, 1)
                 
                 ## RUN MODEL ----
                 #out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk",
