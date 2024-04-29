@@ -30,7 +30,8 @@ if (loops == TRUE) {
   K.vec <- c(10000, 6000, 2000, 1000, 500)
   fit.adj.vec <- c(0.95)
   birth.adj.vec <- c(2)
-  prop.insecticide.vec <- c(0.0,0.025, 0.05, 0.10,0.15, 0.2, 0.3, 0.5, 0.8,1)
+  # do not set prop.insecticide to 1 as generates infinite mortality and an error
+  prop.insecticide.vec <- c(0.0,0.025, 0.05, 0.10,0.15, 0.2, 0.3, 0.5, 0.8, 0.99)
   prop.prophylaxis <- 0.0
   dose.adj.vec <- 1#c(1, 0.9, 0.7, 0.4, 0.2)
   emergence.adj.vec <- 1
