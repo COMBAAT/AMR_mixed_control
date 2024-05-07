@@ -13,7 +13,7 @@ library(dplyr)
 
 source("funcs/plot_functions.R")
 
-treatment_option <- "P"
+treatment_option <- "F"
 
 if (treatment_option == "F"){
 folder_name = "output/plots_fast_finer_insecticide/"
