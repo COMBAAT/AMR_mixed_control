@@ -68,7 +68,7 @@ plot_type1_y_versus_treat_prop_facet_W_st <- function(df, y_var) {
     geom_line(size = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape=my_label("K"), colour=my_label("W_st"))
+    labs(shape=my_label("K"), colour=my_label("W_st")) +
     facet_wrap(~W_st) +
     my_theme()
   p
@@ -92,6 +92,7 @@ plot_type2_y_versus_treat_prop_facet_prop_insecticide <- function(df, this_K, y_
     facet_wrap(~prop.insecticide) +
     xlab(this_xlab) +
     ylab(this_ylab) +
+    labs(shape=my_label("W_st"), colour=my_label("prop.insecticide")) +
     my_theme()
   p
 }
@@ -123,6 +124,7 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight <- function(
     facet_wrap(~prop.insecticide) +
     xlab(this_xlab) +
     ylab(this_ylab) +
+    labs(shape=my_label("W_st"), colour=my_label("prop.insecticide")) +
     my_theme()
   p
 }
@@ -144,13 +146,14 @@ plot_type4_y_versus_treat_prop_facet_W_st <- function(df, y_var, this_K) {
     facet_wrap(~W_st) +
     xlab(this_xlab) +
     ylab(this_ylab) +
+    labs(shape=my_label("K"), colour=my_label("prop.insecticide")) +
     my_theme()
   p
 }
 
 plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
   df$y <- df[, y_var]
-  this_xlab <- my_label("treat_prop")
+  this_xlab <- my_label("prop.insecticide")
   this_ylab <- my_label(y_var)
 
   p <- df %>%
@@ -160,11 +163,12 @@ plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
       W_st %in% c(0, 100, 250),
       K == this_K
     ) %>%
-    ggplot(aes(prop.insecticide, y, colour = treat_prop)) +
+    ggplot(aes(prop.insecticide, y, shape = K, colour = treat_prop)) +
     geom_point(size = my_pointsize()) +
     geom_line(size = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
+    labs(colour=my_label("treat_prop")) +
     facet_wrap(~W_st) +
     my_theme()
   p

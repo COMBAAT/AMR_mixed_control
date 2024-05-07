@@ -27,6 +27,7 @@ test %>%
   facet_wrap(~treat_prop) +
   xlab(my_label("W_st")) +
   ylab(my_label("R0_sen")) +
+  labs(colour=my_label("K")) +
   my_theme()
 
 ggsave(
