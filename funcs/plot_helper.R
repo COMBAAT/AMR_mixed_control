@@ -68,7 +68,7 @@ plot_type1_y_versus_treat_prop_facet_W_st <- function(df, y_var) {
     geom_line(size = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape=my_label("K"), colour=my_label("W_st")) +
+    labs(shape = my_label("K"), colour = my_label("W_st")) +
     facet_wrap(~W_st) +
     my_theme()
   p
@@ -92,7 +92,7 @@ plot_type2_y_versus_treat_prop_facet_prop_insecticide <- function(df, this_K, y_
     facet_wrap(~prop.insecticide) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape=my_label("W_st"), colour=my_label("prop.insecticide")) +
+    labs(shape = my_label("W_st"), colour = my_label("prop.insecticide")) +
     my_theme()
   p
 }
@@ -124,7 +124,7 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight <- function(
     facet_wrap(~prop.insecticide) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape=my_label("W_st"), colour=my_label("prop.insecticide")) +
+    labs(shape = my_label("W_st"), colour = my_label("prop.insecticide")) +
     my_theme()
   p
 }
@@ -146,7 +146,7 @@ plot_type4_y_versus_treat_prop_facet_W_st <- function(df, y_var, this_K) {
     facet_wrap(~W_st) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape=my_label("K"), colour=my_label("prop.insecticide")) +
+    labs(shape = my_label("K"), colour = my_label("prop.insecticide")) +
     my_theme()
   p
 }
