@@ -36,9 +36,9 @@ my_theme <- function() {
       axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
       axis.text.y = element_text(size = 12),
       axis.title.x = element_text(size = 16),
-      axis.title.y = element_text(size = 19) #,
-      #panel.grid.major = element_blank() #,
-      #panel.grid.minor = element_blank()
+      axis.title.y = element_text(size = 19) # ,
+      # panel.grid.major = element_blank() #,
+      # panel.grid.minor = element_blank()
     )
 }
 
@@ -101,11 +101,12 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight <- function(
       W_st %in% c(0, 100, 250),
       K == this_K
     ) %>%
-    ggplot(aes(treat_prop, y, group = interaction(W_st, prop.insecticide), 
-               shape = W_st, colour = prop.insecticide)) +
+    ggplot(aes(treat_prop, y,
+      group = interaction(W_st, prop.insecticide),
+      shape = W_st, colour = prop.insecticide
+    )) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()
-    ) +
+    geom_line(size = my_linewidth()) +
     gghighlight(
       threshold_var < threshold,
       unhighlighted_params = list(colour = "darkgrey"), calculate_per_facet = TRUE
@@ -142,7 +143,7 @@ plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
-  
+
   p <- df %>%
     mutate_at(c("treat_prop", "W_st", "K"), as.factor) %>%
     filter(
