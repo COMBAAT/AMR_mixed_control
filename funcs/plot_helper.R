@@ -1,4 +1,12 @@
 # Specify plot formatting ------------------------------------------------------
+my_linewidth <- function() {
+  1
+}
+
+my_pointsize <- function() {
+  3
+}
+
 
 my_label <- function(variable) {
   if (variable == "R0_sen") this_label <- "R0 sensitive"

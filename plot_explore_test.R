@@ -84,7 +84,8 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight(
   test, this_K, y_var, threshold_var, threshold
 )
 plot_name <- paste0("plot_type3_", y_var, ".pdf")
-ggsave(filename = paste0("output/test/", plot_name),
+ggsave(
+  filename = paste0("output/test/", plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
