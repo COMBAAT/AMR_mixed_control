@@ -14,8 +14,8 @@ my_label <- function(variable) {
   if (variable == "Incidence") this_label <- "Incidence"
   if (variable == "No_trt_cat") this_label <- "Number treated cattle"
   if (variable == "Prob_onward_tran") this_label <- "Prob onward transmission"
-  if (variable == "RiskE") this_label <- "RiskE"
-  if (variable == "RiskA") this_label <- "RiskA"
+  if (variable == "RiskE") this_label <- "Risk of emergence and spread"
+  if (variable == "RiskA") this_label <- "Risk of emergence"
   if (variable == "treat_prop") this_label <- "Treatment proportion"
   if (variable == "prop.insecticide") this_label <- "Insecticide coverage"
   if (variable == "W_st") this_label <- "Wildlife"
@@ -68,6 +68,7 @@ plot_type1_y_versus_treat_prop_facet_W_st <- function(df, y_var) {
     geom_line(size = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
+    labs(shape=my_label("K"), colour=my_label("W_st"))
     facet_wrap(~W_st) +
     my_theme()
   p
