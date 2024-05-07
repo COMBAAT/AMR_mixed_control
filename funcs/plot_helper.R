@@ -101,11 +101,10 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight <- function(
       W_st %in% c(0, 100, 250),
       K == this_K
     ) %>%
-    ggplot(aes(treat_prop, y)) +
-    geom_point(aes(shape = W_st, colour = prop.insecticide), size = my_pointsize()) +
-    geom_line(aes(
-      group = interaction(W_st, prop.insecticide),
-      colour = prop.insecticide), size = my_linewidth()
+    ggplot(aes(treat_prop, y, group = interaction(W_st, prop.insecticide), 
+               shape = W_st, colour = prop.insecticide)) +
+    geom_point(size = my_pointsize()) +
+    geom_line(size = my_linewidth()
     ) +
     gghighlight(
       threshold_var < threshold,
