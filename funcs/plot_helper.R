@@ -168,7 +168,7 @@ plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
     geom_line(size = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(colour=my_label("treat_prop")) +
+    labs(colour = my_label("treat_prop")) +
     facet_wrap(~W_st) +
     my_theme()
   p
