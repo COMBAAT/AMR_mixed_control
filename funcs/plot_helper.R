@@ -159,6 +159,7 @@ plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
   p <- df %>%
     mutate_at(c("treat_prop", "W_st", "K"), as.factor) %>%
     filter(
+      prop.insecticide <= 0.5,
       treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.91),
       W_st %in% c(0, 100, 250),
       K == this_K
