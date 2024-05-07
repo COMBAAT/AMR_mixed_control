@@ -3,7 +3,7 @@
 library(ggplot2)
 library(gghighlight)
 library(dplyr)
-library(styler)
+library(patchwork)
 
 # Source files and function
 source("funcs/plot_helper.R")
@@ -36,6 +36,29 @@ ggsave(
 )
 
 # ----------------------------------------
+# Plot R resistant/R sensitive versus wildlife faceted by treat_prop
+lhs <- test %>%
+  mutate_at(c("prop.insecticide", "W_st", "K"), as.factor) %>%
+  filter(prop.insecticide == 0) %>%
+  ggplot(aes(treat_prop, R_eq_res/R_eq_sen, colour = W_st, shape = K)) +
+  geom_point(size = my_pointsize()) +
+  geom_line(size = my_linewidth()) +
+  xlab(my_label("treat_prop")) +
+  ylab("R resistant / R sensitive") +
+  labs(colour=my_label("W_st"), shape = my_label("K")) +
+  my_theme()
+
+rhs <- lhs + ylim(c(0,2)) + geom_abline(intercept = 1, slope = 0, linetype = "dashed")
+rhs
+
+# use patchwork package to stick plots together
+# use guides = collect to remove duplicate legends
+lhs + rhs + plot_layout(ncol = 2, guides = "collect")
+
+ggsave(
+  filename = "output/test/plot_type0_R_res_R_sen_ratio.pdf",
+  width = my_pdfwidth(), height = my_pdfheight()
+)
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by W_st
