@@ -27,7 +27,7 @@ test %>%
   facet_wrap(~treat_prop) +
   xlab(my_label("W_st")) +
   ylab(my_label("R0_sen")) +
-  labs(colour=my_label("K")) +
+  labs(colour = my_label("K")) +
   my_theme()
 
 ggsave(
@@ -40,15 +40,15 @@ ggsave(
 lhs <- test %>%
   mutate_at(c("prop.insecticide", "W_st", "K"), as.factor) %>%
   filter(prop.insecticide == 0) %>%
-  ggplot(aes(treat_prop, R_eq_res/R_eq_sen, colour = W_st, shape = K)) +
+  ggplot(aes(treat_prop, R_eq_res / R_eq_sen, colour = W_st, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(size = my_linewidth()) +
   xlab(my_label("treat_prop")) +
   ylab("R resistant / R sensitive") +
-  labs(colour=my_label("W_st"), shape = my_label("K")) +
+  labs(colour = my_label("W_st"), shape = my_label("K")) +
   my_theme()
 
-rhs <- lhs + ylim(c(0,2)) + geom_abline(intercept = 1, slope = 0, linetype = "dashed")
+rhs <- lhs + ylim(c(0, 2)) + geom_abline(intercept = 1, slope = 0, linetype = "dashed")
 rhs
 
 # use patchwork package to stick plots together
@@ -71,8 +71,9 @@ for (y_var in y_vars) {
   plot_type1_y_versus_treat_prop_facet_W_st(test, y_var)
 
   plot_name <- paste0("plot_type1_", y_var, ".pdf")
-  ggsave(filename = paste0("output/test/", plot_name),
-         width = my_pdfwidth(), height = my_pdfheight()
+  ggsave(
+    filename = paste0("output/test/", plot_name),
+    width = my_pdfwidth(), height = my_pdfheight()
   )
 }
 # ----------------------------------------
@@ -84,7 +85,8 @@ y_var <- "RiskA"
 this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
-ggsave(filename = paste0("output/test/", plot_name),
+ggsave(
+  filename = paste0("output/test/", plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -92,7 +94,8 @@ y_var <- "RiskE"
 this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
-ggsave(filename = paste0("output/test/", plot_name),
+ggsave(
+  filename = paste0("output/test/", plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -124,7 +127,8 @@ for (y_var in y_vars) {
   plot_type4_y_versus_treat_prop_facet_W_st(test, y_var, this_K)
 
   plot_name <- paste0("plot_type4_", y_var, ".pdf")
-  ggsave(filename = paste0("output/test/", plot_name),
+  ggsave(
+    filename = paste0("output/test/", plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
@@ -139,7 +143,8 @@ for (y_var in y_vars) {
   plot_type5_y_versus_prop_insecticide_facet_W_st(test, y_var, this_K)
 
   plot_name <- paste0("plot_type5_", y_var, ".pdf")
-  ggsave(filename = paste0("output/test/", plot_name),
+  ggsave(
+    filename = paste0("output/test/", plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
