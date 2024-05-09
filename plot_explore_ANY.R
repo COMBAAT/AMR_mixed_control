@@ -13,7 +13,7 @@ library(dplyr)
 
 source("funcs/plot_functions.R")
 
-treatment_option <- "P"
+treatment_option <- "F"
 
 if (treatment_option == "F"){
 folder_name = "output/plots_fast_finer_insecticide/"
@@ -307,7 +307,7 @@ dev.off()
 
 
 
-pdf(file = "My Plot.pdf",   # The directory you want to save the file in
+pdf(file = "output/My Plot.pdf",   # The directory you want to save the file in
     width = 12, # The width of the plot in inches
     height = 7) # The height of the plot in inches
 
