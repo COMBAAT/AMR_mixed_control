@@ -76,38 +76,14 @@ equilibrium_R <- function(R0input, ODEinput){
 
 ## ------------------------------------------------------ Add total cols to out
 
-
-totals <- function(ODEinput){
+totals_LM <- function(df){
   
-  
-  cattle.total <- ODEinput$CS + ODEinput$CEs + ODEinput$CEr + ODEinput$CIs +
-                    ODEinput$CIr + ODEinput$CTs + ODEinput$CTr
-  prophylactic.total <-ODEinput$PF + ODEinput$PS + ODEinput$PEs + ODEinput$PEr +
-                        ODEinput$PIs + ODEinput$PIr + ODEinput$PTs +
-                         ODEinput$PTr + ODEinput$PPr + ODEinput$PPs
-  all.cows <- cattle.total+prophylactic.total
-  wildlife.total <- ODEinput$WS + ODEinput$WEs + ODEinput$WEr +
-                     ODEinput$WIs + ODEinput$WIr
-  vector.total <- ODEinput$VSt + ODEinput$VSf + ODEinput$VEs + ODEinput$VEr +
-                    ODEinput$VIs + ODEinput$VIr
-
-
-  temp1 <- cbind(cattle.total, prophylactic.total, all.cows, wildlife.total, vector.total)
-  ODEoutput <- cbind(ODEinput,temp1)
-  
-  return(ODEoutput)
-  
-}
-
-
-totals_LM <- function(ODEinput){
-  
-  ODEoutput <- ODEinput %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
+  df_new <- df %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
                                    prophylactic.total = rowSums(select(., starts_with("P"))),
                                    vector.total = rowSums(select(., starts_with("V"))),
                                    wildlife.total = rowSums(select(., starts_with("W"))),
                                    all.cows = cattle.total + prophylactic.total)
   
-  return(ODEoutput)
+  return(df_new)
   
 }
