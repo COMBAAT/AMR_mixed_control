@@ -15,7 +15,7 @@ library(codetools)
 
 ## Parameters & Initial Conditions ----
 
-set1 <- function(output, birth.adj, fit.adj, K, prop_treat, prop.insecticide, NW, prop.prophylaxis, trt.type, dose.adj, emergence.adj){
+set1 <- function(output, birth.adj, fit.adj, K, treat_prop, prop.insecticide, NW, prop.prophylaxis, trt.type, dose.adj, emergence.adj){
   
   
   
@@ -28,7 +28,7 @@ set1 <- function(output, birth.adj, fit.adj, K, prop_treat, prop.insecticide, NW
   death.c            <- birth.c
   death.p          <- death.c
   sigma.c         <- 1 / 100 
-  treatment       <- 1 * prop_treat * (sigma.c + death.c) / (1 - prop_treat)
+  treatment       <- 1 * treat_prop * (sigma.c + death.c) / (1 - treat_prop)
   emergence       <- 0
   
 
