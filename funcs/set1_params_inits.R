@@ -15,7 +15,7 @@ library(codetools)
 
 ## Parameters & Initial Conditions ----
 
-set1 <- function(output, this_scenario){
+set1 <- function(this_scenario){
   
   birth.adj = this_scenario$birth.adj
   fit.adj = this_scenario$fit.adj 
@@ -167,12 +167,7 @@ set1 <- function(output, this_scenario){
   inits <- as.vector(inits)
   names(inits) <- names
   
-  
-  if (output == "P"){
-    return(params)
-  }else{
-    return(inits)
-  }
+  return( list(params = params, inits = inits))
   
 }
 

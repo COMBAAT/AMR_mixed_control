@@ -19,7 +19,7 @@ source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
 source("input_scenarios.R")
 
-loops <- FALSE
+loops <- TRUE
 scenarios_df <- input_scenarios(loops)
 
 
@@ -37,8 +37,9 @@ for (i in 1:nrow(scenarios_df)) {
   
                 this_scenario <- scenarios_df[i, ]
                 
-                params <- set1(output = "P", this_scenario)
-                inits <- set1(output = "I", this_scenario)
+                params_and_inits <- set1(this_scenario)
+                params <- params_and_inits[["params"]]
+                inits <- params_and_inits[["inits"]]
     
                 
                 
