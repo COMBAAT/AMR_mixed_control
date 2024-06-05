@@ -126,27 +126,27 @@ for (i in 1:nrow(scenarios_df)) {
                 #2 stage run - pull calcs out, check for quick trt, expand to prophylactic next
                 
                 if(this_scenario$treatment_type == "F"){
-                  No.trt.cat <-  params["treatment.q"] * last$CIs * 365.25
+                  No_trt_cat <-  params["treatment.q"] * last$CIs * 365.25
                   Inc <- params["gamma.c"] * last$CEs * 365.25
-                  P.onward.trans <- 1 - dpois(0, Rres[1])
-                  riskA <- ( last$CTs + last$PTs)
-                  riskE <- (1 - dpois(0, Rres[1])) * ( last$CTs + last$PTs)                  
+                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  RiskA <- ( last$CTs + last$PTs)
+                  RiskE <- (1 - dpois(0, Rres[1])) * ( last$CTs + last$PTs)                  
                 }
                 
                 if(this_scenario$treatment_type == "P"){
-                  No.trt.cat <-  params["treatment.p"] * (last$PIs + last$CIs) * 365.25
+                  No_trt_cat <-  params["treatment.p"] * (last$PIs + last$CIs) * 365.25
                   Inc <- params["gamma.c"] * (last$PEs + last$CEs) * 365.25
-                  P.onward.trans <- 1 - dpois(0, Rres[1])
-                  riskA <- (last$PEs + last$PIs + last$PPs)
-                  riskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs)
+                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  RiskA <- (last$PEs + last$PIs + last$PPs)
+                  RiskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs)
                 }
                 
                 if(this_scenario$treatment_type == "B"){
-                  No.trt.cat <-  (params["treatment.p"]+ params["treatment.q"]) * (last$PIs + last$CIs) * 365.25
+                  No_trt_cat <-  (params["treatment.p"]+ params["treatment.q"]) * (last$PIs + last$CIs) * 365.25
                   Inc <- params["gamma.c"] * (last$PEs + last$CEs) * 365.25 
-                  P.onward.trans <- 1 - dpois(0, Rres[1])
-                  riskA <-  (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs) 
-                  riskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
+                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  RiskA <-  (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs) 
+                  RiskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
                 }
                 
                 
@@ -155,10 +155,11 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 selected_outputs <- cbind( data.frame(W_st = out[1, "WS"], R_eq_sen = Rsen[1], R0_sen = R0s[1], 
                                                R_eq_res = Rres[1], R0_res = R0r[1], 
-                                               No_trt_cat = No.trt.cat, 
+                                               No_trt_cat = No_trt_cat, 
                                                Incidence = Inc, 
-                                               Vector_no = as.numeric(inits["VSt"]), Prob_onward_tran = P.onward.trans, 
-                                               RiskA = riskA , RiskE = riskE,
+                                               Vector_no = as.numeric(inits["VSt"]), 
+                                               Prob_onward_tran = Prob_onward_transmission, 
+                                               RiskA = RiskA , RiskE = RiskE,
                                                prevalence = prev, vector_birth = params["birth.v"], 
                                                vector_mortality = params["death.v"], 
                                                eq_pop = params["equil.vector_pop"],
