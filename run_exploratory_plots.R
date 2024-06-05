@@ -22,7 +22,6 @@ source("input_scenarios.R")
 loops <- TRUE
 scenarios_df <- input_scenarios(loops)
 
-
 df <- data.frame()
 df2 <- data.frame()
 
@@ -40,13 +39,9 @@ for (i in 1:nrow(scenarios_df)) {
                 params_and_inits <- set1(this_scenario)
                 params <- params_and_inits[["params"]]
                 inits <- params_and_inits[["inits"]]
-    
-                
                 
                 qual_check_no0(params) # ensure there are no negative values
                 qual_check_no0(inits) # ensure there are no negative values
-                
-                
                 
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
                 params <- params[!myvars]
@@ -67,7 +62,6 @@ for (i in 1:nrow(scenarios_df)) {
                 R0r <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
                 
                 
-                
                 ## Times ----
                 times <- seq(0, this_scenario$max_time, 1)
                 
@@ -78,15 +72,12 @@ for (i in 1:nrow(scenarios_df)) {
                 out <- as.data.frame(out)
                 names(out)[names(out) == 'time'] <- "times"
                 
-                #if (loops == FALSE) { plot(CEs ~ times, data = out)}
-                
                 last <- tail(out, 1)
                 last <- last %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
                                         prophylactic.total = rowSums(select(., starts_with("P"))),
                                         vector.total = rowSums(select(., starts_with("V"))),
                                         wildlife.total = rowSums(select(., starts_with("W"))),
                                         all.cows = cattle.total + prophylactic.total)
-                #last$total.cattle <- last$CS + last$CEs + last$CEr + last$CIs + last$CIr + last$CTs + last$CTr 
                 
                 last$treat_prop_q <- params["treatment.q"] / (params["treatment.q"] + params["sigma.c"] + params["death.c"])
                 last$treat_prop_p <- params["treatment.p"] / (params["treatment.p"] + params["sigma.c"] + params["death.c"])
