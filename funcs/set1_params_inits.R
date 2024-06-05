@@ -15,9 +15,18 @@ library(codetools)
 
 ## Parameters & Initial Conditions ----
 
-set1 <- function(output, birth.adj, fit.adj, K, treat_prop, prop.insecticide, NW, prop.prophylaxis, trt.type, dose.adj, emergence.adj){
+set1 <- function(output, this_scenario){
   
-  
+  birth.adj = this_scenario$birth.adj
+  fit.adj = this_scenario$fit.adj 
+  K = this_scenario$K
+  treat_prop = this_scenario$treat_prop 
+  prop.insecticide = this_scenario$prop.insecticide 
+  NW = this_scenario$NW
+  prop.prophylaxis = this_scenario$prop.prophylaxis 
+  trt.type = this_scenario$treatment_type
+  dose.adj = this_scenario$dose.adj
+  emergence.adj = this_scenario$emergence.adj
   
   ## Cattle ----- 
   birth.c          <- 1 /(5*365)

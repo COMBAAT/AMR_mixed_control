@@ -41,18 +41,10 @@ for (i in 1:nrow(scenarios_df)) {
   
                 this_scenario <- scenarios_df[i, ]
                 
-                params <- set1(output = "P", birth.adj = this_scenario$birth.adj, fit.adj = this_scenario$fit.adj, 
-                               K = this_scenario$K, treat_prop = this_scenario$treat_prop, 
-                               prop.insecticide = this_scenario$prop.insecticide, 
-                               NW = this_scenario$NW, prop.prophylaxis = this_scenario$prop.prophylaxis, 
-                               trt.type = this_scenario$treatment_type, 
-                               dose.adj = this_scenario$dose.adj, emergence.adj = this_scenario$emergence.adj)
-                inits <- set1(output = "I", birth.adj = this_scenario$birth.adj, fit.adj = this_scenario$fit.adj, 
-                              K = this_scenario$K, treat_prop = this_scenario$treat_prop, 
-                              prop.insecticide = this_scenario$prop.insecticide, 
-                              NW = this_scenario$NW, prop.prophylaxis = this_scenario$prop.prophylaxis, 
-                              trt.type = this_scenario$treatment_type, 
-                              dose.adj = this_scenario$dose.adj, emergence.adj = this_scenario$emergence.adj)
+                params <- set1(output = "P", this_scenario)
+                inits <- set1(output = "I", this_scenario)
+    
+                
                 
                 qual_check_no0(params) # ensure there are no negative values
                 qual_check_no0(inits) # ensure there are no negative values
