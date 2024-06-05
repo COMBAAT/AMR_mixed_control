@@ -19,15 +19,11 @@ source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
 source("input_scenarios.R")
 
-loops <- TRUE
+loops <- FALSE
 scenarios_df <- input_scenarios(loops)
 
-df <-data.frame(CS = c(), total.cattle = c(), treat_prop = c(), W_st = c(), R_eq_sen = c(), 
-                R0_sen = c(), R_eq_res = c(), R0_res = c(), No_trt_cat = c(), 
-                Incidence = c(), Vector_no = c(), Prob_onward_tran = c(), 
-                RiskA = c(), RiskE = c(), prevalence = c(), vector_mortality = c(), fit.adj = c(), 
-                prop.insecticide =c(), birth.adj =c(), eq_pop = c(), K = c(), dose = c(), emergence = c())
 
+df <- data.frame()
 df2 <- data.frame()
 
 ## ---- Run time estimates
