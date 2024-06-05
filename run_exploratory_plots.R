@@ -73,11 +73,7 @@ for (i in 1:nrow(scenarios_df)) {
                 names(out)[names(out) == 'time'] <- "times"
                 
                 last <- tail(out, 1)
-                last <- last %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
-                                        prophylactic.total = rowSums(select(., starts_with("P"))),
-                                        vector.total = rowSums(select(., starts_with("V"))),
-                                        wildlife.total = rowSums(select(., starts_with("W"))),
-                                        all.cows = cattle.total + prophylactic.total)
+                last <- add_totals(last)
                 
                 last$treat_prop_q <- params["treatment.q"] / (params["treatment.q"] + params["sigma.c"] + params["death.c"])
                 last$treat_prop_p <- params["treatment.p"] / (params["treatment.p"] + params["sigma.c"] + params["death.c"])
