@@ -76,7 +76,7 @@ equilibrium_R <- function(R0input, ODEinput){
 
 ## ------------------------------------------------------ Add total cols to out
 
-totals_LM <- function(df){
+add_totals <- function(df){
   
   df_new <- df %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
                                    prophylactic.total = rowSums(select(., starts_with("P"))),
