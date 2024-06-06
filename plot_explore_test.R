@@ -31,7 +31,7 @@ test %>%
   my_theme()
 
 ggsave(
-  filename = "output/test/plot_type0_R0_sen.pdf",
+  filename = paste0(folder_name, "plot_type0_R0_sen.pdf"),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -56,7 +56,7 @@ rhs
 lhs + rhs + plot_layout(ncol = 2, guides = "collect")
 
 ggsave(
-  filename = "output/test/plot_type0_R_res_R_sen_ratio.pdf",
+  filename = paste0(folder_name, "plot_type0_R_res_R_sen_ratio.pdf"),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -72,7 +72,7 @@ for (y_var in y_vars) {
 
   plot_name <- paste0("plot_type1_", y_var, ".pdf")
   ggsave(
-    filename = paste0("output/test/", plot_name),
+    filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
@@ -86,7 +86,7 @@ this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
 ggsave(
-  filename = paste0("output/test/", plot_name),
+  filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -95,7 +95,7 @@ this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
 ggsave(
-  filename = paste0("output/test/", plot_name),
+  filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -112,7 +112,7 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight(
 )
 plot_name <- paste0("plot_type3_", y_var, ".pdf")
 ggsave(
-  filename = paste0("output/test/", plot_name),
+  filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -128,7 +128,7 @@ for (y_var in y_vars) {
 
   plot_name <- paste0("plot_type4_", y_var, ".pdf")
   ggsave(
-    filename = paste0("output/test/", plot_name),
+    filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
@@ -144,7 +144,7 @@ for (y_var in y_vars) {
 
   plot_name <- paste0("plot_type5_", y_var, ".pdf")
   ggsave(
-    filename = paste0("output/test/", plot_name),
+    filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
