@@ -19,7 +19,7 @@ source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
 source("input_scenarios.R")
 
-loops <- TRUE
+loops <- FALSE
 scenarios_df <- input_scenarios(loops)
 
 df <- data.frame()
@@ -72,8 +72,8 @@ for (i in 1:nrow(scenarios_df)) {
                 out <- as.data.frame(out)
                 names(out)[names(out) == 'time'] <- "times"
                 
-                last <- tail(out, 1)
-                last <- add_totals(last)
+                expanded_output <- add_totals(out)
+                last <- tail(expanded_output, 1)
                 
                 last$treat_prop_q <- params["treatment.q"] / (params["treatment.q"] + params["sigma.c"] + params["death.c"])
                 last$treat_prop_p <- params["treatment.p"] / (params["treatment.p"] + params["sigma.c"] + params["death.c"])
@@ -167,10 +167,12 @@ Rres
 
 test <- df2
 time <- format(Sys.time(), "%a %b %d %X %Y")
-save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
+#save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
 #save(test,file ="output/test.Rda")
 
 quick_plot(out)
+quick_plot2(out)
+quick_plot3(out)
 
 
 
