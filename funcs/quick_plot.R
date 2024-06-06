@@ -3,6 +3,7 @@ library(gghighlight)
 library(dplyr)
 library(patchwork)
 library(tidyr)
+library(stringr)
 
 # Source files and function
 source("funcs/plot_helper.R")
@@ -82,7 +83,7 @@ quick_plot2 <- function(df) {
     xlab("Time, days") +
     ggtitle("Cattle, no prophylaxis")
 
-  this_linewidth <- 2
+  this_linewidth <- 1.5
   p1 <- ggplot(df) +
     geom_line(aes(x = times, y = CS, colour = "Sus"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = CEs, colour = "Exp s"), linewidth = this_linewidth) +
@@ -94,7 +95,8 @@ quick_plot2 <- function(df) {
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Cattle, no prophylaxis") +
-    scale_color_manual("Status",
+    my_theme() +
+    scale_color_manual(" ",
       values = c(
         "Full" = "purple",
         "Partial" = "skyblue",
@@ -120,7 +122,8 @@ quick_plot2 <- function(df) {
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Cattle, with prophylaxis") +
-    scale_color_manual("Status",
+    my_theme() +
+    scale_color_manual(" ",
       values = c(
         "Full" = "purple",
         "Partial" = "skyblue",
@@ -133,7 +136,7 @@ quick_plot2 <- function(df) {
         "Trt r" = "darkgreen"
       )
     )
-  
+
   p3 <- ggplot(df) +
     geom_line(aes(x = times, y = WS, colour = "Sus"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = WEs, colour = "Exp s"), linewidth = this_linewidth) +
@@ -143,20 +146,21 @@ quick_plot2 <- function(df) {
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Wildlife") +
-    scale_color_manual("Status",
-                       values = c(
-                         "Full" = "purple",
-                         "Partial" = "skyblue",
-                         "Sus" = "blue",
-                         "Exp s" = "orange",
-                         "Exp r" = "darkorange",
-                         "Inf s" = "red",
-                         "Inf r" = "darkred",
-                         "Trt s" = "green",
-                         "Trt r" = "darkgreen"
-                       )
+    my_theme() +
+    scale_color_manual(" ",
+      values = c(
+        "Full" = "purple",
+        "Partial" = "skyblue",
+        "Sus" = "blue",
+        "Exp s" = "orange",
+        "Exp r" = "darkorange",
+        "Inf s" = "red",
+        "Inf r" = "darkred",
+        "Trt s" = "green",
+        "Trt r" = "darkgreen"
+      )
     )
-  
+
   p4 <- ggplot(df) +
     geom_line(aes(x = times, y = VSf, colour = "Ten"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = VSt, colour = "Sus"), linewidth = this_linewidth) +
@@ -167,18 +171,19 @@ quick_plot2 <- function(df) {
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Vector") +
-    scale_color_manual("Status",
-                       values = c(
-                         "Full" = "purple",
-                         "Partial" = "skyblue",
-                         "Sus" = "blue",
-                         "Exp s" = "orange",
-                         "Exp r" = "darkorange",
-                         "Inf s" = "red",
-                         "Inf r" = "darkred",
-                         "Trt s" = "green",
-                         "Trt r" = "darkgreen"
-                       )
+    my_theme() +
+    scale_color_manual(" ",
+      values = c(
+        "Full" = "purple",
+        "Partial" = "skyblue",
+        "Sus" = "blue",
+        "Exp s" = "orange",
+        "Exp r" = "darkorange",
+        "Inf s" = "red",
+        "Inf r" = "darkred",
+        "Trt s" = "green",
+        "Trt r" = "darkgreen"
+      )
     )
 
   p1 + p2 + p3 + p4 + plot_layout(nrow = 2)
@@ -192,11 +197,11 @@ quick_plot3 <- function(df) {
 
   these_colours <- c(
     "CS" = "blue", "CEs" = "orange", "CEr" = "orange",
-    "CIs" = "red", "CIr" = "red", "CTs" = "green", "CTr" = "green", 
+    "CIs" = "red", "CIr" = "red", "CTs" = "green", "CTr" = "green",
     "PF" = "purple", "PS" = "skyblue", "PEs" = "orange", "PEr" = "orange",
     "PIs" = "red", "PIr" = "red", "PPs" = "grey", "PPr" = "grey", "PTs" = "green", "PTr" = "green",
     "WS" = "blue", "WEs" = "orange", "WEr" = "orange", "WIs" = "red", "WIr" = "red",
-    "VSt" = "purple", "Vsf" = "blue", "VEs" = "orange", "VEr" = "orange", 
+    "VSt" = "purple", "Vsf" = "blue", "VEs" = "orange", "VEr" = "orange",
     "VIs" = "red", "VIr" = "red"
   )
   plot_C <- new_df %>%
@@ -207,7 +212,7 @@ quick_plot3 <- function(df) {
     scale_color_manual(" ", values = these_colours) +
     ggtitle("Cattle, no prophylaxis") +
     my_theme()
-  
+
   plot_P <- new_df %>%
     filter(Animal_type == "P") %>%
     ggplot() +
@@ -216,7 +221,7 @@ quick_plot3 <- function(df) {
     scale_color_manual(" ", values = these_colours) +
     ggtitle("Cattle with prophylaxis") +
     my_theme()
-  
+
   plot_W <- new_df %>%
     filter(Animal_type == "W") %>%
     ggplot() +
@@ -225,7 +230,7 @@ quick_plot3 <- function(df) {
     scale_color_manual(" ", values = these_colours) +
     ggtitle("Wildlife") +
     my_theme()
-  
+
   plot_V <- new_df %>%
     filter(Animal_type == "V") %>%
     ggplot() +
@@ -234,9 +239,6 @@ quick_plot3 <- function(df) {
     scale_color_manual(" ", values = these_colours) +
     ggtitle("Vector") +
     my_theme()
-  
+
   plot_C + plot_P + plot_W + plot_V
 }
-
-
-
