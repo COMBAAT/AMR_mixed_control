@@ -70,13 +70,11 @@ for (i in 1:nrow(scenarios_df)) {
                 #          rootfunc = my_rootfun2,events = list(root = TRUE, terminalroot = c(1,2)))
                 out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 out <- as.data.frame(out)
-                names(out)[names(out) == 'time'] <- "times"
+                names(out)[names(out) == 'Time'] <- "times"
                 
                 expanded_output <- add_totals(out)
                 last <- tail(expanded_output, 1)
                 
-                last$treat_prop_q <- params["treatment.q"] / (params["treatment.q"] + params["sigma.c"] + params["death.c"])
-                last$treat_prop_p <- params["treatment.p"] / (params["treatment.p"] + params["sigma.c"] + params["death.c"])
                 
                 #Check get 1 at equilibrium when run with only sensitive strains
                 #fraction of cattle available for infection by sensitive strain
