@@ -52,10 +52,10 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 ## R0 calculations
                 
-                Nc = inits["CS"] + inits["CIs"]
-                Np = inits["PS"]
-                Nw = inits["WS"]
-                Nv = inits["VSt"]
+                Nc = as.numeric(inits["CS"] + inits["CIs"])
+                Np = as.numeric(inits["PS"])
+                Nw = as.numeric(inits["WS"])
+                Nv = as.numeric(inits["VSt"])
                 sen <- "yes"
                 R0s <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
                 sen <- "no"
@@ -70,7 +70,7 @@ for (i in 1:nrow(scenarios_df)) {
                 #          rootfunc = my_rootfun2,events = list(root = TRUE, terminalroot = c(1,2)))
                 out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 out <- as.data.frame(out)
-                names(out)[names(out) == 'Time'] <- "times"
+                names(out)[names(out) == 'time'] <- "times"
                 
                 expanded_output <- add_totals(out)
                 last <- tail(expanded_output, 1)
@@ -78,7 +78,7 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 #Check get 1 at equilibrium when run with only sensitive strains
                 #fraction of cattle available for infection by sensitive strain
-                fC <- last$CS / (as.numeric(inits["CS"]+inits["CIs"]))
+                fC <- last$CS / Nc
                 #fraction of vectors available for infection by sensitive strain
                 if (as.numeric(inits["VSt"] + inits["VSf"]) > 0){fV <- (last$VSt + last$VSf) / as.numeric(inits["VSt"] + inits["VSf"])} else {fV <- 0}
                 
