@@ -94,7 +94,6 @@ for (i in 1:nrow(scenarios_df)) {
                 Nv = last$VSt + last$VSf
                 sen <- "yes"
                 Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
-                
                 sen <- "no"
                 Np = last$PS + last$PF
                 Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
