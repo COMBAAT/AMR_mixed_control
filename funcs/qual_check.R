@@ -78,11 +78,11 @@ equilibrium_R <- function(R0input, ODEinput){
 
 add_totals <- function(df){
   
-  df_new <- df %>% mutate(cattle.total = rowSums(select(., starts_with("C"))),
-                                   prophylactic.total = rowSums(select(., starts_with("P"))),
-                                   vector.total = rowSums(select(., starts_with("V"))),
-                                   wildlife.total = rowSums(select(., starts_with("W"))),
-                                   all.cows = cattle.total + prophylactic.total)
+  df_new <- df %>% mutate(Cattle.total = rowSums(select(., starts_with("C"))),
+                                   Prophylactic.total = rowSums(select(., starts_with("P"))),
+                                   Vector.total = rowSums(select(., starts_with("V"))),
+                                   Wildlife.total = rowSums(select(., starts_with("W"))),
+                                   All.cows = Cattle.total + Prophylactic.total)
   
   return(df_new)
   
