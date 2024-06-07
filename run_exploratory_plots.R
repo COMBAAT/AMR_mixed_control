@@ -134,7 +134,7 @@ for (i in 1:nrow(scenarios_df)) {
                 }
                 
                 
-                prev <- (last$PIs + last$CIs) / last$all.cows
+                prev <- (last$PIs + last$CIs) / last$All.cows
                 
                 
                 selected_outputs <- cbind( data.frame(W_st = out[1, "WS"], R_eq_sen = Rsen[1], R0_sen = R0s[1], 
@@ -170,9 +170,9 @@ time <- format(Sys.time(), "%a %b %d %X %Y")
 #save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
 #save(test,file ="output/test.Rda")
 
-quick_plot(out)
-quick_plot2(out)
-quick_plot3(out)
+quick_plot(expanded_output)
+quick_plot2(expanded_output)
+quick_plot3(expanded_output)
 
 
 
