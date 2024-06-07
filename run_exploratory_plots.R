@@ -80,10 +80,10 @@ for (i in 1:nrow(scenarios_df)) {
                 #fraction of cattle available for infection by sensitive strain
                 fC <- last$CS / Nc
                 #fraction of vectors available for infection by sensitive strain
-                if (as.numeric(inits["VSt"] + inits["VSf"]) > 0){fV <- (last$VSt + last$VSf) / as.numeric(inits["VSt"] + inits["VSf"])} else {fV <- 0}
+                if (Nv > 0){fV <- (last$VSt + last$VSf) / Nv} else {fV <- 0}
                 
                 #fraction of wildlife available for infection by sensitive strain
-                if (as.numeric(inits["WS"]) > 0) {fW = last$WS / as.numeric(inits["WS"])} else {fW = 0}
+                if (Nw > 0) {fW = last$WS / Nw} else {fW <- 0}
                 
                 
                 ## R calculations
