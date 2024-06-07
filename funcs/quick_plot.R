@@ -79,6 +79,7 @@ quick_plot2 <- function(df) {
     geom_line(aes(x = times, y = CIr), colour = "red") +
     geom_line(aes(x = times, y = CTs), colour = "green") +
     geom_line(aes(x = times, y = CTr), colour = "green") +
+    geom_line(aes(x = times, y = cattle.total), colour = "pink") +
     ylab("Number") +
     xlab("Time, days") +
     ggtitle("Cattle, no prophylaxis")
@@ -92,6 +93,7 @@ quick_plot2 <- function(df) {
     geom_line(aes(x = times, y = CIr, colour = "Inf r"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = CTs, colour = "Trt s"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = CTr, colour = "Trt r"), linewidth = this_linewidth) +
+    geom_line(aes(x = times, y = Cattle.total), colour = "pink") +
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Cattle, no prophylaxis") +
@@ -119,6 +121,7 @@ quick_plot2 <- function(df) {
     geom_line(aes(x = times, y = PIr, colour = "Inf r"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = PTs, colour = "Trt s"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = PTr, colour = "Trt r"), linewidth = this_linewidth) +
+    geom_line(aes(x = times, y = Prophylactic.total), colour = "black") +
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Cattle, with prophylaxis") +
@@ -143,6 +146,7 @@ quick_plot2 <- function(df) {
     geom_line(aes(x = times, y = WEr, colour = "Exp r"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = WIs, colour = "Inf s"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = WIr, colour = "Inf r"), linewidth = this_linewidth) +
+    geom_line(aes(x = times, y = Wildlife.total), colour = "black") +
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Wildlife") +
@@ -168,6 +172,7 @@ quick_plot2 <- function(df) {
     geom_line(aes(x = times, y = VEr, colour = "Exp r"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = VIs, colour = "Inf s"), linewidth = this_linewidth) +
     geom_line(aes(x = times, y = VIr, colour = "Inf r"), linewidth = this_linewidth) +
+    geom_line(aes(x = times, y = Vector.total), colour = "black") +
     ylab("Number") +
     xlab("Time (days)") +
     ggtitle("Vector") +
@@ -202,7 +207,8 @@ quick_plot3 <- function(df) {
     "PIs" = "red", "PIr" = "red", "PPs" = "grey", "PPr" = "grey", "PTs" = "green", "PTr" = "green",
     "WS" = "blue", "WEs" = "orange", "WEr" = "orange", "WIs" = "red", "WIr" = "red",
     "VSt" = "purple", "Vsf" = "blue", "VEs" = "orange", "VEr" = "orange",
-    "VIs" = "red", "VIr" = "red"
+    "VIs" = "red", "VIr" = "red", "Cattle.total" = "pink", "Vector.total" = "black", 
+    "Wildlife.total" = "black"
   )
   plot_C <- new_df %>%
     filter(Animal_type == "C") %>%
@@ -210,8 +216,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = times, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle, no prophylaxis") +
-    my_theme()
+    ggtitle("Cattle, no prophylaxis") 
 
   plot_P <- new_df %>%
     filter(Animal_type == "P") %>%
@@ -219,8 +224,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = times, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle with prophylaxis") +
-    my_theme()
+    ggtitle("Cattle with prophylaxis") 
 
   plot_W <- new_df %>%
     filter(Animal_type == "W") %>%
@@ -228,8 +232,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = times, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Wildlife") +
-    my_theme()
+    ggtitle("Wildlife") 
 
   plot_V <- new_df %>%
     filter(Animal_type == "V") %>%
@@ -237,8 +240,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = times, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Vector") +
-    my_theme()
+    ggtitle("Vector") 
 
   plot_C + plot_P + plot_W + plot_V
 }
