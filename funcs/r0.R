@@ -89,8 +89,9 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen){
   
   R0 <- RCV * RVC + RPV * RVP + RWV * RVW
   
-  names <- c("R0", "RCV", "RPV", "RWV", "RVC", "RVP", "RVW")
-  output <- c(R0, RCV, RPV, RWV, RVC, RVP, RVW)
+  names <- c("R0", "RCV", "RVC", "RPV", "RVP", "RWV", "RVW")
+  #output <- c(R0, RCV, RPV, RWV, RVC, RVP, RVW)
+  output <- c(R0, RCV, RVC, RPV, RVP, RWV, RVW)
   names(output) <- names
   output
   
