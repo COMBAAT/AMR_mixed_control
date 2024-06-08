@@ -4,7 +4,7 @@
 ##
 ##
 
-r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen){
+r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
   
   Nh <- params["NC"] + params["NW"]  
   
@@ -87,11 +87,11 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen){
   RVW <- as.numeric(RVW)
   
   
-  R0 <- RCV * RVC + RPV * RVP + RWV * RVW
+  answer <- RCV * RVC + RPV * RVP + RWV * RVW
+  if (basic == TRUE){answer_name = "R0"} else {answer_name = "R"}
   
-  names <- c("R0", "RCV", "RVC", "RPV", "RVP", "RWV", "RVW")
-  #output <- c(R0, RCV, RPV, RWV, RVC, RVP, RVW)
-  output <- c(R0, RCV, RVC, RPV, RVP, RWV, RVW)
+  names <- c(answer_name, "RCV", "RVC", "RPV", "RVP", "RWV", "RVW")
+  output <- c(answer, RCV, RVC, RPV, RVP, RWV, RVW)
   names(output) <- names
   output
   

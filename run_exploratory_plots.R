@@ -57,9 +57,10 @@ for (i in 1:nrow(scenarios_df)) {
                 Nw = as.numeric(inits["WS"])
                 Nv = as.numeric(inits["VSt"])
                 sen <- "yes"
-                R0s <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
+                basic <- "yes"
+                R0s <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
                 sen <- "no"
-                R0r <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
+                R0r <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
                 
                 
                 ## Times ----
@@ -93,10 +94,11 @@ for (i in 1:nrow(scenarios_df)) {
                 Nw = last$WS
                 Nv = last$VSt + last$VSf
                 sen <- "yes"
-                Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
+                basic <- "no"
+                Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
                 sen <- "no"
                 Np = last$PS + last$PF
-                Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen)
+                Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
                 
                 
                 #Rsen <- fC * R0sen[1] * fV * R0sen[3] + fW * R0sen[2] * fV * R0sen[4]  #Hurrah
