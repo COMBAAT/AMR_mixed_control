@@ -74,6 +74,8 @@ for (i in 1:nrow(scenarios_df)) {
                 names(out)[names(out) == 'time'] <- "times"
                 
                 expanded_output <- add_totals(out)
+                expanded_output <- add_R0(inits, expanded_output)
+                expanded_output <- add_R_trajectories(params, expanded_output)
                 last <- tail(expanded_output, 1)
                 
                 
