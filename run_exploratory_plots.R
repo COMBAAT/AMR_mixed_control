@@ -171,9 +171,10 @@ time <- format(Sys.time(), "%a %b %d %X %Y")
 #save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
 #save(test,file ="output/test.Rda")
 
-quick_plot(expanded_output)
-quick_plot2(expanded_output)
-quick_plot3(expanded_output)
+#quick_plot(expanded_output)
+#quick_plot2(expanded_output)
+#quick_plot3(expanded_output)
+R0_plot(expanded_output)
 
 
 

@@ -244,3 +244,14 @@ quick_plot3 <- function(df) {
 
   plot_C + plot_P + plot_W + plot_V
 }
+
+
+R0_plot <- function(df){
+  
+  ggplot(df) +
+    geom_line(aes(x = times, y = R0sen), colour = "black") +
+    geom_line(aes(x = times, y = R0res), colour = "red") +
+    geom_line(aes(x = times, y = Rsen), colour = "black") +
+    geom_line(aes(x = times, y = Rres), colour = "red") +
+    geom_hline(yintercept = 1, linetype = "dashed")
+}
