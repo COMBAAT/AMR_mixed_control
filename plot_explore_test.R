@@ -23,7 +23,7 @@ test %>%
   filter(prop.insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
   ggplot(aes(W_st, R0_sen, colour = K)) +
   geom_point(size = my_pointsize()) +
-  geom_line(size = my_linewidth()) +
+  geom_line(linewidth = my_linewidth()) +
   facet_wrap(~treat_prop) +
   xlab(my_label("W_st")) +
   ylab(my_label("R0_sen")) +
@@ -42,7 +42,7 @@ lhs <- test %>%
   filter(prop.insecticide == 0) %>%
   ggplot(aes(treat_prop, R_eq_res / R_eq_sen, colour = W_st, shape = K)) +
   geom_point(size = my_pointsize()) +
-  geom_line(size = my_linewidth()) +
+  geom_line(linewidth = my_linewidth()) +
   xlab(my_label("treat_prop")) +
   ylab("R resistant / R sensitive") +
   labs(colour = my_label("W_st"), shape = my_label("K")) +

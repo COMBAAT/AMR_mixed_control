@@ -65,7 +65,7 @@ plot_type1_y_versus_treat_prop_facet_W_st <- function(df, y_var) {
     ) %>%
     ggplot(aes(treat_prop, y, shape = K, colour = W_st)) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()) +
+    geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
     labs(shape = my_label("K"), colour = my_label("W_st")) +
@@ -88,7 +88,7 @@ plot_type2_y_versus_treat_prop_facet_prop_insecticide <- function(df, this_K, y_
     ) %>%
     ggplot(aes(treat_prop, RiskA, shape = W_st, colour = prop.insecticide)) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()) +
+    geom_line(linewidth = my_linewidth()) +
     facet_wrap(~prop.insecticide) +
     xlab(this_xlab) +
     ylab(this_ylab) +
@@ -116,7 +116,7 @@ plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight <- function(
       shape = W_st, colour = prop.insecticide
     )) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()) +
+    geom_line(linewidth = my_linewidth()) +
     gghighlight(
       threshold_var < threshold,
       unhighlighted_params = list(colour = "darkgrey"), calculate_per_facet = TRUE
@@ -142,7 +142,7 @@ plot_type4_y_versus_treat_prop_facet_W_st <- function(df, y_var, this_K) {
     ) %>%
     ggplot(aes(treat_prop, y, shape = K, colour = prop.insecticide)) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()) +
+    geom_line(linewidth = my_linewidth()) +
     facet_wrap(~W_st) +
     xlab(this_xlab) +
     ylab(this_ylab) +
@@ -166,7 +166,7 @@ plot_type5_y_versus_prop_insecticide_facet_W_st <- function(df, y_var, this_K) {
     ) %>%
     ggplot(aes(prop.insecticide, y, shape = K, colour = treat_prop)) +
     geom_point(size = my_pointsize()) +
-    geom_line(size = my_linewidth()) +
+    geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
     labs(colour = my_label("treat_prop")) +
