@@ -19,7 +19,7 @@ source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
 source("input_scenarios.R")
 
-loops <- FALSE
+loops <- TRUE
 scenarios_df <- input_scenarios(loops)
 
 df <- data.frame()
@@ -138,7 +138,7 @@ for (i in 1:nrow(scenarios_df)) {
                 prev <- (last$PIs + last$CIs) / last$All.cows
                 
                 
-                selected_outputs <- cbind( data.frame(W_st = out[1, "WS"], R_eq_sen = Rsen[1], R0_sen = R0s[1], 
+                selected_outputs <- cbind( data.frame(scenario_id = i, this_scenario, W_st = out[1, "WS"], R_eq_sen = Rsen[1], R0_sen = R0s[1], 
                                                R_eq_res = Rres[1], R0_res = R0r[1], 
                                                No_trt_cat = No_trt_cat, 
                                                Incidence = Inc, 
@@ -147,8 +147,7 @@ for (i in 1:nrow(scenarios_df)) {
                                                RiskA = RiskA , RiskE = RiskE,
                                                prevalence = prev, vector_birth = params["birth.v"], 
                                                vector_mortality = params["death.v"], 
-                                               eq_pop = params["equil_vector_pop"],
-                                               this_scenario))
+                                               eq_pop = params["equil_vector_pop"]))
                 df = rbind(df, selected_outputs)
                 
                 wide <- cbind(selected_outputs, last)
@@ -156,7 +155,7 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 
                 print(last$times)
- 
+                }
 }  
 
 toc()
@@ -174,7 +173,7 @@ time <- format(Sys.time(), "%a %b %d %X %Y")
 #quick_plot(expanded_output)
 #quick_plot2(expanded_output)
 #quick_plot3(expanded_output)
-R0_plot(expanded_output)
+#R0_plot(expanded_output)
 
-
+df2 %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
 
