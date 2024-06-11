@@ -147,7 +147,7 @@ for (i in 1:nrow(scenarios_df)) {
                                                RiskA = RiskA , RiskE = RiskE,
                                                prevalence = prev, vector_birth = params["birth.v"], 
                                                vector_mortality = params["death.v"], 
-                                               eq_pop = params["equil.vector_pop"],
+                                               eq_pop = params["equil_vector_pop"],
                                                this_scenario))
                 df = rbind(df, selected_outputs)
                 
