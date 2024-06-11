@@ -155,7 +155,7 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 
                 print(last$times)
-                }
+                
 }  
 
 toc()
