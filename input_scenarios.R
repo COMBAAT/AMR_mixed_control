@@ -2,7 +2,7 @@
 input_scenarios <- function(loops){
   
   if (loops == TRUE) {
-    max_time <- 3000
+    max_time <- 5000
     treatment_type = "F"  #F this means quick treatment
     N_wl <- c(0, 100, 250)
     treat.prop.vecA <- seq(0, 0.9, by = 0.2)      #full from 0-1
