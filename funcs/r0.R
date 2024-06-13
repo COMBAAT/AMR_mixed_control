@@ -120,7 +120,7 @@ add_R_trajectories <- function(params, df) {
   df
 }
 
-add_R0 <- function(inits, df) {
+calculate_R0_from_inits <- function(inits) {
   Nc <- as.numeric(inits["CS"] + inits["CIs"])
   Np <- as.numeric(inits["PS"])
   Nw <- as.numeric(inits["WS"])
@@ -130,8 +130,12 @@ add_R0 <- function(inits, df) {
   R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
   sen <- "no"
   R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
+  list(R0sen, R0res)
+}
 
-  df$R0sen <- R0sen[1]
-  df$R0res <- R0res[1]
-  return(df)
+add_R0 <- function(inits, df){
+  R0sen_and_R0res <- calculate_R0_from_inits(inits)
+  df$R0sen <- R0sen_and_R0res[[1]]
+  df$R0res <- R0sen_and_R0res[[2]]
+  return(df)  
 }
