@@ -99,27 +99,6 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
   
 }
 
-
-add_R_trajectories <- function(params, df) {
-  
-  Rsen_vec <- c()
-  Rres_vec <- c()
-  for (i in 1:nrow(df)) {
-    Nc <- df$CS[i]
-    Np <- df$PS[i]
-    Nw <- df$WS[i]
-    Nv <- df$VSt[i] + df$VSf[i]
-    Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "yes", basic = "no")[1]
-    Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "no", basic = "no")[1]
-    Rsen_vec <- c(Rsen_vec, Rsen)
-    Rres_vec <- c(Rres_vec, Rres)
-  }
-
-  df$Rsen <- Rsen_vec
-  df$Rres <- Rres_vec
-  df
-}
-
 calculate_R0_from_inits <- function(inits) {
   Nc <- as.numeric(inits["CS"] + inits["CIs"])
   Np <- as.numeric(inits["PS"])
@@ -138,4 +117,32 @@ add_R0 <- function(inits, df){
   df$R0sen <- R0sen_and_R0res[[1]]
   df$R0res <- R0sen_and_R0res[[2]]
   return(df)  
+}
+
+calculate_R_from_row_of_df <- function(params, this_row){
+  Nc <- this_row$CS
+  Np <- this_row$PS
+  Nw <- this_row$WS
+  Nv <- this_row$VSt + this_row$VSf
+  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "yes", basic = "no")[1]
+  Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "no", basic = "no")[1]
+  list(Rsen, Rres)
+}
+
+
+add_R_trajectories <- function(params, df) {
+  Rsen_vec <- c()
+  Rres_vec <- c()
+  for (i in 1:nrow(df)) {
+    this_row <- df[i,]
+    Rsen_and_Rres <- calculate_R_from_row_of_df(params, this_row)
+    Rsen <- Rsen_and_Rres[[1]]
+    Rres <- Rsen_and_Rres[[2]]
+    Rsen_vec <- c(Rsen_vec, Rsen)
+    Rres_vec <- c(Rres_vec, Rres)
+  }
+
+  df$Rsen <- Rsen_vec
+  df$Rres <- Rres_vec
+  df
 }
