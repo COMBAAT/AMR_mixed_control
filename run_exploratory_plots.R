@@ -65,7 +65,7 @@ for (i in 1:nrow(scenarios_df)) {
                   # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
                   inits['CS'] <- inits['CS'] + inits['CIs']
                   inits['CIs'] <- 0
-                  times <- seq(0, 0.1, 1)
+                  times <- seq(0, 0.1, 0.1)
                 } else {
                   times <- seq(0, this_scenario$max_time, 1)
                 }
