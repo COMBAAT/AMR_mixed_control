@@ -48,17 +48,8 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 
                 ## R0 calculations
-                
-                Nc = as.numeric(inits["CS"] + inits["CIs"])
-                Np = as.numeric(inits["PS"])
-                Nw = as.numeric(inits["WS"])
-                Nv = as.numeric(inits["VSt"])
-                sen <- "yes"
-                basic <- "yes"
-                R0s <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
-                sen <- "no"
-                R0r <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
-                
+                R0sen_and_R0res <- calculate_R0_from_inits(inits)
+                R0s <- R0sen_and_R0res[[1]]
                 
                 ## Times ----
                 if (R0s[1] < 1.0){
@@ -143,8 +134,7 @@ for (i in 1:nrow(scenarios_df)) {
                 prev <- (last$PIs + last$CIs) / last$All.cows
                 
                 
-                selected_outputs <- cbind( data.frame(scenario_id = i, this_scenario, W_st = out[1, "WS"], R_eq_sen = Rsen[1], R0_sen = R0s[1], 
-                                               R_eq_res = Rres[1], R0_res = R0r[1], 
+                selected_outputs <- cbind( data.frame(scenario_id = i, this_scenario, W_st = out[1, "WS"], 
                                                No_trt_cat = No_trt_cat, 
                                                Incidence = Inc, 
                                                Vector_no = as.numeric(inits["VSt"]), 
@@ -172,7 +162,7 @@ Rres
 
 test <- df2
 time <- format(Sys.time(), "%a %b %d %X %Y")
-#save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
+save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
 #save(test,file ="output/test.Rda")
 
 #quick_plot(expanded_output)
