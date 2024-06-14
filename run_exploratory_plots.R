@@ -64,14 +64,22 @@ for (i in 1:nrow(scenarios_df)) {
                 
                 
                 ## Times ----
-                times <- seq(0, this_scenario$max_time, 1)
+                if (R0s[1] < 1.0){
+                  # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
+                  inits['CS'] <- inits['CS'] + inits['CIs']
+                  inits['CIs'] <- 0
+                  times <- seq(0, 0.1, 1)
+                } else {
+                  times <- seq(0, this_scenario$max_time, 1)
+                }
                 
                 ## RUN MODEL ----
-                #out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk",
-                #          rootfunc = my_rootfun2,events = list(root = TRUE, terminalroot = c(1,2)))
-                out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
+                out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
+                          rootfunc = my_rootfun3, events = list(root = TRUE, terminalroot = c(1,2)))
+                #out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 out <- as.data.frame(out)
                 names(out)[names(out) == 'time'] <- "times"
+                
                 
                 expanded_output <- add_totals(out)
                 expanded_output <- add_R0(inits, expanded_output)
@@ -172,8 +180,8 @@ time <- format(Sys.time(), "%a %b %d %X %Y")
 
 #quick_plot(expanded_output)
 #quick_plot2(expanded_output)
-#quick_plot3(expanded_output)
+quick_plot3(expanded_output)
 #R0_plot(expanded_output)
 
-df2 %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
+df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
 
