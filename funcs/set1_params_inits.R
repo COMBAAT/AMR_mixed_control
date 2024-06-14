@@ -192,7 +192,7 @@ my_rootfun3 <- function (t, y, params) {
   Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "yes", basic = "no")[1]
   
   condition1 <- (Rsen - 1.01)
-  condition2 <- (Rsen - 1.01)
+  condition2 <- (y['CIs'] - 1e-5)
   
   return(c(condition1, condition2))
 }
