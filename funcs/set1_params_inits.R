@@ -167,6 +167,9 @@ set1 <- function(this_scenario){
   inits <- as.vector(inits)
   names(inits) <- names
   
+  qual_check_no0(params) # ensure there are no negative values
+  qual_check_no0(inits) # ensure there are no negative values
+  
   return( list(params = params, inits = inits))
   
 }

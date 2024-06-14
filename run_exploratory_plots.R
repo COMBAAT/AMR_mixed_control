@@ -40,9 +40,6 @@ for (i in 1:nrow(scenarios_df)) {
                 params <- params_and_inits[["params"]]
                 inits <- params_and_inits[["inits"]]
                 
-                qual_check_no0(params) # ensure there are no negative values
-                qual_check_no0(inits) # ensure there are no negative values
-                
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
                 params <- params[!myvars]
                 
