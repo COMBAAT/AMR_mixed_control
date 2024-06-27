@@ -75,28 +75,29 @@ for (i in 1:nrow(scenarios_df)) {
                 last <- tail(expanded_output, 1)
                 
                 
-                #Check get 1 at equilibrium when run with only sensitive strains
-                #fraction of cattle available for infection by sensitive strain
-                fC <- last$CS / Nc
-                #fraction of vectors available for infection by sensitive strain
-                if (Nv > 0){fV <- (last$VSt + last$VSf) / Nv} else {fV <- 0}
-                
-                #fraction of wildlife available for infection by sensitive strain
-                if (Nw > 0) {fW = last$WS / Nw} else {fW <- 0}
+                # #Check get 1 at equilibrium when run with only sensitive strains
+                # #fraction of cattle available for infection by sensitive strain
+                # fC <- last$CS / Nc
+                # #fraction of vectors available for infection by sensitive strain
+                # if (Nv > 0){fV <- (last$VSt + last$VSf) / Nv} else {fV <- 0}
+                # 
+                # #fraction of wildlife available for infection by sensitive strain
+                # if (Nw > 0) {fW = last$WS / Nw} else {fW <- 0}
                 
                 
                 ## R calculations
-                
-                Nc = last$CS
-                Np = last$PS 
-                Nw = last$WS
-                Nv = last$VSt + last$VSf
-                sen <- "yes"
-                basic <- "no"
-                Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
-                sen <- "no"
-                Np = last$PS + last$PF
-                Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
+                Rsen_and_Rres <- calculate_R_from_row_of_df(params, last)
+                Rres <- Rsen_and_Rres[[2]]
+                # Nc = last$CS
+                # Np = last$PS 
+                # Nw = last$WS
+                # Nv = last$VSt + last$VSf
+                # sen <- "yes"
+                # basic <- "no"
+                # Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
+                # sen <- "no"
+                # Np = last$PS + last$PF
+                # Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
                 
                 
                 #Rsen <- fC * R0sen[1] * fV * R0sen[3] + fW * R0sen[2] * fV * R0sen[4]  #Hurrah
@@ -154,11 +155,6 @@ for (i in 1:nrow(scenarios_df)) {
 }  
 
 toc()
-
-Rsen
-Rres
-
-
 
 test <- df2
 time <- format(Sys.time(), "%a %b %d %X %Y")
