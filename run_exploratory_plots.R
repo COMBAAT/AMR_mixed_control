@@ -52,7 +52,7 @@ for (row in 1:nrow(scenarios_df)) {
                 inits <- inits[!myvars2]
                 
                 ## R0 calculations - only run full simulation if R0 >= 1.0
-                R0sen_and_R0res <- calculate_R0_from_inits(inits)
+                R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
                 R0sen <- R0sen_and_R0res$R0sen
                 
                 ## Set simulation times dependent on R0 value
@@ -75,7 +75,7 @@ for (row in 1:nrow(scenarios_df)) {
                 names(out)[names(out) == 'time'] <- "times"
                 
                 expanded_output <- add_totals(out)
-                expanded_output <- add_R0(inits, expanded_output)
+                expanded_output <- add_R0(inits, params, expanded_output)
                 expanded_output <- add_R_trajectories(params, expanded_output)
                 last <- tail(expanded_output, 1)
                 

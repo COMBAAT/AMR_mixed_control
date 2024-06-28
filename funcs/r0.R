@@ -99,7 +99,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
   
 }
 
-calculate_R0_from_inits <- function(inits) {
+calculate_R0_from_inits <- function(inits, params) {
   Nc <- as.numeric(inits["CS"] + inits["CIs"])
   Np <- as.numeric(inits["PS"])
   Nw <- as.numeric(inits["WS"])
@@ -112,8 +112,9 @@ calculate_R0_from_inits <- function(inits) {
   list("R0sen" = R0sen , "R0res" = R0res)
 }
 
-add_R0 <- function(inits, df){
-  R0sen_and_R0res <- calculate_R0_from_inits(inits)
+
+add_R0 <- function(inits, params, df){
+  R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
   df$R0sen <- R0sen_and_R0res[[1]]
   df$R0res <- R0sen_and_R0res[[2]]
   return(df)  
@@ -146,3 +147,10 @@ add_R_trajectories <- function(params, df) {
   df$Rres <- Rres_vec
   df
 }
+
+
+findGlobals(fun = r0_calc_sen_or_res, merge = FALSE)$variables
+findGlobals(fun = calculate_R0_from_inits, merge = FALSE)$variables
+findGlobals(fun = add_R0, merge = FALSE)$variables
+findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
+findGlobals(fun = add_R_trajectories, merge = FALSE)$variables
