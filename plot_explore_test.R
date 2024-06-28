@@ -12,8 +12,8 @@ source("funcs/plot_helper.R")
 # Specify whether treatment is fast "F" or prophylactic "P"
 treatment_option <- "F"
 if (treatment_option == "F") {
-  folder_name <- "output/test/"
-  load("output/test_F.Rda")
+  folder_name <- "output/test_play/"
+  load("output/test_F_play.Rda")
 }
 
 # Generate plots ---------------------------------------------------------------
@@ -21,17 +21,17 @@ if (treatment_option == "F") {
 test %>%
   mutate_at(c("prop.insecticide", "treat_prop", "K"), as.factor) %>%
   filter(prop.insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
-  ggplot(aes(W_st, R0_sen, colour = K)) +
+  ggplot(aes(W_st, R0sen, colour = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
   facet_wrap(~treat_prop) +
   xlab(my_label("W_st")) +
-  ylab(my_label("R0_sen")) +
+  ylab(my_label("R0sen")) +
   labs(colour = my_label("K")) +
   my_theme()
 
 ggsave(
-  filename = paste0(folder_name, "plot_type0_R0_sen.pdf"),
+  filename = paste0(folder_name, "plot_type0_R0sen.pdf"),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -40,7 +40,7 @@ ggsave(
 lhs <- test %>%
   mutate_at(c("prop.insecticide", "W_st", "K"), as.factor) %>%
   filter(prop.insecticide == 0) %>%
-  ggplot(aes(treat_prop, R_eq_res / R_eq_sen, colour = W_st, shape = K)) +
+  ggplot(aes(treat_prop, Rres / Rsen, colour = W_st, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
   xlab(my_label("treat_prop")) +
@@ -63,7 +63,7 @@ ggsave(
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by W_st
 y_vars <- c(
-  "R0_sen", "prevalence", "Incidence", "No_trt_cat", "Prob_onward_tran",
+  "R0sen", "prevalence", "Incidence", "No_trt_cat", "Prob_onward_tran",
   "RiskE", "RiskA"
 )
 

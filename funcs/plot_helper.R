@@ -9,7 +9,7 @@ my_pointsize <- function() {
 
 
 my_label <- function(variable) {
-  if (variable == "R0_sen") this_label <- "R0 sensitive"
+  if (variable == "R0sen") this_label <- "R0 sensitive"
   if (variable == "prevalence") this_label <- "Prevalence"
   if (variable == "Incidence") this_label <- "Incidence"
   if (variable == "No_trt_cat") this_label <- "Number treated cattle"
