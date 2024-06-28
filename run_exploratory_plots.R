@@ -17,12 +17,12 @@ source("funcs/r0.R")
 source("funcs/set1_params_inits.R")
 source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
-source("funcs/ode_stopping_functions.R")
+source("funcs/helper.R")
 source("input_scenarios.R")
 
 ## ---- 
 # Specify multiple or single scenario
-multiple_scenarios <- FALSE
+multiple_scenarios <- TRUE
 # Create dataframe of parameter combinations for each scenario
 scenarios_df <- input_scenarios(multiple_scenarios)
 
@@ -45,6 +45,13 @@ for (row in 1:nrow(scenarios_df)) {
                 params <- params_and_inits[["params"]]
                 inits <- params_and_inits[["inits"]]
                 
+                # Add R0 to this_scenario_df
+                R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
+                R0sen <- R0sen_and_R0res["R0sen"]
+                R0res <- R0sen_and_R0res["R0res"]
+                this_scenario$R0sen <- R0sen
+                this_scenario$R0res <- R0res
+                
                 
                 # Remove unused parameters and variables
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
@@ -52,10 +59,7 @@ for (row in 1:nrow(scenarios_df)) {
                 myvars2 <- names(inits) %in% c("CR", "PR", "WR") 
                 inits <- inits[!myvars2]
                 
-                ## R0 calculations - only run full simulation if R0 >= 1.0
-                R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
-                R0sen <- R0sen_and_R0res["R0sen"]
-                
+                ## Only run full simulation if R0 >= 1.0
                 ## Set simulation times dependent on R0 value
                 if (R0sen[1] < 1.0){
                   # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
@@ -76,45 +80,14 @@ for (row in 1:nrow(scenarios_df)) {
                 names(out)[names(out) == 'time'] <- "times"
                 
                 expanded_output <- add_totals(out)
-                expanded_output <- add_R0(inits, params, expanded_output)
+                #expanded_output <- add_R0(inits, params, expanded_output)
                 expanded_output <- add_R_trajectories(params, expanded_output)
                 last <- tail(expanded_output, 1)
-                
-                # #Check get 1 at equilibrium when run with only sensitive strains
-                # #fraction of cattle available for infection by sensitive strain
-                # fC <- last$CS / Nc
-                # #fraction of vectors available for infection by sensitive strain
-                # if (Nv > 0){fV <- (last$VSt + last$VSf) / Nv} else {fV <- 0}
-                # 
-                # #fraction of wildlife available for infection by sensitive strain
-                # if (Nw > 0) {fW = last$WS / Nw} else {fW <- 0}
-                
-                ## R calculations
-                Rsen_and_Rres <- calculate_R_from_row_of_df(params, last)
-                Rres <- Rsen_and_Rres[[2]]
-                # Nc = last$CS
-                # Np = last$PS 
-                # Nw = last$WS
-                # Nv = last$VSt + last$VSf
-                # sen <- "yes"
-                # basic <- "no"
-                # Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
-                # sen <- "no"
-                # Np = last$PS + last$PF
-                # Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)
-                
-                
-                #Rsen <- fC * R0sen[1] * fV * R0sen[3] + fW * R0sen[2] * fV * R0sen[4]  #Hurrah
-                #Rres <- fC * R0res[1] * fV * R0res[3] + fW * R0res[2] * fV * R0res[4]
-                
-                #pull calculations from df below to here
-                #be mindful of prophylactic treatment that they can be re-treated
-                #2 stage run - pull calcs out, check for quick trt, expand to prophylactic next
                 
                 if(this_scenario$treatment_type == "F"){
                   No_trt_cat <-  params["treatment.q"] * last$CIs * 365.25
                   Inc <- params["gamma.c"] * last$CEs * 365.25
-                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  Prob_onward_transmission <- 1 - dpois(0, last$Rres[1])
                   RiskA <- ( last$CTs + last$PTs)
                   RiskE <- (1 - dpois(0, Rres[1])) * ( last$CTs + last$PTs)                  
                 }
@@ -122,7 +95,7 @@ for (row in 1:nrow(scenarios_df)) {
                 if(this_scenario$treatment_type == "P"){
                   No_trt_cat <-  params["treatment.p"] * (last$PIs + last$CIs) * 365.25
                   Inc <- params["gamma.c"] * (last$PEs + last$CEs) * 365.25
-                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  Prob_onward_transmission <- 1 - dpois(0, last$Rres[1])
                   RiskA <- (last$PEs + last$PIs + last$PPs)
                   RiskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs)
                 }
@@ -130,7 +103,7 @@ for (row in 1:nrow(scenarios_df)) {
                 if(this_scenario$treatment_type == "B"){
                   No_trt_cat <-  (params["treatment.p"]+ params["treatment.q"]) * (last$PIs + last$CIs) * 365.25
                   Inc <- params["gamma.c"] * (last$PEs + last$CEs) * 365.25 
-                  Prob_onward_transmission <- 1 - dpois(0, Rres[1])
+                  Prob_onward_transmission <- 1 - dpois(0, last$Rres[1])
                   RiskA <-  (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs) 
                   RiskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
                 }
