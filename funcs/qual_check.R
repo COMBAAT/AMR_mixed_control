@@ -31,49 +31,6 @@ qual_check_no0 <- function(input){
   
 }
 
-
-
-## ------------------------------------------------------ Check R = 1
-
-
-equilibrium_R <- function(R0input, ODEinput){
-  
-  RCV <- R0input["RCV"] 
-  RPV <- R0input["RPV"] 
-  RWV <- R0input["RWV"] 
-  RVC <- R0input["RVC"] 
-  RVP <- R0input["RVP"] 
-  RVW <- R0input["RVW"] 
-
-  
-  
-
-  ODEinput2 <- tail(ODEinput,1)
-  
-  fc <- ODEinput2$CS / (ODEinput2$CS + ODEinput2$CEs + ODEinput2$CEr + 
-                          ODEinput2$CIs + ODEinput2$CIr + ODEinput2$CTs +
-                          ODEinput2$CTr)
-  
-  
-  fp <- (ODEinput2$PF +  ODEinput2$PS) / (ODEinput2$PF + ODEinput2$PS + 
-                                            ODEinput2$PEs + ODEinput2$PEr + 
-                                            ODEinput2$PIs + ODEinput2$PIr + 
-                                            ODEinput2$PTs + ODEinput2$PTr +
-                                            ODEinput2$PPr + ODEinput2$PPs)
-  fw <- ODEinput2$WS / (ODEinput2$WS + ODEinput2$WEs + ODEinput2$WEr + 
-                          ODEinput2$WIs + ODEinput2$WIr)
-  fv <- (ODEinput2$VSt + ODEinput2$VSf) / (ODEinput2$VSt + ODEinput2$VSf + 
-                                             ODEinput2$VEs + ODEinput2$VEr + 
-                                             ODEinput2$VIs + ODEinput2$VIr)
-  
-  
-  
-  
-  return(as.numeric(RCV * fc * RVC * fv + RPV * fp * RVP * fv + RWV * fw * RVW * fv))
-  
-}
-
-
 ## ------------------------------------------------------ Add total cols to out
 
 add_totals <- function(df){
