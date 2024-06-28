@@ -136,7 +136,7 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 prev <- (last$PIs + last$CIs) / last$All.cows
                 
-                selected_outputs <- cbind( data.frame(scenario_id = i, this_scenario, W_st = out[1, "WS"], 
+                selected_outputs <- cbind( data.frame(scenario_id = row, this_scenario, W_st = out[1, "WS"], 
                                                No_trt_cat = No_trt_cat, 
                                                Incidence = Inc, 
                                                Vector_no = as.numeric(inits["VSt"]), 
