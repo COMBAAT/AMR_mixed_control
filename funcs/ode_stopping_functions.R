@@ -15,7 +15,7 @@ my_rootfun3 <- function (t, y, params) {
   Np <- y['PS']
   Nw <- y['WS']
   Nv <- y['VSt'] + y['VSf']
-  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "yes", basic = "no")[1]
+  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
   
   condition1 <- (Rsen - 1.01)
   condition2 <- (y['CIs'] - 1e-5)

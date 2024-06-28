@@ -45,6 +45,7 @@ for (row in 1:nrow(scenarios_df)) {
                 params <- params_and_inits[["params"]]
                 inits <- params_and_inits[["inits"]]
                 
+                
                 # Remove unused parameters and variables
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
                 params <- params[!myvars]
@@ -53,7 +54,7 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 ## R0 calculations - only run full simulation if R0 >= 1.0
                 R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
-                R0sen <- R0sen_and_R0res$R0sen
+                R0sen <- R0sen_and_R0res["R0sen"]
                 
                 ## Set simulation times dependent on R0 value
                 if (R0sen[1] < 1.0){

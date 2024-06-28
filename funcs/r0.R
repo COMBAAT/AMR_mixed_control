@@ -4,7 +4,7 @@
 ##
 ##
 
-r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
+r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic){
   
   Nh <- params["NC"] + params["NW"]  
   
@@ -34,9 +34,9 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
   death.v <- params["death.v"]
   
   
-  if (sen == "yes"){sigma.treated <- sigma.st}
-  if (sen == "no"){sigma.treated <- sigma.c}
-  if (sen == "no"){prob.infection <- prob.infection* fit.adj}
+  if (is_strain_sensitive == "yes"){sigma.treated <- sigma.st}
+  if (is_strain_sensitive == "no"){sigma.treated <- sigma.c}
+  if (is_strain_sensitive == "no"){prob.infection <- prob.infection* fit.adj}
   
   RCV <- biterate * prob.infection * Nc / Nh * gamma.c / (gamma.c + death.c) * 1 / (death.v)
   RCV <- as.numeric(RCV)
@@ -87,15 +87,16 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, sen, basic){
   RVW <- as.numeric(RVW)
   
   
-  answer <- RCV * RVC + RPV * RVP + RWV * RVW
-  if (basic == TRUE){answer_name = "R0"} else {answer_name = "R"}
-  
-  names <- c(answer_name, "RCV", "RVC", "RPV", "RVP", "RWV", "RVW")
-  output <- c(answer, RCV, RVC, RPV, RVP, RWV, RVW)
-  names(output) <- names
-  output
-  
-  return(output)
+  reproduction_number <- RCV * RVC + RPV * RVP + RWV * RVW
+  # if (basic == TRUE){answer_name = "R0"} else {answer_name = "R"}
+  # 
+  # names <- c(answer_name, "RCV", "RVC", "RPV", "RVP", "RWV", "RVW")
+  # output <- c(answer, RCV, RVC, RPV, RVP, RWV, RVW)
+  # names(output) <- names
+  # output
+  # 
+  # return(output)
+  return(reproduction_number)
   
 }
 
@@ -104,19 +105,16 @@ calculate_R0_from_inits <- function(inits, params) {
   Np <- as.numeric(inits["PS"])
   Nw <- as.numeric(inits["WS"])
   Nv <- as.numeric(inits["VSt"])
-  sen <- "yes"
-  basic <- "yes"
-  R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
-  sen <- "no"
-  R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
-  list("R0sen" = R0sen , "R0res" = R0res)
+  R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
+  R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
+  c("R0sen" = R0sen , "R0res" = R0res)
 }
 
 
 add_R0 <- function(inits, params, df){
   R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
-  df$R0sen <- R0sen_and_R0res[[1]]
-  df$R0res <- R0sen_and_R0res[[2]]
+  df$R0sen <- R0sen_and_R0res["R0sen"]
+  df$R0res <- R0sen_and_R0res["R0res"]
   return(df)  
 }
 
@@ -125,9 +123,9 @@ calculate_R_from_row_of_df <- function(params, this_row){
   Np <- this_row$PS
   Nw <- this_row$WS
   Nv <- this_row$VSt + this_row$VSf
-  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "yes", basic = "no")[1]
-  Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen = "no", basic = "no")[1]
-  list(Rsen, Rres)
+  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
+  Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "no")
+  c("Rsen" = Rsen, "Rres" = Rres)
 }
 
 
@@ -137,8 +135,8 @@ add_R_trajectories <- function(params, df) {
   for (i in 1:nrow(df)) {
     this_row <- df[i,]
     Rsen_and_Rres <- calculate_R_from_row_of_df(params, this_row)
-    Rsen <- Rsen_and_Rres[[1]]
-    Rres <- Rsen_and_Rres[[2]]
+    Rsen <- Rsen_and_Rres["Rsen"]
+    Rres <- Rsen_and_Rres["Rres"]
     Rsen_vec <- c(Rsen_vec, Rsen)
     Rres_vec <- c(Rres_vec, Rres)
   }
