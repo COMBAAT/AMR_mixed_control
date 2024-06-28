@@ -35,11 +35,11 @@ qual_check_no0 <- function(input){
 
 add_totals <- function(df){
   
-  df_new <- df %>% mutate(Cattle.total = rowSums(select(., starts_with("C"))),
-                                   Prophylactic.total = rowSums(select(., starts_with("P"))),
-                                   Vector.total = rowSums(select(., starts_with("V"))),
-                                   Wildlife.total = rowSums(select(., starts_with("W"))),
-                                   All.cows = Cattle.total + Prophylactic.total)
+  df_new <- df %>% mutate(Cattle_total = rowSums(select(., starts_with("C"))),
+                                   Prophylactic_total = rowSums(select(., starts_with("P"))),
+                                   Vector_total = rowSums(select(., starts_with("V"))),
+                                   Wildlife_total = rowSums(select(., starts_with("W"))),
+                                   All.cows = Cattle_total + Prophylactic_total)
   
   return(df_new)
   
