@@ -109,7 +109,7 @@ calculate_R0_from_inits <- function(inits) {
   R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
   sen <- "no"
   R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, sen, basic)[1]
-  list(R0sen, R0res)
+  list("R0sen" = R0sen , "R0res" = R0res)
 }
 
 add_R0 <- function(inits, df){
