@@ -22,3 +22,8 @@ my_rootfun3 <- function (t, y, params) {
   
   return(c(condition1, condition2))
 }
+
+convert_named_vector_to_df <- function(named_vec){
+  df = data.frame(as.list(vector1)) 
+  df
+}
