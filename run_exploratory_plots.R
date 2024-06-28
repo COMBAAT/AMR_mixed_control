@@ -17,7 +17,7 @@ source("funcs/r0.R")
 source("funcs/set1_params_inits.R")
 source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
-source("funcs/helper.R")
+source("funcs/helper_functions.R")
 source("input_scenarios.R")
 
 ## ---- 
@@ -116,9 +116,7 @@ for (row in 1:nrow(scenarios_df)) {
                                                Vector_no = as.numeric(inits["VSt"]), 
                                                Prob_onward_tran = Prob_onward_transmission, 
                                                RiskA = RiskA , RiskE = RiskE,
-                                               prevalence = prev, vector_birth = params["birth.v"], 
-                                               vector_mortality = params["death.v"], 
-                                               eq_pop = params["equil_vector_pop"]))
+                                               prevalence = prev))
                 df = rbind(df, selected_outputs)
                 
                 wide <- cbind(selected_outputs, last)
