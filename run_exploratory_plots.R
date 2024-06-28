@@ -17,11 +17,12 @@ source("funcs/r0.R")
 source("funcs/set1_params_inits.R")
 source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
+source("funcs/ode_stopping_functions.R")
 source("input_scenarios.R")
 
 ## ---- 
 # Specify multiple or single scenario
-multiple_scenarios <- TRUE
+multiple_scenarios <- FALSE
 # Create dataframe of parameter combinations for each scenario
 scenarios_df <- input_scenarios(multiple_scenarios)
 
@@ -47,16 +48,15 @@ for (row in 1:nrow(scenarios_df)) {
                 # Remove unused parameters and variables
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
                 params <- params[!myvars]
-                
                 myvars2 <- names(inits) %in% c("CR", "PR", "WR") 
                 inits <- inits[!myvars2]
                 
                 ## R0 calculations - only run full simulation if R0 >= 1.0
                 R0sen_and_R0res <- calculate_R0_from_inits(inits)
-                R0s <- R0sen_and_R0res[[1]]
+                R0sen <- R0sen_and_R0res$R0sen
                 
                 ## Set simulation times dependent on R0 value
-                if (R0s[1] < 1.0){
+                if (R0sen[1] < 1.0){
                   # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
                   inits['CS'] <- inits['CS'] + inits['CIs']
                   inits['CIs'] <- 0
