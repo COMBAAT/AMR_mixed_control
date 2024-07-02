@@ -89,7 +89,7 @@ for (row in 1:nrow(scenarios_df)) {
                   Inc <- params["gamma.c"] * last$CEs * 365.25
                   Prob_onward_transmission <- 1 - dpois(0, last$Rres[1])
                   RiskA <- ( last$CTs + last$PTs)
-                  RiskE <- (1 - dpois(0, Rres[1])) * ( last$CTs + last$PTs)                  
+                  RiskE <- (1 - dpois(0, last$Rres[1])) * ( last$CTs + last$PTs)                  
                 }
                 
                 if(this_scenario$treatment_type == "P"){
@@ -97,7 +97,7 @@ for (row in 1:nrow(scenarios_df)) {
                   Inc <- params["gamma.c"] * (last$PEs + last$CEs) * 365.25
                   Prob_onward_transmission <- 1 - dpois(0, last$Rres[1])
                   RiskA <- (last$PEs + last$PIs + last$PPs)
-                  RiskE <- (1 - dpois(0, Rres[1])) * (last$PEs + last$PIs + last$PPs)
+                  RiskE <- (1 - dpois(0, last$Rres[1])) * (last$PEs + last$PIs + last$PPs)
                 }
                 
                 if(this_scenario$treatment_type == "B"){
