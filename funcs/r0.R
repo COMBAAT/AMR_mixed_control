@@ -101,22 +101,20 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
 }
 
 calculate_R0_from_inits <- function(inits, params) {
-  Nc <- as.numeric(inits["CS"] + inits["CIs"])
-  Np <- as.numeric(inits["PS"])
-  Nw <- as.numeric(inits["WS"])
-  Nv <- as.numeric(inits["VSt"])
+  #Nc <- as.numeric(inits["CS"] + inits["CIs"])
+  #Np <- as.numeric(inits["PS"])
+  #Nw <- as.numeric(inits["WS"])
+  #Nv <- as.numeric(inits["VSt"])
+  
+  Np <- params["PS"]
+  Nc <- params["CS"]
+  Nw <- params["NW"]
+  Nv <- params["NV"]
   R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
   R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
   c("R0sen" = R0sen , "R0res" = R0res)
 }
 
-
-add_R0 <- function(inits, params, df){
-  R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
-  df$R0sen <- R0sen_and_R0res["R0sen"]
-  df$R0res <- R0sen_and_R0res["R0res"]
-  return(df)  
-}
 
 calculate_R_from_row_of_df <- function(params, this_row){
   Nc <- this_row$CS
@@ -149,6 +147,6 @@ add_R_trajectories <- function(params, df) {
 
 findGlobals(fun = r0_calc_sen_or_res, merge = FALSE)$variables
 findGlobals(fun = calculate_R0_from_inits, merge = FALSE)$variables
-findGlobals(fun = add_R0, merge = FALSE)$variables
+#findGlobals(fun = add_R0, merge = FALSE)$variables
 findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
 findGlobals(fun = add_R_trajectories, merge = FALSE)$variables
