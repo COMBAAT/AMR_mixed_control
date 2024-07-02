@@ -39,12 +39,6 @@ for (row in 1:nrow(scenarios_df)) {
   print(row)
   
                 this_scenario <- scenarios_df[row, ]
-                
-                # Get params and inits for this scenario
-                #params_and_inits <- set1(this_scenario)
-                #params <- params_and_inits[["params"]]
-                #inits <- params_and_inits[["inits"]]
-                
                 params <- set_parameters(this_scenario)
                 inits <- set_inital_conditions(params, disease_present = TRUE)
                 
