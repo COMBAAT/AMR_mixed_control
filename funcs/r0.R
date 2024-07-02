@@ -100,7 +100,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   
 }
 
-calculate_R0_from_inits <- function(inits, params) {
+calculate_R0 <- function(params) {
   #Nc <- as.numeric(inits["CS"] + inits["CIs"])
   #Np <- as.numeric(inits["PS"])
   #Nw <- as.numeric(inits["WS"])
