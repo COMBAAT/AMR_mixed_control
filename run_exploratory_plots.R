@@ -22,7 +22,7 @@ source("input_scenarios.R")
 
 ## ---- 
 # Specify multiple or single scenario
-multiple_scenarios <- TRUE
+multiple_scenarios <- FALSE
 # Create dataframe of parameter combinations for each scenario
 scenarios_df <- input_scenarios(multiple_scenarios)
 
@@ -41,9 +41,12 @@ for (row in 1:nrow(scenarios_df)) {
                 this_scenario <- scenarios_df[row, ]
                 
                 # Get params and inits for this scenario
-                params_and_inits <- set1(this_scenario)
-                params <- params_and_inits[["params"]]
-                inits <- params_and_inits[["inits"]]
+                #params_and_inits <- set1(this_scenario)
+                #params <- params_and_inits[["params"]]
+                #inits <- params_and_inits[["inits"]]
+                
+                params <- set_parameters_and_population_sizes(this_scenario)
+                inits <- set_inital_conditions(params)
                 
                 # Add R0 to this_scenario_df
                 R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
@@ -130,7 +133,7 @@ toc()
 
 test <- df2
 time <- format(Sys.time(), "%a %b %d %X %Y")
-save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
+#save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
 #save(test,file ="output/test.Rda")
 
 #quick_plot(expanded_output)
