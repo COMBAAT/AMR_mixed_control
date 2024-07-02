@@ -40,7 +40,7 @@ for (row in 1:nrow(scenarios_df)) {
   
                 this_scenario <- scenarios_df[row, ]
                 
-                # Get params and intis for this scenario
+                # Get params and inits for this scenario
                 params_and_inits <- set1(this_scenario)
                 params <- params_and_inits[["params"]]
                 inits <- params_and_inits[["inits"]]
