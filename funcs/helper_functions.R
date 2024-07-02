@@ -27,3 +27,36 @@ convert_named_vector_to_df <- function(named_vec){
   df = data.frame(as.list(vector1)) 
   df
 }
+
+
+calculate_epi_outputs <- function(treatment_type, params, last) {
+  if (treatment_type == "F") {
+    No_trt_cat <- as.numeric(params["treatment.q"]) * last$CIs * 365.25
+    Incidence <- as.numeric(params["gamma.c"]) * last$CEs * 365.25
+    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
+    RiskA <- (last$CTs + last$PTs)
+    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$CTs + last$PTs)
+  }
+
+  if (treatment_type == "P") {
+    No_trt_cat <- as.numeric(params["treatment.q"]) * (last$PIs + last$CIs) * 365.25
+    Incidence <- as.numeric(params["gamma.c"]) * (last$PEs + last$CEs) * 365.25
+    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
+    RiskA <- (last$PEs + last$PIs + last$PPs)
+    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$PEs + last$PIs + last$PPs)
+  }
+
+  if (treatment_type == "B") {
+    No_trt_cat <- (as.numeric(params["treatment.q"]) + as.numeric(params["treatment.p"])) * (last$PIs + last$CIs) * 365.25
+    Inc <- as.numeric(params["gamma.c"]) * (last$PEs + last$CEs) * 365.25
+    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
+    RiskA <- (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
+    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
+  }
+  prevalence <- (last$PIs + last$CIs) / last$All.cows
+  
+  epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, Prob_onward_tran, RiskA, RiskE))
+  return(epi_outputs)
+}
+
+findGlobals(fun = calculate_epi_outputs, merge = FALSE)$variables
