@@ -45,11 +45,11 @@ for (row in 1:nrow(scenarios_df)) {
                 #params <- params_and_inits[["params"]]
                 #inits <- params_and_inits[["inits"]]
                 
-                params <- set_parameters_and_population_sizes(this_scenario)
-                inits <- set_inital_conditions(params)
+                params <- set_parameters(this_scenario)
+                inits <- set_inital_conditions(params, disease_present = TRUE)
                 
                 # Add R0 to this_scenario_df
-                R0sen_and_R0res <- calculate_R0_from_inits(inits, params)
+                R0sen_and_R0res <- calculate_R0(params)
                 R0sen <- R0sen_and_R0res["R0sen"]
                 R0res <- R0sen_and_R0res["R0res"]
                 this_scenario$R0sen <- R0sen
@@ -59,8 +59,8 @@ for (row in 1:nrow(scenarios_df)) {
                 # Remove unused parameters and variables
                 myvars <- names(params) %in% c("resusceptible", "resusceptible.w") 
                 params <- params[!myvars]
-                myvars2 <- names(inits) %in% c("CR", "PR", "WR") 
-                inits <- inits[!myvars2]
+                #myvars2 <- names(inits) %in% c("CR", "PR", "WR") 
+                #inits <- inits[!myvars2]
                 
                 ## Only run full simulation if R0 >= 1.0
                 ## Set simulation times dependent on R0 value
@@ -141,5 +141,5 @@ time <- format(Sys.time(), "%a %b %d %X %Y")
 quick_plot3(expanded_output)
 #R0_plot(expanded_output)
 
-df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
+#df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
 
