@@ -267,9 +267,9 @@ set_parameters <- function(this_scenario) {
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
     birth.c, biterate, prob.infection, fit.adj, rec.adj, sigma.st,
-    gamma.c, resusceptible, death.c, treatment.p, treatment.q, sigma.c, birth.v,
+    gamma.c, death.c, treatment.p, treatment.q, sigma.c, birth.v,
     death.v, feed.frequency, prob.infection.v, gamma.v, emergence.p, emergence.f,
-    reversion, K, birth.w, gamma.w, resusceptible.w, death.w, sigma.w, equil_vector_pop,
+    reversion, K, birth.w, gamma.w, death.w, sigma.w, equil_vector_pop,
     waning, waning.f2s, new.prop, ten2fed, prop.prophylaxis
   )
   names <- colnames(params)
