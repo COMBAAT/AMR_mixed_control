@@ -55,7 +55,7 @@ calculate_epi_outputs <- function(treatment_type, params, last) {
   }
   prevalence <- (last$PIs + last$CIs) / last$All.cows
   
-  epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, Prob_onward_tran, RiskA, RiskE))
+  epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, prevalence, Prob_onward_tran, RiskA, RiskE))
   return(epi_outputs)
 }
 
