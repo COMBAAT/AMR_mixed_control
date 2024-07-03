@@ -77,13 +77,13 @@ for (row in 1:nrow(scenarios_df)) {
                 last <- tail(expanded_output, 1)
                 
                 epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, last)
+                params_df <- as.data.frame(as.list(params))
                 
-                
-                selected_outputs <- cbind( data.frame(scenario_id = row, W_st = out[1, "WS"], 
-                                               Vector_no = as.numeric(inits["VSt"]) ), 
+                selected_outputs <- cbind( data.frame(scenario_id = row, 
+                                               W_st = params_df$NW,
                                                this_scenario,
                                                epi_outputs
-                                               )
+                                               ))
                 df = rbind(df, selected_outputs)
                 
                 wide <- cbind(selected_outputs, last)
