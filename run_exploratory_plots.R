@@ -22,7 +22,7 @@ source("input_scenarios.R")
 
 ## ---- 
 # Specify multiple or single scenario
-multiple_scenarios <- FALSE
+multiple_scenarios <- TRUE
 # Create dataframe of parameter combinations for each scenario
 if (multiple_scenarios == TRUE) {
   scenarios_df <- create_multiple_scenarios()
@@ -80,12 +80,13 @@ for (row in 1:nrow(scenarios_df)) {
                 final_state <- tail(expanded_output, 1)
                 
                 epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
-                params_df <- as.data.frame(as.list(params))
+                params_df <- convert_named_vector_to_df(params)
+                full_scenario <- merge_dfs_without_duplicate_columns(this_scenario, params_df) 
                 
-                selected_outputs <- cbind( data.frame(scenario_id = row, 
-                                               this_scenario, params_df,
+                selected_outputs <- cbind( data.frame(scenario_id = row), 
+                                               full_scenario,
                                                epi_outputs
-                                               ))
+                                               )
                 df = rbind(df, selected_outputs)
                 
                 wide <- cbind(selected_outputs, final_state)
