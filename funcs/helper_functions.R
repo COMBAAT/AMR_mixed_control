@@ -24,7 +24,7 @@ my_rootfun3 <- function (t, y, params) {
 }
 
 convert_named_vector_to_df <- function(named_vec){
-  df = data.frame(as.list(vector1)) 
+  df = data.frame(as.list(named_vec)) 
   df
 }
 
@@ -58,5 +58,13 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
   epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, prevalence, Prob_onward_tran, RiskA, RiskE))
   return(epi_outputs)
 }
+
+merge_dfs_without_duplicate_columns <- function(df1, df2){
+  duplicated_names <- names(df2)[!(names(df2) %in% names(df1))]
+  df2_reduced <- df2 %>% select(-duplicated_names)
+  merged_df <- merge(df1, df2_reduced)
+  merged_df
+}
+
 
 findGlobals(fun = calculate_epi_outputs, merge = FALSE)$variables
