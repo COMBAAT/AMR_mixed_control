@@ -50,7 +50,7 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 ## Set simulation times dependent on R0 value
                 ## Only run full simulation if R0 >= 1.0
-                if (R0sen[1] < 1.0){
+                if (R0sen[1] < 1.0) {
                   # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
                   inits <- set_inital_conditions(params, disease_present = FALSE)
                   times <- seq(0, 0.1, 0.1)
@@ -62,12 +62,12 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 ## RUN MODEL ----
                 use_root_functions <- TRUE
-                if (use_root_functions == TRUE){
+                if (use_root_functions == TRUE) {
                   # use rootfunc option to exist simulation when Rsen < 1.01 or Number infected cattle < 1e-5
-                  out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
+                  out <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
                             rootfunc = my_rootfun3, events = list(root = TRUE, terminalroot = c(1,2)))
                 } else {
-                  out <-ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
+                  out <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 }
                 out <- as.data.frame(out)
                 names(out)[names(out) == 'time'] <- "times"
