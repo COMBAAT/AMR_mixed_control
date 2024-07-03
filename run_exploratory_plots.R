@@ -24,7 +24,11 @@ source("input_scenarios.R")
 # Specify multiple or single scenario
 multiple_scenarios <- FALSE
 # Create dataframe of parameter combinations for each scenario
-scenarios_df <- input_scenarios(multiple_scenarios)
+if (multiple_scenarios == TRUE) {
+  scenarios_df <- create_multiple_scenarios()
+} else {
+  scenarios_df <- create_single_scenario()
+}
 
 # Create empty dataframes to store outputs
 df <- data.frame()
