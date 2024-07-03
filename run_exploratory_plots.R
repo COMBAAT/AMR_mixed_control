@@ -79,14 +79,11 @@ for (row in 1:nrow(scenarios_df)) {
                 epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, last)
                 
                 
-                selected_outputs <- cbind( data.frame(scenario_id = row, this_scenario, W_st = out[1, "WS"], 
-                                               #No_trt_cat = No_trt_cat, 
-                                               #Incidence = Inc, 
-                                               Vector_no = as.numeric(inits["VSt"]) 
-                                               #Prob_onward_tran = Prob_onward_transmission, 
-                                               #RiskA = RiskA , RiskE = RiskE,
-                                               #prevalence = prev
-                                               ))
+                selected_outputs <- cbind( data.frame(scenario_id = row, W_st = out[1, "WS"], 
+                                               Vector_no = as.numeric(inits["VSt"]) ), 
+                                               this_scenario,
+                                               epi_outputs
+                                               )
                 df = rbind(df, selected_outputs)
                 
                 wide <- cbind(selected_outputs, last)
