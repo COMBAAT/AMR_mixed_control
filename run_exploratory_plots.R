@@ -44,13 +44,15 @@ for (row in 1:nrow(scenarios_df)) {
   
                 this_scenario <- scenarios_df[row, ]
                 params <- set_parameters(this_scenario)
+                params_df <- convert_named_vector_to_df(params)
+                full_scenario <- merge_dfs_without_duplicate_columns(this_scenario, params_df)
  
-                # Add R0 to this_scenario
+                # Add R0 to full_scenario
                 R0sen_and_R0res <- calculate_R0(params)
                 R0sen <- R0sen_and_R0res["R0sen"]
                 R0res <- R0sen_and_R0res["R0res"]
-                this_scenario$R0sen <- R0sen
-                this_scenario$R0res <- R0res
+                full_scenario$R0sen <- R0sen
+                full_scenario$R0res <- R0res
                 
                 ## Set simulation time dependent on R0 value
                 ## Only run full simulation if R0 >= 1.0
@@ -80,8 +82,6 @@ for (row in 1:nrow(scenarios_df)) {
                 final_state <- tail(expanded_output, 1)
                 
                 epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
-                params_df <- convert_named_vector_to_df(params)
-                full_scenario <- merge_dfs_without_duplicate_columns(this_scenario, params_df) 
                 
                 selected_outputs <- cbind( data.frame(scenario_id = row), 
                                                full_scenario,
