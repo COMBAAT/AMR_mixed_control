@@ -83,7 +83,7 @@ for (row in 1:nrow(scenarios_df)) {
                 params_df <- as.data.frame(as.list(params))
                 
                 selected_outputs <- cbind( data.frame(scenario_id = row, 
-                                               this_scenario,
+                                               this_scenario, params_df,
                                                epi_outputs
                                                ))
                 df = rbind(df, selected_outputs)
