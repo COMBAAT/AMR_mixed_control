@@ -29,31 +29,31 @@ convert_named_vector_to_df <- function(named_vec){
 }
 
 
-calculate_epi_outputs <- function(treatment_type, params, last) {
+calculate_epi_outputs <- function(treatment_type, params, final_state) {
   if (treatment_type == "F") {
-    No_trt_cat <- as.numeric(params["treatment.q"]) * last$CIs * 365.25
-    Incidence <- as.numeric(params["gamma.c"]) * last$CEs * 365.25
-    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
-    RiskA <- (last$CTs + last$PTs)
-    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$CTs + last$PTs)
+    No_trt_cat <- as.numeric(params["treatment.q"]) * final_state$CIs * 365.25
+    Incidence <- as.numeric(params["gamma.c"]) * final_state$CEs * 365.25
+    Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
+    RiskA <- (final_state$CTs + final_state$PTs)
+    RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$CTs + final_state$PTs)
   }
 
   if (treatment_type == "P") {
-    No_trt_cat <- as.numeric(params["treatment.q"]) * (last$PIs + last$CIs) * 365.25
-    Incidence <- as.numeric(params["gamma.c"]) * (last$PEs + last$CEs) * 365.25
-    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
-    RiskA <- (last$PEs + last$PIs + last$PPs)
-    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$PEs + last$PIs + last$PPs)
+    No_trt_cat <- as.numeric(params["treatment.q"]) * (final_state$PIs + final_state$CIs) * 365.25
+    Incidence <- as.numeric(params["gamma.c"]) * (final_state$PEs + final_state$CEs) * 365.25
+    Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
+    RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs)
+    RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs)
   }
 
   if (treatment_type == "B") {
-    No_trt_cat <- (as.numeric(params["treatment.q"]) + as.numeric(params["treatment.p"])) * (last$PIs + last$CIs) * 365.25
-    Inc <- as.numeric(params["gamma.c"]) * (last$PEs + last$CEs) * 365.25
-    Prob_onward_tran <- 1 - dpois(0, last$Rres[1])
-    RiskA <- (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
-    RiskE <- (1 - dpois(0, last$Rres[1])) * (last$PEs + last$PIs + last$PPs + last$CTs + last$PTs)
+    No_trt_cat <- (as.numeric(params["treatment.q"]) + as.numeric(params["treatment.p"])) * (final_state$PIs + final_state$CIs) * 365.25
+    Inc <- as.numeric(params["gamma.c"]) * (final_state$PEs + final_state$CEs) * 365.25
+    Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
+    RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
+    RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
   }
-  prevalence <- (last$PIs + last$CIs) / last$All.cows
+  prevalence <- (final_state$PIs + final_state$CIs) / final_state$All.cows
   
   epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, prevalence, Prob_onward_tran, RiskA, RiskE))
   return(epi_outputs)

@@ -6,8 +6,8 @@ add_columns_for_totals_and_Rvalues <-function(out){
   expanded_output
 }
 
-create_summary_from_last_timepoint_of_simulation <- function(expanded_output){
-  last <- tail(expanded_output, 1)
+create_summary_from_final_state_timepoint_of_simulation <- function(expanded_output){
+  final_state <- tail(expanded_output, 1)
   
 }
 

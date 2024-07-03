@@ -77,9 +77,9 @@ for (row in 1:nrow(scenarios_df)) {
                
                 expanded_output <- add_population_totals(time_trajectory)
                 expanded_output <- add_R_trajectories(params, expanded_output)
-                last <- tail(expanded_output, 1)
+                final_state <- tail(expanded_output, 1)
                 
-                epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, last)
+                epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
                 params_df <- as.data.frame(as.list(params))
                 
                 selected_outputs <- cbind( data.frame(scenario_id = row, 
@@ -88,10 +88,10 @@ for (row in 1:nrow(scenarios_df)) {
                                                ))
                 df = rbind(df, selected_outputs)
                 
-                wide <- cbind(selected_outputs, last)
+                wide <- cbind(selected_outputs, final_state)
                 df2 = rbind(df2, wide)
                 
-                print(last$time)
+                print(final_state$time)
                 
 }  
 
