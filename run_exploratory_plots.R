@@ -45,7 +45,7 @@ for (row in 1:nrow(scenarios_df)) {
                 this_scenario <- scenarios_df[row, ]
                 params <- set_parameters(this_scenario)
  
-                # Add R0 to this_scenario_df
+                # Add R0 to this_scenario
                 R0sen_and_R0res <- calculate_R0(params)
                 R0sen <- R0sen_and_R0res["R0sen"]
                 R0res <- R0sen_and_R0res["R0res"]
@@ -65,17 +65,17 @@ for (row in 1:nrow(scenarios_df)) {
                 }
                 
                 ## RUN MODEL ----
+                # use rootfunc option to exit simulation when Rsen < 1.01 or Number infected cattle < 1e-5
                 use_root_functions <- TRUE
                 if (use_root_functions == TRUE) {
-                  # use rootfunc option to exist simulation when Rsen < 1.01 or Number infected cattle < 1e-5
-                  out <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
+                  time_trajectory <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
                             rootfunc = my_rootfun3, events = list(root = TRUE, terminalroot = c(1,2)))
                 } else {
-                  out <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
+                  time_trajectory <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 }
-                out <- as.data.frame(out)
+                time_trajectory <- as.data.frame(time_trajectory)
                
-                expanded_output <- add_totals(out)
+                expanded_output <- add_population_totals(time_trajectory)
                 expanded_output <- add_R_trajectories(params, expanded_output)
                 last <- tail(expanded_output, 1)
                 

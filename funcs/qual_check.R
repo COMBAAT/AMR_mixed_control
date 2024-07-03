@@ -33,7 +33,7 @@ qual_check_no0 <- function(input){
 
 ## ------------------------------------------------------ Add total cols to out
 
-add_totals <- function(df){
+add_population_totals <- function(df){
   
   df_new <- df %>% mutate(Cattle_total = rowSums(select(., starts_with("C"))),
                                    Prophylactic_total = rowSums(select(., starts_with("P"))),
