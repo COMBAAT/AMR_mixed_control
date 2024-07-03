@@ -48,7 +48,7 @@ for (row in 1:nrow(scenarios_df)) {
                 this_scenario$R0sen <- R0sen
                 this_scenario$R0res <- R0res
                 
-                ## Set simulation times dependent on R0 value
+                ## Set simulation time dependent on R0 value
                 ## Only run full simulation if R0 >= 1.0
                 if (R0sen[1] < 1.0) {
                   # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
@@ -70,8 +70,7 @@ for (row in 1:nrow(scenarios_df)) {
                   out <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
                 }
                 out <- as.data.frame(out)
-                names(out)[names(out) == 'time'] <- "times"
-                
+               
                 expanded_output <- add_totals(out)
                 expanded_output <- add_R_trajectories(params, expanded_output)
                 last <- tail(expanded_output, 1)
@@ -80,7 +79,6 @@ for (row in 1:nrow(scenarios_df)) {
                 params_df <- as.data.frame(as.list(params))
                 
                 selected_outputs <- cbind( data.frame(scenario_id = row, 
-                                               W_st = params_df$NW,
                                                this_scenario,
                                                epi_outputs
                                                ))
@@ -89,7 +87,7 @@ for (row in 1:nrow(scenarios_df)) {
                 wide <- cbind(selected_outputs, last)
                 df2 = rbind(df2, wide)
                 
-                print(last$times)
+                print(last$time)
                 
 }  
 
@@ -97,13 +95,13 @@ toc()
 
 test <- df2
 time <- format(Sys.time(), "%a %b %d %X %Y")
-#save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play", ".Rda"))
+save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play2", ".Rda"))
 #save(test,file ="output/test.Rda")
 
-#quick_plot(expanded_output)
-#quick_plot2(expanded_output)
+quick_plot(expanded_output)
+quick_plot2(expanded_output)
 quick_plot3(expanded_output)
-#R0_plot(expanded_output)
+R0_plot(expanded_output)
 
 #df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
 
