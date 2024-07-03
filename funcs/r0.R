@@ -146,7 +146,7 @@ add_R_trajectories <- function(params, df) {
 
 
 findGlobals(fun = r0_calc_sen_or_res, merge = FALSE)$variables
-findGlobals(fun = calculate_R0_from_inits, merge = FALSE)$variables
+findGlobals(fun = calculate_R0, merge = FALSE)$variables
 #findGlobals(fun = add_R0, merge = FALSE)$variables
 findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
 findGlobals(fun = add_R_trajectories, merge = FALSE)$variables
