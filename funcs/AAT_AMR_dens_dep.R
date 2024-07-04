@@ -71,8 +71,8 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   gamma   <- parms["gamma_c"]
   death            <- parms["death_c"]
   sigma         <- parms["sigma_c"]
-  treatment.q      <- parms["treatment.q"]
-  treatment.p      <- parms["treatment.p"]
+  treatment_q      <- parms["treatment_q"]
+  treatment_p      <- parms["treatment_p"]
   sigma_st      <- parms["sigma_st"]
   emergence_p      <- parms["emergence_p"]  
   emergence_f      <- parms["emergence_f"]
@@ -140,29 +140,29 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     death * CEr
   
   dCIs.dt <- gamma * CEs - 
-    treatment.q * CIs - 
-    treatment.p * CIs - 
+    treatment_q * CIs - 
+    treatment_p * CIs - 
     sigma  * CIs + 
     waning * PIs + 
     waning * PPs - #LM moved from CTs equation
     death * CIs 
   
   dCIr.dt <- gamma * CEr - 
-    treatment.q * CIr - 
-    treatment.p * CIr - 
+    treatment_q * CIr - 
+    treatment_p * CIr - 
     sigma  * CIr + 
     waning * PIr +
     waning * PPr -  #LM moved from CTr equation 29/9/22
     death * CIr 
   
-  dCTs.dt <- treatment.q * CIs - 
+  dCTs.dt <- treatment_q * CIs - 
     sigma_st  * CTs - 
     emergence_f * CTs + 
     waning * PTs - 
 #    waning * PPs - #LM moved up to CIs equation
     death * CTs
   
-  dCTr.dt <- treatment.q * CIr - 
+  dCTr.dt <- treatment_q * CIr - 
     (sigma * rec_adj) * CTr  + 
     emergence_f * CTs + 
     waning * PTr - 
@@ -175,7 +175,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # dCTr.dt <- 0
   # 
-  # dCR.dt <- treatment.q * CIs + treatment.q * CIr + sigma  * CIs + sigma  * CIr + sigma  * CTs + 
+  # dCR.dt <- treatment_q * CIs + treatment_q * CIr + sigma  * CIs + sigma  * CIr + sigma  * CTs + 
   #   sigma  * CTr - resusceptible * CR - death * CR
   
   
@@ -214,44 +214,44 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     death * PEr                                              # Death of prophylactic exposed (resistant strain)
   
   dPIs.dt <- gamma * PEs -                                   # Movement from exposed to infectious
-    treatment.q * PIs -                                      # Treatment with fast acting drug
-    treatment.p * PIs -                                      # Treatment with prophylactic acting drug 
+    treatment_q * PIs -                                      # Treatment with fast acting drug
+    treatment_p * PIs -                                      # Treatment with prophylactic acting drug 
     sigma  * PIs -                                        # sigma from sensitive strain infection
     emergence_p * PIs -                                        # Emergence of AMR
     waning * PIs -                                           # Waning of infection to non-prophylactic class
     death * PIs                                              # Death of prophylactic infectious (sensitive strain)
   
   dPIr.dt <- gamma * PEr -                                   # Movement from exposed to infectious 
-    treatment.q * PIr -                                      # Treatment with fast acting drug 
-    treatment.p * PIr -                                      # Treatment with prophylactic acting drug 
+    treatment_q * PIr -                                      # Treatment with fast acting drug 
+    treatment_p * PIr -                                      # Treatment with prophylactic acting drug 
     sigma  * PIr +                                        # sigma from resistant strain infection
     emergence_p * PIs -                                        # Emergence of AMR 
     waning * PIr -                                           # Waning of infection to non-prophylactic class
     death * PIr                                              # Death of prophylactic infectious (resistant strain)
   
-  dPTs.dt <- treatment.q * PIs -                                      # Treatment with fast acting drug 
+  dPTs.dt <- treatment_q * PIs -                                      # Treatment with fast acting drug 
     sigma_st  * PTs -                                     # sigma from sensitive strain infection (fast acting treatment)
     emergence_p * PTs -    
     emergence_f * PTs -                                        # Emergence of AMR  
     waning * PTs -                                           # Waning of infection to non-prophylactic class 
     death * PTs                                              # Death of sensitive treated (fast acting)
   
-  dPTr.dt <- treatment.q * PIr -                                      # Treatment with fast acting drug  
+  dPTr.dt <- treatment_q * PIr -                                      # Treatment with fast acting drug  
     (sigma * rec_adj)  * PTr +                            # Treatment with prophylactic acting drug  
     emergence_p * PTs +    
     emergence_f * PTs  -                                       # Emergence of AMR 
     waning * PTr -                                           # Waning of infection to non-prophylactic class  
     death * PTr                                              # Death of sensitive treated (prophylactic)  
   
-  dPPs.dt <- treatment.p * PIs +                                      # Treatment with prophylactic acting drug  
-    treatment.p * CIs -                                      # Treatment with prophylactic acting drug  
+  dPPs.dt <- treatment_p * PIs +                                      # Treatment with prophylactic acting drug  
+    treatment_p * CIs -                                      # Treatment with prophylactic acting drug  
     emergence_p * PPs -
     sigma_st  * PPs -                                     # sigma from sensitive strain infection (prophylactic treatment) 
     waning * PPs -                                           # Waning of infection to non-prophylactic class 
     death* PPs                                               # Death of sensitive treated (prophylactic)  
   
-  dPPr.dt <- treatment.p * PIr +                                      # Treatment with prophylactic acting drug   
-    treatment.p * CIr +                                      # Treatment with prophylactic acting drug   
+  dPPr.dt <- treatment_p * PIr +                                      # Treatment with prophylactic acting drug   
+    treatment_p * CIr +                                      # Treatment with prophylactic acting drug   
     emergence_p * PPs -
     (sigma * rec_adj)  * PPr -                            # sigma from resistant strain infection (prophylactic treatment)  
     waning * PPr -                                           # Waning of infection to non-prophylactic class 

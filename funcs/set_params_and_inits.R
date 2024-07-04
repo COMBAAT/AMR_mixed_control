@@ -30,19 +30,19 @@ set_parameters <- function(this_scenario) {
 
 
   if (trt.type == "F") {
-    treatment.q <- treatment
-    treatment.p <- 0
+    treatment_q <- treatment
+    treatment_p <- 0
     emergence_p <- 0
     emergence_f <- emergence * emergence_adj
   } else {
     if (trt.type == "P") {
-      treatment.q <- 0
-      treatment.p <- treatment
+      treatment_q <- 0
+      treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
       emergence_f <- 0
     } else {
-      treatment.q <- treatment
-      treatment.p <- treatment
+      treatment_q <- treatment
+      treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
       emergence_f <- emergence * emergence_adj
     }
@@ -96,7 +96,7 @@ set_parameters <- function(this_scenario) {
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
     birth_c, biterate, prob_infection, fit_adj, rec_adj, sigma_st,
-    gamma_c, death_c, treatment.p, treatment.q, sigma_c, birth_v,
+    gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
     death_v, feed.frequency, prob_infection.v, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
