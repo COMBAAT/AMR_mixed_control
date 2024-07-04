@@ -13,10 +13,10 @@ library(crayon)
 
 source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/r0.R")
-source("funcs/set1_params_inits.R")
+source("funcs/set_params_and_inits.R")
 source("funcs/qual_check.R")
 source("funcs/quick_plot.R")
-source("funcs/helper_functions.R")
+source("funcs/run_simulation_helper_functions.R")
 source("input_scenarios.R")
 
 ## ----
@@ -29,7 +29,7 @@ if (multiple_scenarios == TRUE) {
   scenarios_df <- create_single_scenario()
 }
 
-# Create empty dataframes to store outputs
+# Create empty dataframe to store outputs
 all_scenarios_summary <- data.frame()
 
 ## ---- Run time estimates
@@ -42,7 +42,6 @@ for (row in 1:nrow(scenarios_df)) {
 
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters(this_scenario)
-  # params_df <- convert_named_vector_to_df(params)
   full_scenario <- merge_params_into_this_scenario(this_scenario, params)
   full_scenario <- move_populations_first(full_scenario)
 
@@ -107,4 +106,5 @@ all_scenarios_summary %>%
   filter(R0sen < 5) %>%
   ggplot() +
   geom_point(aes(y = Rsen_final, x = R0sen))
+
 glimpse(all_scenarios_summary)

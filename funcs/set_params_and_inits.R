@@ -175,7 +175,6 @@ set_inital_conditions <- function(params, disease_present) {
 
 findGlobals(fun = set_inital_conditions, merge = FALSE)$variables
 findGlobals(fun = set_parameters, merge = FALSE)$variables
-findGlobals(fun = set1, merge = FALSE)$variables
 
 
 
