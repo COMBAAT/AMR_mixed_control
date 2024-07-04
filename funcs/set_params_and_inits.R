@@ -52,7 +52,7 @@ set_parameters <- function(this_scenario) {
   rec_adj <- 1
   waning <- (1 / 30) / dose_adj
   waning_f2s <- (1 / 60) / dose_adj
-  new.prop <- 0
+  new_prop <- 0
 
 
   NC <- 50 # Total cattle
@@ -99,7 +99,7 @@ set_parameters <- function(this_scenario) {
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
     death_v, feed.frequency, prob_infection.v, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
-    waning, waning_f2s, new.prop, ten2fed, prop_prophylaxis
+    waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
   )
   names <- colnames(params)
   params <- as.vector(params)

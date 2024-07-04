@@ -80,7 +80,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   prop_prophylaxis <- parms["prop_prophylaxis"]
   fit_adj          <- parms["fit_adj"]
   waning           <- parms["waning"]
-  new.prop         <- parms["new.prop"]    
+  new_prop         <- parms["new_prop"]    
   waning_f2s       <- parms["waning_f2s"]
   
   ## ----- Wildlife
@@ -126,7 +126,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma_st  * CTs +
 #    sigma_st  * PPs +  #test addition
     (sigma * rec_adj)  * CTr - 
-#    new.prop * CS - 
+#    new_prop * CS - 
     death * CS 
   
   dCEs.dt <- biterate * prob_infection * CS * VIs / N - 
@@ -183,7 +183,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # PS, PEs, PEr, PIs, PIr, PTs, PTr, PR
   
-  dPF.dt <- birth_c * (prop_prophylaxis) * PC - #new.prop * CS # Adding new prophylactically treated cattle
+  dPF.dt <- birth_c * (prop_prophylaxis) * PC - #new_prop * CS # Adding new prophylactically treated cattle
     biterate * (prob_infection * fit_adj * 1) * PF * VIr / N +   # Infection of resistant strain
     sigma_st  * PPs +                                     # sigma from treated (prophylactic) sensitive strain infection
     (sigma * rec_adj)  * PPr -                            # sigma from treated (prophylactic) resistant strain infection
