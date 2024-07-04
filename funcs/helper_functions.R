@@ -28,6 +28,27 @@ convert_named_vector_to_df <- function(named_vec){
   df
 }
 
+append_epi_outputs_to_df <- function(df) {
+  days_per_year <- 365.25
+
+  df <- df %>% mutate(
+    No_trt_cat = (treatment.q * CIs_final + treatment.p * PIs_final) * days_per_year,
+    Incidence = gamma.c * (PEs_final + CEs_final) * days_per_year,
+    Prob_onward_tran = 1 - dpois(0, Rres_final),
+    RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final,
+    RiskE = Prob_onward_tran * RiskA,
+    prevalence = (PIs_final + CIs_final) / All.cows_final
+  )
+  df
+}
+
+
+include_parameters <- function(params, df) {
+  params_df <- convert_named_vector_to_df(params)
+  df_with_params <- cbind(params_df, df)
+  df_with_params
+}
+
 
 calculate_epi_outputs <- function(treatment_type, params, final_state) {
   if (treatment_type == "F") {
@@ -61,13 +82,13 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
 
 merge_dfs_without_duplicate_columns <- function(df1, df2){
   duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
-  df2_reduced <- df2 %>% select(-duplicated_names)
+  df2_reduced <- df2 %>% select(-all_of(duplicated_names))
   merged_df <- merge(df1, df2_reduced)
   merged_df
 }
 
 move_populations_first <- function(df){
-  df <- df %>% select(NC, CS, PS, NW, NV, everything())
+  df <- df %>% select(NC, CS, PF, PS, NW, NV, everything())
   df
 }
 
