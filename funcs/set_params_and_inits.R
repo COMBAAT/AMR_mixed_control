@@ -19,7 +19,7 @@ set_parameters <- function(this_scenario) {
   ## Cattle -----
   birth_c <- 1 / (5 * 365)
   biterate <- 0.8 / 4
-  prob.infection <- 0.46
+  prob_infection <- 0.46
   gamma_c <- 1 / 15
   resusceptible <- 10
   death_c <- birth_c
@@ -66,8 +66,8 @@ set_parameters <- function(this_scenario) {
 
   ## ----- Wildlife
   birth_w <- 1 / 365
-  prob.infection.s_w <- 0.46
-  prob.infection.r_w <- 0.46
+  prob_infection.s_w <- 0.46
+  prob_infection.r_w <- 0.46
   gamma_w <- 1 / 20
   resusceptible_w <- 1 / 100
   death_w <- birth_w
@@ -81,7 +81,7 @@ set_parameters <- function(this_scenario) {
   qn <- 0.98 # Probability of surviving on a non-feeding day
   feed.cyc <- 4 # Days between feeding
   feed.frequency <- 0
-  prob.infection.v <- 0.025
+  prob_infection.v <- 0.025
   incubation <- 20
   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
   death_v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
@@ -95,9 +95,9 @@ set_parameters <- function(this_scenario) {
 
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
-    birth_c, biterate, prob.infection, fit_adj, rec_adj, sigma_st,
+    birth_c, biterate, prob_infection, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment.p, treatment.q, sigma_c, birth_v,
-    death_v, feed.frequency, prob.infection.v, gamma_v, emergence_p, emergence_f,
+    death_v, feed.frequency, prob_infection.v, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
   )
