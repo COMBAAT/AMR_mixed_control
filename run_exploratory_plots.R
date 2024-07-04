@@ -83,12 +83,12 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 final_state <- tail(expanded_output, 1)
                 final_state <- append_suffix_to_column_names(final_state, "_final")
-                final_state_with_parameters <- include_parameters(full_scenario, final_state)
-                final_state_with_parameters <- append_epi_outputs_to_df(final_state_with_parameters)
+                final_state_with_full_scenario <- include_parameters(full_scenario, final_state)
+                final_state_with_full_scenario <- append_epi_outputs_to_df(final_state_with_full_scenario)
                 
                 #epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
 
-                selected_outputs <- final_state_with_parameters
+                selected_outputs <- final_state_with_full_scenario
                 df2 = rbind(df2, selected_outputs)
                 
                 #wide <- cbind(selected_outputs) #, final_state)
