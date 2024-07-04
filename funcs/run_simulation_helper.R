@@ -34,7 +34,7 @@ append_suffix_to_column_names <- function(df, suffix) {
 }
 
 
-my_rootfun3 <- function (t, y, params) {
+my_rootfun <- function (t, y, params) {
   dstate <- unlist(AAT_AMR_dens_dep(t, y, params)) # rate of change vector
   Nc <- y['CS']
   Np <- y['PS']

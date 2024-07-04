@@ -17,6 +17,7 @@ source("funcs/qual_check.R")
 source("funcs/r0.R")
 source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/run_simulation_helper.R")
+source("funcs/epi_outputs.R")
 source("funcs/plot_helper.R")
 source("funcs/quick_plot.R")
 
@@ -73,7 +74,7 @@ for (row in 1:nrow(scenarios_df)) {
   if (use_root_functions == TRUE) {
     time_trajectory <- ode(
       y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
-      rootfunc = my_rootfun3, events = list(root = TRUE, terminalroot = c(1, 2))
+      rootfunc = my_rootfun, events = list(root = TRUE, terminalroot = c(1, 2))
     )
   } else {
     time_trajectory <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
