@@ -43,7 +43,7 @@ append_epi_outputs_to_df <- function(df) {
 }
 
 
-include_parameters <- function(params, df) {
+include_full_scenario <- function(params, df) {
   params_df <- convert_named_vector_to_df(params)
   df_with_params <- cbind(params_df, df)
   df_with_params
@@ -84,6 +84,12 @@ merge_dfs_without_duplicate_columns <- function(df1, df2){
   duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
   df2_reduced <- df2 %>% select(-all_of(duplicated_names))
   merged_df <- merge(df1, df2_reduced)
+  merged_df
+}
+
+merge_params_into_this_scenario <- function(df, params) {
+  params_df <- convert_named_vector_to_df(params)
+  merged_df <- merge_dfs_without_duplicate_columns(df, params_df)
   merged_df
 }
 
