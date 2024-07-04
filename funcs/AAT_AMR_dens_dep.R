@@ -74,8 +74,8 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   treatment.q      <- parms["treatment.q"]
   treatment.p      <- parms["treatment.p"]
   sigma_st      <- parms["sigma_st"]
-  emergence.p      <- parms["emergence.p"]  
-  emergence.f      <- parms["emergence.f"]
+  emergence_p      <- parms["emergence_p"]  
+  emergence_f      <- parms["emergence_f"]
   rec_adj          <- parms["rec_adj"]
   prop_prophylaxis <- parms["prop_prophylaxis"]
   fit_adj          <- parms["fit_adj"]
@@ -157,14 +157,14 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   
   dCTs.dt <- treatment.q * CIs - 
     sigma_st  * CTs - 
-    emergence.f * CTs + 
+    emergence_f * CTs + 
     waning * PTs - 
 #    waning * PPs - #LM moved up to CIs equation
     death * CTs
   
   dCTr.dt <- treatment.q * CIr - 
     (sigma * rec_adj) * CTr  + 
-    emergence.f * CTs + 
+    emergence_f * CTs + 
     waning * PTr - 
 #    waning *PPr - #LM moved up to CIr equation 29/9/22
     death * CTr
@@ -202,14 +202,14 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   
   dPEs.dt <- biterate * prob.infection * PS * VIs / N -      # Infection of sensitive strain
     gamma * PEs -                                   # Movement from exposed to infectious
-    emergence.p * PEs -
+    emergence_p * PEs -
     waning *PEs -                                            # Waning of infection to non-prophylactic class
     death * PEs                                              # Death of prophylactic exposed (sensitive strain)
   
   dPEr.dt <- biterate * (prob.infection * fit_adj) * PS *VIr / N +    # Infection of resistant strain
     biterate * (prob.infection * fit_adj * 1) * PF * VIr / N -   # Infection of resistant strain
     gamma * PEr +                                   # Movement from exposed to infectious
-    emergence.p * PEs -
+    emergence_p * PEs -
     waning * PEr -                                           # Waning of infection to non-prophylactic class
     death * PEr                                              # Death of prophylactic exposed (resistant strain)
   
@@ -217,7 +217,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     treatment.q * PIs -                                      # Treatment with fast acting drug
     treatment.p * PIs -                                      # Treatment with prophylactic acting drug 
     sigma  * PIs -                                        # sigma from sensitive strain infection
-    emergence.p * PIs -                                        # Emergence of AMR
+    emergence_p * PIs -                                        # Emergence of AMR
     waning * PIs -                                           # Waning of infection to non-prophylactic class
     death * PIs                                              # Death of prophylactic infectious (sensitive strain)
   
@@ -225,34 +225,34 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     treatment.q * PIr -                                      # Treatment with fast acting drug 
     treatment.p * PIr -                                      # Treatment with prophylactic acting drug 
     sigma  * PIr +                                        # sigma from resistant strain infection
-    emergence.p * PIs -                                        # Emergence of AMR 
+    emergence_p * PIs -                                        # Emergence of AMR 
     waning * PIr -                                           # Waning of infection to non-prophylactic class
     death * PIr                                              # Death of prophylactic infectious (resistant strain)
   
   dPTs.dt <- treatment.q * PIs -                                      # Treatment with fast acting drug 
     sigma_st  * PTs -                                     # sigma from sensitive strain infection (fast acting treatment)
-    emergence.p * PTs -    
-    emergence.f * PTs -                                        # Emergence of AMR  
+    emergence_p * PTs -    
+    emergence_f * PTs -                                        # Emergence of AMR  
     waning * PTs -                                           # Waning of infection to non-prophylactic class 
     death * PTs                                              # Death of sensitive treated (fast acting)
   
   dPTr.dt <- treatment.q * PIr -                                      # Treatment with fast acting drug  
     (sigma * rec_adj)  * PTr +                            # Treatment with prophylactic acting drug  
-    emergence.p * PTs +    
-    emergence.f * PTs  -                                       # Emergence of AMR 
+    emergence_p * PTs +    
+    emergence_f * PTs  -                                       # Emergence of AMR 
     waning * PTr -                                           # Waning of infection to non-prophylactic class  
     death * PTr                                              # Death of sensitive treated (prophylactic)  
   
   dPPs.dt <- treatment.p * PIs +                                      # Treatment with prophylactic acting drug  
     treatment.p * CIs -                                      # Treatment with prophylactic acting drug  
-    emergence.p * PPs -
+    emergence_p * PPs -
     sigma_st  * PPs -                                     # sigma from sensitive strain infection (prophylactic treatment) 
     waning * PPs -                                           # Waning of infection to non-prophylactic class 
     death* PPs                                               # Death of sensitive treated (prophylactic)  
   
   dPPr.dt <- treatment.p * PIr +                                      # Treatment with prophylactic acting drug   
     treatment.p * CIr +                                      # Treatment with prophylactic acting drug   
-    emergence.p * PPs -
+    emergence_p * PPs -
     (sigma * rec_adj)  * PPr -                            # sigma from resistant strain infection (prophylactic treatment)  
     waning * PPr -                                           # Waning of infection to non-prophylactic class 
     death* PPr                                               # Death of resistant treated (prophylactic) 
