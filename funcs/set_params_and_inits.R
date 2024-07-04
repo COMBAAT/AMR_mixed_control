@@ -65,12 +65,12 @@ set_parameters <- function(this_scenario) {
   CS <- (birth.c * (1 - prop_prophylaxis) * NC + waning * PS) / death.c
 
   ## ----- Wildlife
-  birth.w <- 1 / 365
-  prob.infection.s.w <- 0.46
-  prob.infection.r.w <- 0.46
-  gamma.w <- 1 / 20
-  resusceptible.w <- 1 / 100
-  death.w <- birth.w
+  birth_w <- 1 / 365
+  prob.infection.s_w <- 0.46
+  prob.infection.r_w <- 0.46
+  gamma_w <- 1 / 20
+  resusceptible_w <- 1 / 100
+  death_w <- birth_w
   sigma_w <- sigma_c
   reversion <- 0
 
@@ -98,7 +98,7 @@ set_parameters <- function(this_scenario) {
     birth.c, biterate, prob.infection, fit_adj, rec_adj, sigma_st,
     gamma.c, death.c, treatment.p, treatment.q, sigma_c, birth.v,
     death.v, feed.frequency, prob.infection.v, gamma.v, emergence.p, emergence.f,
-    reversion, K, birth.w, gamma.w, death.w, sigma_w, equil_vector_pop,
+    reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
   )
   names <- colnames(params)

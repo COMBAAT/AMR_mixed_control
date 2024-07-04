@@ -26,8 +26,8 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   death.p <- params["death.c"]
   sigma_p <- params["sigma_c"]
   
-  gamma.w <- params["gamma.w"]
-  death.w <- params["death.w"]
+  gamma_w <- params["gamma_w"]
+  death_w <- params["death_w"]
   sigma_w <- params["sigma_w"]
   
   gamma.v <- params["gamma.v"]
@@ -44,7 +44,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   RPV <- biterate * prob.infection * Np / Nh * gamma.p / (gamma.p + death.p) * 1 / (death.v)
   RPV <- as.numeric(RPV)
   
-  RWV <- biterate * prob.infection * Nw / Nh * gamma.w / (gamma.w + death.w) * 1 / (death.v)
+  RWV <- biterate * prob.infection * Nw / Nh * gamma_w / (gamma_w + death_w) * 1 / (death.v)
   RWV <- as.numeric(RWV)
 
   
@@ -83,7 +83,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   RVP <- as.numeric(RVP)
   
   
-  RVW <- biterate * prob.infection.v * Nv / Nh * 1 / (sigma_w + death.w) * gamma.v / (gamma.v + death.v)
+  RVW <- biterate * prob.infection.v * Nv / Nh * 1 / (sigma_w + death_w) * gamma.v / (gamma.v + death.v)
   RVW <- as.numeric(RVW)
   
   

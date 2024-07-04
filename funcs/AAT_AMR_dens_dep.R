@@ -84,11 +84,11 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   waning.f2s       <- parms["waning.f2s"]
   
   ## ----- Wildlife
-  birth.w            <- parms["birth.w"]
-  prob.infection.s.w <- parms["prob.infection.s.w"]
-  prob.infection.r.w <- parms["prob.infection.r.w"]
-  gamma.w   <- parms["gamma.w"]
-  death.w            <- parms["death.w"]
+  birth_w            <- parms["birth_w"]
+  prob.infection.s_w <- parms["prob.infection.s_w"]
+  prob.infection.r_w <- parms["prob.infection.r_w"]
+  gamma_w   <- parms["gamma_w"]
+  death_w            <- parms["death_w"]
   sigma_w         <- parms["sigma_w"]
   reversion          <- parms["reversion"]
   
@@ -262,19 +262,19 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # WS, WEs, WEr, WIs, WIr, WTs, WTr
   
-  dWS.dt <- birth.w * W - biterate * prob.infection * WS * VIs / N - 
+  dWS.dt <- birth_w * W - biterate * prob.infection * WS * VIs / N - 
     biterate * (prob.infection * fit_adj) * WS * VIr / N  - 
-    death.w * WS + sigma_w * WIs + sigma_w * WIr 
+    death_w * WS + sigma_w * WIs + sigma_w * WIr 
   
-  dWEs.dt <- biterate * prob.infection * WS * VIs / N - gamma.w * 
-    WEs - death.w * WEs 
+  dWEs.dt <- biterate * prob.infection * WS * VIs / N - gamma_w * 
+    WEs - death_w * WEs 
   
-  dWEr.dt <- biterate * (prob.infection * fit_adj) * WS * VIr / N - gamma.w * 
-    WEr - death.w * WEr 
+  dWEr.dt <- biterate * (prob.infection * fit_adj) * WS * VIr / N - gamma_w * 
+    WEr - death_w * WEr 
   
-  dWIs.dt <- gamma.w * WEs - sigma_w * WIs - death.w * WIs + reversion * WIr
+  dWIs.dt <- gamma_w * WEs - sigma_w * WIs - death_w * WIs + reversion * WIr
   
-  dWIr.dt <- gamma.w * WEr - sigma_w * WIr - death.w * WIr - reversion * WIr
+  dWIr.dt <- gamma_w * WEr - sigma_w * WIr - death_w * WIr - reversion * WIr
   
   # if (W < 1.0-8){
   #   dWS.dt <- 0
