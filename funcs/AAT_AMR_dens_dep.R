@@ -68,7 +68,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   birth.c          <- parms["birth.c"]
   biterate         <- parms["biterate"]
   prob.infection   <- parms["prob.infection"]
-  gamma   <- parms["gamma.c"]
+  gamma   <- parms["gamma_c"]
   death            <- parms["death.c"]
   sigma         <- parms["sigma_c"]
   treatment.q      <- parms["treatment.q"]
@@ -98,7 +98,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   prob.infection.v <-  parms["prob.infection.v"]
   death.v <- parms["death.v"]
   birth.v <- parms["birth.v"]
-  gamma.v <- parms["gamma.v"]
+  gamma_v <- parms["gamma_v"]
   ten2fed <- parms["ten2fed"]
   
   
@@ -338,7 +338,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIs/N) * VSf -
     #prob.infection.v * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSf +
     #prob.infection.v * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSt -
-    gamma.v * VEs - death.v *VEs
+    gamma_v * VEs - death.v *VEs
   
   dVEr.dt <-  + 
     prob.infection.v * biterate * (CIr/N) * VSt +
@@ -355,11 +355,11 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIr/N) * VSf -
 #    prob.infection.v * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSf +
 #    prob.infection.v * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSt -
-    gamma.v * VEr - death.v *VEr
+    gamma_v * VEr - death.v *VEr
   
-  dVIs.dt <- gamma.v * VEs - death.v * VIs
+  dVIs.dt <- gamma_v * VEs - death.v * VIs
   
-  dVIr.dt <- gamma.v * VEr - death.v * VIr
+  dVIr.dt <- gamma_v * VEr - death.v * VIr
   
   # Model output ----
   #dX <- c(dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt,  

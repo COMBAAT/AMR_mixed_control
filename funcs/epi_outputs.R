@@ -5,7 +5,7 @@ append_epi_outputs_to_df <- function(df) {
 
   df <- df %>% mutate(
     No_trt_cat = (treatment.q * CIs_final + treatment.p * PIs_final) * days_per_year,
-    Incidence = gamma.c * (PEs_final + CEs_final) * days_per_year,
+    Incidence = gamma_c * (PEs_final + CEs_final) * days_per_year,
     Prob_onward_tran = 1 - dpois(0, Rres_final),
     RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final,
     RiskE = Prob_onward_tran * RiskA,
@@ -31,7 +31,7 @@ add_population_totals <- function(df){
 calculate_epi_outputs <- function(treatment_type, params, final_state) {
   if (treatment_type == "F") {
     No_trt_cat <- as.numeric(params["treatment.q"]) * final_state$CIs * 365.25
-    Incidence <- as.numeric(params["gamma.c"]) * final_state$CEs * 365.25
+    Incidence <- as.numeric(params["gamma_c"]) * final_state$CEs * 365.25
     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
     RiskA <- (final_state$CTs + final_state$PTs)
     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$CTs + final_state$PTs)
@@ -39,7 +39,7 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
 
   if (treatment_type == "P") {
     No_trt_cat <- as.numeric(params["treatment.q"]) * (final_state$PIs + final_state$CIs) * 365.25
-    Incidence <- as.numeric(params["gamma.c"]) * (final_state$PEs + final_state$CEs) * 365.25
+    Incidence <- as.numeric(params["gamma_c"]) * (final_state$PEs + final_state$CEs) * 365.25
     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
     RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs)
     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs)
@@ -47,7 +47,7 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
 
   if (treatment_type == "B") {
     No_trt_cat <- (as.numeric(params["treatment.q"]) + as.numeric(params["treatment.p"])) * (final_state$PIs + final_state$CIs) * 365.25
-    Inc <- as.numeric(params["gamma.c"]) * (final_state$PEs + final_state$CEs) * 365.25
+    Inc <- as.numeric(params["gamma_c"]) * (final_state$PEs + final_state$CEs) * 365.25
     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
     RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
