@@ -9,7 +9,7 @@ append_epi_outputs_to_df <- function(df) {
     Prob_onward_tran = 1 - dpois(0, Rres_final),
     RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final,
     RiskE = Prob_onward_tran * RiskA,
-    prevalence = (PIs_final + CIs_final) / All.cows_final
+    prevalence = (PIs_final + CIs_final) / All_cows_final
   )
   df
 }
@@ -21,7 +21,7 @@ add_population_totals <- function(df){
                           Prophylactic_total = rowSums(select(., starts_with("P"))),
                           Vector_total = rowSums(select(., starts_with("V"))),
                           Wildlife_total = rowSums(select(., starts_with("W"))),
-                          All.cows = Cattle_total + Prophylactic_total)
+                          All_cows = Cattle_total + Prophylactic_total)
   
   return(df_new)
   
@@ -52,7 +52,7 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
     RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
   }
-  prevalence <- (final_state$PIs + final_state$CIs) / final_state$All.cows
+  prevalence <- (final_state$PIs + final_state$CIs) / final_state$All_cows
   
   epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, prevalence, Prob_onward_tran, RiskA, RiskE))
   return(epi_outputs)

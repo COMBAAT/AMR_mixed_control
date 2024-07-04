@@ -81,7 +81,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   fit_adj          <- parms["fit_adj"]
   waning           <- parms["waning"]
   new.prop         <- parms["new.prop"]    
-  waning.f2s       <- parms["waning.f2s"]
+  waning_f2s       <- parms["waning_f2s"]
   
   ## ----- Wildlife
   birth_w            <- parms["birth_w"]
@@ -187,10 +187,10 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     biterate * (prob_infection * fit_adj * 1) * PF * VIr / N +   # Infection of resistant strain
     sigma_st  * PPs +                                     # sigma from treated (prophylactic) sensitive strain infection
     (sigma * rec_adj)  * PPr -                            # sigma from treated (prophylactic) resistant strain infection
-    waning.f2s * PF -                                        # Waning prophylaxis from fully protected to partially protected
+    waning_f2s * PF -                                        # Waning prophylaxis from fully protected to partially protected
     death * PF                                               # Death of prophylactic susceptibles (fully protected)
   
-  dPS.dt <-  waning.f2s * PF -                               # Waning of prophylactically treated cattle to semi protected
+  dPS.dt <-  waning_f2s * PF -                               # Waning of prophylactically treated cattle to semi protected
     biterate * prob_infection * PS * VIs / N -               # Infection of sensitive strain
     biterate * (prob_infection * fit_adj) * PS * VIr / N +   # Infection of resistant strain
     sigma  * PIs +                                        # sigma from sensitive strain infection

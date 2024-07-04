@@ -51,16 +51,16 @@ set_parameters <- function(this_scenario) {
   sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
   rec_adj <- 1
   waning <- (1 / 30) / dose_adj
-  waning.f2s <- (1 / 60) / dose_adj
+  waning_f2s <- (1 / 60) / dose_adj
   new.prop <- 0
 
 
   NC <- 50 # Total cattle
   # figure out equilibrium in absence of infection
-  # birth_c * prop_prophylaxis *NC - death_c * PF - waning.f2s*PF
-  PF <- birth_c * prop_prophylaxis * NC / (death_c + waning.f2s)
-  # waning.f2s * PF - death_p * PS - waning * PS
-  PS <- waning.f2s * PF / (death_p + waning)
+  # birth_c * prop_prophylaxis *NC - death_c * PF - waning_f2s*PF
+  PF <- birth_c * prop_prophylaxis * NC / (death_c + waning_f2s)
+  # waning_f2s * PF - death_p * PS - waning * PS
+  PS <- waning_f2s * PF / (death_p + waning)
   # birth_c * (1-prop_prophylaxis) * NC - death_c * CS + waning * PS
   CS <- (birth_c * (1 - prop_prophylaxis) * NC + waning * PS) / death_c
 
@@ -99,7 +99,7 @@ set_parameters <- function(this_scenario) {
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
     death_v, feed.frequency, prob_infection.v, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
-    waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
+    waning, waning_f2s, new.prop, ten2fed, prop_prophylaxis
   )
   names <- colnames(params)
   params <- as.vector(params)
