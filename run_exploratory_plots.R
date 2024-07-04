@@ -88,11 +88,7 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 #epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
 
-                selected_outputs <- final_state_with_full_scenario
-                df2 = rbind(df2, selected_outputs)
-                
-                #wide <- cbind(selected_outputs) #, final_state)
-                #df2 = rbind(df2, wide)
+                df2 = rbind(df2, final_state_with_full_scenario)
                 
                 print(final_state$time)
                 
