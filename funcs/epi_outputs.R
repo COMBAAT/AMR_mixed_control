@@ -58,7 +58,3 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
   return(epi_outputs)
 }
 
-
-
-findGlobals(fun = add_population_totals, merge = FALSE)$variables
-findGlobals(fun = append_epi_outputs_to_df, merge = FALSE)$variables
