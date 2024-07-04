@@ -22,17 +22,17 @@
 ########################################################
 create_K_plots <- function(df, ymax, label, this_K){
     
-    plot2a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop.insect, group = interaction(prop.insect, K))) + 
+    plot2a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop_insect, group = interaction(prop_insect, K))) + 
       geom_point(aes(shape = K), size = 3) + ylim(0,ymax) + xlab("Proportion treated") + xlab("\n") + ylab("") +
       geom_line() + my_theme2()
     plot2a
     
-    plot2b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop.insect, group = interaction(prop.insect, K))) + 
+    plot2b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop_insect, group = interaction(prop_insect, K))) + 
       geom_point(aes(shape = K), size = 3) + ylim(0,ymax) + xlab("Proportion treated") +xlab("\n") + ylab("") +
       geom_line() + my_theme2()
     plot2b
     
-    plot2c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop.insect, group = interaction(prop.insect, K))) + 
+    plot2c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = this_y, colour = prop_insect, group = interaction(prop_insect, K))) + 
       geom_point(aes(shape = K), size = 3) + ylim(0,ymax) + xlab("Proportion treated") +xlab("\n") + ylab("") +
       geom_line() + my_theme2()
     plot2c
@@ -50,8 +50,8 @@ create_K_plots <- function(df, ymax, label, this_K){
     # dev.off()
 }
 ########################################################
-df <- test1 %>% filter(prop.insecticide < 0.5, prop.insecticide != 0.025, K == 6000) %>% 
-  mutate(W = as.factor(W_st), prop.insect = as.factor(prop.insecticide), K = as.factor(K)) %>% 
+df <- test1 %>% filter(prop_insecticide < 0.5, prop_insecticide != 0.025, K == 6000) %>% 
+  mutate(W = as.factor(W_st), prop_insect = as.factor(prop_insecticide), K = as.factor(K)) %>% 
   filter(dose ==1)
 
 df$this_y <- df$Incidence
@@ -97,17 +97,17 @@ for (this_K in unique(df$K)) {
 
 # for (this_K in unique(test1$K)) {
 #   
-#   plot2a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot2a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0,ymax2) + xlab("Proportion treated") + xlab("\n") + ylab("") +
 #     geom_line() + my_theme2()
 #   plot2a
 #   
-#   plot2b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot2b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0,ymax2) + xlab("Proportion treated") +xlab("\n") + ylab("") +
 #     geom_line() + my_theme2()
 #   plot2b
 #   
-#   plot2c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot2c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = Incidence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0,ymax2) + xlab("Proportion treated") +xlab("\n") + ylab("") +
 #     geom_line() + my_theme2()
 #   plot2c
@@ -127,17 +127,17 @@ for (this_K in unique(df$K)) {
 # 
 # for (this_K in unique(test1$K)) {
 #   
-#   plot3a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot3a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, 1) + xlab("Proportion treated") + ylab("Prevalence") +
 #     geom_line() + my_theme2()
 #   plot3a
 #   
-#   plot3b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot3b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, 1) + xlab("Proportion treated") + ylab("Prevalence") +
 #     geom_line() + my_theme2()
 #   plot3b
 #   
-#   plot3c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot3c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = prevalence, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, 1) + xlab("Proportion treated") + ylab("Prevalence") +
 #     geom_line() + my_theme2()
 #   plot3c
@@ -153,17 +153,17 @@ for (this_K in unique(df$K)) {
 # 
 # for (this_K in unique(test1$K)) {
 #   
-#   plot4a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot4a <- df %>% filter(W == 0, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, ymax2) + xlab("Proportion treated") + ylab("Risk of emergence and spread") +
 #     geom_line() + my_theme2()
 #   plot4a
 #   
-#   plot4b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot4b <- df %>% filter(W == 100, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, ymax2) + xlab("Proportion treated") + ylab("Risk of emergence and spread") +
 #     geom_line() + my_theme2()
 #   plot4b
 #   
-#   plot4c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop.insect, group = interaction(prop.insect, K))) + 
+#   plot4c <- df %>% filter(W == 250, K == this_K) %>% ggplot(aes(x = treat_prop, y = RiskE, colour = prop_insect, group = interaction(prop_insect, K))) + 
 #     geom_point(aes(shape = K), size = 3) + ylim(0, ymax2) + xlab("Proportion treated") + ylab("Risk of emergence and spread") +
 #     geom_line() + my_theme2()
 #   plot4c
@@ -182,12 +182,12 @@ for (this_K in unique(df$K)) {
 ###########
 plot_versus_insecticide <- function(df, this_K, max.ins, y_label){
   this_W_st = 0
-  plot4a <- df3 %>% filter(W_st == this_W_st & prop.insecticide < 0.51) %>%
+  plot4a <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
     ggplot() +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) + xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop.insecticide, colour = treat_prop),size = 2) +
-    geom_line(aes(y = this_y, x = prop.insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop),size = 2) +
+    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2() +
     ylim(0, max.ins)
   plot4a
@@ -195,23 +195,23 @@ plot_versus_insecticide <- function(df, this_K, max.ins, y_label){
                         legend.title=element_text(size=12)) )
   
   this_W_st = 100
-  plot4b <- df3 %>% filter(W_st == this_W_st & prop.insecticide < 0.51) %>%
+  plot4b <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
     ggplot()  +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) +  xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop.insecticide, colour = treat_prop), size = 2) +
-    geom_line(aes(y = this_y, x = prop.insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 2) +
+    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2()+
     ylim(0, max.ins)
   plot4b
   
   this_W_st = 250
-  plot4c <- df3 %>% filter(W_st == this_W_st & prop.insecticide < 0.51) %>%
+  plot4c <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
     ggplot()  +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) + xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop.insecticide, colour = treat_prop), size = 2) +
-    geom_line(aes(y = this_y, x = prop.insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 2) +
+    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2()+
     ylim(0, max.ins)
   plot4c

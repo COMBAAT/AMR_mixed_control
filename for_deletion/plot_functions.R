@@ -46,7 +46,7 @@ plot_PT.Y <- function(df2, Wn, fitadj, my_theme, my_par, this_var, y_label, prev
   my_cols_vec <- ggplotColours(n=3)
   my_cols <- my_cols_vec[1:3]
   
-  df2 <- df2 %>% filter(fit.adj == fitadj)
+  df2 <- df2 %>% filter(fit_adj == fitadj)
   names(df2)[names(df2) == this_var] <- "y"
   
   plot_this <- df2 %>% filter(W_st %in% Wn) %>% mutate(W_st = as.factor(W_st), K = as.factor(K))
@@ -88,20 +88,20 @@ plot_multiplot.insecticide <- function(df2, Wn, p.ins, col.var, shape.var,
   my_cols_vec <- ggplotColours(n=5)
   my_cols <- my_cols_vec[1:5]
   
-  df2 <- df2 %>% filter(fit.adj == fitadj)
+  df2 <- df2 %>% filter(fit_adj == fitadj)
   names(df2)[names(df2) == this_var] <- "y"
   
-  plot_this <- df2 %>% filter(prop.insecticide %in% p.ins) %>% mutate(W_st = as.factor(W_st), prop.insecticide = as.factor(prop.insecticide))
+  plot_this <- df2 %>% filter(prop_insecticide %in% p.ins) %>% mutate(W_st = as.factor(W_st), prop_insecticide = as.factor(prop_insecticide))
   
-  p <- ggplot(plot_this, aes(x = treat_prop, y = y*0.999, colour = prop.insecticide, group = interaction(W_st, prop.insecticide)) )  + my_theme() +
+  p <- ggplot(plot_this, aes(x = treat_prop, y = y*0.999, colour = prop_insecticide, group = interaction(W_st, prop_insecticide)) )  + my_theme() +
     geom_point(aes(shape = W_st), size = 2) + geom_line() +
     xlab("\n") + ylab("") +
-    guides(col = guide_legend("Prop.insect"), shape = guide_legend("Wildlife"))
+    guides(col = guide_legend("prop_insect"), shape = guide_legend("Wildlife"))
   
   plots <- list()
   for (i in 1:5){
-    plots[[i]] <- plot_this %>% filter(prop.insecticide == p.ins[i]) %>% 
-      ggplot(aes(x = treat_prop, y = y*0.999, group = interaction(W_st, prop.insecticide)) ) + my_theme() +
+    plots[[i]] <- plot_this %>% filter(prop_insecticide == p.ins[i]) %>% 
+      ggplot(aes(x = treat_prop, y = y*0.999, group = interaction(W_st, prop_insecticide)) ) + my_theme() +
       geom_point(aes(shape = W_st), size = 2, colour = my_cols[i] ) + geom_line(colour = my_cols[i]  ) + ylim(ymin, ymax/0.0001) +xlab("\n") + ylab("")+ 
       if (threshold == "prevalence"){
         if (this_var != "prevalence"){gghighlight(prevalence < prev_threshold)}
@@ -137,9 +137,9 @@ plot_R0_Sen_dd <- function(df2, trtprops, fitadj){
     ylab("")+
     guides(col = guide_legend("Carrying \nCapacity (K)"))
   p
-  p1 <- p + gghighlight(treat_prop == trtprops[1], fit.adj == fitadj,  unhighlighted_params = my_par) + ggtitle(paste0("TP = ",trtprops[1]))
-  p2 <- p + gghighlight(treat_prop > trtprops[2]-0.0001, treat_prop < trtprops[2] + 0.0001, fit.adj == fitadj,   unhighlighted_params = my_par)+ ggtitle(paste0("TP = ",trtprops[2]))
-  p3 <- p + gghighlight(treat_prop > trtprops[3]-0.0001, treat_prop < trtprops[3] +0.0001, fit.adj == fitadj,   unhighlighted_params = my_par) + ggtitle(paste0("TP = ",trtprops[3]))
+  p1 <- p + gghighlight(treat_prop == trtprops[1], fit_adj == fitadj,  unhighlighted_params = my_par) + ggtitle(paste0("TP = ",trtprops[1]))
+  p2 <- p + gghighlight(treat_prop > trtprops[2]-0.0001, treat_prop < trtprops[2] + 0.0001, fit_adj == fitadj,   unhighlighted_params = my_par)+ ggtitle(paste0("TP = ",trtprops[2]))
+  p3 <- p + gghighlight(treat_prop > trtprops[3]-0.0001, treat_prop < trtprops[3] +0.0001, fit_adj == fitadj,   unhighlighted_params = my_par) + ggtitle(paste0("TP = ",trtprops[3]))
   
   legend <- get_legend(p + theme(legend.box.margin = margin(0, 0, 0, 12), legend.title=element_text(size=15)) ) 
   plot_grid(p1 + theme(legend.position="none") + geom_line(aes(x = W_st, y = R0_sen, colour = as.factor(K),shape = as.factor(W_st))) + ylab("R0 sensitive"), 
@@ -157,7 +157,7 @@ plot_res_v_sen_dd <- function(df2, Wn, fitadj){
   #R0 plots: Resistant strain does better than sensitive apart from very low treatment rates
   my_par <- list(colour = "grey92")
   
-  p1 <- df2 %>% filter(W_st %in% Wn) %>% filter(fit.adj %in% fitadj)  %>% ggplot() + my_theme() +
+  p1 <- df2 %>% filter(W_st %in% Wn) %>% filter(fit_adj %in% fitadj)  %>% ggplot() + my_theme() +
     geom_point(aes(x = treat_prop, y = R_eq_res/R_eq_sen, colour = as.factor(W_st), shape = as.factor(K)), size = 2) + 
     geom_line(aes(x = treat_prop, y = R_eq_res/R_eq_sen, colour = as.factor(W_st), shape = as.factor(K))) + 
     xlab("Treatment") + ylab("R resistant / R sensitive") + ylim(0,100)  + ggtitle(paste0("Fitness = ",fitadj)) +
@@ -166,7 +166,7 @@ plot_res_v_sen_dd <- function(df2, Wn, fitadj){
   
   legend <- get_legend(p1 + theme(legend.box.margin = margin(0, 0, 0, 12))) 
   
-  p2 <- df2 %>% filter(W_st %in% Wn) %>% filter(fit.adj %in% fitadj)  %>%ggplot() + my_theme() +
+  p2 <- df2 %>% filter(W_st %in% Wn) %>% filter(fit_adj %in% fitadj)  %>%ggplot() + my_theme() +
     geom_point(aes(x = treat_prop, y = R_eq_res/R_eq_sen, colour = as.factor(W_st), shape = as.factor(K)), size = 2) + 
     geom_line(aes(x = treat_prop, y = R_eq_res/R_eq_sen, colour = as.factor(W_st), shape = as.factor(K))) + 
     geom_abline(intercept = 1, slope = 0, linetype = 2) + 
@@ -187,7 +187,7 @@ plot_PT.Y.dose <- function(df2, Wn, fitadj, my_theme, my_par, this_var, y_label,
   my_cols_vec <- ggplotColours(n=3)
   my_cols <- my_cols_vec[1:3]
   
-  df2 <- df2 %>% filter(fit.adj == fitadj)
+  df2 <- df2 %>% filter(fit_adj == fitadj)
   names(df2)[names(df2) == this_var] <- "y"
   
   plot_this <- df2 %>% filter(W_st %in% Wn) %>% mutate(W_st = as.factor(W_st), K = as.factor(K))

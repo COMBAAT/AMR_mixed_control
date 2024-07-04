@@ -5,16 +5,16 @@ library(codetools)
 ## Set parameters & Initial Conditions ----
 
 set_parameters <- function(this_scenario) {
-  birth.adj <- this_scenario$birth.adj
-  fit.adj <- this_scenario$fit.adj
+  birth_adj <- this_scenario$birth_adj
+  fit_adj <- this_scenario$fit_adj
   K <- this_scenario$K
   treat_prop <- this_scenario$treat_prop
-  prop.insecticide <- this_scenario$prop.insecticide
+  prop_insecticide <- this_scenario$prop_insecticide
   NW <- this_scenario$NW
-  prop.prophylaxis <- this_scenario$prop.prophylaxis
+  prop_prophylaxis <- this_scenario$prop_prophylaxis
   trt.type <- this_scenario$treatment_type
-  dose.adj <- this_scenario$dose.adj
-  emergence.adj <- this_scenario$emergence.adj
+  dose_adj <- this_scenario$dose_adj
+  emergence_adj <- this_scenario$emergence_adj
 
   ## Cattle -----
   birth.c <- 1 / (5 * 365)
@@ -24,8 +24,8 @@ set_parameters <- function(this_scenario) {
   resusceptible <- 10
   death.c <- birth.c
   death.p <- death.c
-  sigma.c <- 1 / 100
-  treatment <- 1 * treat_prop * (sigma.c + death.c) / (1 - treat_prop)
+  sigma_c <- 1 / 100
+  treatment <- 1 * treat_prop * (sigma_c + death.c) / (1 - treat_prop)
   emergence <- 0
 
 
@@ -33,36 +33,36 @@ set_parameters <- function(this_scenario) {
     treatment.q <- treatment
     treatment.p <- 0
     emergence.p <- 0
-    emergence.f <- emergence * emergence.adj
+    emergence.f <- emergence * emergence_adj
   } else {
     if (trt.type == "P") {
       treatment.q <- 0
       treatment.p <- treatment
-      emergence.p <- emergence * emergence.adj
+      emergence.p <- emergence * emergence_adj
       emergence.f <- 0
     } else {
       treatment.q <- treatment
       treatment.p <- treatment
-      emergence.p <- emergence * emergence.adj
-      emergence.f <- emergence * emergence.adj
+      emergence.p <- emergence * emergence_adj
+      emergence.f <- emergence * emergence_adj
     }
   }
 
-  sigma.st <- (1 / 3) * dose.adj + sigma.c * (1 - dose.adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
-  rec.adj <- 1
-  waning <- (1 / 30) / dose.adj
-  waning.f2s <- (1 / 60) / dose.adj
+  sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
+  rec_adj <- 1
+  waning <- (1 / 30) / dose_adj
+  waning.f2s <- (1 / 60) / dose_adj
   new.prop <- 0
 
 
   NC <- 50 # Total cattle
   # figure out equilibrium in absence of infection
-  # birth.c * prop.prophylaxis *NC - death.c * PF - waning.f2s*PF
-  PF <- birth.c * prop.prophylaxis * NC / (death.c + waning.f2s)
+  # birth.c * prop_prophylaxis *NC - death.c * PF - waning.f2s*PF
+  PF <- birth.c * prop_prophylaxis * NC / (death.c + waning.f2s)
   # waning.f2s * PF - death.p * PS - waning * PS
   PS <- waning.f2s * PF / (death.p + waning)
-  # birth.c * (1-prop.prophylaxis) * NC - death.c * CS + waning * PS
-  CS <- (birth.c * (1 - prop.prophylaxis) * NC + waning * PS) / death.c
+  # birth.c * (1-prop_prophylaxis) * NC - death.c * CS + waning * PS
+  CS <- (birth.c * (1 - prop_prophylaxis) * NC + waning * PS) / death.c
 
   ## ----- Wildlife
   birth.w <- 1 / 365
@@ -71,7 +71,7 @@ set_parameters <- function(this_scenario) {
   gamma.w <- 1 / 20
   resusceptible.w <- 1 / 100
   death.w <- birth.w
-  sigma.w <- sigma.c
+  sigma_w <- sigma_c
   reversion <- 0
 
   ## -----  Vectors
@@ -83,9 +83,9 @@ set_parameters <- function(this_scenario) {
   feed.frequency <- 0
   prob.infection.v <- 0.025
   incubation <- 20
-  prop.insecticide.actual <- prop.insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
-  death.v <- -1 * log((1 - prop.insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
-  birth.v <- birth.adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
+  prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
+  death.v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
+  birth.v <- birth_adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
   equil_vector_pop <- max(0, K * (1 - death.v / birth.v)) # Vector equilibrium population
   gamma.v <- death.v * exp(-death.v * incubation) / (1 - exp(-death.v * incubation)) # Rate from E to I
 
@@ -95,11 +95,11 @@ set_parameters <- function(this_scenario) {
 
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
-    birth.c, biterate, prob.infection, fit.adj, rec.adj, sigma.st,
-    gamma.c, death.c, treatment.p, treatment.q, sigma.c, birth.v,
+    birth.c, biterate, prob.infection, fit_adj, rec_adj, sigma_st,
+    gamma.c, death.c, treatment.p, treatment.q, sigma_c, birth.v,
     death.v, feed.frequency, prob.infection.v, gamma.v, emergence.p, emergence.f,
-    reversion, K, birth.w, gamma.w, death.w, sigma.w, equil_vector_pop,
-    waning, waning.f2s, new.prop, ten2fed, prop.prophylaxis
+    reversion, K, birth.w, gamma.w, death.w, sigma_w, equil_vector_pop,
+    waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
   )
   names <- colnames(params)
   params <- as.vector(params)

@@ -35,11 +35,11 @@ options(warn = -1)
 
 #load("output/test.Rda")
 test1 <- test %>% signif(4)
-p.ins <- unique(test1$prop.insecticide)
+p.ins <- unique(test1$prop_insecticide)
 this_prop <- 0.05
-ins2.dat <- test1 %>% filter(prop.insecticide == this_prop) 
+ins2.dat <- test1 %>% filter(prop_insecticide == this_prop) 
 this_prop <- 0.0
-ins1.dat <- test1 %>% filter(prop.insecticide == this_prop) 
+ins1.dat <- test1 %>% filter(prop_insecticide == this_prop) 
 ins1.dat <- ins1.dat %>% filter(dose == 1)
 
 
@@ -163,9 +163,9 @@ dev.off()
 
 
 test1 <- test %>% signif(4)
-p.ins <- unique(test1$prop.insecticide)
+p.ins <- unique(test1$prop_insecticide)
 this_prop <- 0.0
-ins1.dat <- test1 %>% filter(prop.insecticide == this_prop & treat_prop == 0.8) 
+ins1.dat <- test1 %>% filter(prop_insecticide == this_prop & treat_prop == 0.8) 
 
 
 this_var <- "RiskE"
@@ -191,8 +191,8 @@ dev.off()
 ##
 
 
-K.10000 <- test1 %>% filter(K == 10000 & dose ==1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
-p.ins <- unique(K.10000$prop.insecticide)
+K.10000 <- test1 %>% filter(K == 10000 & dose ==1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
+p.ins <- unique(K.10000$prop_insecticide)
 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
@@ -202,7 +202,7 @@ inc_threshold <- max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9a_10k_RiskE.pdf"))
 plot_multiplot.insecticide(K.10000, Wn = c(0,100,250), p.ins,
@@ -210,7 +210,7 @@ plot_multiplot.insecticide(K.10000, Wn = c(0,100,250), p.ins,
                            fitadj = fitadj, my_theme, this_var, y_label, threshold, prev_threshold, inc_threshold, ymin, ymax , label = label)
 dev.off()
 
-#K.10000 <- test1 %>% filter(K == 10000 & dose ==1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
+#K.10000 <- test1 %>% filter(K == 10000 & dose ==1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
 prev_threshold <- 0.1
@@ -218,7 +218,7 @@ inc_threshold <- max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9b_10k_RiskE_pt0.1.pdf"))
 
@@ -229,7 +229,7 @@ dev.off()
 
 
 
-#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
+#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
 prev_threshold <- 0.05
@@ -237,7 +237,7 @@ inc_threshold <- max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9c_10k_RiskE_pt0.05.pdf"))
 
@@ -248,7 +248,7 @@ dev.off()
 
 
 
-#K.10000 <- test1 %>% filter(K == 10000& dose == 1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
+#K.10000 <- test1 %>% filter(K == 10000& dose == 1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
 threshold <- "Incidence"
@@ -257,7 +257,7 @@ inc_threshold <- max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9d_10k_RiskE_pt1.pdf"))
 
@@ -266,7 +266,7 @@ plot_multiplot.insecticide(K.10000, Wn = c(0,100,250), p.ins,
                            fitadj = fitadj, my_theme, this_var, y_label, threshold, prev_threshold, inc_threshold, ymin, ymax , label = label)
 dev.off()
 
-#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
+#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
 prev_threshold <- 0.1
@@ -274,7 +274,7 @@ inc_threshold <- 100#max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9e_10k_RiskE_pt0.1it100.pdf"))
 
@@ -285,7 +285,7 @@ dev.off()
 
 
 
-#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop.insecticide < 0.5, prop.insecticide != 0.025) 
+#K.10000 <- test1 %>% filter(K == 10000 & dose == 1, prop_insecticide < 0.5, prop_insecticide != 0.025) 
 this_var <- "RiskE"
 y_label <- "Relative Risk of emergence"
 prev_threshold <- 0.05
@@ -293,7 +293,7 @@ inc_threshold <- 10#max(K.10000$Incidence)
 axislims <- plotlims[which (plotlims[,1]==this_var),]
 ymin <- as.numeric(axislims["plotlims.min"])
 ymax <- 9*0.0001#1.1*max(ins1.dat$RiskA)*0.0001 #as.numeric(axislims["plotlims.max"])
-col.var = "prop.insecticide"
+col.var = "prop_insecticide"
 shape.var = "W_st"
 pdf(file=paste0(folder_name, "9f_10k_RiskA_pt0.05it10.pdf"))
 

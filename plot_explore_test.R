@@ -19,8 +19,8 @@ if (treatment_option == "F") {
 # Generate plots ---------------------------------------------------------------
 # Plot R0 versus wildlife faceted by treat_prop
 test %>%
-  mutate_at(c("prop.insecticide", "treat_prop", "K"), as.factor) %>%
-  filter(prop.insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
+  mutate_at(c("prop_insecticide", "treat_prop", "K"), as.factor) %>%
+  filter(prop_insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
   ggplot(aes(NW, R0sen, colour = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
@@ -38,8 +38,8 @@ ggsave(
 # ----------------------------------------
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
 lhs <- test %>%
-  mutate_at(c("prop.insecticide", "NW", "K"), as.factor) %>%
-  filter(prop.insecticide == 0) %>%
+  mutate_at(c("prop_insecticide", "NW", "K"), as.factor) %>%
+  filter(prop_insecticide == 0) %>%
   ggplot(aes(treat_prop, Rres_final / Rsen_final, colour = NW, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
@@ -79,7 +79,7 @@ for (y_var in y_vars) {
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by prop.insecticide
+# Plot y versus_treat_prop faceted by prop_insecticide
 
 y_var <- "RiskA"
 this_K <- 10000
@@ -102,7 +102,7 @@ ggsave(
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by prop.insecticide with highlighting
+# Plot y versus_treat_prop faceted by prop_insecticide with highlighting
 y_var <- "RiskE"
 this_K <- 10000
 threshold_var <- "prevalence"
@@ -119,7 +119,7 @@ ggsave(
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by NW, coloured by prop.insecticide
+# Plot y versus_treat_prop faceted by NW, coloured by prop_insecticide
 y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
 this_K <- 6000
 
@@ -135,7 +135,7 @@ for (y_var in y_vars) {
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus prop.insecticide faceted by NW, coloured by treat_prop
+# Plot y versus prop_insecticide faceted by NW, coloured by treat_prop
 y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
 this_K <- 6000
 
