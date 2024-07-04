@@ -11,8 +11,6 @@
 ## ------------------------------------------------------ Check Inputs
 
 library(crayon)
-library(dplyr) #added by LM
-
 
 qual_check_no0 <- function(input){
   
@@ -31,16 +29,3 @@ qual_check_no0 <- function(input){
   
 }
 
-## ------------------------------------------------------ Add total cols to out
-
-add_population_totals <- function(df){
-  
-  df_new <- df %>% mutate(Cattle_total = rowSums(select(., starts_with("C"))),
-                                   Prophylactic_total = rowSums(select(., starts_with("P"))),
-                                   Vector_total = rowSums(select(., starts_with("V"))),
-                                   Wildlife_total = rowSums(select(., starts_with("W"))),
-                                   All.cows = Cattle_total + Prophylactic_total)
-  
-  return(df_new)
-  
-}
