@@ -46,6 +46,7 @@ for (row in 1:nrow(scenarios_df)) {
                 params <- set_parameters(this_scenario)
                 params_df <- convert_named_vector_to_df(params)
                 full_scenario <- merge_dfs_without_duplicate_columns(this_scenario, params_df)
+                full_scenario <- move_populations_first(full_scenario)
  
                 # Add R0 to full_scenario
                 R0sen_and_R0res <- calculate_R0(params)
@@ -54,7 +55,6 @@ for (row in 1:nrow(scenarios_df)) {
                 full_scenario$R0sen <- R0sen
                 full_scenario$R0res <- R0res
                 
-                print("hello")
                 ## Set simulation time dependent on R0 value
                 ## Only run full simulation if R0 >= 1.0
                 if (R0sen[1] < 1.0) {
@@ -80,20 +80,19 @@ for (row in 1:nrow(scenarios_df)) {
                
                 expanded_output <- add_population_totals(time_trajectory)
                 expanded_output <- add_R_trajectories(params, expanded_output)
+                
                 final_state <- tail(expanded_output, 1)
+                final_state <- append_suffix_to_column_names(final_state, "_final")
+                final_state_with_parameters <- include_parameters(full_scenario, final_state)
+                final_state_with_parameters <- append_epi_outputs_to_df(final_state_with_parameters)
                 
-                epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
-                print("hello2")
-                selected_outputs <- cbind( data.frame(scenario_id = row), 
-                                               this_scenario,
-                                               params_df,
-                                               epi_outputs
-                                               )
-                df = rbind(df, selected_outputs)
-                print("hello3")
+                #epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
+
+                selected_outputs <- final_state_with_parameters
+                df2 = rbind(df2, selected_outputs)
                 
-                wide <- cbind(selected_outputs, final_state)
-                df2 = rbind(df2, wide)
+                #wide <- cbind(selected_outputs) #, final_state)
+                #df2 = rbind(df2, wide)
                 
                 print(final_state$time)
                 
@@ -112,4 +111,4 @@ quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
 #df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
-
+glimpse(df2)
