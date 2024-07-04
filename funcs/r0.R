@@ -18,12 +18,12 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   waning <- params["waning"]
   
   gamma_c <- params["gamma_c"]
-  death.c <- params["death.c"]
+  death_c <- params["death_c"]
   sigma_c <- params["sigma_c"]
   sigma_st <- params["sigma_st"]
   
   gamma_p <- params["gamma_c"]
-  death.p <- params["death.c"]
+  death_p <- params["death_c"]
   sigma_p <- params["sigma_c"]
   
   gamma_w <- params["gamma_w"]
@@ -31,59 +31,59 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   sigma_w <- params["sigma_w"]
   
   gamma_v <- params["gamma_v"]
-  death.v <- params["death.v"]
+  death_v <- params["death_v"]
   
   
   if (is_strain_sensitive == "yes"){sigma_treated <- sigma_st}
   if (is_strain_sensitive == "no"){sigma_treated <- sigma_c}
   if (is_strain_sensitive == "no"){prob.infection <- prob.infection* fit_adj}
   
-  RCV <- biterate * prob.infection * Nc / Nh * gamma_c / (gamma_c + death.c) * 1 / (death.v)
+  RCV <- biterate * prob.infection * Nc / Nh * gamma_c / (gamma_c + death_c) * 1 / (death_v)
   RCV <- as.numeric(RCV)
   
-  RPV <- biterate * prob.infection * Np / Nh * gamma_p / (gamma_p + death.p) * 1 / (death.v)
+  RPV <- biterate * prob.infection * Np / Nh * gamma_p / (gamma_p + death_p) * 1 / (death_v)
   RPV <- as.numeric(RPV)
   
-  RWV <- biterate * prob.infection * Nw / Nh * gamma_w / (gamma_w + death_w) * 1 / (death.v)
+  RWV <- biterate * prob.infection * Nw / Nh * gamma_w / (gamma_w + death_w) * 1 / (death_v)
   RWV <- as.numeric(RWV)
 
   
   # Probability of I -> Tp
-  p1c <- treatment.p/ (treatment.p + treatment.q + sigma_c + death.c)  
+  p1c <- treatment.p/ (treatment.p + treatment.q + sigma_c + death_c)  
   
   # Probability of Tp -> I
-  #p2c <- waning/ (treatment.p + treatment.q + sigma_st + death.c) 
-  p2c <- waning/ (waning + sigma_treated + death.c) #LM corrected
+  #p2c <- waning/ (treatment.p + treatment.q + sigma_st + death_c) 
+  p2c <- waning/ (waning + sigma_treated + death_c) #LM corrected
   
   
-  RVC <- biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death.v) * 
-    ( 1/(treatment.p + treatment.q + sigma_c + death.c) * 1/(1-p1c *p2c)  +
-        treatment.q/(treatment.p + treatment.q + sigma_c + death.c) * 1/(death.c + sigma_treated) * 1/(1-p1c *p2c) +
-        treatment.p/(treatment.p + treatment.q + sigma_c + death.c) * 1/ (death.c + sigma_treated + waning) *
+  RVC <- biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * 
+    ( 1/(treatment.p + treatment.q + sigma_c + death_c) * 1/(1-p1c *p2c)  +
+        treatment.q/(treatment.p + treatment.q + sigma_c + death_c) * 1/(death_c + sigma_treated) * 1/(1-p1c *p2c) +
+        treatment.p/(treatment.p + treatment.q + sigma_c + death_c) * 1/ (death_c + sigma_treated + waning) *
         1/(1-p1c *p2c))
   RVC <- as.numeric(RVC)
   
   
-  RVP <- biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death.v) * 
-    (1/(treatment.p + treatment.q + sigma_p + death.p + waning)) +              #contribution from PIs
+  RVP <- biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * 
+    (1/(treatment.p + treatment.q + sigma_p + death_p + waning)) +              #contribution from PIs
     
-    (waning /(treatment.p + treatment.q + sigma_p + death.p + waning)) * RVC  + #contribution from waning back to CIS
+    (waning /(treatment.p + treatment.q + sigma_p + death_p + waning)) * RVC  + #contribution from waning back to CIS
     
-    biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death.v) * (
-      treatment.q/(treatment.p + treatment.q + sigma_p + death.p + waning) * ( 1/(death.p + sigma_treated + waning) + #contribution from PTs
-                                                                                 waning/(death.p + sigma_treated + waning) * 1/(sigma_treated + death.c)))  + # waning from PTs back to CTs 
+    biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * (
+      treatment.q/(treatment.p + treatment.q + sigma_p + death_p + waning) * ( 1/(death_p + sigma_treated + waning) + #contribution from PTs
+                                                                                 waning/(death_p + sigma_treated + waning) * 1/(sigma_treated + death_c)))  + # waning from PTs back to CTs 
     
-    biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death.v) * (
-      treatment.p /(treatment.p + treatment.q + sigma_p + death.p + waning)) * 1/(sigma_treated + death.p + waning) + #contrib from PPs
+    biterate * prob.infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * (
+      treatment.p /(treatment.p + treatment.q + sigma_p + death_p + waning)) * 1/(sigma_treated + death_p + waning) + #contrib from PPs
     
-    treatment.p /(treatment.p + treatment.q + sigma_p + death.p + waning) *
-    waning /(sigma_treated + death.p + waning) * RVC #contribution from PPs waning back to CIs
+    treatment.p /(treatment.p + treatment.q + sigma_p + death_p + waning) *
+    waning /(sigma_treated + death_p + waning) * RVC #contribution from PPs waning back to CIs
   
   
   RVP <- as.numeric(RVP)
   
   
-  RVW <- biterate * prob.infection.v * Nv / Nh * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death.v)
+  RVW <- biterate * prob.infection.v * Nv / Nh * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
   RVW <- as.numeric(RVW)
   
   

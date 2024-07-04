@@ -65,11 +65,11 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   VIr <- init["VIr"] # Infected (drug resistant strain) 
   
   ## ----- Cattle
-  birth.c          <- parms["birth.c"]
+  birth_c          <- parms["birth_c"]
   biterate         <- parms["biterate"]
   prob.infection   <- parms["prob.infection"]
   gamma   <- parms["gamma_c"]
-  death            <- parms["death.c"]
+  death            <- parms["death_c"]
   sigma         <- parms["sigma_c"]
   treatment.q      <- parms["treatment.q"]
   treatment.p      <- parms["treatment.p"]
@@ -96,8 +96,8 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   K                <- parms["K"]
   feeding.rate     <-  parms["feeding.rate"]
   prob.infection.v <-  parms["prob.infection.v"]
-  death.v <- parms["death.v"]
-  birth.v <- parms["birth.v"]
+  death_v <- parms["death_v"]
+  birth_v <- parms["birth_v"]
   gamma_v <- parms["gamma_v"]
   ten2fed <- parms["ten2fed"]
   
@@ -117,7 +117,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # CS, CEs, CEr, CIs, CIr, CTs, CTr, CR
   
-  dCS.dt <- birth.c * (1 - prop_prophylaxis) * PC +
+  dCS.dt <- birth_c * (1 - prop_prophylaxis) * PC +
     waning * PS -
     biterate * prob.infection * CS * VIs / N -  
     biterate * (prob.infection * fit_adj) * CS * VIr / N  + 
@@ -183,7 +183,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # PS, PEs, PEr, PIs, PIr, PTs, PTr, PR
   
-  dPF.dt <- birth.c * (prop_prophylaxis) * PC - #new.prop * CS # Adding new prophylactically treated cattle
+  dPF.dt <- birth_c * (prop_prophylaxis) * PC - #new.prop * CS # Adding new prophylactically treated cattle
     biterate * (prob.infection * fit_adj * 1) * PF * VIr / N +   # Infection of resistant strain
     sigma_st  * PPs +                                     # sigma from treated (prophylactic) sensitive strain infection
     (sigma * rec_adj)  * PPr -                            # sigma from treated (prophylactic) resistant strain infection
@@ -289,7 +289,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # 
   # VS, VEs, VEr, VIs, VIr, 
   
-  dVSt.dt <- birth.v * V  * (1 - V / K ) - 
+  dVSt.dt <- birth_v * V  * (1 - V / K ) - 
     prob.infection.v * biterate * (CIs/N) * VSt -
     prob.infection.v * biterate * (CIr/N) * VSt -
     prob.infection.v * biterate * (CTs/N) * VSt -
@@ -304,7 +304,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIr/N) * VSt -
 #    prob.infection.v * biterate * (CIs + CIr + CTs +CTr + PIs + PIr + PPs + PPr + PTs + PTr + WIs + WIr) / N * VSt -
     ten2fed * VSt -
-    death.v * VSt 
+    death_v * VSt 
   
   dVSf.dt <- - 
     prob.infection.v * biterate * (CIs/N) * VSf - #LM missing minus at start of line
@@ -321,7 +321,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIr/N) * VSf +
 #  prob.infection.v * biterate * (CIs + CIr + CTs +CTr + PIs + PIr + PPs + PPr + PTs + PTr + WIs + WIr) / N * VSf +
     ten2fed * VSt -
-    death.v * VSf
+    death_v * VSf
   
   dVEs.dt <-  + 
     prob.infection.v * biterate * (CIs/N) * VSt +
@@ -338,7 +338,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIs/N) * VSf -
     #prob.infection.v * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSf +
     #prob.infection.v * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSt -
-    gamma_v * VEs - death.v *VEs
+    gamma_v * VEs - death_v *VEs
   
   dVEr.dt <-  + 
     prob.infection.v * biterate * (CIr/N) * VSt +
@@ -355,11 +355,11 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob.infection.v * biterate * (WIr/N) * VSf -
 #    prob.infection.v * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSf +
 #    prob.infection.v * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSt -
-    gamma_v * VEr - death.v *VEr
+    gamma_v * VEr - death_v *VEr
   
-  dVIs.dt <- gamma_v * VEs - death.v * VIs
+  dVIs.dt <- gamma_v * VEs - death_v * VIs
   
-  dVIr.dt <- gamma_v * VEr - death.v * VIr
+  dVIr.dt <- gamma_v * VEr - death_v * VIr
   
   # Model output ----
   #dX <- c(dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt,  

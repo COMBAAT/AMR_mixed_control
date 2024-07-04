@@ -17,15 +17,15 @@ set_parameters <- function(this_scenario) {
   emergence_adj <- this_scenario$emergence_adj
 
   ## Cattle -----
-  birth.c <- 1 / (5 * 365)
+  birth_c <- 1 / (5 * 365)
   biterate <- 0.8 / 4
   prob.infection <- 0.46
   gamma_c <- 1 / 15
   resusceptible <- 10
-  death.c <- birth.c
-  death.p <- death.c
+  death_c <- birth_c
+  death_p <- death_c
   sigma_c <- 1 / 100
-  treatment <- 1 * treat_prop * (sigma_c + death.c) / (1 - treat_prop)
+  treatment <- 1 * treat_prop * (sigma_c + death_c) / (1 - treat_prop)
   emergence <- 0
 
 
@@ -57,12 +57,12 @@ set_parameters <- function(this_scenario) {
 
   NC <- 50 # Total cattle
   # figure out equilibrium in absence of infection
-  # birth.c * prop_prophylaxis *NC - death.c * PF - waning.f2s*PF
-  PF <- birth.c * prop_prophylaxis * NC / (death.c + waning.f2s)
-  # waning.f2s * PF - death.p * PS - waning * PS
-  PS <- waning.f2s * PF / (death.p + waning)
-  # birth.c * (1-prop_prophylaxis) * NC - death.c * CS + waning * PS
-  CS <- (birth.c * (1 - prop_prophylaxis) * NC + waning * PS) / death.c
+  # birth_c * prop_prophylaxis *NC - death_c * PF - waning.f2s*PF
+  PF <- birth_c * prop_prophylaxis * NC / (death_c + waning.f2s)
+  # waning.f2s * PF - death_p * PS - waning * PS
+  PS <- waning.f2s * PF / (death_p + waning)
+  # birth_c * (1-prop_prophylaxis) * NC - death_c * CS + waning * PS
+  CS <- (birth_c * (1 - prop_prophylaxis) * NC + waning * PS) / death_c
 
   ## ----- Wildlife
   birth_w <- 1 / 365
@@ -84,10 +84,10 @@ set_parameters <- function(this_scenario) {
   prob.infection.v <- 0.025
   incubation <- 20
   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
-  death.v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
-  birth.v <- birth_adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
-  equil_vector_pop <- max(0, K * (1 - death.v / birth.v)) # Vector equilibrium population
-  gamma_v <- death.v * exp(-death.v * incubation) / (1 - exp(-death.v * incubation)) # Rate from E to I
+  death_v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
+  birth_v <- birth_adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
+  equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
+  gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
 
   NV <- equil_vector_pop # equil_vector_pop
 
@@ -95,9 +95,9 @@ set_parameters <- function(this_scenario) {
 
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
-    birth.c, biterate, prob.infection, fit_adj, rec_adj, sigma_st,
-    gamma_c, death.c, treatment.p, treatment.q, sigma_c, birth.v,
-    death.v, feed.frequency, prob.infection.v, gamma_v, emergence_p, emergence_f,
+    birth_c, biterate, prob.infection, fit_adj, rec_adj, sigma_st,
+    gamma_c, death_c, treatment.p, treatment.q, sigma_c, birth_v,
+    death_v, feed.frequency, prob.infection.v, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning.f2s, new.prop, ten2fed, prop_prophylaxis
   )
