@@ -103,5 +103,5 @@ quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
-#all_scenarios_summary %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
+all_scenarios_summary %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen_final, x = R0sen))
 glimpse(all_scenarios_summary)
