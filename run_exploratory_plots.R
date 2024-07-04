@@ -54,6 +54,7 @@ for (row in 1:nrow(scenarios_df)) {
                 full_scenario$R0sen <- R0sen
                 full_scenario$R0res <- R0res
                 
+                print("hello")
                 ## Set simulation time dependent on R0 value
                 ## Only run full simulation if R0 >= 1.0
                 if (R0sen[1] < 1.0) {
@@ -82,12 +83,14 @@ for (row in 1:nrow(scenarios_df)) {
                 final_state <- tail(expanded_output, 1)
                 
                 epi_outputs <- calculate_epi_outputs(this_scenario$treatment_type, params, final_state)
-                
+                print("hello2")
                 selected_outputs <- cbind( data.frame(scenario_id = row), 
-                                               full_scenario,
+                                               this_scenario,
+                                               params_df,
                                                epi_outputs
                                                )
                 df = rbind(df, selected_outputs)
+                print("hello3")
                 
                 wide <- cbind(selected_outputs, final_state)
                 df2 = rbind(df2, wide)

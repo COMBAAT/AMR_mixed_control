@@ -60,10 +60,19 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
 }
 
 merge_dfs_without_duplicate_columns <- function(df1, df2){
-  duplicated_names <- names(df2)[!(names(df2) %in% names(df1))]
+  duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
   df2_reduced <- df2 %>% select(-duplicated_names)
   merged_df <- merge(df1, df2_reduced)
   merged_df
+}
+
+move_populations_first <- function(df){
+  df <- df %>% select(NC, CS, PS, NW, NV, everything())
+  df
+}
+
+append_suffix_to_column_names <- function(df, suffix) {
+  df <- df %>% rename_with(~ paste0(., suffix))
 }
 
 
