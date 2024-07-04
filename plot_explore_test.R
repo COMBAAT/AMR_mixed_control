@@ -40,7 +40,7 @@ ggsave(
 lhs <- test %>%
   mutate_at(c("prop.insecticide", "NW", "K"), as.factor) %>%
   filter(prop.insecticide == 0) %>%
-  ggplot(aes(treat_prop, Rres / Rsen, colour = NW, shape = K)) +
+  ggplot(aes(treat_prop, Rres_final / Rsen_final, colour = NW, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
   xlab(my_label("treat_prop")) +
