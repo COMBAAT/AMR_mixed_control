@@ -31,8 +31,7 @@ if (multiple_scenarios == TRUE) {
 }
 
 # Create empty dataframes to store outputs
-df <- data.frame()
-df2 <- data.frame()
+all_scenarios_summary <- data.frame()
 
 ## ---- Run time estimates
 tic()
@@ -44,8 +43,8 @@ for (row in 1:nrow(scenarios_df)) {
   
                 this_scenario <- scenarios_df[row, ]
                 params <- set_parameters(this_scenario)
-                params_df <- convert_named_vector_to_df(params)
-                full_scenario <- merge_dfs_without_duplicate_columns(this_scenario, params_df)
+                #params_df <- convert_named_vector_to_df(params)
+                full_scenario <- merge_params_into_this_scenario(this_scenario, params)
                 full_scenario <- move_populations_first(full_scenario)
  
                 # Add R0 to full_scenario
@@ -83,10 +82,10 @@ for (row in 1:nrow(scenarios_df)) {
                 
                 final_state <- tail(expanded_output, 1)
                 final_state <- append_suffix_to_column_names(final_state, "_final")
-                final_state_with_full_scenario <- include_parameters(full_scenario, final_state)
+                final_state_with_full_scenario <- include_full_scenario(full_scenario, final_state)
                 final_state_with_full_scenario <- append_epi_outputs_to_df(final_state_with_full_scenario)
 
-                df2 = rbind(df2, final_state_with_full_scenario)
+                all_scenarios_summary = rbind(all_scenarios_summary, final_state_with_full_scenario)
                 
                 print(final_state$time)
                 
@@ -94,7 +93,7 @@ for (row in 1:nrow(scenarios_df)) {
 
 toc()
 
-test <- df2
+test <- all_scenarios_summary
 time <- format(Sys.time(), "%a %b %d %X %Y")
 save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play2", ".Rda"))
 #save(test,file ="output/test.Rda")
@@ -104,5 +103,5 @@ quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
-#df2 %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
-glimpse(df2)
+#all_scenarios_summary %>% filter(R0sen < 5) %>% ggplot() + geom_point(aes(y = Rsen, x = R0sen))
+glimpse(all_scenarios_summary)
