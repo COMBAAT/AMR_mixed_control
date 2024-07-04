@@ -11,13 +11,16 @@ library(crayon)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
-source("funcs/AAT_AMR_dens_dep.R")
-source("funcs/r0.R")
+source("input_scenarios.R")
 source("funcs/set_params_and_inits.R")
 source("funcs/qual_check.R")
+source("funcs/r0.R")
+source("funcs/AAT_AMR_dens_dep.R")
+source("funcs/run_simulation_helper.R")
+source("funcs/plot_helper.R")
 source("funcs/quick_plot.R")
-source("funcs/run_simulation_helper_functions.R")
-source("input_scenarios.R")
+
+
 
 ## ----
 # Specify multiple or single scenario
