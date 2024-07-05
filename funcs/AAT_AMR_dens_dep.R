@@ -37,7 +37,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   #CR  <- init["CR"] # Recovered
   
   # P - Prophylactically treated cattle
-  PF <- init["PF"]  # Susceptible Fully protected
+  PF  <- init["PF"]  # Susceptible Fully protected
   PS  <- init["PS"]  # Susceptible
   PEs <- init["PEs"] # Exposed (drug sensitive strain)
   PEr <- init["PEr"] # Exposed (drug resistant strain)
@@ -70,7 +70,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   prob_infection   <- parms["prob_infection"]
   gamma_c          <- parms["gamma_c"]
   death_c          <- parms["death_c"]
-  sigma_c            <- parms["sigma_c"]
+  sigma_c          <- parms["sigma_c"]
   treatment_q      <- parms["treatment_q"]
   treatment_p      <- parms["treatment_p"]
   sigma_st         <- parms["sigma_st"]
@@ -87,19 +87,19 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   birth_w            <- parms["birth_w"]
   prob_infection.s_w <- parms["prob_infection.s_w"]
   prob_infection.r_w <- parms["prob_infection.r_w"]
-  gamma_w   <- parms["gamma_w"]
+  gamma_w            <- parms["gamma_w"]
   death_w            <- parms["death_w"]
-  sigma_w         <- parms["sigma_w"]
+  sigma_w            <- parms["sigma_w"]
   reversion          <- parms["reversion"]
   
   ## ----- Vectors
-  K                <- parms["K"]
-  feeding.rate     <-  parms["feeding.rate"]
-  prob_infection.v <-  parms["prob_infection.v"]
-  death_v <- parms["death_v"]
-  birth_v <- parms["birth_v"]
-  gamma_v <- parms["gamma_v"]
-  ten2fed <- parms["ten2fed"]
+  K                  <- parms["K"]
+  feeding.rate       <-  parms["feeding.rate"]
+  prob_infection.v   <-  parms["prob_infection.v"]
+  death_v            <- parms["death_v"]
+  birth_v            <- parms["birth_v"]
+  gamma_v            <- parms["gamma_v"]
+  ten2fed            <- parms["ten2fed"]
   
   
   # Population total ----
