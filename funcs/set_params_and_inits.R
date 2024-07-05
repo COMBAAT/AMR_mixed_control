@@ -173,6 +173,50 @@ set_inital_conditions <- function(params, disease_present) {
   return(inits = inits)
 }
 
+get_variables <- function() {
+  cattle_no_prophylaxis <- c("CS", "CEs", "CEr", "CIs", "CIr", "CTs", "CTr")
+  cattle_with_prophylaxis <- c("PF", "PS", "PEs", "PEr", "PIs", "PIr", "PTs", "PTr", "PPs", "PPr")
+  wildlife <- c("WS", "WEs", "WEr", "WIs", "WIr")
+  vectors <- c("VSt", "VSf", "VEs", "VEr", "VIs", "VIr")
+  
+  variable_names <- list("cattle_no_prophylaxis" = cattle_no_prophylaxis,
+                         "cattle_with_prophylaxis" = cattle_with_prophylaxis,
+                         "wildlife" = wildlife, "vectors" = vectors)
+  variable_names
+}
+
+initialise_variables_with_zeros <- function(variable_names) {
+  vector_of_zeros <- rep(0.0, length(variable_names))
+  names(vector_of_zeros) <- variable_names
+  vector_of_zeros
+}
+
+
+set_inital_conditions2 <- function(params, number_initially_infected) {
+  variables_names <- get_variables()
+  
+  cattle_no_prophylaxis <- initialise_variables_with_zeros(variables_names$cattle_no_prophylaxis)
+  cattle_with_prophylaxis <- initialise_variables_with_zeros(variables_names$cattle_with_prophylaxis)
+  wildlife <- initialise_variables_with_zeros(variables_names$wildlife)
+  vectors <- initialise_variables_with_zeros(variables_names$vectors)
+  
+  cattle_no_prophylaxis["CS"] <- params["CS"]
+  cattle_with_prophylaxis["PF"] <- params["PF"]
+  wildlife["WS"] <- params["NW"]
+  vectors["VSt"] <- params["equil_vector_pop"]
+  cattle_no_prophylaxis["CIs"] <- number_initially_infected # Infected (drug resistant strain)
+  cattle_no_prophylaxis["CS"] <- cattle_no_prophylaxis["CS"] - number_initially_infected
+  
+  ## ----- Initial conditions output
+  
+  inits <- c(cattle_no_prophylaxis, cattle_with_prophylaxis, wildlife, vectors)
+  
+  qual_check_no0(inits) # ensure there are no negative values
+  
+  return(inits)
+}
+
+
 findGlobals(fun = set_inital_conditions, merge = FALSE)$variables
 findGlobals(fun = set_parameters, merge = FALSE)$variables
 

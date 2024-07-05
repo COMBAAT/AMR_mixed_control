@@ -60,11 +60,13 @@ for (row in 1:nrow(scenarios_df)) {
   ## Only run full simulation if R0 >= 1.0
   if (R0sen[1] < 1.0) {
     # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
-    inits <- set_inital_conditions(params, disease_present = FALSE)
+    #inits <- set_inital_conditions(params, FALSE)
+    inits <- set_inital_conditions2(params, 0)
     times <- seq(0, 0.1, 0.1)
   } else {
     # if R0 >= 1.0 run full simulation
-    inits <- set_inital_conditions(params, disease_present = TRUE)
+    #inits <- set_inital_conditions(params, TRUE)
+    inits <- set_inital_conditions2(params, 1)
     times <- seq(0, this_scenario$max_time, 1)
   }
 
