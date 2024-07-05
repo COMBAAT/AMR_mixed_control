@@ -10,7 +10,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   
   biterate <- params["biterate"]
   prob_infection <- params["prob_infection"]
-  prob_infection.v <- params["prob_infection.v"]
+  prob_infection_to_vector <- params["prob_infection_to_vector"]
   fit_adj <- params["fit_adj"]
   
   treatment_p <- params["treatment_p"]
@@ -56,7 +56,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   p2c <- waning/ (waning + sigma_treated + death_c) #LM corrected
   
   
-  RVC <- biterate * prob_infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * 
+  RVC <- biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * 
     ( 1/(treatment_p + treatment_q + sigma_c + death_c) * 1/(1-p1c *p2c)  +
         treatment_q/(treatment_p + treatment_q + sigma_c + death_c) * 1/(death_c + sigma_treated) * 1/(1-p1c *p2c) +
         treatment_p/(treatment_p + treatment_q + sigma_c + death_c) * 1/ (death_c + sigma_treated + waning) *
@@ -64,16 +64,16 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   RVC <- as.numeric(RVC)
   
   
-  RVP <- biterate * prob_infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * 
+  RVP <- biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * 
     (1/(treatment_p + treatment_q + sigma_p + death_p + waning)) +              #contribution from PIs
     
     (waning /(treatment_p + treatment_q + sigma_p + death_p + waning)) * RVC  + #contribution from waning back to CIS
     
-    biterate * prob_infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * (
+    biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * (
       treatment_q/(treatment_p + treatment_q + sigma_p + death_p + waning) * ( 1/(death_p + sigma_treated + waning) + #contribution from PTs
                                                                                  waning/(death_p + sigma_treated + waning) * 1/(sigma_treated + death_c)))  + # waning from PTs back to CTs 
     
-    biterate * prob_infection.v * Nv / Nh * gamma_v / (gamma_v + death_v) * (
+    biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * (
       treatment_p /(treatment_p + treatment_q + sigma_p + death_p + waning)) * 1/(sigma_treated + death_p + waning) + #contrib from PPs
     
     treatment_p /(treatment_p + treatment_q + sigma_p + death_p + waning) *
@@ -83,7 +83,7 @@ r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basi
   RVP <- as.numeric(RVP)
   
   
-  RVW <- biterate * prob_infection.v * Nv / Nh * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
+  RVW <- biterate * prob_infection_to_vector * Nv / Nh * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
   RVW <- as.numeric(RVW)
   
   
