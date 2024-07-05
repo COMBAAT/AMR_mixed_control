@@ -68,12 +68,12 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   birth_c          <- parms["birth_c"]
   biterate         <- parms["biterate"]
   prob_infection   <- parms["prob_infection"]
-  gamma_c   <- parms["gamma_c"]
-  death            <- parms["death_c"]
-  sigma         <- parms["sigma_c"]
+  gamma_c          <- parms["gamma_c"]
+  death_c          <- parms["death_c"]
+  sigma            <- parms["sigma_c"]
   treatment_q      <- parms["treatment_q"]
   treatment_p      <- parms["treatment_p"]
-  sigma_st      <- parms["sigma_st"]
+  sigma_st         <- parms["sigma_st"]
   emergence_p      <- parms["emergence_p"]  
   emergence_f      <- parms["emergence_f"]
   rec_adj          <- parms["rec_adj"]
@@ -127,17 +127,17 @@ AAT_AMR_dens_dep <- function(times, init, parms){
 #    sigma_st  * PPs +  #test addition
     (sigma * rec_adj)  * CTr - 
 #    new_prop * CS - 
-    death * CS 
+    death_c * CS 
   
   dCEs.dt <- biterate * prob_infection * CS * VIs / N - 
     gamma_c * CEs + 
     waning * PEs - 
-    death * CEs 
+    death_c * CEs 
   
   dCEr.dt <- biterate * (prob_infection * fit_adj) * CS * VIr / N - 
     gamma_c * CEr + 
     waning * PEr - 
-    death * CEr
+    death_c * CEr
   
   dCIs.dt <- gamma_c * CEs - 
     treatment_q * CIs - 
@@ -145,7 +145,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma  * CIs + 
     waning * PIs + 
     waning * PPs - #LM moved from CTs equation
-    death * CIs 
+    death_c * CIs 
   
   dCIr.dt <- gamma_c * CEr - 
     treatment_q * CIr - 
@@ -153,21 +153,21 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma  * CIr + 
     waning * PIr +
     waning * PPr -  #LM moved from CTr equation 29/9/22
-    death * CIr 
+    death_c * CIr 
   
   dCTs.dt <- treatment_q * CIs - 
     sigma_st  * CTs - 
     emergence_f * CTs + 
     waning * PTs - 
 #    waning * PPs - #LM moved up to CIs equation
-    death * CTs
+    death_c * CTs
   
   dCTr.dt <- treatment_q * CIr - 
     (sigma * rec_adj) * CTr  + 
     emergence_f * CTs + 
     waning * PTr - 
 #    waning *PPr - #LM moved up to CIr equation 29/9/22
-    death * CTr
+    death_c * CTr
   
   
   
@@ -176,7 +176,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   # dCTr.dt <- 0
   # 
   # dCR.dt <- treatment_q * CIs + treatment_q * CIr + sigma  * CIs + sigma  * CIr + sigma  * CTs + 
-  #   sigma  * CTr - resusceptible * CR - death * CR
+  #   sigma  * CTr - resusceptible * CR - death_c * CR
   
   
   # Cattle with prophylaxis ----
@@ -188,7 +188,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma_st  * PPs +                                     # sigma from treated (prophylactic) sensitive strain infection
     (sigma * rec_adj)  * PPr -                            # sigma from treated (prophylactic) resistant strain infection
     waning_f2s * PF -                                        # Waning prophylaxis from fully protected to partially protected
-    death * PF                                               # Death of prophylactic susceptibles (fully protected)
+    death_c * PF                                               # Death of prophylactic susceptibles (fully protected)
   
   dPS.dt <-  waning_f2s * PF -                               # Waning of prophylactically treated cattle to semi protected
     biterate * prob_infection * PS * VIs / N -               # Infection of sensitive strain
@@ -198,20 +198,20 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma_st  * PTs +                                     # sigma from treated (fast acting) sensitive strain infection
     (sigma * rec_adj)  * PTr   -                          # sigma from treated (fast acting) resistant strain infection
     waning * PS -                                            # Waning of infection to non-prophylactic class
-    death * PS                                               # Death of prophylactic susceptibles (partially protected)
+    death_c * PS                                               # Death of prophylactic susceptibles (partially protected)
   
   dPEs.dt <- biterate * prob_infection * PS * VIs / N -      # Infection of sensitive strain
     gamma_c * PEs -                                   # Movement from exposed to infectious
     emergence_p * PEs -
     waning *PEs -                                            # Waning of infection to non-prophylactic class
-    death * PEs                                              # Death of prophylactic exposed (sensitive strain)
+    death_c * PEs                                              # Death of prophylactic exposed (sensitive strain)
   
   dPEr.dt <- biterate * (prob_infection * fit_adj) * PS *VIr / N +    # Infection of resistant strain
     biterate * (prob_infection * fit_adj * 1) * PF * VIr / N -   # Infection of resistant strain
     gamma_c * PEr +                                   # Movement from exposed to infectious
     emergence_p * PEs -
     waning * PEr -                                           # Waning of infection to non-prophylactic class
-    death * PEr                                              # Death of prophylactic exposed (resistant strain)
+    death_c * PEr                                              # Death of prophylactic exposed (resistant strain)
   
   dPIs.dt <- gamma_c * PEs -                                   # Movement from exposed to infectious
     treatment_q * PIs -                                      # Treatment with fast acting drug
@@ -219,7 +219,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma  * PIs -                                        # sigma from sensitive strain infection
     emergence_p * PIs -                                        # Emergence of AMR
     waning * PIs -                                           # Waning of infection to non-prophylactic class
-    death * PIs                                              # Death of prophylactic infectious (sensitive strain)
+    death_c * PIs                                              # Death of prophylactic infectious (sensitive strain)
   
   dPIr.dt <- gamma_c * PEr -                                   # Movement from exposed to infectious 
     treatment_q * PIr -                                      # Treatment with fast acting drug 
@@ -227,35 +227,35 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma  * PIr +                                        # sigma from resistant strain infection
     emergence_p * PIs -                                        # Emergence of AMR 
     waning * PIr -                                           # Waning of infection to non-prophylactic class
-    death * PIr                                              # Death of prophylactic infectious (resistant strain)
+    death_c * PIr                                              # Death of prophylactic infectious (resistant strain)
   
   dPTs.dt <- treatment_q * PIs -                                      # Treatment with fast acting drug 
     sigma_st  * PTs -                                     # sigma from sensitive strain infection (fast acting treatment)
     emergence_p * PTs -    
     emergence_f * PTs -                                        # Emergence of AMR  
     waning * PTs -                                           # Waning of infection to non-prophylactic class 
-    death * PTs                                              # Death of sensitive treated (fast acting)
+    death_c * PTs                                              # Death of sensitive treated (fast acting)
   
   dPTr.dt <- treatment_q * PIr -                                      # Treatment with fast acting drug  
     (sigma * rec_adj)  * PTr +                            # Treatment with prophylactic acting drug  
     emergence_p * PTs +    
     emergence_f * PTs  -                                       # Emergence of AMR 
     waning * PTr -                                           # Waning of infection to non-prophylactic class  
-    death * PTr                                              # Death of sensitive treated (prophylactic)  
+    death_c * PTr                                              # Death of sensitive treated (prophylactic)  
   
   dPPs.dt <- treatment_p * PIs +                                      # Treatment with prophylactic acting drug  
     treatment_p * CIs -                                      # Treatment with prophylactic acting drug  
     emergence_p * PPs -
     sigma_st  * PPs -                                     # sigma from sensitive strain infection (prophylactic treatment) 
     waning * PPs -                                           # Waning of infection to non-prophylactic class 
-    death* PPs                                               # Death of sensitive treated (prophylactic)  
+    death_c* PPs                                               # Death of sensitive treated (prophylactic)  
   
   dPPr.dt <- treatment_p * PIr +                                      # Treatment with prophylactic acting drug   
     treatment_p * CIr +                                      # Treatment with prophylactic acting drug   
     emergence_p * PPs -
     (sigma * rec_adj)  * PPr -                            # sigma from resistant strain infection (prophylactic treatment)  
     waning * PPr -                                           # Waning of infection to non-prophylactic class 
-    death* PPr                                               # Death of resistant treated (prophylactic) 
+    death_c* PPr                                               # Death of resistant treated (prophylactic) 
   
   
   # Wildlife ----
