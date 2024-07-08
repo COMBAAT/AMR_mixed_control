@@ -1,8 +1,8 @@
 
 create_multiple_scenarios <- function() {
-  max_time <- 10
+  max_time <- 10000
   treatment_type <- "F" # F this means quick treatment
-  N_wl <- c(0, 100, 250)
+  N_wl <- c(0, 50, 100, 150, 200, 250)
   treat.prop_vecA <- seq(0, 0.9, by = 0.2) # full from 0-1
   treat.prop_vecB <- seq(0.91, 0.99, by = 0.02)
   treat.prop_vec <- c(treat.prop_vecA, treat.prop_vecB)
@@ -10,8 +10,8 @@ create_multiple_scenarios <- function() {
   fit_adj.vec <- c(0.95)
   birth_adj.vec <- c(2)
   # do not set prop_insecticide to 1 as generates infinite mortality and an error
-  prop_insecticide.vec <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
-  # prop_insecticide.vec <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.4, 0.5)
+  #prop_insecticide.vec <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
+   prop_insecticide.vec <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
   prop_prophylaxis <- 0.0
   dose_adj.vec <- 1 # c(1, 0.9, 0.7, 0.4, 0.2)
   emergence_adj.vec <- 1
