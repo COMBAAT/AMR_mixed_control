@@ -25,7 +25,7 @@ qual_check_no0 <- function(input){
     if (input[j] >= 0){test[j] <- 1}
   }
 
-    if(sum(test[!is.na(test)]) == length(input)){cat(green("CHECK OK\n"))}
+    #if(sum(test[!is.na(test)]) == length(input)){cat(green("CHECK OK\n"))}
   
 }
 
