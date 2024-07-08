@@ -10,8 +10,8 @@ source("funcs/plot_helper.R")
 
 # Load data files --------------------------------------------------------------
 # Specify whether treatment is fast "F" or prophylactic "P"
-treatment_option <- "F"
-if (treatment_option == "F") {
+treatment_type <- "F"
+if (treatment_type == "F") {
   folder_name <- "output/test_play2/"
   load("output/test_F_play2.Rda")
 }

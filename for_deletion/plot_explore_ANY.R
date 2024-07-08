@@ -13,17 +13,17 @@ library(dplyr)
 
 source("funcs/plot_functions.R")
 
-treatment_option <- "F"
+treatment_type <- "F"
 
-if (treatment_option == "F"){
+if (treatment_type == "F"){
 folder_name = "output/plots_fast_finer_insecticide/"
 load("output/test_F.Rda")
 }
-if (treatment_option == "P"){
+if (treatment_type == "P"){
   folder_name = "output/plots_proph_finer_insecticide/"
   load("output/test_P.Rda")
 }
-if (treatment_option == "B"){
+if (treatment_type == "B"){
   folder_name = "output/plots_both_fit1/"
   load("output/test_B_fit1.Rda")
 }

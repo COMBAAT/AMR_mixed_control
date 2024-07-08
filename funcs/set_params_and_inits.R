@@ -12,7 +12,7 @@ set_parameters <- function(this_scenario) {
   prop_insecticide <- this_scenario$prop_insecticide
   NW <- this_scenario$NW
   prop_prophylaxis <- this_scenario$prop_prophylaxis
-  trt.type <- this_scenario$treatment_type
+  treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence_adj <- this_scenario$emergence_adj
 
@@ -29,13 +29,13 @@ set_parameters <- function(this_scenario) {
   emergence <- 0
 
 
-  if (trt.type == "F") {
+  if (treatment_type == "F") {
     treatment_q <- treatment
     treatment_p <- 0
     emergence_p <- 0
     emergence_f <- emergence * emergence_adj
   } else {
-    if (trt.type == "P") {
+    if (treatment_type == "P") {
       treatment_q <- 0
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
