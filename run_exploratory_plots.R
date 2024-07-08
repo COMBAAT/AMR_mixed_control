@@ -42,7 +42,7 @@ start.time <- Sys.time()
 
 ## ---- Execute model
 for (row in 1:nrow(scenarios_df)) {
-  print(row)
+  print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
 
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters(this_scenario)
@@ -93,14 +93,14 @@ for (row in 1:nrow(scenarios_df)) {
 
   all_scenarios_summary <- rbind(all_scenarios_summary, final_state_with_full_scenario)
 
-  print(final_state$time)
+  print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
 
 toc()
 
 test <- all_scenarios_summary
 time <- format(Sys.time(), "%a %b %d %X %Y")
-save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play2", ".Rda"))
+save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play3", ".Rda"))
 # save(test,file ="output/test.Rda")
 
 quick_plot(expanded_output)
