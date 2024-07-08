@@ -19,7 +19,7 @@ set_parameters <- function(this_scenario) {
   ## Cattle -----
   birth_c <- 1 / (5 * 365)
   biterate <- 0.8 / 4
-  prob_infection <- 0.46
+  prob_infection_to_host <- 0.46
   gamma_c <- 1 / 15
   resusceptible <- 10
   death_c <- birth_c
@@ -95,7 +95,7 @@ set_parameters <- function(this_scenario) {
 
   params <- cbind(
     NC, NV, NW, PF, PS, CS,
-    birth_c, biterate, prob_infection, fit_adj, rec_adj, sigma_st,
+    birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
     death_v, feed.frequency, prob_infection_to_vector, gamma_v, emergence_p, emergence_f,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
