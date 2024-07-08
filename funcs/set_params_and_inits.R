@@ -110,6 +110,55 @@ set_parameters <- function(this_scenario) {
   return(params = params)
 }
 
+create_params_for_output <- function(params) {
+  
+  fixed_params_for_output <- c()
+  fixed_params_for_output["cattle life span"] <- 1/params["death_c"]
+  fixed_params_for_output["cattle inc period"] <- 1/params["gamma_c"]
+  fixed_params_for_output["cattle inf period"] <- 1/params["sigma_c"]
+  fixed_params_for_output["wildlife life span"] <- 1/params["death_w"]
+  fixed_params_for_output["wildlife inc period"] <- 1/params["gamma_w"]
+  fixed_params_for_output["wildlife inf period"] <- 1/params["sigma_w"]
+  fixed_params_for_output["vector lifespan"] <- 1/params["death_v"]
+  fixed_params_for_output["vector feed cyc"] <- 1/params["feed_cyc"]
+  fixed_params_for_output["vector teneral period"] <- 1/params["ten2fed"]
+  fixed_params_for_output["prob inf vector to host"] <- params["prob_infection_to_host"]
+  fixed_params_for_output["prob inf host to vector"] <- params["prob_infection_to_vector"]
+  fixed_params_for_output["cattle treatment period"] <- 1/params["sigma_st"]
+  fixed_params_for_output["cattle proph full protection"] <- 1/params["waning_f2s"]
+  fixed_params_for_output["cattle proph partial protection"] <- 1/params["waning"]
+  
+  fixed_params_for_output 
+}
+
+output_params <- function(params, report_time){
+  
+  fixed_params_for_output <- create_params_for_output(params)
+  fixed_params_for_output <- signif(fixed_params_for_output, 4)
+  
+  for_plot1 <- fixed_params_for_output[c("cattle life span", "cattle inc period", "cattle inf period", "wildlife life span",
+                                         "wildlife inc period", "wildlife inf period", "vector lifespan",
+                                         "vector teneral period", "prob inf vector to host", "prob inf host to vector",
+                                         "cattle treatment period", "cattle proph full protection", "cattle proph partial protection")]
+  
+  df1 <- data.frame(value = as.numeric(for_plot1), name = names(for_plot1))
+  
+  p1 <- df1 %>% ggplot() +
+    geom_bar(aes(y = value, x = name), fill = "skyblue", stat = "identity") + ylab(" ") + xlab(" ") + ylim(c(0, 2000)) +
+    geom_text(aes(label= signif(value, 4), y = value, x = name), vjust = -0.1, hjust = -0.2) +
+    coord_flip() +
+    theme(text = element_text(size = 12), axis.text.x = element_text(angle=0, hjust=1, size = 8))
+  
+  print(p1)
+  
+  ggsave(p1, filename = paste0("output/params_plot_", report_time, ".pdf"))
+  
+  time <- format(Sys.time(), "%a %b %d %X %Y")
+  write.csv(df1, paste0("output/params_", report_time, ".csv"))
+}
+
+
+
 set_inital_conditions <- function(params, disease_present) {
   NC <- params["NC"]
   PF <- params["PF"]
