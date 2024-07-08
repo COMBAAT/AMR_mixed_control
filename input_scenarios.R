@@ -1,7 +1,7 @@
 
 create_multiple_scenarios <- function() {
   max_time <- 10
-  treatment_type <- "F" # F this means quick treatment
+  treatment_type <- "quick" # F this means quick treatment
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
   treat_propA <- seq(0, 0.9, by = 0.2) # full from 0-1
@@ -29,7 +29,7 @@ create_multiple_scenarios <- function() {
 
 create_single_scenario <- function() {
   max_time <- 5000
-  treatment_type <- "F"
+  treatment_type <- "quick"
   wildlife_number <- 250
   treat_prop <- 0.25
   fit_adj <- c(0.95)

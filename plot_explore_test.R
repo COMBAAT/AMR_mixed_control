@@ -9,9 +9,9 @@ library(patchwork)
 source("funcs/plot_helper.R")
 
 # Load data files --------------------------------------------------------------
-# Specify whether treatment is fast "F" or prophylactic "P"
-treatment_type <- "F"
-if (treatment_type == "F") {
+# Specify whether treatment is quick "quick" or prophylactic "P"
+treatment_type <- "quick"
+if (treatment_type == "quick") {
   folder_name <- "output/test_play2/"
   load("output/test_F_play2.Rda")
 }

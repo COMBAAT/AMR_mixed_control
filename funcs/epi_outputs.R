@@ -29,7 +29,7 @@ add_population_totals <- function(df){
 
 
 calculate_epi_outputs <- function(treatment_type, params, final_state) {
-  if (treatment_type == "F") {
+  if (treatment_type == "quick") {
     No_trt_cat <- as.numeric(params["treatment_q"]) * final_state$CIs * 365.25
     Incidence <- as.numeric(params["gamma_c"]) * final_state$CEs * 365.25
     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])

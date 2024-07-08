@@ -13,10 +13,10 @@ library(dplyr)
 
 source("funcs/plot_functions.R")
 
-treatment_type <- "F"
+treatment_type <- "quick"
 
-if (treatment_type == "F"){
-folder_name = "output/plots_fast_finer_insecticide/"
+if (treatment_type == "quick"){
+folder_name = "output/plots_quick_finer_insecticide/"
 load("output/test_F.Rda")
 }
 if (treatment_type == "P"){

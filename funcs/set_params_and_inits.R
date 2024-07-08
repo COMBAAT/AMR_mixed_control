@@ -29,7 +29,7 @@ set_parameters <- function(this_scenario) {
   emergence <- 0
 
 
-  if (treatment_type == "F") {
+  if (treatment_type == "quick") {
     treatment_q <- treatment
     treatment_p <- 0
     emergence_p <- 0
