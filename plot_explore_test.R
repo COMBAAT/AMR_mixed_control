@@ -7,18 +7,13 @@ library(patchwork)
 
 # Source files and function
 source("funcs/plot_helper.R")
+source("funcs/run_simulation_helper.R")
 
 # Load data files --------------------------------------------------------------
-# Specify whether treatment is quick "quick" or prophylactic "P"
-treatment_type <- "quick"
-if (treatment_type == "quick") {
-  folder_name <- "output/test_quick/"
-  load("output/test_quick_play2.Rda")
-}
-if (treatment_type == "proph") {
-  folder_name <- "output/test_proph/"
-  load("output/test_proph_play2.Rda")
-}
+latest_file <- get_latest_Rda_file()
+load(latest_file)
+folder_name <- gsub(".Rda", "/", latest_file)
+dir.create(folder_name)
 
 # Generate plots ---------------------------------------------------------------
 # Plot R0 versus wildlife faceted by treat_prop
