@@ -122,11 +122,7 @@ set_parameters_NEW <- function(this_scenario) {
   ## -----  Vectors
   
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
-  qf <- 0.96 # Probability of surviving on a feeding day
-  qn <- 0.98 # Probability of surviving on a non-feeding day
-  feed.cyc <- 4 # Days between feeding
-  feed.frequency <- 0
-  incubation <- 20
+
   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
   
   death_v <- calculate_vector_death_rate(d = baseline_params["days_between_feeds"],
@@ -140,6 +136,7 @@ set_parameters_NEW <- function(this_scenario) {
   birth_v <- birth_adj * death_v_no_insecticide # Vector birth rate
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
   
+  incubation <- 20
   gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
   
   NV <- equil_vector_pop # equil_vector_pop
