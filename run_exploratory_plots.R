@@ -98,18 +98,20 @@ for (row in 1:nrow(scenarios_df)) {
 
 toc()
 
+test <- all_scenarios_summary
 
-my_string <- ""
-append_time_to_output <- TRUE
+my_string <- "now"
+append_time_to_output <- FALSE
 if (append_time_to_output == TRUE) {
   label <- get_label_with_current_datetime(my_string)
 } else {
   label <- my_string
 }
+label
+output_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", label)
 
-save(all_scenarios_summary,
-  file = paste0("output/treatment_type_", this_scenario$treatment_type, "_", label, ".Rda")
-)
+save(test, file = paste0(output_name, ".Rda")) 
+
 
 quick_plot(expanded_output)
 quick_plot2(expanded_output)
