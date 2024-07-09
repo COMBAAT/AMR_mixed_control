@@ -7,7 +7,7 @@ library(patchwork)
 
 # Source files and function
 source("funcs/plot_helper.R")
-source("funcs/run_simulation_helper.R")
+source("funcs/helper_functions.R")
 
 # Load data files --------------------------------------------------------------
 latest_file <- get_latest_Rda_file()
