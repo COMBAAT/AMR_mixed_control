@@ -65,7 +65,7 @@ my_rootfun <- function (t, y, params) {
 
 get_label_with_current_datetime <- function(my_string) {
   current_time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
-  current_time_without_colons <- gsub(":", "", time)
+  current_time_without_colons <- gsub(":", "", current_time)
   current_time_without_colons
   if (str_length(my_string) > 0) {
     label <- paste0(current_time_without_colons, "_", my_string)
@@ -73,4 +73,13 @@ get_label_with_current_datetime <- function(my_string) {
     label <- current_time_without_colons
   }
   label
+}
+
+
+get_latest_Rda_file <- function() {
+  datafiles <- list.files("output", pattern = ".Rda", full.names = TRUE)
+  info <- file.info(datafiles) 
+  most_recent_creation_time <- max(info$ctime)
+  latest_file <- rownames(info[info$ctime == most_recent_creation_time,])
+  latest_file
 }
