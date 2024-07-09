@@ -160,6 +160,8 @@ set_parameters_NEW <- function(this_scenario) {
   )
   original_params <- convert_array_to_named_vector(original_params)
   
+  original_params <- c(original_params, baseline_params)
+  
   qual_check_no0(original_params) # ensure there are no negative values
   
   return_params <- original_params
