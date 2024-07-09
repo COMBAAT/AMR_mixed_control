@@ -140,21 +140,13 @@ set_parameters_NEW <- function(this_scenario) {
   
   NV <- equil_vector_pop # equil_vector_pop
   
-  # take directly from baseline
-  biterate <- 0.8 / 4
-  prob_infection_to_host <- 0.46
-  prob_infection_to_vector <- 0.025
-  qf <- 0.96 # Probability of surviving on a feeding day
-  qn <- 0.98 # Probability of surviving on a non-feeding day
-  feed.cyc <- 4 # Days between feeding
-  
   ## ----- Parameters & initial conditions output
   
   original_params <- cbind(
     NC, NV, NW, PF, PS, CS,
-    birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
+    birth_c, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
-    death_v, prob_infection_to_vector, gamma_v, emergence_p, emergence_q,
+    death_v, gamma_v, emergence_p, emergence_q,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
   )
