@@ -99,7 +99,6 @@ for (row in 1:nrow(scenarios_df)) {
 
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
-toc()
 
 
 if (append_current_time_to_output_file == TRUE) {
@@ -124,3 +123,7 @@ all_scenarios_summary %>%
   geom_point(aes(y = Rsen_final, x = R0sen))
 
 glimpse(all_scenarios_summary)
+
+toc()
+minutes_elapsed <- (ans$toc - ans$tic)/60
+minutes_elapsed
