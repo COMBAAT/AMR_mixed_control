@@ -13,7 +13,7 @@ source("funcs/plot_helper.R")
 treatment_type <- "quick"
 if (treatment_type == "quick") {
   folder_name <- "output/test_play2/"
-  load("output/test_F_play2.Rda")
+  load("output/test_quick_play2.Rda")
 }
 
 # Generate plots ---------------------------------------------------------------
