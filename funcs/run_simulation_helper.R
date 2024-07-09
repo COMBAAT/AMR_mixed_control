@@ -67,6 +67,10 @@ get_label_with_current_datetime <- function(my_string) {
   current_time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
   current_time_without_colons <- gsub(":", "", time)
   current_time_without_colons
-  label <- paste0(current_time_without_colons, "_", my_string)
+  if (str_length(my_string) > 0) {
+    label <- paste0(current_time_without_colons, "_", my_string)
+  } else {
+    label <- current_time_without_colons
+  }
   label
 }
