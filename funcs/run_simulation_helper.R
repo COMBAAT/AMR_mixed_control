@@ -25,8 +25,13 @@ convert_array_to_named_vector <- function(this_array) {
 }
 
 
-convert_named_vector_to_df <- function(named_vec){
-  df = data.frame(as.list(named_vec)) 
+convert_named_vector_to_df <- function(named_vector){
+  df = data.frame(as.list(named_vector)) 
+  df
+}
+
+convert_named_vector_to_long_df <- function(named_vector) {
+  df <- data.frame(value = as.numeric(named_vector), name = names(named_vector))
   df
 }
 
