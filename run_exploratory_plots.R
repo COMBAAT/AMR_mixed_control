@@ -24,8 +24,12 @@ source("funcs/quick_plot.R")
 
 
 ## ----
-# Specify multiple or single scenario
+# User choices
 multiple_scenarios <- TRUE
+use_root_functions <- TRUE 
+append_current_time_to_output_file <- FALSE
+my_string_for_output_file <- "now"
+
 # Create dataframe of parameter combinations for each scenario
 if (multiple_scenarios == TRUE) {
   scenarios_df <- create_multiple_scenarios()
@@ -95,21 +99,17 @@ for (row in 1:nrow(scenarios_df)) {
 
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
-
 toc()
 
-test <- all_scenarios_summary
 
-my_string <- "now"
-append_time_to_output <- FALSE
-if (append_time_to_output == TRUE) {
-  label <- get_label_with_current_datetime(my_string)
+if (append_current_time_to_output_file == TRUE) {
+  label <- get_label_with_current_datetime(my_string_for_output_file)
 } else {
-  label <- my_string
+  label <- my_string_for_output_file
 }
-label
 output_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", label)
 
+test <- all_scenarios_summary
 save(test, file = paste0(output_name, ".Rda")) 
 
 
