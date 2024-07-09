@@ -150,7 +150,7 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Parameters & initial conditions output
   
-  derived_params <- cbind(
+  original_params <- cbind(
     NC, NV, NW, PF, PS, CS,
     birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
@@ -158,11 +158,12 @@ set_parameters_NEW <- function(this_scenario) {
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
   )
-  derived_params <- convert_array_to_named_vector(derived_params)
+  original_params <- convert_array_to_named_vector(original_params)
   
-  qual_check_no0(derived_params) # ensure there are no negative values
+  qual_check_no0(original_params) # ensure there are no negative values
   
-  return(params = derived_params)
+  return_params <- original_params
+  return(params = return_params)
 }
 
 
