@@ -67,8 +67,6 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## Cattle -----
   birth_c <- 1 / baseline_params["cattle_lifespan"]
-  biterate <- 0.8 / 4
-  prob_infection_to_host <- 0.46
   gamma_c <- 1 / baseline_params["cattle_incubation_period"]
   death_c <- birth_c
   death_p <- death_c
@@ -123,20 +121,36 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## -----  Vectors
   
-  ten2fed <- 1 / 4
+  ten2fed <- 1 / baseline_params["vector_teneral_period"]
   qf <- 0.96 # Probability of surviving on a feeding day
   qn <- 0.98 # Probability of surviving on a non-feeding day
   feed.cyc <- 4 # Days between feeding
   feed.frequency <- 0
-  prob_infection_to_vector <- 0.025
   incubation <- 20
   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
-  death_v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
-  birth_v <- birth_adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
+  
+  death_v <- calculate_vector_death_rate(d = baseline_params["days_between_feeds"],
+                                         qf = baseline_params["prob_vector_surviving_feed"],
+                                         qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
+                                         pi = prop_insecticide.actual)
+  death_v_no_insecticide <- calculate_vector_death_rate(d = baseline_params["days_between_feeds"],
+                                                        qf = baseline_params["prob_vector_surviving_feed"],
+                                                        qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
+                                                        pi = 0.0)
+  birth_v <- birth_adj * death_v_no_insecticide # Vector birth rate
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
+  
   gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
   
   NV <- equil_vector_pop # equil_vector_pop
+  
+  # take directly from baseline
+  biterate <- 0.8 / 4
+  prob_infection_to_host <- 0.46
+  prob_infection_to_vector <- 0.025
+  qf <- 0.96 # Probability of surviving on a feeding day
+  qn <- 0.98 # Probability of surviving on a non-feeding day
+  feed.cyc <- 4 # Days between feeding
   
   ## ----- Parameters & initial conditions output
   
