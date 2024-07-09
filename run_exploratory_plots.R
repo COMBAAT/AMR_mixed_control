@@ -45,7 +45,7 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
 
   this_scenario <- scenarios_df[row, ]
-  params <- set_parameters(this_scenario)
+  params <- set_parameters_NEW(this_scenario)
   full_scenario <- merge_params_into_this_scenario(this_scenario, params)
   full_scenario <- move_populations_first(full_scenario)
 
