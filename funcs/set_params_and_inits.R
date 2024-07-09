@@ -20,7 +20,7 @@ set_baseline_parameters <- function() {
   wildlife_infection_period <- cattle_infection_period
   wildlife_incubation_period <- 20
 
-  bite_rate <- 0.8 / 4
+  biterate <- 0.8 / 4
   prob_infection_to_host <- 0.46
   prob_infection_to_vector <- 0.025
   vector_teneral_period <- 4
@@ -31,7 +31,7 @@ set_baseline_parameters <- function() {
   baseline_params <- cbind(cattle_lifespan, cattle_incubation_period, cattle_infection_period,
                            cattle_proph_full_protection_period, cattle_proph_partial_protection_period,
                            cattle_treatment_period, wildlife_lifespan, wildlife_infection_period,
-                           wildlife_incubation_period, bite_rate, prob_infection_to_host, prob_infection_to_vector,
+                           wildlife_incubation_period, biterate, prob_infection_to_host, prob_infection_to_vector,
                            vector_teneral_period, days_between_feeds, prob_vector_surviving_feed, prob_vector_surviving_nonfeeding_day
     
   )
