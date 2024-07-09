@@ -66,7 +66,7 @@ set_parameters_NEW <- function(this_scenario) {
   baseline_params <- set_baseline_parameters()
   
   ## Cattle -----
-  birth_c <- 1 / baseline_params["cattle_life_span"]
+  birth_c <- 1 / baseline_params["cattle_lifespan"]
   biterate <- 0.8 / 4
   prob_infection_to_host <- 0.46
   gamma_c <- 1 / baseline_params["cattle_incubation_period"]
@@ -140,7 +140,7 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Parameters & initial conditions output
   
-  params <- cbind(
+  derived_params <- cbind(
     NC, NV, NW, PF, PS, CS,
     birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
@@ -148,13 +148,11 @@ set_parameters_NEW <- function(this_scenario) {
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
   )
-  names <- colnames(params)
-  params <- as.vector(params)
-  names(params) <- names
+  derived_params <- convert_array_to_named_vector(derived_params)
   
-  qual_check_no0(params) # ensure there are no negative values
+  qual_check_no0(derived_params) # ensure there are no negative values
   
-  return(params = params)
+  return(params = derived_params)
 }
 
 
@@ -429,7 +427,7 @@ set_inital_conditions2 <- function(params, number_initially_infected) {
 
 
 findGlobals(fun = set_inital_conditions, merge = FALSE)$variables
-findGlobals(fun = set_parameters, merge = FALSE)$variables
+findGlobals(fun = set_parameters_NEW, merge = FALSE)$variables
 
 
 
