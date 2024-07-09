@@ -4,6 +4,52 @@ library(codetools)
 
 ## Set parameters & Initial Conditions ----
 
+
+set_baseline_parameters <- function() {
+  # Using day as unit of time
+  cattle_lifespan <- 5 * 365
+  cattle_incubation_period <- 15
+  cattle_infectious_period <- 100
+  cattle_proph_full_protection_period <- 60
+  cattle_proph_partial_protection_period <- 30
+  cattle_treatment_period <- 3
+
+  wildlife_lifespan <- 365
+  wildlife_infectious_period <- cattle_infection_period
+  wildlife_incubation_period <- 20
+
+  bite_rate <- 0.8 / 4
+  prob_infection_to_host <- 0.46
+  prob_infection_to_vector <- 0.025
+  vector_teneral_period <- 4
+  days_between_feeds <- 4
+  prob_vector_surviving_feed <- 0.96
+  prob_vector_surviving_nonfeeding_day <- 0.98
+  
+  baseline_params <- cbind(cattle_lifespan, cattle_incubation_period, cattle_infectious_period,
+                           cattle_proph_full_protection_period, cattle_proph_partial_protection_period,
+                           cattle_treatment_period, wildlife_lifespan, wildlife_infectious_period,
+                           wildlife_incubation_period, bite_rate, prob_infection_to_host, prob_infection_to_vector,
+                           vector_teneral_period, days_between_feeds, prob_vector_surviving_feed, prob_vector_surviving_nonfeeding_day
+    
+  )
+  baseline_params <- convert_array_to_named_vector(baseline_params)
+  baseline_params
+}
+
+
+calculate_vector_death_rate <- function(d, qf, qn, pi) {
+  # From Hargrove et al 2012, using exp( - daily_mortality * d) = qf * qn ^ d
+  # pi is proportion of animals that are insecticide treated
+  # qf is probability of a vector surviving a feed
+  # qn is probability of vector surviving a non-feeding day
+  # d is the length of the feeding cycle
+  daily_mortality <- -log( (1 - pi) * qf * qn ^ d) / d
+  daily_mortality
+}
+
+
+
 set_parameters <- function(this_scenario) {
   birth_adj <- this_scenario$birth_adj
   fit_adj <- this_scenario$fit_adj
