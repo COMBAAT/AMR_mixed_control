@@ -125,5 +125,3 @@ all_scenarios_summary %>%
 glimpse(all_scenarios_summary)
 
 toc()
-minutes_elapsed <- (ans$toc - ans$tic)/60
-minutes_elapsed
