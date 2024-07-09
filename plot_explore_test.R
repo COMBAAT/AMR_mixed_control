@@ -12,8 +12,12 @@ source("funcs/plot_helper.R")
 # Specify whether treatment is quick "quick" or prophylactic "P"
 treatment_type <- "quick"
 if (treatment_type == "quick") {
-  folder_name <- "output/test_play2/"
+  folder_name <- "output/test_quick/"
   load("output/test_quick_play2.Rda")
+}
+if (treatment_type == "proph") {
+  folder_name <- "output/test_proph/"
+  load("output/test_proph_play2.Rda")
 }
 
 # Generate plots ---------------------------------------------------------------
