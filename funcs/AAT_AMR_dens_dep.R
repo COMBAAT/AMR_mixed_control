@@ -75,7 +75,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   treatment_p      <- parms["treatment_p"]
   sigma_st         <- parms["sigma_st"]
   emergence_p      <- parms["emergence_p"]  
-  emergence_f      <- parms["emergence_f"]
+  emergence_q      <- parms["emergence_q"]
   rec_adj          <- parms["rec_adj"]
   prop_prophylaxis <- parms["prop_prophylaxis"]
   fit_adj          <- parms["fit_adj"]
@@ -157,14 +157,14 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   
   dCTs.dt <- treatment_q * CIs - 
     sigma_st  * CTs - 
-    emergence_f * CTs + 
+    emergence_q * CTs + 
     waning * PTs - 
 #    waning * PPs - #LM moved up to CIs equation
     death_c * CTs
   
   dCTr.dt <- treatment_q * CIr - 
     (sigma_c * rec_adj) * CTr  + 
-    emergence_f * CTs + 
+    emergence_q * CTs + 
     waning * PTr - 
 #    waning *PPr - #LM moved up to CIr equation 29/9/22
     death_c * CTr
@@ -232,14 +232,14 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   dPTs.dt <- treatment_q * PIs -                                      # Treatment with quick acting drug 
     sigma_st  * PTs -                                     # sigma from sensitive strain infection (quick acting treatment)
     emergence_p * PTs -    
-    emergence_f * PTs -                                        # Emergence of AMR  
+    emergence_q * PTs -                                        # Emergence of AMR  
     waning * PTs -                                           # Waning of infection to non-prophylactic class 
     death_c * PTs                                              # Death of sensitive treated (quick acting)
   
   dPTr.dt <- treatment_q * PIr -                                      # Treatment with quick acting drug  
     (sigma_c * rec_adj)  * PTr +                            # Treatment with prophylactic acting drug  
     emergence_p * PTs +    
-    emergence_f * PTs  -                                       # Emergence of AMR 
+    emergence_q * PTs  -                                       # Emergence of AMR 
     waning * PTr -                                           # Waning of infection to non-prophylactic class  
     death_c * PTr                                              # Death of sensitive treated (prophylactic)  
   

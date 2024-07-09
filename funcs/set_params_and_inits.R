@@ -79,18 +79,18 @@ set_parameters_NEW <- function(this_scenario) {
     treatment_q <- treatment
     treatment_p <- 0
     emergence_p <- 0
-    emergence_f <- emergence * emergence_adj
+    emergence_q <- emergence * emergence_adj
   } else {
     if (treatment_type == "P") {
       treatment_q <- 0
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
-      emergence_f <- 0
+      emergence_q <- 0
     } else {
       treatment_q <- treatment
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
-      emergence_f <- emergence * emergence_adj
+      emergence_q <- emergence * emergence_adj
     }
   }
   
@@ -155,7 +155,7 @@ set_parameters_NEW <- function(this_scenario) {
     NC, NV, NW, PF, PS, CS,
     birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
-    death_v, prob_infection_to_vector, gamma_v, emergence_p, emergence_f,
+    death_v, prob_infection_to_vector, gamma_v, emergence_p, emergence_q,
     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
     waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
   )
@@ -212,18 +212,18 @@ set_parameters_NEW <- function(this_scenario) {
 #     treatment_q <- treatment
 #     treatment_p <- 0
 #     emergence_p <- 0
-#     emergence_f <- emergence * emergence_adj
+#     emergence_q <- emergence * emergence_adj
 #   } else {
 #     if (treatment_type == "P") {
 #       treatment_q <- 0
 #       treatment_p <- treatment
 #       emergence_p <- emergence * emergence_adj
-#       emergence_f <- 0
+#       emergence_q <- 0
 #     } else {
 #       treatment_q <- treatment
 #       treatment_p <- treatment
 #       emergence_p <- emergence * emergence_adj
-#       emergence_f <- emergence * emergence_adj
+#       emergence_q <- emergence * emergence_adj
 #     }
 #   }
 # 
@@ -276,7 +276,7 @@ set_parameters_NEW <- function(this_scenario) {
 #     NC, NV, NW, PF, PS, CS,
 #     birth_c, biterate, prob_infection_to_host, fit_adj, rec_adj, sigma_st,
 #     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
-#     death_v, feed.frequency, prob_infection_to_vector, gamma_v, emergence_p, emergence_f,
+#     death_v, feed.frequency, prob_infection_to_vector, gamma_v, emergence_p, emergence_q,
 #     reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
 #     waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
 #   )
