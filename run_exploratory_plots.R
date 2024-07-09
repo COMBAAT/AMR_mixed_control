@@ -2,7 +2,7 @@
 
 library(deSolve)
 library(tictoc)
-library(progress)
+library(lubridate)
 library(ggplot2)
 library(dplyr)
 library(gghighlight)
@@ -99,7 +99,8 @@ for (row in 1:nrow(scenarios_df)) {
 toc()
 
 test <- all_scenarios_summary
-time <- format(Sys.time(), "%a %b %d %X %Y")
+
+time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
 save(test, file = paste0("output/test_", this_scenario$treatment_type, "_play2", ".Rda"))
 # save(test,file ="output/test.Rda")
 
