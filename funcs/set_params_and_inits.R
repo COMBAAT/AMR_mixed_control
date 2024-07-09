@@ -69,11 +69,10 @@ set_parameters_NEW <- function(this_scenario) {
   birth_c <- 1 / baseline_params["cattle_life_span"]
   biterate <- 0.8 / 4
   prob_infection_to_host <- 0.46
-  gamma_c <- 1 / 15
-  resusceptible <- 10
+  gamma_c <- 1 / baseline_params["cattle_incubation_period"]
   death_c <- birth_c
   death_p <- death_c
-  sigma_c <- 1 / 100
+  sigma_c <- 1 / baseline_params["cattle_infection_period"]
   treatment <- 1 * treat_prop * (sigma_c + death_c) / (1 - treat_prop)
   emergence <- 0
   
@@ -99,8 +98,8 @@ set_parameters_NEW <- function(this_scenario) {
   
   sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
   rec_adj <- 1
-  waning <- (1 / 30) / dose_adj
-  waning_f2s <- (1 / 60) / dose_adj
+  waning <- (1 / baseline_params["cattle_proph_partial_protection_period"]) / dose_adj
+  waning_f2s <- (1 / baseline_params["cattle_proph_full_protection_period"]) / dose_adj
   new_prop <- 0
   
   
@@ -114,11 +113,10 @@ set_parameters_NEW <- function(this_scenario) {
   CS <- (birth_c * (1 - prop_prophylaxis) * NC + waning * PS) / death_c
   
   ## ----- Wildlife
-  birth_w <- 1 / 365
-  prob_infection.s_w <- 0.46
-  prob_infection.r_w <- 0.46
-  gamma_w <- 1 / 20
-  resusceptible_w <- 1 / 100
+  birth_w <- 1 / baseline_params["wildlife_lifespan"]
+  prob_infection.s_w <- baseline_params["prob_infection_to_host"]
+  prob_infection.r_w <- baseline_params["prob_infection_to_host"]
+  gamma_w <- 1 / baseline_params["wildlife_incubation_period"]
   death_w <- birth_w
   sigma_w <- sigma_c
   reversion <- 0
@@ -304,7 +302,7 @@ create_params_for_output <- function(params) {
 }
 
 
-output_params <- function(params, report_time){
+output_baseline_params_as_plot_and_csv <- function(report_time){
   
   params_for_output <- set_baseline_parameters()
   plot_this <- convert_named_vector_to_long_df(params_for_output)
@@ -316,11 +314,8 @@ output_params <- function(params, report_time){
     theme(text = element_text(size = 12), axis.text.x = element_text(angle=0, hjust=1, size = 8))
   
   print(p1)
-  
-  ggsave(p1, filename = paste0("output/params_plot_", report_time, ".pdf"))
-  
-  time <- format(Sys.time(), "%a %b %d %X %Y")
-  write.csv(df1, paste0("output/params_", report_time, ".csv"))
+  ggsave(p1, filename = paste0("output/baseline_params_plot_", report_time, ".pdf"))
+  write.csv(df1, paste0("output/baseline_params_", report_time, ".csv"))
 }
 
 
@@ -400,6 +395,7 @@ get_variables <- function() {
   variable_names
 }
 
+
 initialise_variables_with_zeros <- function(variable_names) {
   vector_of_zeros <- rep(0.0, length(variable_names))
   names(vector_of_zeros) <- variable_names
@@ -419,13 +415,13 @@ set_inital_conditions2 <- function(params, number_initially_infected) {
   cattle_with_prophylaxis["PF"] <- params["PF"]
   wildlife["WS"] <- params["NW"]
   vectors["VSt"] <- params["equil_vector_pop"]
+  
   cattle_no_prophylaxis["CIs"] <- number_initially_infected # Infected (drug resistant strain)
   cattle_no_prophylaxis["CS"] <- cattle_no_prophylaxis["CS"] - number_initially_infected
   
   ## ----- Initial conditions output
   
   inits <- c(cattle_no_prophylaxis, cattle_with_prophylaxis, wildlife, vectors)
-  
   qual_check_no0(inits) # ensure there are no negative values
   
   return(inits)
