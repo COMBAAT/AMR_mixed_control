@@ -37,7 +37,7 @@ calculate_epi_outputs <- function(treatment_type, params, final_state) {
     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$CTs + final_state$PTs)
   }
 
-  if (treatment_type == "P") {
+  if (treatment_type == "proph") {
     No_trt_cat <- as.numeric(params["treatment_q"]) * (final_state$PIs + final_state$CIs) * 365.25
     Incidence <- as.numeric(params["gamma_c"]) * (final_state$PEs + final_state$CEs) * 365.25
     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])

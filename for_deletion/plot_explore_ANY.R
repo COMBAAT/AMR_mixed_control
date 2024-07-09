@@ -19,7 +19,7 @@ if (treatment_type == "quick"){
 folder_name = "output/plots_quick_finer_insecticide/"
 load("output/test_F.Rda")
 }
-if (treatment_type == "P"){
+if (treatment_type == "proph"){
   folder_name = "output/plots_proph_finer_insecticide/"
   load("output/test_P.Rda")
 }

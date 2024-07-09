@@ -81,7 +81,7 @@ set_parameters_NEW <- function(this_scenario) {
     emergence_p <- 0
     emergence_q <- emergence * emergence_adj
   } else {
-    if (treatment_type == "P") {
+    if (treatment_type == "proph") {
       treatment_q <- 0
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
@@ -214,7 +214,7 @@ set_parameters_NEW <- function(this_scenario) {
 #     emergence_p <- 0
 #     emergence_q <- emergence * emergence_adj
 #   } else {
-#     if (treatment_type == "P") {
+#     if (treatment_type == "proph") {
 #       treatment_q <- 0
 #       treatment_p <- treatment
 #       emergence_p <- emergence * emergence_adj
