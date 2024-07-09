@@ -85,8 +85,6 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   
   ## ----- Wildlife
   birth_w            <- parms["birth_w"]
-  prob_infection.s_w <- parms["prob_infection.s_w"]
-  prob_infection.r_w <- parms["prob_infection.r_w"]
   gamma_w            <- parms["gamma_w"]
   death_w            <- parms["death_w"]
   sigma_w            <- parms["sigma_w"]

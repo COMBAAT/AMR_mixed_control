@@ -113,8 +113,6 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Wildlife
   birth_w <- 1 / baseline_params["wildlife_lifespan"]
-  prob_infection.s_w <- baseline_params["prob_infection_to_host"]
-  prob_infection.r_w <- baseline_params["prob_infection_to_host"]
   gamma_w <- 1 / baseline_params["wildlife_incubation_period"]
   death_w <- birth_w
   sigma_w <- sigma_c
