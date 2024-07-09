@@ -17,6 +17,13 @@ move_populations_first <- function(df){
   df
 }
 
+convert_array_to_named_vector <- function(this_array) {
+  names <- colnames((this_array))
+  this_vector <- as.vector(this_array)
+  names(this_vector) <- names
+  this_vector
+}
+
 
 convert_named_vector_to_df <- function(named_vec){
   df = data.frame(as.list(named_vec)) 
@@ -32,6 +39,8 @@ include_full_scenario <- function(params, df) {
 append_suffix_to_column_names <- function(df, suffix) {
   df <- df %>% rename_with(~ paste0(., suffix))
 }
+
+
 
 
 my_rootfun <- function (t, y, params) {
