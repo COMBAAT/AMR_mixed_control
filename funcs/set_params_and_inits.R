@@ -73,13 +73,12 @@ set_parameters_NEW <- function(this_scenario) {
   ## Cattle -----
   birth_c <- 1 / baseline_params["cattle_lifespan"]
   gamma_c <- 1 / baseline_params["cattle_incubation_period"]
+  sigma_c <- 1 / baseline_params["cattle_infection_period"]
   death_c <- birth_c
   death_p <- death_c
-  sigma_c <- 1 / baseline_params["cattle_infection_period"]
   
   
   treatment <- 1 * treat_prop * (sigma_c + death_c) / (1 - treat_prop)
-  #emergence <- 0
   
   if (treatment_type == "quick") {
     treatment_q <- treatment
@@ -101,13 +100,10 @@ set_parameters_NEW <- function(this_scenario) {
   }
   
   sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
-  #rec_adj <- 1
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   new_prop <- 0
   
-  
-  #NC <- 50 # Total cattle
   # figure out equilibrium in absence of infection
   # birth_c * prop_prophylaxis *NC - death_c * PF - waning_f2s*PF
   PF <- birth_c * prop_prophylaxis * NC / (death_c + waning_f2s)
@@ -119,9 +115,8 @@ set_parameters_NEW <- function(this_scenario) {
   ## ----- Wildlife
   birth_w <- 1 / baseline_params["wildlife_lifespan"]
   gamma_w <- 1 / baseline_params["wildlife_incubation_period"]
+  sigma_w <- 1 / baseline_params["wildlife_infection_period"]
   death_w <- birth_w
-  sigma_w <- sigma_c
-  #reversion <- 0
   
   ## -----  Vectors
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
