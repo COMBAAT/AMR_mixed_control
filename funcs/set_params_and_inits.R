@@ -123,7 +123,6 @@ set_parameters_NEW <- function(this_scenario) {
   #reversion <- 0
   
   ## -----  Vectors
-  
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
   
@@ -144,8 +143,7 @@ set_parameters_NEW <- function(this_scenario) {
   
   
   
-  ## ----- Parameters & initial conditions output
-  
+  ## ----- Parameters output
   original_params <- cbind(
     NC, NV, NW, PF, PS, CS,
     birth_c, fit_adj, rec_adj, sigma_st,
