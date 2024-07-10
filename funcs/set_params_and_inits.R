@@ -52,20 +52,22 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 
 
 set_parameters_NEW <- function(this_scenario) {
-  birth_adj <- this_scenario$birth_adj
-  fit_adj <- this_scenario$fit_adj
-  K <- this_scenario$K
-  treat_prop <- this_scenario$treat_prop
-  prop_insecticide <- this_scenario$prop_insecticide
-  NW <- this_scenario$NW
-  NC <- this_scenario$NC
-  prop_prophylaxis <- this_scenario$prop_prophylaxis
-  treatment_type <- this_scenario$treatment_type
-  dose_adj <- this_scenario$dose_adj
-  emergence_adj <- this_scenario$emergence_adj
-  emergence <- this_scenario$emergence
-  rec_adj <- this_scenario$rec_adj
-  reversion <- this_scenario$reversion
+  this_scenario <- convert_df_row_to_named_vector(this_scenario)
+  
+  birth_adj <- this_scenario["birth_adj"]
+  fit_adj <- this_scenario["fit_adj"]
+  K <- this_scenario["K"]
+  treat_prop <- this_scenario["treat_prop"]  
+  prop_insecticide <- this_scenario["prop_insecticide"]
+  NW <- this_scenario["NW"]
+  NC <- this_scenario["NC"]
+  prop_prophylaxis <- this_scenario["prop_prophylaxis"]
+  treatment_type <- this_scenario["treatment_type"]
+  dose_adj <- this_scenario["dose_adj"]
+  emergence_adj <- this_scenario["emergence_adj"]
+  emergence <- this_scenario["emergence"]
+  rec_adj <- this_scenario["rec_adj"]
+  reversion <- this_scenario["reversion"]
   
   baseline_params <- set_baseline_parameters()
   
