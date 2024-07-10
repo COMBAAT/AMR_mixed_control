@@ -99,7 +99,8 @@ set_parameters_NEW <- function(this_scenario) {
       emergence_q <- emergence * emergence_adj
   }
   
-  sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
+  sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
+  sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   new_prop <- 0
