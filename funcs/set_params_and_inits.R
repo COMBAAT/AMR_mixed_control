@@ -147,16 +147,16 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Parameters output
   original_params <- cbind(
-    NC, NV, NW, PF, PS, CS,
-    birth_c, fit_adj, rec_adj, sigma_st,
+    NV, PF, PS, CS,
+    birth_c, sigma_st,
     gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
     death_v, gamma_v, emergence_p, emergence_q,
-    reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
-    waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
+    birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
+    waning, waning_f2s, new_prop, ten2fed
   )
   original_params <- convert_array_to_named_vector(original_params)
   
-  original_params <- c(original_params, baseline_params)
+  original_params <- c(original_params, baseline_params, this_scenario)
   
   qual_check_no0(original_params) # ensure there are no negative values
   
