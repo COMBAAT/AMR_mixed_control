@@ -1,6 +1,6 @@
 
 create_multiple_scenarios <- function() {
-  max_time <- 5
+  max_time <- 2
   treatment_type <- "quick"
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
@@ -16,9 +16,11 @@ create_multiple_scenarios <- function() {
   birth_adj <- c(2)
   dose_adj <- 1 # c(1, 0.9, 0.7, 0.4, 0.2)
   emergence_adj <- 1
+  emergence <- 0
+  rec_adj <- 1
 
   df <- expand.grid(
-    emergence_adj = emergence_adj, dose_adj = dose_adj,
+    rec_adj, emergence, emergence_adj = emergence_adj, dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_insecticide = prop_insecticide,
     birth_adj = birth_adj, prop_prophylaxis = prop_prophylaxis,
@@ -39,9 +41,11 @@ create_single_scenario <- function() {
   birth_adj <- 2
   dose_adj <- 1.0
   emergence_adj <- 1
+  emergence <- 0
+  rec_adj <- 1
 
   df <- data.frame(
-    emergence_adj = emergence_adj, dose_adj = dose_adj,
+    rec_adj, emergence, emergence_adj = emergence_adj, dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_insecticide = prop_insecticide,
     birth_adj = birth_adj, prop_prophylaxis = prop_prophylaxis,

@@ -62,6 +62,8 @@ set_parameters_NEW <- function(this_scenario) {
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence_adj <- this_scenario$emergence_adj
+  emergence <- this_scenario$emergence
+  rec_adj <- this_scenario$rec_adj
   
   baseline_params <- set_baseline_parameters()
   
@@ -74,7 +76,7 @@ set_parameters_NEW <- function(this_scenario) {
   
   
   treatment <- 1 * treat_prop * (sigma_c + death_c) / (1 - treat_prop)
-  emergence <- 0
+  #emergence <- 0
   
   if (treatment_type == "quick") {
     treatment_q <- treatment
@@ -96,7 +98,7 @@ set_parameters_NEW <- function(this_scenario) {
   }
   
   sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
-  rec_adj <- 1
+  #rec_adj <- 1
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   new_prop <- 0
