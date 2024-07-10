@@ -65,6 +65,7 @@ set_parameters_NEW <- function(this_scenario) {
   emergence_adj <- this_scenario$emergence_adj
   emergence <- this_scenario$emergence
   rec_adj <- this_scenario$rec_adj
+  reversion <- this_scenario$reversion
   
   baseline_params <- set_baseline_parameters()
   
@@ -119,7 +120,7 @@ set_parameters_NEW <- function(this_scenario) {
   gamma_w <- 1 / baseline_params["wildlife_incubation_period"]
   death_w <- birth_w
   sigma_w <- sigma_c
-  reversion <- 0
+  #reversion <- 0
   
   ## -----  Vectors
   
