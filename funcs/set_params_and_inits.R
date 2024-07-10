@@ -52,7 +52,6 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 
 
 set_parameters_NEW <- function(this_scenario) {
-  #this_scenario <- convert_df_row_to_named_vector(this_scenario)
   
   birth_adj <- this_scenario$birth_adj
   fit_adj <- this_scenario$fit_adj
@@ -87,18 +86,18 @@ set_parameters_NEW <- function(this_scenario) {
     treatment_p <- 0
     emergence_p <- 0
     emergence_q <- emergence * emergence_adj
-  } else {
-    if (treatment_type == "proph") {
+  }
+  if (treatment_type == "proph") {
       treatment_q <- 0
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
       emergence_q <- 0
-    } else {
+  } 
+  if (treatment_type == "both") {
       treatment_q <- treatment
       treatment_p <- treatment
       emergence_p <- emergence * emergence_adj
       emergence_q <- emergence * emergence_adj
-    }
   }
   
   sigma_st <- (1 / 3) * dose_adj + sigma_c * (1 - dose_adj) #* 250 #LM: adjusted so that R0 drops below 1 when 99% treated to reflect Hargrove
@@ -147,16 +146,19 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Parameters output
   derived_params <- cbind(
-    NC, NV, NW, PF, PS, CS,
-    birth_c, fit_adj, rec_adj, sigma_st,
-    gamma_c, death_c, treatment_p, treatment_q, sigma_c, birth_v,
-    death_v, gamma_v, emergence_p, emergence_q,
-    reversion, K, birth_w, gamma_w, death_w, sigma_w, equil_vector_pop,
-    waning, waning_f2s, new_prop, ten2fed, prop_prophylaxis
+    NV, PF, PS, CS, equil_vector_pop,
+    birth_c, death_c, gamma_c, sigma_c, 
+    birth_w, death_w, gamma_w, sigma_w,
+    birth_v, death_v, gamma_v, ten2fed,
+    treatment_p, treatment_q, sigma_st, 
+    emergence_p, emergence_q, waning, waning_f2s, new_prop 
   )
-  derived_params <- convert_array_to_named_vector(derived_params)
+  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis)
   
-  all_params <- c(derived_params, baseline_params)
+  derived_plus_scenario_params <- cbind(derived_params, scenario_params)
+  derived_plus_scenario_params <- convert_array_to_named_vector(derived_plus_scenario_params)
+  
+  all_params <- c(derived_plus_scenario_params, baseline_params)
   qual_check_no0(all_params) # ensure there are no negative values
   
   return(all_params)
