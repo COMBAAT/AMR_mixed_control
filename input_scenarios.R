@@ -16,14 +16,13 @@ create_multiple_scenarios <- function() {
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
-  emergence_adj <- 1.0
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    emergence_adj = emergence_adj, dose_adj = dose_adj,
+    dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis = prop_prophylaxis,
@@ -44,14 +43,13 @@ create_single_scenario <- function() {
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
-  emergence_adj <- 1.0
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    emergence_adj = emergence_adj, dose_adj = dose_adj,
+    dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis = prop_prophylaxis,
