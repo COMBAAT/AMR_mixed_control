@@ -50,8 +50,8 @@ create_K_plots <- function(df, ymax, label, this_K){
     # dev.off()
 }
 ########################################################
-df <- test1 %>% filter(prop_insecticide < 0.5, prop_insecticide != 0.025, K == 6000) %>% 
-  mutate(W = as.factor(W_st), prop_insect = as.factor(prop_insecticide), K = as.factor(K)) %>% 
+df <- test1 %>% filter(prop_cattle_with_insecticide < 0.5, prop_cattle_with_insecticide != 0.025, K == 6000) %>% 
+  mutate(W = as.factor(W_st), prop_insect = as.factor(prop_cattle_with_insecticide), K = as.factor(K)) %>% 
   filter(dose ==1)
 
 df$this_y <- df$Incidence
@@ -182,12 +182,12 @@ for (this_K in unique(df$K)) {
 ###########
 plot_versus_insecticide <- function(df, this_K, max.ins, y_label){
   this_W_st = 0
-  plot4a <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
+  plot4a <- df3 %>% filter(W_st == this_W_st & prop_cattle_with_insecticide < 0.51) %>%
     ggplot() +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) + xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop),size = 2) +
-    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop),size = 2) +
+    geom_line(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2() +
     ylim(0, max.ins)
   plot4a
@@ -195,23 +195,23 @@ plot_versus_insecticide <- function(df, this_K, max.ins, y_label){
                         legend.title=element_text(size=12)) )
   
   this_W_st = 100
-  plot4b <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
+  plot4b <- df3 %>% filter(W_st == this_W_st & prop_cattle_with_insecticide < 0.51) %>%
     ggplot()  +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) +  xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 2) +
-    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop), size = 2) +
+    geom_line(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2()+
     ylim(0, max.ins)
   plot4b
   
   this_W_st = 250
-  plot4c <- df3 %>% filter(W_st == this_W_st & prop_insecticide < 0.51) %>%
+  plot4c <- df3 %>% filter(W_st == this_W_st & prop_cattle_with_insecticide < 0.51) %>%
     ggplot()  +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 12),
           axis.text.y = element_text( size = 12)) + xlab("\n") + ylab("") +
-    geom_point(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 2) +
-    geom_line(aes(y = this_y, x = prop_insecticide, colour = treat_prop), size = 1.1) + 
+    geom_point(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop), size = 2) +
+    geom_line(aes(y = this_y, x = prop_cattle_with_insecticide, colour = treat_prop), size = 1.1) + 
     ggtitle(paste0("Wildlife = ", this_W_st)) + my_theme2()+
     ylim(0, max.ins)
   plot4c

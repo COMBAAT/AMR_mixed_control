@@ -91,17 +91,17 @@ plot_multiplot.insecticide <- function(df2, Wn, p.ins, col.var, shape.var,
   df2 <- df2 %>% filter(fit_adj == fitadj)
   names(df2)[names(df2) == this_var] <- "y"
   
-  plot_this <- df2 %>% filter(prop_insecticide %in% p.ins) %>% mutate(W_st = as.factor(W_st), prop_insecticide = as.factor(prop_insecticide))
+  plot_this <- df2 %>% filter(prop_cattle_with_insecticide %in% p.ins) %>% mutate(W_st = as.factor(W_st), prop_cattle_with_insecticide = as.factor(prop_cattle_with_insecticide))
   
-  p <- ggplot(plot_this, aes(x = treat_prop, y = y*0.999, colour = prop_insecticide, group = interaction(W_st, prop_insecticide)) )  + my_theme() +
+  p <- ggplot(plot_this, aes(x = treat_prop, y = y*0.999, colour = prop_cattle_with_insecticide, group = interaction(W_st, prop_cattle_with_insecticide)) )  + my_theme() +
     geom_point(aes(shape = W_st), size = 2) + geom_line() +
     xlab("\n") + ylab("") +
     guides(col = guide_legend("prop_insect"), shape = guide_legend("Wildlife"))
   
   plots <- list()
   for (i in 1:5){
-    plots[[i]] <- plot_this %>% filter(prop_insecticide == p.ins[i]) %>% 
-      ggplot(aes(x = treat_prop, y = y*0.999, group = interaction(W_st, prop_insecticide)) ) + my_theme() +
+    plots[[i]] <- plot_this %>% filter(prop_cattle_with_insecticide == p.ins[i]) %>% 
+      ggplot(aes(x = treat_prop, y = y*0.999, group = interaction(W_st, prop_cattle_with_insecticide)) ) + my_theme() +
       geom_point(aes(shape = W_st), size = 2, colour = my_cols[i] ) + geom_line(colour = my_cols[i]  ) + ylim(ymin, ymax/0.0001) +xlab("\n") + ylab("")+ 
       if (threshold == "prevalence"){
         if (this_var != "prevalence"){gghighlight(prevalence < prev_threshold)}

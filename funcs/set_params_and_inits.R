@@ -57,7 +57,7 @@ set_parameters_NEW <- function(this_scenario) {
   fit_adj <- this_scenario$fit_adj
   K <- this_scenario$K
   treat_prop <- this_scenario$treat_prop 
-  prop_insecticide <- this_scenario$prop_insecticide
+  prop_cattle_with_insecticide <- this_scenario$prop_cattle_with_insecticide
   NW <- this_scenario$NW
   NC <- this_scenario$NC
   prop_prophylaxis <- this_scenario$prop_prophylaxis
@@ -121,12 +121,12 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## -----  Vectors
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
-  prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
+  prop_hosts_with_insecticide <- prop_cattle_with_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
   
   death_v <- calculate_vector_death_rate(d = baseline_params["days_between_feeds"],
                                          qf = baseline_params["prob_vector_surviving_feed"],
                                          qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
-                                         pi = prop_insecticide.actual)
+                                         pi = prop_hosts_with_insecticide)
   death_v_no_insecticide <- calculate_vector_death_rate(d = baseline_params["days_between_feeds"],
                                                         qf = baseline_params["prob_vector_surviving_feed"],
                                                         qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
@@ -182,7 +182,7 @@ set_parameters_NEW <- function(this_scenario) {
 #   fit_adj <- this_scenario$fit_adj
 #   K <- this_scenario$K
 #   treat_prop <- this_scenario$treat_prop
-#   prop_insecticide <- this_scenario$prop_insecticide
+#   prop_cattle_with_insecticide <- this_scenario$prop_cattle_with_insecticide
 #   NW <- this_scenario$NW
 #   prop_prophylaxis <- this_scenario$prop_prophylaxis
 #   treatment_type <- this_scenario$treatment_type
@@ -256,8 +256,8 @@ set_parameters_NEW <- function(this_scenario) {
 #   feed.frequency <- 0
 #   prob_infection_to_vector <- 0.025
 #   incubation <- 20
-#   prop_insecticide.actual <- prop_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
-#   death_v <- -1 * log((1 - prop_insecticide.actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
+#   prop_cattle_with_insecticide_actual <- prop_cattle_with_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
+#   death_v <- -1 * log((1 - prop_cattle_with_insecticide_actual) * qf * qn^feed.cyc) / feed.cyc # Vector death rate
 #   birth_v <- birth_adj * (-1) * log((1 - 0) * qf * qn^feed.cyc) / feed.cyc # Vector birth rate
 #   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
 #   gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I

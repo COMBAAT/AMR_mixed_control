@@ -18,8 +18,8 @@ dir.create(folder_name)
 # Generate plots ---------------------------------------------------------------
 # Plot R0 versus wildlife faceted by treat_prop
 test %>%
-  mutate_at(c("prop_insecticide", "treat_prop", "K"), as.factor) %>%
-  filter(prop_insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
+  mutate_at(c("prop_cattle_with_insecticide", "treat_prop", "K"), as.factor) %>%
+  filter(prop_cattle_with_insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
   ggplot(aes(NW, R0sen, colour = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
@@ -37,8 +37,8 @@ ggsave(
 # ----------------------------------------
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
 lhs <- test %>%
-  mutate_at(c("prop_insecticide", "NW", "K"), as.factor) %>%
-  filter(prop_insecticide == 0) %>%
+  mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
+  filter(prop_cattle_with_insecticide == 0) %>%
   ggplot(aes(treat_prop, Rres_final / Rsen_final, colour = NW, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
@@ -78,11 +78,11 @@ for (y_var in y_vars) {
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by prop_insecticide
+# Plot y versus_treat_prop faceted by prop_cattle_with_insecticide
 
 y_var <- "RiskA"
 this_K <- 10000
-plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
+plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
 ggsave(
   filename = paste0(folder_name, plot_name),
@@ -91,7 +91,7 @@ ggsave(
 
 y_var <- "RiskE"
 this_K <- 10000
-plot_type2_y_versus_treat_prop_facet_prop_insecticide(test, this_K, y_var)
+plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(test, this_K, y_var)
 plot_name <- paste0("plot_type2_", y_var, ".pdf")
 ggsave(
   filename = paste0(folder_name, plot_name),
@@ -101,12 +101,12 @@ ggsave(
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by prop_insecticide with highlighting
+# Plot y versus_treat_prop faceted by prop_cattle_with_insecticide with highlighting
 y_var <- "RiskE"
 this_K <- 10000
 threshold_var <- "prevalence"
 threshold <- 0.1
-plot_type3_y_versus_treat_prop_facet_prop_insecticide_with_higlight(
+plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight(
   test, this_K, y_var, threshold_var, threshold
 )
 plot_name <- paste0("plot_type3_", y_var, ".pdf")
@@ -118,7 +118,7 @@ ggsave(
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by NW, coloured by prop_insecticide
+# Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
 y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
 this_K <- 6000
 
@@ -134,12 +134,12 @@ for (y_var in y_vars) {
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus prop_insecticide faceted by NW, coloured by treat_prop
+# Plot y versus prop_cattle_with_insecticide faceted by NW, coloured by treat_prop
 y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
 this_K <- 6000
 
 for (y_var in y_vars) {
-  plot_type5_y_versus_prop_insecticide_facet_NW(test, y_var, this_K)
+  plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW(test, y_var, this_K)
 
   plot_name <- paste0("plot_type5_", y_var, ".pdf")
   ggsave(
