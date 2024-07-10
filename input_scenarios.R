@@ -5,7 +5,7 @@ create_multiple_scenarios <- function() {
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
-  treat_propA <- seq(0, 0.9, by = 0.2) # full from 0-1
+  treat_propA <- seq(0.0, 0.9, by = 0.2) # full from 0-1
   treat_propB <- seq(0.91, 0.99, by = 0.02)
   treat_prop <- c(treat_propA, treat_propB)
   carrying_capacity <- c(10000, 6000, 2000, 1000, 500)
@@ -15,7 +15,7 @@ create_multiple_scenarios <- function() {
   prop_prophylaxis <- 0.0
   fit_adj <- 0.95
   birth_adj <- 2.0
-  dose_adj <- 1 # c(1, 0.9, 0.7, 0.4, 0.2)
+  dose_adj <- 1.0
   emergence_adj <- 1.0
   emergence <- 0.0
   rec_adj <- 1.0
@@ -41,7 +41,7 @@ create_single_scenario <- function() {
   carrying_capacity <- 2000
   prop_insecticide <- 0.0
   prop_prophylaxis <- 0.0
-  fit_adj <- c(0.95)
+  fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence_adj <- 1.0
