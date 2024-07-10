@@ -42,7 +42,6 @@ all_scenarios_summary <- data.frame()
 
 ## ---- Run time estimates
 tic()
-start.time <- Sys.time()
 
 ## ---- Execute model
 for (row in 1:nrow(scenarios_df)) {
