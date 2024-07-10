@@ -1,3 +1,4 @@
+
 set_inital_conditions <- function(params, disease_present) {
   NC <- params["NC"]
   PF <- params["PF"]
