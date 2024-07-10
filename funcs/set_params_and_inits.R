@@ -78,7 +78,7 @@ set_parameters_NEW <- function(this_scenario) {
   death_p <- death_c
   
   
-  treatment <- 1 * treat_prop * (sigma_c + death_c) / (1 - treat_prop)
+  treatment <- treat_prop * (sigma_c + death_c) / (1 - treat_prop)
   
   if (treatment_type == "quick") {
     treatment_q <- treatment
