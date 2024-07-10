@@ -58,6 +58,7 @@ set_parameters_NEW <- function(this_scenario) {
   treat_prop <- this_scenario$treat_prop
   prop_insecticide <- this_scenario$prop_insecticide
   NW <- this_scenario$NW
+  NC <- this_scenario$NC
   prop_prophylaxis <- this_scenario$prop_prophylaxis
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
@@ -104,7 +105,7 @@ set_parameters_NEW <- function(this_scenario) {
   new_prop <- 0
   
   
-  NC <- 50 # Total cattle
+  #NC <- 50 # Total cattle
   # figure out equilibrium in absence of infection
   # birth_c * prop_prophylaxis *NC - death_c * PF - waning_f2s*PF
   PF <- birth_c * prop_prophylaxis * NC / (death_c + waning_f2s)
