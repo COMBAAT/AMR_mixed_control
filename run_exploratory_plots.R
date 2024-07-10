@@ -12,7 +12,8 @@ library(crayon)
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
 source("input_scenarios.R")
-source("funcs/set_params_and_inits.R")
+source("funcs/set_params.R")
+source("funcs/set_inits.R")
 source("funcs/qual_check.R")
 source("funcs/r0.R")
 source("funcs/AAT_AMR_dens_dep.R")
@@ -28,7 +29,7 @@ source("funcs/quick_plot.R")
 multiple_scenarios <- TRUE
 use_root_functions <- TRUE 
 append_current_time_to_output_file <- FALSE
-my_string_for_output_file <- "now"
+my_string_for_output_file <- "test"
 
 # Create dataframe of parameter combinations for each scenario
 if (multiple_scenarios == TRUE) {
