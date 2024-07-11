@@ -1,6 +1,15 @@
 
+set_user_inputs <- function() {
+  user_inputs <- list(multiple_scenarios = TRUE,
+                      use_root_functions = TRUE,
+                      append_current_time_to_output_file = FALSE,
+                      my_string_for_output_file = "test")
+  user_inputs
+}
+
+
 create_multiple_scenarios <- function() {
-  max_time <- 10000
+  max_time <- 5
   treatment_type <- "quick"
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)

@@ -8,6 +8,7 @@ library(dplyr)
 library(gghighlight)
 library(cowplot)
 library(crayon)
+library(codetools)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
@@ -26,13 +27,10 @@ source("funcs/quick_plot.R")
 
 ## ----
 # User choices
-multiple_scenarios <- TRUE
-use_root_functions <- TRUE 
-append_current_time_to_output_file <- FALSE
-my_string_for_output_file <- "test"
+user_inputs <- set_user_inputs()
 
 # Create dataframe of parameter combinations for each scenario
-if (multiple_scenarios == TRUE) {
+if (user_inputs$multiple_scenarios == TRUE) {
   scenarios_df <- create_multiple_scenarios()
 } else {
   scenarios_df <- create_single_scenario()
@@ -76,8 +74,7 @@ for (row in 1:nrow(scenarios_df)) {
 
   ## RUN MODEL ----
   # use rootfunc option to exit simulation when Rsen < 1.01 or Number infected cattle < 1e-5
-  use_root_functions <- TRUE
-  if (use_root_functions == TRUE) {
+  if (user_inputs$use_root_functions == TRUE) {
     time_trajectory <- ode(
       y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
       rootfunc = my_rootfun, events = list(root = TRUE, terminalroot = c(1, 2))
@@ -100,8 +97,8 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
 
-
-if (append_current_time_to_output_file == TRUE) {
+my_string_for_output_file <- user_inputs$my_string_for_output_file
+if (user_inputs$append_current_time_to_output_file == TRUE) {
   label <- get_label_with_current_datetime(my_string_for_output_file)
 } else {
   label <- my_string_for_output_file
