@@ -106,5 +106,7 @@ set_inital_conditions2 <- function(params, number_initially_infected) {
   return(inits)
 }
 
-
 findGlobals(fun = set_inital_conditions, merge = FALSE)$variables
+findGlobals(fun = get_variables, merge = FALSE)$variables
+findGlobals(fun = initialise_variables_with_zeros, merge = FALSE)$variables
+findGlobals(fun = set_inital_conditions2, merge = FALSE)$variables
