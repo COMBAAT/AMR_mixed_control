@@ -10,8 +10,8 @@ create_multiple_scenarios <- function() {
   treat_prop <- c(treat_propA, treat_propB)
   carrying_capacity <- c(10000, 6000, 2000, 1000, 500)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
-  #prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
+  #prop_cattle_with_insecticide <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
+  prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
   prop_prophylaxis <- 0.0
   fit_adj <- 0.95
   birth_adj <- 2.0
@@ -57,3 +57,6 @@ create_single_scenario <- function() {
   )
   df
 }
+
+findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
+findGlobals(fun = create_single_scenario, merge = FALSE)$variables
