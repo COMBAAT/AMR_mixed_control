@@ -3,13 +3,14 @@ set_user_inputs <- function() {
   user_inputs <- list(multiple_scenarios = TRUE,
                       use_root_functions = TRUE,
                       append_current_time_to_output_file = FALSE,
-                      my_string_for_output_file = "test")
+                      label = "option3")
   user_inputs
 }
 
 
-create_multiple_scenarios <- function() {
-  max_time <- 5
+create_multiple_scenarios <- function(label) {
+  option <- 3
+  max_time <- 10000
   treatment_type <- "quick"
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
@@ -20,7 +21,7 @@ create_multiple_scenarios <- function() {
   carrying_capacity <- c(10000, 6000, 2000, 1000, 500)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
   #prop_cattle_with_insecticide <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
-  prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
+  prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.5, 0.8, 0.99)
   prop_prophylaxis <- 0.0
   fit_adj <- 0.95
   birth_adj <- 2.0
@@ -30,6 +31,7 @@ create_multiple_scenarios <- function() {
   reversion <- 0.0
 
   df <- expand.grid(
+    label = label, option = option, 
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
     dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
@@ -41,6 +43,7 @@ create_multiple_scenarios <- function() {
 }
 
 create_single_scenario <- function() {
+  option <- 1
   max_time <- 5000
   treatment_type <- "quick"
   cattle_number <- 50
@@ -62,7 +65,7 @@ create_single_scenario <- function() {
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis = prop_prophylaxis,
-    treatment_type = treatment_type, max_time = max_time
+    treatment_type = treatment_type, max_time = max_time, option = option
   )
   df
 }

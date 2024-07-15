@@ -31,9 +31,9 @@ user_inputs <- set_user_inputs()
 
 # Create dataframe of parameter combinations for each scenario
 if (user_inputs$multiple_scenarios == TRUE) {
-  scenarios_df <- create_multiple_scenarios()
+  scenarios_df <- create_multiple_scenarios(label = user_inputs$label)
 } else {
-  scenarios_df <- create_single_scenario()
+  scenarios_df <- create_single_scenario(label = user_inputs$label)
 }
 
 # Create empty dataframe to store outputs
@@ -97,16 +97,15 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
 
-my_string_for_output_file <- user_inputs$my_string_for_output_file
 if (user_inputs$append_current_time_to_output_file == TRUE) {
-  label <- get_label_with_current_datetime(my_string_for_output_file)
+  file_label <- get_label_with_current_datetime(user_inputs$label)
 } else {
-  label <- my_string_for_output_file
+  file_label <- user_inputs$label
 }
-output_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", label)
+file_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", file_label)
 
 test <- all_scenarios_summary
-save(test, file = paste0(output_name, ".Rda")) 
+save(test, file = paste0(file_name, ".Rda")) 
 
 
 quick_plot(expanded_output)
