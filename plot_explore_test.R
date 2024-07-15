@@ -12,6 +12,7 @@ source("funcs/helper_functions.R")
 # Load data files --------------------------------------------------------------
 latest_file <- get_latest_Rda_file()
 load(latest_file)
+plot_label <- test$label[1]
 folder_name <- gsub(".Rda", "/", latest_file)
 dir.create(folder_name)
 
@@ -29,8 +30,9 @@ test %>%
   labs(colour = my_label("K")) +
   my_theme()
 
+plot_name <- paste0("plot_type0_R0sen", "_", plot_label, ".pdf")
 ggsave(
-  filename = paste0(folder_name, "plot_type0_R0sen.pdf"),
+  filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -54,6 +56,7 @@ rhs
 # use guides = collect to remove duplicate legends
 lhs + rhs + plot_layout(ncol = 2, guides = "collect")
 
+plot_name <- paste0("plot_type0_R_res_R_sen_ratio", "_", plot_label, ".pdf")
 ggsave(
   filename = paste0(folder_name, "plot_type0_R_res_R_sen_ratio.pdf"),
   width = my_pdfwidth(), height = my_pdfheight()
@@ -69,7 +72,7 @@ y_vars <- c(
 for (y_var in y_vars) {
   plot_type1_y_versus_treat_prop_facet_NW(test, y_var)
 
-  plot_name <- paste0("plot_type1_", y_var, ".pdf")
+  plot_name <- paste0("plot_type1_", y_var, "_", plot_label, ".pdf")
   ggsave(
     filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
@@ -83,7 +86,7 @@ for (y_var in y_vars) {
 y_var <- "RiskA"
 this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(test, this_K, y_var)
-plot_name <- paste0("plot_type2_", y_var, ".pdf")
+plot_name <- paste0("plot_type2_", y_var, "_", plot_label, ".pdf")
 ggsave(
   filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
@@ -92,7 +95,7 @@ ggsave(
 y_var <- "RiskE"
 this_K <- 10000
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(test, this_K, y_var)
-plot_name <- paste0("plot_type2_", y_var, ".pdf")
+plot_name <- paste0("plot_type2_", y_var, "_", plot_label, ".pdf")
 ggsave(
   filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
@@ -109,7 +112,7 @@ threshold <- 0.1
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight(
   test, this_K, y_var, threshold_var, threshold
 )
-plot_name <- paste0("plot_type3_", y_var, ".pdf")
+plot_name <- paste0("plot_type3_", y_var, "_", plot_label, ".pdf")
 ggsave(
   filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
@@ -125,7 +128,7 @@ this_K <- 6000
 for (y_var in y_vars) {
   plot_type4_y_versus_treat_prop_facet_NW(test, y_var, this_K)
 
-  plot_name <- paste0("plot_type4_", y_var, ".pdf")
+  plot_name <- paste0("plot_type4_", y_var, "_", plot_label, ".pdf")
   ggsave(
     filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
@@ -141,7 +144,7 @@ this_K <- 6000
 for (y_var in y_vars) {
   plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW(test, y_var, this_K)
 
-  plot_name <- paste0("plot_type5_", y_var, ".pdf")
+  plot_name <- paste0("plot_type5_", y_var, "_", plot_label, ".pdf")
   ggsave(
     filename = paste0(folder_name, plot_name),
     width = my_pdfwidth(), height = my_pdfheight()
