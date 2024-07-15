@@ -66,6 +66,7 @@ set_parameters_NEW <- function(this_scenario) {
   emergence <- this_scenario$emergence
   rec_adj <- this_scenario$rec_adj
   reversion <- this_scenario$reversion
+  option <- this_scenario$option
   
   baseline_params <- set_baseline_parameters()
   
@@ -134,10 +135,17 @@ set_parameters_NEW <- function(this_scenario) {
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
   NV <- equil_vector_pop # equil_vector_pop
   
-  incubation <- 20
-  gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
-  
-  
+  if (option == 1) {
+    incubation <- 20
+    gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
+  } 
+  if (option == 2) {
+    gamma_v <- 1/baseline_params["wildlife_incubation_period"] # big change
+  }
+  if (option == 3) {
+    incubation <- 20
+    gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation)) # big change 2
+  }
   
   ## ----- Parameters output
   derived_params <- cbind(
@@ -146,9 +154,9 @@ set_parameters_NEW <- function(this_scenario) {
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st, 
-    emergence_p, emergence_q, waning, waning_f2s, new_prop 
+    emergence_p, emergence_q, waning, waning_f2s, new_prop
   )
-  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis)
+  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis, option)
   
   derived_plus_scenario_params <- cbind(derived_params, scenario_params)
   derived_plus_scenario_params <- convert_array_to_named_vector(derived_plus_scenario_params)
