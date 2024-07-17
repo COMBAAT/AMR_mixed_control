@@ -10,11 +10,20 @@ source("funcs/plot_helper.R")
 source("funcs/helper_functions.R")
 
 # Load data files --------------------------------------------------------------
-latest_file <- get_latest_Rda_file()
-load(latest_file)
-plot_label <- test$label[1]
-folder_name <- gsub(".Rda", "/", latest_file)
-dir.create(folder_name)
+load_latest_file <- TRUE
+if (load_latest_file == TRUE) {
+  latest_file <- get_latest_Rda_file()
+  load(latest_file)
+  plot_label <- test$label[1]
+  folder_name <- gsub(".Rda", "/", latest_file)
+  dir.create(folder_name)
+} else {
+  load("output/quick_treatment_option4.Rda")
+  plot_label <- test$label[1]
+  folder_name <- "output/merged/"
+  dir.create(folder_name)
+}
+
 
 # Generate plots ---------------------------------------------------------------
 # Plot R0 versus wildlife faceted by treat_prop
@@ -58,7 +67,7 @@ lhs + rhs + plot_layout(ncol = 2, guides = "collect")
 
 plot_name <- paste0("plot_type0_R_res_R_sen_ratio", "_", plot_label, ".pdf")
 ggsave(
-  filename = paste0(folder_name, "plot_type0_R_res_R_sen_ratio.pdf"),
+  filename = paste0(folder_name, plot_name),
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
