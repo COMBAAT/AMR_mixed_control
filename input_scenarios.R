@@ -3,15 +3,14 @@ library(codetools)
 set_user_inputs <- function() {
   user_inputs <- list(multiple_scenarios = TRUE,
                       use_root_functions = TRUE,
-                      append_current_time_to_output_file = FALSE,
-                      label = "as_test_play")
+                      append_current_time_to_output_file = TRUE,
+                      descriptor = "playing")
   user_inputs
 }
 
-
-create_multiple_scenarios <- function(label) {
+create_multiple_scenarios <- function() {
   option <- 1
-  max_time <- 3
+  max_time <- 10000
   treatment_type <- "quick"
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
@@ -32,7 +31,7 @@ create_multiple_scenarios <- function(label) {
   reversion <- 0.0
 
   df <- expand.grid(
-    label = label, option = option, 
+    option = option, 
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
     dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
