@@ -5,6 +5,11 @@ merge_params_into_this_scenario <- function(df, params) {
   merged_df
 }
 
+append_descriptor <- function(df, descriptor) {
+  df <- df %>% mutate(descriptor = descriptor)
+  df
+}
+
 merge_dfs_without_duplicate_columns <- function(df1, df2){
   duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
   df2_reduced <- df2 %>% select(-all_of(duplicated_names))
@@ -62,18 +67,23 @@ my_rootfun <- function (t, y, params) {
   return(c(condition1, condition2))
 }
 
-
-get_label_with_current_datetime <- function(my_string) {
+get_formatted_time <- function() {
   current_time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
   current_time_without_colons <- gsub(":", "", current_time)
   current_time_without_colons
-  if (str_length(my_string) > 0) {
-    label <- paste0(current_time_without_colons, "_", my_string)
-  } else {
-    label <- current_time_without_colons
-  }
-  label
 }
+
+# get_label_with_current_datetime <- function(my_string) {
+#   current_time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
+#   current_time_without_colons <- gsub(":", "", current_time)
+#   current_time_without_colons
+#   if (str_length(my_string) > 0) {
+#     label <- paste0(current_time_without_colons, "_", my_string)
+#   } else {
+#     label <- current_time_without_colons
+#   }
+#   label
+# }
 
 
 get_latest_Rda_file <- function() {
@@ -82,4 +92,15 @@ get_latest_Rda_file <- function() {
   most_recent_creation_time <- max(info$ctime)
   latest_file <- rownames(info[info$ctime == most_recent_creation_time,])
   latest_file
+}
+
+get_filename <- function(user_inputs) {
+  if (user_inputs$append_current_time_to_output_file == TRUE) {
+    current_time <- get_formatted_time()
+    file_descriptor <- paste0(user_inputs$descriptor, current_time)
+  } else {
+    file_descriptor <- user_inputs$descriptor
+  }
+  filename <- paste0("output/", "simulation_set_", file_descriptor)
+  filename
 }
