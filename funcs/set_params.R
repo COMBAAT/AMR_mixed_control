@@ -1,11 +1,8 @@
-## --------------------- Params & Inits
+## --------------------- Params
 
 library(codetools)
 
-## Set parameters & Initial Conditions ----
-
-
-
+## Set parameters
 
 set_baseline_parameters <- function() {
   # Using day as unit of time
@@ -171,26 +168,7 @@ set_parameters_NEW <- function(this_scenario) {
 }
 
 
-output_baseline_params_as_plot_and_csv <- function(report_time){
-  
-  params_for_output <- set_baseline_parameters()
-  plot_this <- convert_named_vector_to_long_df(params_for_output)
-  
-  p1 <- plot_this %>% ggplot() +
-    geom_bar(aes(y = value, x = name), fill = "skyblue", stat = "identity") + ylab(" ") + xlab(" ") + ylim(c(0, 2000)) +
-    geom_text(aes(label= signif(value, 4), y = value, x = name), vjust = -0.1, hjust = -0.2) +
-    coord_flip() +
-    theme(text = element_text(size = 12), axis.text.x = element_text(angle=0, hjust=1, size = 8))
-  
-  print(p1)
-  ggsave(p1, filename = paste0("output/baseline_params_plot_", report_time, ".pdf"))
-  write.csv(df1, paste0("output/baseline_params_", report_time, ".csv"))
-}
-
-
-
-
+findGlobals(fun = set_baseline_parameters, merge = FALSE)$variables
+findGlobals(fun = calculate_vector_death_rate, merge = FALSE)$variables
 findGlobals(fun = set_parameters_NEW, merge = FALSE)$variables
-
-
 
