@@ -31,9 +31,9 @@ user_inputs <- set_user_inputs()
 
 # Create dataframe of parameter combinations for each scenario
 if (user_inputs$multiple_scenarios == TRUE) {
-  scenarios_df <- create_multiple_scenarios(label = user_inputs$label)
+  scenarios_df <- create_multiple_scenarios()
 } else {
-  scenarios_df <- create_single_scenario(label = user_inputs$label)
+  scenarios_df <- create_single_scenario()
 }
 
 # Create empty dataframe to store outputs
@@ -49,6 +49,7 @@ for (row in 1:nrow(scenarios_df)) {
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters_NEW(this_scenario)
   full_scenario <- merge_params_into_this_scenario(this_scenario, params)
+  full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$descriptor)
   full_scenario <- move_populations_first(full_scenario)
 
   # Add R0 to full_scenario
@@ -97,23 +98,20 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
 
-# Create filename for .Rda file
-if (user_inputs$append_current_time_to_output_file == TRUE) {
-  file_label <- get_label_with_current_datetime(user_inputs$label)
-} else {
-  file_label <- user_inputs$label
-}
-file_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", file_label)
 
 # save outputs as dataframe called test
 test <- all_scenarios_summary
-save(test, file = paste0(file_name, ".Rda")) 
+filename <- get_filename(user_inputs)
+save(test, file = paste0(filename, ".Rda")) 
 
 # some exploratory plots
 quick_plot(expanded_output)
 quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
+
+output_scenario_as_dotplot(scenarios_df)
+output_baseline_params_as_dotplot()
 
 all_scenarios_summary %>%
   filter(R0sen < 5) %>%
