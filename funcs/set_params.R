@@ -131,21 +131,24 @@ set_parameters_NEW <- function(this_scenario) {
                                                         qf = baseline_params["prob_vector_surviving_feed"],
                                                         qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
                                                         pi = 0.0)
+  incubation <- 20
+  if (option == 1) {
+    gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # original formulation but incorrect
+  } 
+  if (option == 2) {
+    gamma_v <- 1/incubation  # correct way
+  }
+  if (option == 3) {
+    gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation)) # still wrong
+  }
+  if (option == 4) {
+    gamma_v <- 1/incubation
+    death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide # not best way if pi is close to 1
+  }
+  
   birth_v <- birth_adj * death_v_no_insecticide # Vector birth rate
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
   NV <- equil_vector_pop # equil_vector_pop
-  
-  if (option == 1) {
-    incubation <- 20
-    gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # Rate from E to I
-  } 
-  if (option == 2) {
-    gamma_v <- 1/baseline_params["wildlife_incubation_period"] # big change
-  }
-  if (option == 3) {
-    incubation <- 20
-    gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation)) # big change 2
-  }
   
   ## ----- Parameters output
   derived_params <- cbind(
