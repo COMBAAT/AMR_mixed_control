@@ -39,7 +39,15 @@ if (user_inputs$multiple_scenarios == TRUE) {
 # Create empty dataframe to store outputs
 all_scenarios_summary <- data.frame()
 
-## ---- Run time estimates
+# Create filename for .Rda file
+if (user_inputs$append_current_time_to_output_file == TRUE) {
+  file_label <- get_label_with_current_datetime(user_inputs$label)
+} else {
+  file_label <- user_inputs$label
+}
+file_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", file_label)
+
+## ---- Start run time estimates
 tic()
 
 ## ---- Execute model
@@ -97,17 +105,11 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
 }
 
-if (user_inputs$append_current_time_to_output_file == TRUE) {
-  file_label <- get_label_with_current_datetime(user_inputs$label)
-} else {
-  file_label <- user_inputs$label
-}
-file_name <- paste0("output/", this_scenario$treatment_type, "_treatment_", file_label)
-
+# save outputs as dataframe called test
 test <- all_scenarios_summary
 save(test, file = paste0(file_name, ".Rda")) 
 
-
+# some exploratory plots
 quick_plot(expanded_output)
 quick_plot2(expanded_output)
 quick_plot3(expanded_output)
@@ -121,3 +123,10 @@ all_scenarios_summary %>%
 glimpse(all_scenarios_summary)
 
 toc()
+
+
+
+test %>% filter(prop_cattle_with_insecticide < 1.0) %>% 
+  ggplot() + 
+  geom_point(aes(x = death_v_option1, y = death_v, shape = as.factor(NW), colour = as.factor(prop_cattle_with_insecticide))) + 
+  geom_abline(aes(slope = 1, intercept = 0), colour = "red")
