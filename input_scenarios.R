@@ -1,16 +1,17 @@
+library(codetools)
 
 set_user_inputs <- function() {
   user_inputs <- list(multiple_scenarios = TRUE,
                       use_root_functions = TRUE,
                       append_current_time_to_output_file = FALSE,
-                      label = "option3")
+                      label = "as_test_play")
   user_inputs
 }
 
 
 create_multiple_scenarios <- function(label) {
-  option <- 3
-  max_time <- 10000
+  option <- 1
+  max_time <- 3
   treatment_type <- "quick"
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
@@ -70,5 +71,6 @@ create_single_scenario <- function() {
   df
 }
 
+findGlobals(fun = set_user_inputs, merge = FALSE)$variables
 findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
 findGlobals(fun = create_single_scenario, merge = FALSE)$variables
