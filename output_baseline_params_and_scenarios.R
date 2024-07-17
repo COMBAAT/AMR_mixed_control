@@ -86,6 +86,3 @@ findGlobals(fun = add_labels_to_baseline_parameters_dotplot, merge = FALSE)$vari
 findGlobals(fun = add_labels_to_scenarios_dotplot, merge = FALSE)$variables
 findGlobals(fun = output_baseline_params_as_dotplot, merge = FALSE)$variables
 findGlobals(fun = output_scenario_as_dotplot, merge = FALSE)$variables
-
-output_scenario_as_dotplot(scenarios_df)
-output_baseline_params_as_dotplot()
