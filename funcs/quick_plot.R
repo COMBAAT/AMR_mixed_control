@@ -8,61 +8,61 @@ library(stringr)
 # Source files and function
 source("funcs/plot_helper.R")
 
-quick_plot <- function(ODEinput){
+quick_plot <- function(df){
   
   
   par(mfrow = c(2, 2))
-  plot(ODEinput$CS ~ ODEinput$time, type = 'l', ylim = c(0, 55), 
+  plot(df$CS ~ df$time, type = 'l', ylim = c(0, 55), 
        lwd = 3, col = 'blue', main = "Cattle (no Prophylaxis)", 
        xlab = "Time", ylab = "Number")
-  lines(ODEinput$CEs ~ ODEinput$time, lwd = 3, col = 'orange') # Exposed
-  lines(ODEinput$CEr ~ ODEinput$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(ODEinput$CIs ~ ODEinput$time, lwd = 3, col = 'red') # Infected
-  lines(ODEinput$CIr ~ ODEinput$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines(ODEinput$CTs ~ ODEinput$time, lwd = 3, col = 'green') # Treated
-  lines(ODEinput$CTr ~ ODEinput$time, lwd = 3, col = 'green', lty = 2) # Treated
-  lines(( ODEinput$CEs + ODEinput$CEr + ODEinput$CIs + ODEinput$CIr + ODEinput$CTs + ODEinput$CTr + ODEinput$CS) ~ODEinput$time,lty = 2)
-  lines(( ODEinput$CEs + ODEinput$CEr + ODEinput$CIs + ODEinput$CIr + ODEinput$CTs + ODEinput$CTr + ODEinput$CS +
-            ODEinput$PEs + ODEinput$PEr + ODEinput$PIs + ODEinput$PIr + ODEinput$PTs + ODEinput$PTr + ODEinput$PS + ODEinput$PF+ ODEinput$PPr + ODEinput$PPs) ~ODEinput$time,lty = 2, col = "pink")
+  lines(df$CEs ~ df$time, lwd = 3, col = 'orange') # Exposed
+  lines(df$CEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
+  lines(df$CIs ~ df$time, lwd = 3, col = 'red') # Infected
+  lines(df$CIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
+  lines(df$CTs ~ df$time, lwd = 3, col = 'green') # Treated
+  lines(df$CTr ~ df$time, lwd = 3, col = 'green', lty = 2) # Treated
+  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS) ~df$time,lty = 2)
+  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
+            df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS + df$PF+ df$PPr + df$PPs) ~df$time,lty = 2, col = "pink")
   #legend("topright", col = c("blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey"),
   #       y = c("CS", "CEs", "CEr", "CIs", "CIr","CTs", "CTr"), pch = 15)
   
-  plot( ODEinput$PF ~ ODEinput$time, type = 'l', ylim = c(0, 55),col = 'purple',
+  plot( df$PF ~ df$time, type = 'l', ylim = c(0, 55),col = 'purple',
         lwd = 3,main = "Cattle (with Prophylaxis)",xlab = "Time", ylab = "Number")
-  lines(ODEinput$PS ~ ODEinput$time, lwd = 3, col = 'blue') # Exposed
-  lines(ODEinput$PEs ~ ODEinput$time, lwd = 3, col = 'orange') # Exposed
-  lines(ODEinput$PEr ~ ODEinput$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(ODEinput$PIs ~ ODEinput$time, lwd = 3, col = 'red') # Infected
-  lines(ODEinput$PIr ~ ODEinput$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines(ODEinput$PTs ~ ODEinput$time, lwd = 3, col = 'green') # Treated
-  lines(ODEinput$PTr ~ ODEinput$time, lwd = 3, col = 'green', lty = 2) # Treated
-  lines(ODEinput$PPs ~ ODEinput$time, lwd = 3, col = 'grey') # Treated
-  lines(ODEinput$PPr ~ ODEinput$time, lwd = 3, col = 'grey', lty = 2) # Treated
-  lines((ODEinput$PEs + ODEinput$PEr + ODEinput$PIs + ODEinput$PIr + ODEinput$PTs + ODEinput$PTr  + ODEinput$PS + ODEinput$PF + ODEinput$PPr + ODEinput$PPs) ~ODEinput$time, lty = 2)
-  lines(( ODEinput$CEs + ODEinput$CEr + ODEinput$CIs + ODEinput$CIr + ODEinput$CTs + ODEinput$CTr + ODEinput$CS +
-            ODEinput$PEs + ODEinput$PEr + ODEinput$PIs + ODEinput$PIr + ODEinput$PTs + ODEinput$PTr + ODEinput$PS+ ODEinput$PF+ ODEinput$PPr + ODEinput$PPs) ~ODEinput$time,lty = 2, col = "pink")
+  lines(df$PS ~ df$time, lwd = 3, col = 'blue') # Exposed
+  lines(df$PEs ~ df$time, lwd = 3, col = 'orange') # Exposed
+  lines(df$PEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
+  lines(df$PIs ~ df$time, lwd = 3, col = 'red') # Infected
+  lines(df$PIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
+  lines(df$PTs ~ df$time, lwd = 3, col = 'green') # Treated
+  lines(df$PTr ~ df$time, lwd = 3, col = 'green', lty = 2) # Treated
+  lines(df$PPs ~ df$time, lwd = 3, col = 'grey') # Treated
+  lines(df$PPr ~ df$time, lwd = 3, col = 'grey', lty = 2) # Treated
+  lines((df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr  + df$PS + df$PF + df$PPr + df$PPs) ~df$time, lty = 2)
+  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
+            df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS+ df$PF+ df$PPr + df$PPs) ~df$time,lty = 2, col = "pink")
   #legend("topright", col = c("purple","blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey", "black", "grey"),
   #       y = c("PF","PS", "PEs", "PEr", "PIs", "PIr","PTs", "PTr", "PPs", "PPr"), pch = 15)
   
-  plot(ODEinput$WS ~ ODEinput$time,type = 'l', ylim = c(0, max(ODEinput$WS+10)),col = 'blue',lwd = 3,
+  plot(df$WS ~ df$time,type = 'l', ylim = c(0, max(df$WS+10)),col = 'blue',lwd = 3,
        main = "Wildlife", xlab = "Time", ylab = "Number")
-  lines(ODEinput$WEs ~ ODEinput$time, lwd = 3, col = 'orange') # Exposed
-  lines(ODEinput$WEr ~ ODEinput$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(ODEinput$WIs ~ ODEinput$time, lwd = 3, col = 'red') # Infected
-  lines(ODEinput$WIr ~ ODEinput$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines((ODEinput$WEs + ODEinput$WEr + ODEinput$WIs + ODEinput$WIr + ODEinput$WS) ~ ODEinput$time,lty = 2)
+  lines(df$WEs ~ df$time, lwd = 3, col = 'orange') # Exposed
+  lines(df$WEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
+  lines(df$WIs ~ df$time, lwd = 3, col = 'red') # Infected
+  lines(df$WIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
+  lines((df$WEs + df$WEr + df$WIs + df$WIr + df$WS) ~ df$time,lty = 2)
   #legend("topright", col = c("blue", "orange", "darkorange", "red","darkred"),
   #       y = c("WS", "WEs", "WEr", "WIs", "WIr"), pch = 15)
   
-  plot(ODEinput$VSt ~ ODEinput$time, type = 'l', ylim = c(0, max(ODEinput$VSt)+100), col = 'blue',
+  plot(df$VSt ~ df$time, type = 'l', ylim = c(0, max(df$VSt)+100), col = 'blue',
        lwd = 3, main = "Vector", xlab = "Time", ylab = "Number")
-  lines(ODEinput$VSf ~ ODEinput$time, lwd = 3, col = 'lightblue') # Exposed
-  lines(ODEinput$VEs ~ ODEinput$time, lwd = 3, col = 'orange') # Exposed
-  lines(ODEinput$VEr ~ ODEinput$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(ODEinput$VIs ~ ODEinput$time, lwd = 3, col = 'red') # Infected
-  lines(ODEinput$VIr ~ ODEinput$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines((ODEinput$VEs + ODEinput$VEr + ODEinput$VIs + ODEinput$VIr + ODEinput$VSt + ODEinput$VSf) ~
-          ODEinput$time, lty = 2)
+  lines(df$VSf ~ df$time, lwd = 3, col = 'lightblue') # Exposed
+  lines(df$VEs ~ df$time, lwd = 3, col = 'orange') # Exposed
+  lines(df$VEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
+  lines(df$VIs ~ df$time, lwd = 3, col = 'red') # Infected
+  lines(df$VIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
+  lines((df$VEs + df$VEr + df$VIs + df$VIr + df$VSt + df$VSf) ~
+          df$time, lty = 2)
   #legend("topright", col = c("blue", "lightblue","orange", "darkorange", "red","darkred"),
   #  €   y = c("VSt","VSf", "VEs", "VEr", "VIs", "VIr"), pch = 15)
   
