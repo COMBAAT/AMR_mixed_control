@@ -70,7 +70,8 @@ get_variables <- function() {
   
   variable_names <- list("cattle_no_prophylaxis" = cattle_no_prophylaxis,
                          "cattle_with_prophylaxis" = cattle_with_prophylaxis,
-                         "wildlife" = wildlife, "vectors" = vectors)
+                         "wildlife" = wildlife, 
+                         "vectors" = vectors)
   variable_names
 }
 
