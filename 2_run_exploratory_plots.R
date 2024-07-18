@@ -14,7 +14,7 @@ library(tidyr)
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
 source("0_set_non_epi_inputs.R")
-source("input_scenarios.R")
+source("1_input_scenarios.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
