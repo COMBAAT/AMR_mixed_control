@@ -49,6 +49,7 @@ output_scenarios_as_dotplot <- function(scenario_df) {
   
   p <- p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(ncol = 1, heights = c(1, 1, 1, 1, 1, 3))
   print(p)
+  
   ggsave(p, filename = paste0("output/scenario_plot.pdf"))
   write.csv(plot_this, paste0("output/scenario_params.csv"))
 }
