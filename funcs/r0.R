@@ -2,7 +2,7 @@ library(codetools)
 
 ## --------------------- R0
 
-r0_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic) {
+R_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic) {
   Nh <- params["NC"] + params["NW"]
 
   biterate <- params["biterate"]
@@ -97,8 +97,8 @@ calculate_R0 <- function(params) {
   Nc <- params["CS"]
   Nw <- params["NW"]
   Nv <- params["NV"]
-  R0sen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
-  R0res <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
+  R0sen <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
+  R0res <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
   c("R0sen" = R0sen, "R0res" = R0res)
 }
 
@@ -108,8 +108,8 @@ calculate_R_from_row_of_df <- function(params, this_row) {
   Np <- this_row$PS
   Nw <- this_row$WS
   Nv <- this_row$VSt + this_row$VSf
-  Rsen <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
-  Rres <- r0_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "no")
+  Rsen <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
+  Rres <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "no")
   c("Rsen" = Rsen, "Rres" = Rres)
 }
 
@@ -132,7 +132,7 @@ add_R_trajectories <- function(params, df) {
 }
 
 
-findGlobals(fun = r0_calc_sen_or_res, merge = FALSE)$variables
+findGlobals(fun = R_calc_sen_or_res, merge = FALSE)$variables
 findGlobals(fun = calculate_R0, merge = FALSE)$variables
 # findGlobals(fun = add_R0, merge = FALSE)$variables
 findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
