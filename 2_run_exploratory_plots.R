@@ -106,7 +106,8 @@ for (row in 1:nrow(scenarios_df)) {
 
 # save outputs as dataframe called test
 test <- all_scenarios_summary
-save(test, file = user_inputs$filename) 
+filename <- get_filename()
+save(test, file = filename) 
 
 # some exploratory plots
 quick_plot(expanded_output)
