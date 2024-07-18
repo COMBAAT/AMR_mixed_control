@@ -5,19 +5,22 @@ library(codetools)
 ## Set parameters
 
 set_baseline_parameters <- function() {
+  
+  days_per_year <- set_days_per_year()
+  
   # Using day as unit of time
-  cattle_lifespan <- 5 * 365
+  cattle_lifespan <- 5 * days_per_year
   cattle_incubation_period <- 15
   cattle_infection_period <- 100
   cattle_proph_full_protection_period <- 60
   cattle_proph_partial_protection_period <- 30
   cattle_treatment_period <- 3
 
-  wildlife_lifespan <- 365
+  wildlife_lifespan <- 1 * days_per_year
   wildlife_infection_period <- cattle_infection_period
   wildlife_incubation_period <- 20
 
-  biterate <- 0.8 / 4
+  #biterate <- 0.8 / 4
   prob_infection_to_host <- 0.46
   prob_infection_to_vector <- 0.025
   vector_teneral_period <- 4
@@ -28,7 +31,7 @@ set_baseline_parameters <- function() {
   baseline_params <- cbind(cattle_lifespan, cattle_incubation_period, cattle_infection_period,
                            cattle_proph_full_protection_period, cattle_proph_partial_protection_period,
                            cattle_treatment_period, wildlife_lifespan, wildlife_infection_period,
-                           wildlife_incubation_period, biterate, prob_infection_to_host, prob_infection_to_vector,
+                           wildlife_incubation_period, prob_infection_to_host, prob_infection_to_vector,
                            vector_teneral_period, days_between_feeds, prob_vector_surviving_feed, prob_vector_surviving_nonfeeding_day
     
   )
@@ -117,6 +120,7 @@ set_parameters_NEW <- function(this_scenario) {
   death_w <- birth_w
   
   ## -----  Vectors
+  biterate <- 1 / baseline_params["days_between_feeds"]
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
   prop_hosts_with_insecticide <- prop_cattle_with_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
   
@@ -149,6 +153,7 @@ set_parameters_NEW <- function(this_scenario) {
   
   ## ----- Parameters output
   derived_params <- cbind(
+    biterate,
     NV, PF, PS, CS, equil_vector_pop,
     birth_c, death_c, gamma_c, sigma_c, 
     birth_w, death_w, gamma_w, sigma_w,
