@@ -15,7 +15,7 @@ set_user_inputs <- function() {
   filename <- get_filename2(path, current_descriptor, append_current_time_to_output_file)
   user_inputs <- list(multiple_scenarios = multiple_scenarios, 
                       use_root_functions = use_root_functions,
-                      filename = filename)
+                      descriptor = current_descriptor, filename = filename)
   user_inputs
 }
 
