@@ -6,7 +6,6 @@ library(lubridate)
 library(ggplot2)
 library(dplyr)
 library(gghighlight)
-library(cowplot)
 library(crayon)
 library(codetools)
 
@@ -20,8 +19,8 @@ source("funcs/r0.R")
 source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
-source("funcs/plot_helper.R")
 source("funcs/quick_plot.R")
+source("funcs/output_baseline_params_and_scenarios.R")
 
 
 
