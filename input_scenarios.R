@@ -1,16 +1,24 @@
 library(codetools)
 
 set_user_inputs <- function() {
-  user_inputs <- list(multiple_scenarios = TRUE,
-                      use_root_functions = TRUE,
-                      append_current_time_to_output_file = TRUE,
-                      descriptor = "playing")
+  multiple_scenarios <- TRUE
+  use_root_functions <- TRUE
+  path <- "output/simulation_set_"
+  current_descriptor = "play"
+  append_current_time_to_output_file = TRUE
+  
+  filename <- get_filename2(path, current_descriptor, append_current_time_to_output_file)
+  
+  user_inputs <- list(multiple_scenarios = multiple_scenarios,
+                      use_root_functions = use_root_functions,
+                      filename = filename)
   user_inputs
 }
 
+
 create_multiple_scenarios <- function() {
   option <- 1
-  max_time <- 10000
+  max_time <- 3
   treatment_type <- "quick"
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)

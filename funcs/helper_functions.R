@@ -94,13 +94,17 @@ get_latest_Rda_file <- function() {
   latest_file
 }
 
-get_filename <- function(user_inputs) {
-  if (user_inputs$append_current_time_to_output_file == TRUE) {
+
+get_filename2 <- function(path, current_descriptor, append_current_time_to_output_file) {
+  
+  if (append_current_time_to_output_file == TRUE) {
     current_time <- get_formatted_time()
-    file_descriptor <- paste0(user_inputs$descriptor, current_time)
+    filename <- paste0(path, current_descriptor, "_", current_time, ".Rda")
   } else {
-    file_descriptor <- user_inputs$descriptor
+    filename <- paste0(path, current_descriptor, ".Rda")
   }
-  filename <- paste0("output/", "simulation_set_", file_descriptor)
   filename
 }
+
+
+
