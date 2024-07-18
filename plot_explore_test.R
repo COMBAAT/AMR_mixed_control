@@ -1,8 +1,8 @@
 # Load required packages -------------------------------------------------------
 
-library(ggplot2)
-library(gghighlight)
 library(dplyr)
+library(gghighlight)
+library(ggplot2)
 library(patchwork)
 
 # Source files and function

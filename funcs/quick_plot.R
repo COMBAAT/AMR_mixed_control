@@ -2,14 +2,14 @@ library(ggplot2)
 library(gghighlight)
 library(dplyr)
 library(patchwork)
-library(tidyr)
 library(stringr)
+library(tidyr)
+
 
 # Source files and function
 source("funcs/plot_helper.R")
 
 quick_plot <- function(df){
-  
   
   par(mfrow = c(2, 2))
   plot(df$CS ~ df$time, type = 'l', ylim = c(0, 55), 

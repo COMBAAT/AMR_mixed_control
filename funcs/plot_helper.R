@@ -1,3 +1,7 @@
+library(dplyr)
+library(ggplot2)
+library(gghighlight)
+
 # Specify plot formatting ------------------------------------------------------
 my_linewidth <- function() {
   1

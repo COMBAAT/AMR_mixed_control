@@ -1,13 +1,15 @@
 ## ------------------------------------------------------ LOAD LIBRARIES
 
-library(deSolve)
-library(tictoc)
-library(lubridate)
-library(ggplot2)
-library(dplyr)
-library(gghighlight)
 library(crayon)
 library(codetools)
+library(dplyr)
+library(deSolve)
+library(ggplot2)
+library(lubridate)
+library(patchwork)
+library(stringr)
+library(tictoc)
+library(tidyr)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 

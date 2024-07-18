@@ -1,16 +1,8 @@
-## --------------------- Quality Check - qual_check
-##
-##
-##
-##
-
-
-
-
+library(crayon)
+library(codetools)
 
 ## ------------------------------------------------------ Check Inputs
 
-library(crayon)
 
 qual_check_no0 <- function(input){
   
@@ -28,4 +20,6 @@ qual_check_no0 <- function(input){
     #if(sum(test[!is.na(test)]) == length(input)){cat(green("CHECK OK\n"))}
   
 }
+
+findGlobals(fun = qual_check_no0, merge = FALSE)$variables
 

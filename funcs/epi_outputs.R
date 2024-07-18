@@ -1,4 +1,5 @@
 library(codetools)
+library(dplyr)
 
 append_epi_outputs_to_df <- function(df) {
   days_per_year <- set_days_per_year()
