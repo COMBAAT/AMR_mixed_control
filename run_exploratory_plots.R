@@ -13,6 +13,7 @@ library(tidyr)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
+source("0_set_non_epi_inputs.R")
 source("input_scenarios.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
@@ -97,6 +98,9 @@ for (row in 1:nrow(scenarios_df)) {
   all_scenarios_summary <- rbind(all_scenarios_summary, final_state_with_full_scenario)
 
   print(paste0("final time = ", round(final_state$time, 1), " days"))
+  print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
+  print(paste0("R = ", final_state_with_full_scenario$Rsen_final))
+  
 }
 
 
