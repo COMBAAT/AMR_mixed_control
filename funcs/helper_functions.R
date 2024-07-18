@@ -86,18 +86,6 @@ get_latest_Rda_file <- function() {
 }
 
 
-get_filename2 <- function(path, current_descriptor, append_current_time_to_output_file) {
-  
-  if (append_current_time_to_output_file == TRUE) {
-    current_time <- get_formatted_time()
-    filename <- paste0(path, current_descriptor, "_", current_time, ".Rda")
-  } else {
-    filename <- paste0(path, current_descriptor, ".Rda")
-  }
-  filename
-}
-
-
 findGlobals(fun = get_filename2, merge = FALSE)$variables
 findGlobals(fun = get_latest_Rda_file, merge = FALSE)$variables
 findGlobals(fun = get_formatted_time, merge = FALSE)$variables
