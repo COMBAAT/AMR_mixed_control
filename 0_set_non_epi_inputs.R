@@ -7,12 +7,13 @@ set_days_per_year <- function() {
 
 set_user_inputs <- function() {
   multiple_scenarios <- TRUE
-  use_root_functions <- FALSE
+  use_root_functions <- TRUE
   path <- "output/simulation_set_"
   current_descriptor = "play"
-  append_current_time_to_output_file = TRUE
+  append_current_time_to_output_file = FALSE
   
   filename <- get_filename2(path, current_descriptor, append_current_time_to_output_file)
+  
   user_inputs <- list(multiple_scenarios = multiple_scenarios, 
                       use_root_functions = use_root_functions,
                       descriptor = current_descriptor, filename = filename)

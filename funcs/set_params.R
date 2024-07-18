@@ -27,12 +27,14 @@ set_baseline_parameters <- function() {
   days_between_feeds <- 4
   prob_vector_surviving_feed <- 0.96
   prob_vector_surviving_nonfeeding_day <- 0.98
+  vector_incubation_period <- 20
   
   baseline_params <- cbind(cattle_lifespan, cattle_incubation_period, cattle_infection_period,
                            cattle_proph_full_protection_period, cattle_proph_partial_protection_period,
                            cattle_treatment_period, wildlife_lifespan, wildlife_infection_period,
                            wildlife_incubation_period, prob_infection_to_host, prob_infection_to_vector,
-                           vector_teneral_period, days_between_feeds, prob_vector_surviving_feed, prob_vector_surviving_nonfeeding_day
+                           vector_teneral_period, days_between_feeds, prob_vector_surviving_feed, 
+                           prob_vector_surviving_nonfeeding_day, vector_incubation_period
     
   )
   baseline_params <- convert_array_to_named_vector(baseline_params)
@@ -132,20 +134,10 @@ set_parameters_NEW <- function(this_scenario) {
                                                         qf = baseline_params["prob_vector_surviving_feed"],
                                                         qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
                                                         pi = 0.0)
-  incubation <- 20
-  if (option == 1) {
-    gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # original formulation but incorrect
-  } 
-  if (option == 2) {
-    gamma_v <- 1/incubation  # correct way
-  }
-  if (option == 3) {
-    gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation)) # still wrong
-  }
-  if (option == 4) {
-    gamma_v <- 1/incubation
-    death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide # not best way if pi is close to 1
-  }
+  
+  # death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide # not best way if pi is close to 1
+  # gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) # original formulation but incorrect
+  gamma_v <- 1 / baseline_params["vector_incubation_period"] # correct way
   
   birth_v <- birth_adj * death_v_no_insecticide # Vector birth rate
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population

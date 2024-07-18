@@ -2,7 +2,6 @@ library(codetools)
 
 
 create_multiple_scenarios <- function() {
-  option <- 1
   max_time <- 3
   treatment_type <- "quick"
   cattle_number <- 50
@@ -24,7 +23,6 @@ create_multiple_scenarios <- function() {
   reversion <- 0.0
 
   df <- expand.grid(
-    option = option, 
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
     dose_adj = dose_adj,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
@@ -36,7 +34,6 @@ create_multiple_scenarios <- function() {
 }
 
 create_single_scenario <- function() {
-  option <- 1
   max_time <- 5000
   treatment_type <- "quick"
   cattle_number <- 50
