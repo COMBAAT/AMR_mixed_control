@@ -1,24 +1,5 @@
 library(codetools)
 
-set_days_per_year <- function() {
-  days_per_year <- 365.25
-  days_per_year
-}
-
-set_user_inputs <- function() {
-  multiple_scenarios <- TRUE
-  use_root_functions <- TRUE
-  path <- "output/simulation_set_"
-  current_descriptor = "play"
-  append_current_time_to_output_file = TRUE
-  
-  filename <- get_filename2(path, current_descriptor, append_current_time_to_output_file)
-  user_inputs <- list(multiple_scenarios = multiple_scenarios, 
-                      use_root_functions = use_root_functions,
-                      descriptor = current_descriptor, filename = filename)
-  user_inputs
-}
-
 
 create_multiple_scenarios <- function() {
   option <- 1
@@ -33,7 +14,7 @@ create_multiple_scenarios <- function() {
   carrying_capacity <- c(10000, 6000, 2000, 1000, 500)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
   #prop_cattle_with_insecticide <- c(0.0, 0.05, 0.10, 0.15, 0.2, 0.5)
-  prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.5, 0.8, 0.99)
+  prop_cattle_with_insecticide <- rev(c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.5, 0.8, 0.99))
   prop_prophylaxis <- 0.0
   fit_adj <- 0.95
   birth_adj <- 2.0
@@ -82,6 +63,5 @@ create_single_scenario <- function() {
   df
 }
 
-findGlobals(fun = set_user_inputs, merge = FALSE)$variables
 findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
 findGlobals(fun = create_single_scenario, merge = FALSE)$variables
