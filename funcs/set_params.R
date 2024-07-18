@@ -135,14 +135,14 @@ set_parameters_NEW <- function(this_scenario) {
                                                         qn = baseline_params["prob_vector_surviving_nonfeeding_day"],
                                                         pi = 0.0)
   
-  # death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide # not best way if pi is close to 1
-  # gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation)) 
-  # biterate <- 0.8/4 # original formulation but incorrect
+  # death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide   # not best way if pi is close to 1
+  # gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation))  # original formulation but incorrect
+  # biterate <- 0.8/4   # original formulation but incorrect
   gamma_v <- 1 / baseline_params["vector_incubation_period"] # correct way
   
-  birth_v <- birth_adj * death_v_no_insecticide # Vector birth rate
-  equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) # Vector equilibrium population
-  NV <- equil_vector_pop # equil_vector_pop
+  birth_v <- birth_adj * death_v_no_insecticide 
+  equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) 
+  NV <- equil_vector_pop 
   
   ## ----- Parameters output
   derived_params <- cbind(
