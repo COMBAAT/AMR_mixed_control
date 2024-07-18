@@ -1,3 +1,4 @@
+library(codetools)
 
 merge_params_into_this_scenario <- function(df, params) {
   params_df <- convert_named_vector_to_wide_df(params)
@@ -73,18 +74,6 @@ get_formatted_time <- function() {
   current_time_without_colons
 }
 
-# get_label_with_current_datetime <- function(my_string) {
-#   current_time <- format_ISO8601(Sys.time(), usetz = FALSE, precision = NULL)
-#   current_time_without_colons <- gsub(":", "", current_time)
-#   current_time_without_colons
-#   if (str_length(my_string) > 0) {
-#     label <- paste0(current_time_without_colons, "_", my_string)
-#   } else {
-#     label <- current_time_without_colons
-#   }
-#   label
-# }
-
 
 get_latest_Rda_file <- function() {
   datafiles <- list.files("output", pattern = ".Rda", full.names = TRUE)
@@ -105,6 +94,21 @@ get_filename2 <- function(path, current_descriptor, append_current_time_to_outpu
   }
   filename
 }
+
+
+findGlobals(fun = get_filename2, merge = FALSE)$variables
+findGlobals(fun = get_latest_Rda_file, merge = FALSE)$variables
+findGlobals(fun = get_formatted_time, merge = FALSE)$variables
+findGlobals(fun = my_rootfun, merge = FALSE)$variables
+findGlobals(fun = append_suffix_to_column_names, merge = FALSE)$variables
+findGlobals(fun = include_full_scenario, merge = FALSE)$variables
+findGlobals(fun = convert_named_vector_to_long_df, merge = FALSE)$variables
+findGlobals(fun = convert_named_vector_to_wide_df, merge = FALSE)$variables
+findGlobals(fun = convert_array_to_named_vector, merge = FALSE)$variables
+findGlobals(fun = merge_dfs_without_duplicate_columns, merge = FALSE)$variables
+findGlobals(fun = append_descriptor, merge = FALSE)$variables
+findGlobals(fun = merge_params_into_this_scenario, merge = FALSE)$variables
+findGlobals(fun = move_populations_first, merge = FALSE)$variables
 
 
 
