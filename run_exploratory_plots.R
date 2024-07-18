@@ -101,8 +101,7 @@ for (row in 1:nrow(scenarios_df)) {
 
 # save outputs as dataframe called test
 test <- all_scenarios_summary
-filename <- get_filename(user_inputs)
-save(test, file = paste0(filename, ".Rda")) 
+save(test, file = user_inputs$filename) 
 
 # some exploratory plots
 quick_plot(expanded_output)
@@ -110,7 +109,7 @@ quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
-output_scenario_as_dotplot(scenarios_df)
+output_scenarios_as_dotplot(scenarios_df)
 output_baseline_params_as_dotplot()
 
 all_scenarios_summary %>%
