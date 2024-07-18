@@ -16,7 +16,7 @@ output_baseline_params_as_dotplot <- function(){
 }
 
 
-output_scenario_as_dotplot <- function(scenario_df) {
+output_scenarios_as_dotplot <- function(scenario_df) {
   
   scenario_numeric <- scenario_df %>% select(where(is.numeric))
   scenario_numeric_long <- pivot_longer(scenario_numeric, everything(), names_to = "name", values_to = "value")
@@ -85,4 +85,4 @@ findGlobals(fun = plot_parameters, merge = FALSE)$variables
 findGlobals(fun = add_labels_to_baseline_parameters_dotplot, merge = FALSE)$variables
 findGlobals(fun = add_labels_to_scenarios_dotplot, merge = FALSE)$variables
 findGlobals(fun = output_baseline_params_as_dotplot, merge = FALSE)$variables
-findGlobals(fun = output_scenario_as_dotplot, merge = FALSE)$variables
+findGlobals(fun = output_scenarios_as_dotplot, merge = FALSE)$variables
