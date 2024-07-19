@@ -2,6 +2,26 @@ library(codetools)
 library(lubridate)
 library(dplyr)
 
+get_full_path <- function() {
+  user_inputs <- get_user_inputs()
+  full_path <- paste0(user_inputs$folder, user_inputs$general_descriptor, user_inputs$current_descriptor)
+  full_path
+}
+
+
+get_filename <- function() {
+  user_inputs <- get_user_inputs()
+  full_path  <- get_full_path()
+  if (user_inputs$append_current_time_to_output_file == TRUE) {
+    current_time <- get_formatted_time()
+    filename <- paste0(full_path, "_", current_time, ".Rda")
+  } else {
+    filename <- paste0(full_path, ".Rda")
+  }
+  filename
+}
+
+
 merge_params_into_this_scenario <- function(df, params) {
   params_df <- convert_named_vector_to_wide_df(params)
   merged_df <- merge_dfs_without_duplicate_columns(df, params_df)
@@ -86,7 +106,8 @@ get_latest_Rda_file <- function() {
 }
 
 
-findGlobals(fun = get_filename2, merge = FALSE)$variables
+findGlobals(fun = get_filename, merge = FALSE)$variables
+findGlobals(fun = get_full_path, merge = FALSE)$variables
 findGlobals(fun = get_latest_Rda_file, merge = FALSE)$variables
 findGlobals(fun = get_formatted_time, merge = FALSE)$variables
 findGlobals(fun = my_rootfun, merge = FALSE)$variables
