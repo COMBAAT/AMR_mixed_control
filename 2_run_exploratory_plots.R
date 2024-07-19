@@ -28,15 +28,12 @@ source("funcs/output_baseline_params_and_scenarios.R")
 
 
 ## ----
-# User choices
-user_inputs <- set_user_inputs()
-
-# Create dataframe of parameter combinations for each scenario
-if (user_inputs$multiple_scenarios == TRUE) {
-  scenarios_df <- create_multiple_scenarios()
-} else {
-  scenarios_df <- create_single_scenario()
-}
+# View inputs
+user_inputs <- get_user_inputs()
+scenarios_df <- get_scenarios()
+baseline_parameters <- get_baseline_parameters()
+plot_baseline_parameters(baseline_parameters)
+plot_scenarios(scenarios_df)
 
 # Create empty dataframe to store outputs
 all_scenarios_summary <- data.frame()
@@ -51,7 +48,7 @@ for (row in 1:nrow(scenarios_df)) {
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters_NEW(this_scenario)
   full_scenario <- merge_params_into_this_scenario(this_scenario, params)
-  full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$descriptor)
+  full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$current_descriptor)
   full_scenario <- move_populations_first(full_scenario)
 
   # Add R0 to full_scenario
@@ -107,17 +104,15 @@ for (row in 1:nrow(scenarios_df)) {
 # save outputs as dataframe called test
 test <- all_scenarios_summary
 filename <- get_filename()
-save(test, file = filename) 
+save(test, baseline_parameters, scenarios_df, file = filename) 
 
-# some exploratory plots
+# some exploratory plots showing final simulation in scenario set
 quick_plot(expanded_output)
 quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
-output_scenarios_as_dotplot(scenarios_df)
-output_baseline_params_as_dotplot()
-
+# display Rsen to check close to 1
 all_scenarios_summary %>%
   filter(R0sen < 5) %>%
   ggplot() +
