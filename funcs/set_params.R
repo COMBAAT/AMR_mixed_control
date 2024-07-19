@@ -4,7 +4,7 @@ library(codetools)
 
 ## Set parameters
 
-set_baseline_parameters <- function() {
+get_baseline_parameters <- function() {
   
   days_per_year <- set_days_per_year()
   
@@ -70,7 +70,7 @@ set_parameters_NEW <- function(this_scenario) {
   reversion <- this_scenario$reversion
   option <- this_scenario$option
   
-  baseline_params <- set_baseline_parameters()
+  baseline_params <- get_baseline_parameters()
   
   ## Cattle -----
   birth_c <- 1 / baseline_params["cattle_lifespan"]
@@ -136,10 +136,10 @@ set_parameters_NEW <- function(this_scenario) {
                                                         pi = 0.0)
   
   # death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide   # not best way if pi is close to 1
-  # incubation <- 20
-  # gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation))  # original formulation but incorrect
-  # biterate <- 0.8/4   # original formulation but incorrect
-  gamma_v <- 1 / baseline_params["vector_incubation_period"] # correct way
+   incubation <- 20
+   gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation))  # original formulation but incorrect
+   biterate <- 0.8/4   # original formulation but incorrect
+  #gamma_v <- 1 / baseline_params["vector_incubation_period"] # correct way
   
   birth_v <- birth_adj * death_v_no_insecticide 
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v)) 
@@ -167,7 +167,7 @@ set_parameters_NEW <- function(this_scenario) {
 }
 
 
-findGlobals(fun = set_baseline_parameters, merge = FALSE)$variables
+findGlobals(fun = get_baseline_parameters, merge = FALSE)$variables
 findGlobals(fun = calculate_vector_death_rate, merge = FALSE)$variables
 findGlobals(fun = set_parameters_NEW, merge = FALSE)$variables
 
