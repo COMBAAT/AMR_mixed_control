@@ -8,6 +8,7 @@ library(patchwork)
 # Source files and function
 source("funcs/plot_helper.R")
 source("funcs/helper_functions.R")
+source("funcs/output_baseline_params_and_scenarios.R")
 
 # Load data files --------------------------------------------------------------
 load_latest_file <- TRUE
@@ -26,6 +27,26 @@ if (load_latest_file == TRUE) {
 
 
 # Generate plots ---------------------------------------------------------------
+# Plot and save baseline parameters
+output_label <- "00_baseline_parameters"
+p <- plot_baseline_parameters(baseline_parameters)
+plot_name <- "00_baseline_parameters.pdf"
+ggsave(
+  filename = paste0(folder_name, output_label, ".pdf"),
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+write.csv(baseline_parameters, file = paste0(folder_name, output_label, ".csv"))
+
+# Plot and save scenarios
+output_label <- "00_scenarios"
+p <- plot_scenarios(scenarios_df)
+ggsave(p,
+  filename = paste0(folder_name, output_label, ".pdf"),
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+scenarios_for_output <- get_simplified_scenarios(scenarios_df)
+write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv"))
+
 # Plot R0 versus wildlife faceted by treat_prop
 test %>%
   mutate_at(c("prop_cattle_with_insecticide", "treat_prop", "K"), as.factor) %>%
