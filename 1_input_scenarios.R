@@ -50,7 +50,7 @@ create_single_scenario <- function() {
   treatment_type <- "quick"
   cattle_number <- 50
   wildlife_number <- 250
-  treat_prop <- 0.25
+  treat_prop <- 0.1
   carrying_capacity <- 2000
   prop_cattle_with_insecticide <- 0.0
   prop_prophylaxis <- 0.0
