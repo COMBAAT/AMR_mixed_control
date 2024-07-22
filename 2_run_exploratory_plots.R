@@ -86,6 +86,7 @@ for (row in 1:nrow(scenarios_df)) {
 
   expanded_output <- add_population_totals(time_trajectory)
   expanded_output <- add_R_trajectories(params, expanded_output)
+  expanded_output <- add_R0(params, expanded_output)
 
   final_state <- tail(expanded_output, 1)
   final_state <- append_suffix_to_column_names(final_state, "_final")
