@@ -42,7 +42,7 @@ output_label <- "00_scenarios"
 p <- plot_scenarios(scenarios_df)
 ggsave(p,
   filename = paste0(folder_name, output_label, ".pdf"),
-  width = my_pdfwidth(), height = my_pdfheight()
+  width = my_pdfwidth(), height = 1.5 * my_pdfheight()
 )
 scenarios_for_output <- get_simplified_scenarios(scenarios_df)
 write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv"))
