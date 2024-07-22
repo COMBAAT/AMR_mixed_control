@@ -14,7 +14,26 @@ plot_baseline_parameters <- function(params){
   p
 }
 
+add_treatment_type_in_numeric_form <- function(scenarios_df) {
+  
+  if (unique(scenarios_df$treatment_type) == "quick") {
+    scenarios_df$quick_treatment_on <- 1
+    scenarios_df$proph_treatment_on <- 0
+  }
+  if (unique(scenarios_df$treatment_type) == "proph") {
+    scenarios_df$quick_treatment_on <- 0
+    scenarios_df$proph_treatment_on <- 1
+  }
+  if (unique(scenarios_df$treatment_type) == "both") {
+    scenarios_df$quick_treatment_on <- 1
+    scenarios_df$proph_treatment_on <- 1
+  }
+  scenarios_df
+}
+
 get_simplified_scenarios <- function(scenarios_df) {
+  
+  scenarios_df <- add_treatment_type_in_numeric_form(scenarios_df)
   scenarios_numeric <- scenarios_df %>% select(where(is.numeric))
   scenarios_numeric_long <- pivot_longer(scenarios_numeric, everything(), names_to = "name", values_to = "value")
   simplified_scenarios <- distinct(scenarios_numeric_long)
@@ -42,10 +61,14 @@ plot_scenarios <- function(scenarios_df) {
   p4 <- plot_parameters(plot_this, ymax = 10000)
   p4 <- add_labels_to_scenarios_dotplot(p4, plot_this)
   
+  plot_this <- simplified_scenarios %>% filter(name %in% c("quick_treatment_on", "proph_treatment_on"))
+  p5 <- plot_parameters(plot_this, ymax = 1.1)
+  p5 <- add_labels_to_scenarios_dotplot(p5, plot_this)
+  
   plot_this <- simplified_scenarios %>% filter(!(name %in% c("NC", "NW", "K", "birth_adj", "max_time")))
   p6 <- plot_parameters(plot_this, ymax = 1.0)
   
-  p <- p1 + p2 + p3 + p4 + p6 + plot_layout(ncol = 1, heights = c(1, 1, 1, 1, 3))
+  p <- p5 + p1 + p2 + p3 + p4 + p6 + plot_layout(ncol = 1, heights = c(1, 1, 1, 1, 1, 3))
   p
 }
 
