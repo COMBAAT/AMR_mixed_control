@@ -94,6 +94,7 @@ set_inital_conditions2 <- function(params, number_initially_infected) {
   
   cattle_no_prophylaxis["CS"] <- params["CS"]
   cattle_with_prophylaxis["PF"] <- params["PF"]
+  cattle_with_prophylaxis["PS"] <- params["PS"]
   wildlife["WS"] <- params["NW"]
   vectors["VSt"] <- params["equil_vector_pop"]
   
