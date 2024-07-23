@@ -1,20 +1,24 @@
 library(codetools)
 
-get_scenarios <- function() {
-  user_inputs <- get_user_inputs()
-  
-  # Create dataframe of parameter combinations for each scenario
-  if (user_inputs$multiple_scenarios == TRUE) {
-    scenarios_df <- create_multiple_scenarios()
-  } else {
-    scenarios_df <- create_single_scenario()
-  }
-  scenarios_df
+set_days_per_year <- function() {
+  days_per_year <- 365.25
+  days_per_year
 }
 
+get_user_inputs <- function() {
+  user_inputs <- list(
+    multiple_scenarios = FALSE,
+    use_root_functions = FALSE,
+    append_current_time_to_output_file = FALSE,
+    folder = "output/",
+    general_descriptor = "simulation_set_",
+    current_descriptor = "ORIGINAL_proph_at_birth"
+  )
+  user_inputs
+}
 
 create_multiple_scenarios <- function() {
-  max_time <- 1
+  max_time <- 10000
   treatment_type <- "proph" # quick or proph
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
@@ -26,7 +30,7 @@ create_multiple_scenarios <- function() {
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
   prop_cattle_with_insecticide <- c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.4, 0.5)
   #prop_cattle_with_insecticide <- rev(c(0.0, 0.025, 0.05, 0.10, 0.15, 0.2, 0.3, 0.5, 0.8, 0.99))
-  prop_prophylaxis <- 0.0
+  prop_prophylaxis <- 0.9
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -47,13 +51,13 @@ create_multiple_scenarios <- function() {
 
 create_single_scenario <- function() {
   max_time <- 5000
-  treatment_type <- "quick"
+  treatment_type <- "proph"
   cattle_number <- 50
   wildlife_number <- 250
   treat_prop <- 0.1
   carrying_capacity <- 2000
   prop_cattle_with_insecticide <- 0.0
-  prop_prophylaxis <- 0.0
+  prop_prophylaxis <- 0.95
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -74,3 +78,5 @@ create_single_scenario <- function() {
 
 findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
 findGlobals(fun = create_single_scenario, merge = FALSE)$variables
+findGlobals(fun = set_days_per_year, merge = FALSE)$variables
+findGlobals(fun = get_user_inputs, merge = FALSE)$variables
