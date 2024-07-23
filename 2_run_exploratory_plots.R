@@ -13,8 +13,7 @@ library(tidyr)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
-source("0_set_non_epi_inputs.R")
-source("1_input_scenarios.R")
+source("1_set_user_inputs.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
@@ -30,7 +29,11 @@ source("funcs/output_baseline_params_and_scenarios.R")
 ## ----
 # View inputs
 user_inputs <- get_user_inputs()
-scenarios_df <- get_scenarios()
+if (user_inputs$multiple_scenarios == TRUE) {
+  scenarios_df <- create_multiple_scenarios()
+} else {
+  scenarios_df <- create_single_scenario()
+}
 baseline_parameters <- get_baseline_parameters()
 plot_baseline_parameters(baseline_parameters)
 plot_scenarios(scenarios_df)
