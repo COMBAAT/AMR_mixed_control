@@ -62,7 +62,8 @@ set_parameters_NEW <- function(this_scenario) {
   prop_cattle_with_insecticide <- this_scenario$prop_cattle_with_insecticide
   NW <- this_scenario$NW
   NC <- this_scenario$NC
-  prop_prophylaxis <- this_scenario$prop_prophylaxis
+  prop_prophylaxis_at_birth <- this_scenario$prop_prophylaxis_at_birth
+  pt <- this_scenario$pt
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence <- this_scenario$emergence
@@ -108,12 +109,12 @@ set_parameters_NEW <- function(this_scenario) {
   new_prop <- 0
   
   # figure out equilibrium in absence of infection
-  # birth_c * prop_prophylaxis *NC - death_c * PF - waning_f2s*PF
-  PF <- birth_c * prop_prophylaxis * NC / (death_c + waning_f2s)
+  # birth_c * prop_prophylaxis_at_birth *NC - death_c * PF - waning_f2s*PF
+  PF <- birth_c * prop_prophylaxis_at_birth * NC / (death_c + waning_f2s)
   # waning_f2s * PF - death_p * PS - waning * PS
   PS <- waning_f2s * PF / (death_p + waning)
-  # birth_c * (1-prop_prophylaxis) * NC - death_c * CS + waning * PS
-  CS <- (birth_c * (1 - prop_prophylaxis) * NC + waning * PS) / death_c
+  # birth_c * (1-prop_prophylaxis_at_birth) * NC - death_c * CS + waning * PS
+  CS <- (birth_c * (1 - prop_prophylaxis_at_birth) * NC + waning * PS) / death_c
   
   ## ----- Wildlife
   birth_w <- 1 / baseline_params["wildlife_lifespan"]
@@ -155,7 +156,7 @@ set_parameters_NEW <- function(this_scenario) {
     treatment_p, treatment_q, sigma_st, 
     emergence_p, emergence_q, waning, waning_f2s, new_prop
   )
-  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis, option)
+  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis_at_birth, pt, option)
   
   derived_plus_scenario_params <- cbind(derived_params, scenario_params)
   derived_plus_scenario_params <- convert_array_to_named_vector(derived_plus_scenario_params)
