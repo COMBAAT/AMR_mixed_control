@@ -63,7 +63,7 @@ set_parameters_NEW <- function(this_scenario) {
   NW <- this_scenario$NW
   NC <- this_scenario$NC
   prop_prophylaxis_at_birth <- this_scenario$prop_prophylaxis_at_birth
-  pt <- this_scenario$pt
+  proph_ongoing <- this_scenario$proph_ongoing
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence <- this_scenario$emergence
@@ -156,7 +156,8 @@ set_parameters_NEW <- function(this_scenario) {
     treatment_p, treatment_q, sigma_st, 
     emergence_p, emergence_q, waning, waning_f2s, new_prop
   )
-  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, prop_prophylaxis_at_birth, pt, option)
+  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, 
+                           prop_prophylaxis_at_birth, proph_ongoing, option)
   
   derived_plus_scenario_params <- cbind(derived_params, scenario_params)
   derived_plus_scenario_params <- convert_array_to_named_vector(derived_plus_scenario_params)
