@@ -61,9 +61,9 @@ for (row in 1:nrow(scenarios_df)) {
   full_scenario$R0sen <- R0sen
   full_scenario$R0res <- R0res
 
-  ## Set simulation time dependent on R0 value
+  ## Make the simulation time dependent on R0 value
   ## Only run full simulation if R0 >= 1.0
-  if (R0sen[1] < 1.0) {
+  if (R0sen < 1.0) {
     # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
     #inits <- set_inital_conditions(params, FALSE)
     inits <- set_inital_conditions2(params, 0)
@@ -111,9 +111,9 @@ filename <- get_filename()
 save(test, baseline_parameters, scenarios_df, file = filename) 
 
 # some exploratory plots showing final simulation in scenario set
-quick_plot(expanded_output)
-quick_plot2(expanded_output)
-quick_plot3(expanded_output)
+#quick_plot(expanded_output)
+#quick_plot2(expanded_output)
+#quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
 # display Rsen to check close to 1
