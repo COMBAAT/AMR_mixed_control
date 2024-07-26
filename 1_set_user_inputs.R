@@ -8,18 +8,18 @@ set_days_per_year <- function() {
 get_user_inputs <- function() {
   user_inputs <- list(
     multiple_scenarios = TRUE,
-    use_root_functions = FALSE,
+    use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
     general_descriptor = "simulation_set_",
-    current_descriptor = "ORIGINAL_proph"
+    current_descriptor = "ORIGINAL_quick"
   )
   user_inputs
 }
 
 create_multiple_scenarios <- function() {
   max_time <- 10000
-  treatment_type <- "both" # quick or proph
+  treatment_type <- "quick" # quick or proph
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
@@ -57,7 +57,7 @@ create_single_scenario <- function() {
   treat_prop <- 0.1
   carrying_capacity <- 2000
   prop_cattle_with_insecticide <- 0.0
-  prop_prophylaxis_at_birth <- 0.95
+  prop_prophylaxis_at_birth <- 0.0
   proph_ongoing <- 0.0 #seq(0, 0.9, 0.1)
   fit_adj <- 0.95
   birth_adj <- 2.0
