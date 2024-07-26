@@ -156,14 +156,11 @@ set_parameters_NEW <- function(this_scenario) {
     treatment_p, treatment_q, sigma_st, 
     emergence_p, emergence_q, waning, waning_f2s, new_prop
   )
-  scenario_params <- cbind(NC, NW, K, fit_adj, rec_adj, reversion, 
-                           prop_prophylaxis_at_birth, proph_ongoing, option)
+  derived_params <- convert_array_to_named_vector(derived_params)
   
-  derived_plus_scenario_params <- cbind(derived_params, scenario_params)
-  derived_plus_scenario_params <- convert_array_to_named_vector(derived_plus_scenario_params)
-  
-  all_params <- c(derived_plus_scenario_params, baseline_params)
-  qual_check_no0(all_params) # ensure there are no negative values
+  scenario_params <- convert_df_row_to_named_vector(this_scenario)  
+  all_params <- c(derived_params, scenario_params, baseline_params)
+  qual_check_no0(all_params)
   
   return(all_params)
 }
