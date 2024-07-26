@@ -52,6 +52,10 @@ convert_array_to_named_vector <- function(this_array) {
   this_vector
 }
 
+convert_df_row_to_named_vector <- function(df_row) {
+  named_vector <- unlist(df_row)
+  named_vector
+}
 
 convert_named_vector_to_wide_df <- function(named_vector){
   df = data.frame(as.list(named_vector)) 
