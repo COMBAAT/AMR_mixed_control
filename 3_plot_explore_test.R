@@ -181,3 +181,17 @@ for (y_var in y_vars) {
   )
 }
 # ----------------------------------------
+
+# ----------------------------------------
+# Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
+
+for (y_var in y_vars) {
+  plot_type6_y_versus_treat_prop_facet_NW_K(test, y_var)
+
+  plot_name <- paste0("plot_type6_", y_var, "_", plot_descriptor, ".pdf")
+  ggsave(
+    filename = paste0(folder_name, plot_name),
+    width = my_pdfwidth(), height = 2 * my_pdfheight()
+  )
+}

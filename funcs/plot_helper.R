@@ -178,3 +178,26 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
     my_theme()
   p
 }
+
+
+plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var) {
+  df$y <- df[, y_var]
+  this_xlab <- my_label("treat_prop")
+  this_ylab <- my_label(y_var)
+  
+  p <- df %>%
+    mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
+    filter(
+      K %in% c(500, 1000, 6000),
+      NW %in% c(0, 100, 250)
+    ) %>%
+    ggplot(aes(treat_prop, y, shape = K, colour = prop_cattle_with_insecticide)) +
+    geom_point(size = my_pointsize()) +
+    geom_line(linewidth = my_linewidth()) +
+    facet_wrap(~ K + NW) +
+    xlab(this_xlab) +
+    ylab(this_ylab) +
+    labs(shape = my_label("K"), colour = my_label("prop_cattle_with_insecticide")) +
+    my_theme()
+  p
+}
