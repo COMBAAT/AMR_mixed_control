@@ -113,14 +113,15 @@ save(test, baseline_parameters, scenarios_df, file = filename)
 # some exploratory plots showing final simulation in scenario set
 #quick_plot(expanded_output)
 #quick_plot2(expanded_output)
-#quick_plot3(expanded_output)
+quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
 # display Rsen to check close to 1
-all_scenarios_summary %>%
+Rplot <- all_scenarios_summary %>%
   filter(R0sen < 5) %>%
   ggplot() +
   geom_point(aes(y = Rsen_final, x = R0sen))
+#Rplot
 
 glimpse(all_scenarios_summary)
 
