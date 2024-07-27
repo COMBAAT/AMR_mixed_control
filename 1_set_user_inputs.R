@@ -5,6 +5,7 @@ messages_and_issues <- function() {
   message1 <- "vector incubation has been wrongly calculated, enhance effect of insecticide"
   message2 <- "added reversion for cattle stages"
   message3 <- "need to include regular prophylactic treatment"
+  message4 <- "need to allow for partial susceptibility of PS animals"
 }
 
 set_days_per_year <- function() {
@@ -14,7 +15,7 @@ set_days_per_year <- function() {
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = TRUE,
+    multiple_scenarios = FALSE,
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
@@ -44,10 +45,11 @@ create_multiple_scenarios <- function() {
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
+  partial_susceptibility <- 1.0
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing,
+    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility = partial_susceptibility,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
@@ -72,10 +74,11 @@ create_single_scenario <- function() {
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
+  partial_susceptibility <- 1.0
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing,
+    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility = partial_susceptibility,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth, 
