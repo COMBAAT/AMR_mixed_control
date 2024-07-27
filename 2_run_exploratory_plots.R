@@ -121,8 +121,8 @@ Rplot <- all_scenarios_summary %>%
   filter(R0sen < 5) %>%
   ggplot() +
   geom_point(aes(y = Rsen_final, x = R0sen))
-#Rplot
+Rplot
 
-glimpse(all_scenarios_summary)
+#glimpse(all_scenarios_summary)
 
 toc()
