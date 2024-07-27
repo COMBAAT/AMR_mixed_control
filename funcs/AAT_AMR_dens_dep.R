@@ -81,7 +81,6 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   proph_ongoing    <- parms["proph_ongoing"]
   fit_adj          <- parms["fit_adj"]
   waning           <- parms["waning"]
-  new_prop         <- parms["new_prop"]    
   waning_f2s       <- parms["waning_f2s"]
   partial_susceptibility <- parms["partial_susceptibility"]
   
@@ -109,7 +108,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   C <- CS + CEs + CEr + CIs + CIr + CTs + CTr 
   P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr
   PC <- CS + CEs + CEr + CIs + CIr + CTs + CTr +
-    PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr
+        PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr
   W <- WS + WEs + WEr + WIs + WIr 
   V <- VSt + VSf + VEs + VEr + VIs + VIr
   
@@ -124,9 +123,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma_c  * CIs + 
     sigma_c  * CIr + 
     sigma_st  * CTs +
-#    sigma_st  * PPs +  #test addition
     (sigma_c * rec_adj)  * CTr - 
-#    new_prop * CS - 
     death_c * CS 
   
   dCEs.dt <- biterate * prob_infection_to_host * CS * VIs / N - 
@@ -146,7 +143,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     treatment_p * CIs - 
     sigma_c  * CIs + 
     waning * PIs + 
-    waning * PPs - #LM moved from CTs equation
+    waning * PPs - 
     death_c * CIs +
     reversion * CIr 
   
@@ -155,7 +152,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     treatment_p * CIr - 
     sigma_c  * CIr + 
     waning * PIr +
-    waning * PPr -  #LM moved from CTr equation 29/9/22
+    waning * PPr -  
     death_c * CIr -
     reversion * CIr 
   
@@ -163,7 +160,6 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     sigma_st  * CTs - 
     emergence_q * CTs + 
     waning * PTs - 
-#    waning * PPs - #LM moved up to CIs equation
     death_c * CTs +
     reversion * CTr 
   
@@ -171,25 +167,12 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     (sigma_c * rec_adj) * CTr  + 
     emergence_q * CTs + 
     waning * PTr - 
-#    waning *PPr - #LM moved up to CIr equation 29/9/22
     death_c * CTr -
     reversion * CTr 
   
   
   
-  # dCTs.dt <- 0
-  # 
-  # dCTr.dt <- 0
-  # 
-  # dCR.dt <- treatment_q * CIs + treatment_q * CIr + sigma_c  * CIs + sigma_c  * CIr + sigma_c  * CTs + 
-  #   sigma_c  * CTr - resusceptible * CR - death_c * CR
-  
-  
-  # Cattle with prophylaxis ----
-  # 
-  # PS, PEs, PEr, PIs, PIr, PTs, PTr, PR
-  
-  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * PC - #new_prop * CS # Adding new prophylactically treated cattle
+  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * PC -             # Adding new prophylactically treated cattle
     biterate * (prob_infection_to_host * fit_adj) * PF * VIr / N +   # Infection of resistant strain
     sigma_st  * PPs +                                     # sigma from treated (prophylactic) sensitive strain infection
     (sigma_c * rec_adj)  * PPr -                            # sigma from treated (prophylactic) resistant strain infection
@@ -208,14 +191,14 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     death_c * PS                                               # Death of prophylactic susceptibles (partially protected)
     
     
-  dPEs.dt <- biterate * prob_infection_to_host * PS * VIs / N -      # Infection of sensitive strain
+  dPEs.dt <- biterate * partial_susceptibility * prob_infection_to_host * PS * VIs / N -      # Infection of sensitive strain
     gamma_c * PEs -                                   # Movement from exposed to infectious
     emergence_p * PEs -
     waning *PEs -                                            # Waning of infection to non-prophylactic class
     death_c * PEs +                                             # Death of prophylactic exposed (sensitive strain)
     reversion * PEr 
       
-  dPEr.dt <- biterate * (prob_infection_to_host * fit_adj) * PS *VIr / N +    # Infection of resistant strain
+  dPEr.dt <- biterate * partial_susceptibility * prob_infection_to_host * fit_adj * PS *VIr / N +    # Infection of resistant strain
     biterate * (prob_infection_to_host * fit_adj * 1) * PF * VIr / N -   # Infection of resistant strain
     gamma_c * PEr +                                   # Movement from exposed to infectious
     emergence_p * PEs -
@@ -291,15 +274,6 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   
   dWIr.dt <- gamma_w * WEr - sigma_w * WIr - death_w * WIr - reversion * WIr
   
-  # if (W < 1.0-8){
-  #   dWS.dt <- 0
-  #   dWEs.dt <- 0
-  #   dWEr.dt <- 0
-  #   dWIs.dt <- 0
-  #   dWIr.dt <- 0
-  # }
-  # 
-  
   # Tsetse ----
   # 
   # VS, VEs, VEr, VIs, VIr, 
@@ -311,73 +285,66 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     prob_infection_to_vector * biterate * (CTr/N) * VSt -
     prob_infection_to_vector * biterate * (PIs/N) * VSt -
     prob_infection_to_vector * biterate * (PIr/N) * VSt -
-    prob_infection_to_vector * biterate * (PPs/N) * VSt -  #LM
-    prob_infection_to_vector * biterate * (PPr/N) * VSt -  #LM
-    prob_infection_to_vector * biterate * (PTs/N) * VSt -  #LM
+    prob_infection_to_vector * biterate * (PPs/N) * VSt - 
+    prob_infection_to_vector * biterate * (PPr/N) * VSt -  
+    prob_infection_to_vector * biterate * (PTs/N) * VSt -  
     prob_infection_to_vector * biterate * (PTr/N) * VSt -
     prob_infection_to_vector * biterate * (WIs/N) * VSt -
     prob_infection_to_vector * biterate * (WIr/N) * VSt -
-#    prob_infection_to_vector * biterate * (CIs + CIr + CTs +CTr + PIs + PIr + PPs + PPr + PTs + PTr + WIs + WIr) / N * VSt -
     ten2fed * VSt -
     death_v * VSt 
   
-  dVSf.dt <- - 
-    prob_infection_to_vector * biterate * (CIs/N) * VSf - #LM missing minus at start of line
+  dVSf.dt <- ten2fed * VSt - 
+    prob_infection_to_vector * biterate * (CIs/N) * VSf - 
     prob_infection_to_vector * biterate * (CIr/N) * VSf -
     prob_infection_to_vector * biterate * (CTs/N) * VSf -
     prob_infection_to_vector * biterate * (CTr/N) * VSf -
     prob_infection_to_vector * biterate * (PIs/N) * VSf -
     prob_infection_to_vector * biterate * (PIr/N) * VSf -
-    prob_infection_to_vector * biterate * (PPs/N) * VSf -  #LM addition
-    prob_infection_to_vector * biterate * (PPr/N) * VSf -  #LM addition
-    prob_infection_to_vector * biterate * (PTs/N) * VSf -  #LM addition
+    prob_infection_to_vector * biterate * (PPs/N) * VSf -  
+    prob_infection_to_vector * biterate * (PPr/N) * VSf -  
+    prob_infection_to_vector * biterate * (PTs/N) * VSf -  
     prob_infection_to_vector * biterate * (PTr/N) * VSf -
     prob_infection_to_vector * biterate * (WIs/N) * VSf -
-    prob_infection_to_vector * biterate * (WIr/N) * VSf +
-#  prob_infection_to_vector * biterate * (CIs + CIr + CTs +CTr + PIs + PIr + PPs + PPr + PTs + PTr + WIs + WIr) / N * VSf +
-    ten2fed * VSt -
+    prob_infection_to_vector * biterate * (WIr/N) * VSf -
     death_v * VSf
   
   dVEs.dt <-  + 
     prob_infection_to_vector * biterate * (CIs/N) * VSt +
     prob_infection_to_vector * biterate * (CTs/N) * VSt +
     prob_infection_to_vector * biterate * (PIs/N) * VSt +
-    prob_infection_to_vector * biterate * (PPs/N) * VSt +  #LM addition
+    prob_infection_to_vector * biterate * (PPs/N) * VSt +  
     prob_infection_to_vector * biterate * (PTs/N) * VSt +
     prob_infection_to_vector * biterate * (WIs/N) * VSt +
     prob_infection_to_vector * biterate * (CIs/N) * VSf +
     prob_infection_to_vector * biterate * (CTs/N) * VSf +
     prob_infection_to_vector * biterate * (PIs/N) * VSf +
-    prob_infection_to_vector * biterate * (PPs/N) * VSf +  #LM addition
+    prob_infection_to_vector * biterate * (PPs/N) * VSf +  
     prob_infection_to_vector * biterate * (PTs/N) * VSf +
     prob_infection_to_vector * biterate * (WIs/N) * VSf -
-    #prob_infection_to_vector * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSf +
-    #prob_infection_to_vector * biterate * (CIs + 0*CIr + CTs + 0*CTr + PIs + 0*PIr + PPs + 0*PPr + PTs + 0*PTr + WIs + 0*WIr) / N * VSt -
-    gamma_v * VEs - death_v *VEs
+    gamma_v * VEs - death_v * VEs
   
-  dVEr.dt <-  + 
+  dVEr.dt <-
     prob_infection_to_vector * biterate * (CIr/N) * VSt +
     prob_infection_to_vector * biterate * (CTr/N) * VSt +
     prob_infection_to_vector * biterate * (PIr/N) * VSt +
-    prob_infection_to_vector * biterate * (PPr/N) * VSt +  #LM addition
+    prob_infection_to_vector * biterate * (PPr/N) * VSt +  
     prob_infection_to_vector * biterate * (PTr/N) * VSt +
     prob_infection_to_vector * biterate * (WIr/N) * VSt +
     prob_infection_to_vector * biterate * (CIr/N) * VSf +
     prob_infection_to_vector * biterate * (CTr/N) * VSf +
     prob_infection_to_vector * biterate * (PIr/N) * VSf +
-    prob_infection_to_vector * biterate * (PPr/N) * VSf +  #LM addition, corrected VSt to VSf 29/9/2022
+    prob_infection_to_vector * biterate * (PPr/N) * VSf +  
     prob_infection_to_vector * biterate * (PTr/N) * VSf +
     prob_infection_to_vector * biterate * (WIr/N) * VSf -
-#    prob_infection_to_vector * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSf +
-#    prob_infection_to_vector * biterate * (0*CIs + 1*CIr + 0*CTs + 1*CTr + 0*PIs + 1*PIr + 0*PPs + 1*PPr + 0*PTs + 1*PTr + 0*WIs + 1*WIr) / N * VSt -
-    gamma_v * VEr - death_v *VEr
+    gamma_v * VEr - death_v * VEr
   
   dVIs.dt <- gamma_v * VEs - death_v * VIs
   
   dVIr.dt <- gamma_v * VEr - death_v * VIr
   
   # Model output ----
-  #dX <- c(dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt,  
+  # dX <- c(dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt,  
   #        dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt,
   #        dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt, 
   #        dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt)

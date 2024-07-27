@@ -106,7 +106,6 @@ set_parameters_NEW <- function(this_scenario) {
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
-  new_prop <- 0
   
   # figure out equilibrium in absence of infection
   # birth_c * prop_prophylaxis_at_birth *NC - death_c * PF - waning_f2s*PF
@@ -154,7 +153,7 @@ set_parameters_NEW <- function(this_scenario) {
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st, 
-    emergence_p, emergence_q, waning, waning_f2s, new_prop
+    emergence_p, emergence_q, waning, waning_f2s
   )
   derived_params <- convert_array_to_named_vector(derived_params)
   
