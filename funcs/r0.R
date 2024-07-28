@@ -30,6 +30,7 @@ R_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic
 
   gamma_v <- params["gamma_v"]
   death_v <- params["death_v"]
+  proph_ongoing <- params["proph_ongoing"]
 
 
   if (is_strain_sensitive == "yes") {
