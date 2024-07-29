@@ -83,10 +83,11 @@ append_suffix_to_column_names <- function(df, suffix) {
 my_rootfun <- function (t, y, params) {
   dstate <- unlist(AAT_AMR_dens_dep(t, y, params)) # rate of change vector
   Nc <- y['CS']
-  Np <- y['PS']
+  Npf <- y['PF']
+  Nps <- y['PS']
   Nw <- y['WS']
   Nv <- y['VSt'] + y['VSf']
-  Rsen <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
+  Rsen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
   
   condition1 <- (Rsen - 1.01)
   condition2 <- (y['CIs'] - 1e-5)
