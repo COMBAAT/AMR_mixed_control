@@ -84,7 +84,7 @@ initialise_variables_with_zeros <- function(variable_names) {
 }
 
 
-set_inital_conditions2 <- function(params, number_initially_infected) {
+set_inital_conditions2 <- function(params, initial_sensitive_infections, initial_resistant_infections) {
   variables_names <- get_variables()
   
   cattle_no_prophylaxis <- initialise_variables_with_zeros(variables_names$cattle_no_prophylaxis)
@@ -98,8 +98,9 @@ set_inital_conditions2 <- function(params, number_initially_infected) {
   wildlife["WS"] <- params["NW"]
   vectors["VSt"] <- params["equil_vector_pop"]
   
-  cattle_no_prophylaxis["CIs"] <- number_initially_infected # Infected (drug resistant strain)
-  cattle_no_prophylaxis["CS"] <- cattle_no_prophylaxis["CS"] - number_initially_infected
+  cattle_no_prophylaxis["CIs"] <- initial_sensitive_infections # Infected (drug resistant strain)
+  cattle_no_prophylaxis["CIr"] <- initial_resistant_infections 
+  cattle_no_prophylaxis["CS"] <- cattle_no_prophylaxis["CS"] - initial_sensitive_infections - initial_resistant_infections
   
   ## ----- Initial conditions output
   

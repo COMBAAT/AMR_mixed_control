@@ -65,14 +65,13 @@ for (row in 1:nrow(scenarios_df)) {
   ## Only run full simulation if R0 >= 1.0
   if (R0sen < 1.0) {
     # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
-    #inits <- set_inital_conditions(params, FALSE)
-    inits <- set_inital_conditions2(params, 0)
+    inits <- set_inital_conditions2(params, initial_sensitive_infections = 0, initial_resistant_infections = 0)
     times <- seq(0, 0.1, 0.1)
   } else {
     # if R0 >= 1.0 run full simulation
-    #inits <- set_inital_conditions(params, TRUE)
-    inits <- set_inital_conditions2(params, 1)
+    inits <- set_inital_conditions2(params, initial_sensitive_infections = 1, initial_resistant_infections = 0)
     times <- seq(0, this_scenario$max_time, 1)
+    
   }
 
   ## RUN MODEL ----
@@ -116,13 +115,20 @@ save(test, baseline_parameters, scenarios_df, file = filename)
 quick_plot3(expanded_output)
 R0_plot(expanded_output)
 
-# display Rsen to check close to 1
 Rplot <- all_scenarios_summary %>%
   filter(R0sen < 5) %>%
   ggplot() +
-  geom_point(aes(y = Rsen_final, x = R0sen))
-Rplot
+  geom_point(aes(y = Rsen_final, x = R0sen, colour = as.factor(partial_susceptibility), 
+                  shape = as.factor(treatment_type))) +
+  geom_abline(aes(slope = 1, intercept = 0), colour = "red")
+#Rplot
+
 
 #glimpse(all_scenarios_summary)
+all_scenarios_summary$Cattle_total_final
+all_scenarios_summary$Prophylactic_total_final
+all_scenarios_summary$All_cows_final
+all_scenarios_summary$Rsen_final
+all_scenarios_summary$Rres_final
 
 toc()
