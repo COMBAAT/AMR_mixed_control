@@ -110,6 +110,25 @@ get_latest_Rda_file <- function() {
 }
 
 
+get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
+                            waning_f2s, death_p, waning, proph_ongoing) {
+  
+  # get matrix from odes for PF, PS and CS in absence of disease
+  M <- matrix(c( death_p + waning_f2s, -proph_ongoing, -proph_ongoing,
+                 waning_f2s, -(waning + death_p + proph_ongoing), 0,
+                 0, -waning, death_c + proph_ongoing), byrow = TRUE, ncol = 3)
+  
+  this_vec <- c( birth_c * (prop_prophylaxis_at_birth) * NC, 
+                 0,
+                 birth_c * (1 - prop_prophylaxis_at_birth) * NC)
+  
+  # solve linear system of equations by inverting matrix and mutliplying rhs
+  answer <- solve(M) %*% this_vec
+  names(answer) <- c("PF", "PS", "CS")
+  answer
+}
+
+findGlobals(fun = get_equilibrium, merge = FALSE)$variables
 findGlobals(fun = get_filename, merge = FALSE)$variables
 findGlobals(fun = get_full_path, merge = FALSE)$variables
 findGlobals(fun = get_latest_Rda_file, merge = FALSE)$variables

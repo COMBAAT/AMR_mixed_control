@@ -107,13 +107,13 @@ set_parameters_NEW <- function(this_scenario) {
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   
-  # figure out equilibrium in absence of infection
-  # birth_c * prop_prophylaxis_at_birth *NC - death_c * PF - waning_f2s*PF
-  PF <- birth_c * prop_prophylaxis_at_birth * NC / (death_c + waning_f2s)
-  # waning_f2s * PF - death_p * PS - waning * PS
-  PS <- waning_f2s * PF / (death_p + waning)
-  # birth_c * (1-prop_prophylaxis_at_birth) * NC - death_c * CS + waning * PS
-  CS <- (birth_c * (1 - prop_prophylaxis_at_birth) * NC + waning * PS) / death_c
+  
+  equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(birth_c, prop_prophylaxis_at_birth, NC, death_c, 
+                            waning_f2s, death_p, waning, proph_ongoing) 
+
+  PF <- equilibrium_values["PF"]
+  PS <- equilibrium_values["PS"]
+  CS <- equilibrium_values["CS"]
   
   ## ----- Wildlife
   birth_w <- 1 / baseline_params["wildlife_lifespan"]
