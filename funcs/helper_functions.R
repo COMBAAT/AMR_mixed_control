@@ -128,7 +128,7 @@ get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophyla
   answer
 }
 
-findGlobals(fun = get_equilibrium, merge = FALSE)$variables
+findGlobals(fun = get_disease_free_equilibrium_for_PF_PS_and_CS, merge = FALSE)$variables
 findGlobals(fun = get_filename, merge = FALSE)$variables
 findGlobals(fun = get_full_path, merge = FALSE)$variables
 findGlobals(fun = get_latest_Rda_file, merge = FALSE)$variables
