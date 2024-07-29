@@ -16,17 +16,18 @@ plot_baseline_parameters <- function(params){
 
 add_treatment_type_in_numeric_form <- function(scenarios_df) {
   
-  if (unique(scenarios_df$treatment_type) == "quick") {
+  scenarios_df$quick_treatment_on <- 0
+  scenarios_df$proph_treatment_on <- 0
+  scenarios_df$both_treatment_on <- 0
+  
+  if ("quick" %in% unique(scenarios_df$treatment_type)) {
     scenarios_df$quick_treatment_on <- 1
-    scenarios_df$proph_treatment_on <- 0
   }
-  if (unique(scenarios_df$treatment_type) == "proph") {
-    scenarios_df$quick_treatment_on <- 0
+  if ("proph" %in% unique(scenarios_df$treatment_type)) {
     scenarios_df$proph_treatment_on <- 1
   }
-  if (unique(scenarios_df$treatment_type) == "both") {
-    scenarios_df$quick_treatment_on <- 1
-    scenarios_df$proph_treatment_on <- 1
+  if ("both" %in% unique(scenarios_df$treatment_type)) {
+    scenarios_df$both_treatment_on <- 1
   }
   scenarios_df
 }
@@ -61,12 +62,18 @@ plot_scenarios <- function(scenarios_df) {
   p4 <- plot_parameters(plot_this, ymax = 10000)
   p4 <- add_labels_to_scenarios_dotplot(p4, plot_this)
   
-  plot_this <- simplified_scenarios %>% filter(name %in% c("quick_treatment_on", "proph_treatment_on"))
+  plot_this <- simplified_scenarios %>% filter(name %in% c("quick_treatment_on", "proph_treatment_on", "both_treatment_on"))
   p5 <- plot_parameters(plot_this, ymax = 1.1)
   p5 <- add_labels_to_scenarios_dotplot(p5, plot_this)
   
-  plot_this <- simplified_scenarios %>% filter(!(name %in% c("NC", "NW", "K", "birth_adj", "max_time")))
+  
+  plot_this <- simplified_scenarios %>% filter(!(name %in% c("NC", "NW", "K", "birth_adj", "max_time",
+                                                             "quick_treatment_on", "proph_treatment_on", "both_treatment_on")))
   p6 <- plot_parameters(plot_this, ymax = 1.0)
+  
+  plot_this <- simplified_scenarios %>% filter(name %in% c("treat_prop", "proph_prophylaxis_at_birth", "proph_ongoing"))
+  p7 <- plot_parameters(plot_this, ymax = 1.1)
+  p7 <- add_labels_to_scenarios_dotplot(p7, plot_this)
   
   p <- p5 + p1 + p2 + p3 + p4 + p6 + plot_layout(ncol = 1, heights = c(1, 1, 1, 1, 1, 3))
   p
