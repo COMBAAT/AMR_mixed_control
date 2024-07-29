@@ -2,7 +2,7 @@ library(codetools)
 
 ## --------------------- R0
 
-R_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic) {
+R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
   Nh <- params["NC"] + params["NW"]
 
   biterate <- params["biterate"]
@@ -46,7 +46,12 @@ R_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic
   RCV <- biterate * prob_infection_to_host * Nc / Nh * gamma_c / (gamma_c + death_c + proph_ongoing) * 1 / (death_v)
   RCV <- as.numeric(RCV)
 
-  RPV <- biterate * partial_susceptibility * prob_infection_to_host * Np / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
+  if (is_strain_sensitive == "yes") {
+  RPV <- biterate * partial_susceptibility * prob_infection_to_host * Nps / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
+  } 
+  if (is_strain_sensitive == "no") {
+    RPV <- biterate * prob_infection_to_host * (Nps + Npf) / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
+  }
   RPV <- as.numeric(RPV)
 
   RWV <- biterate * prob_infection_to_host * Nw / Nh * gamma_w / (gamma_w + death_w) * 1 / (death_v)
@@ -138,23 +143,25 @@ R_calc_sen_or_res <- function(params, Nc, Np, Nw, Nv, is_strain_sensitive, basic
 }
 
 calculate_R0 <- function(params) {
-  Np <- params["PS"]
+  Npf <- params["PF"]
+  Nps <- params["PS"]
   Nc <- params["CS"]
   Nw <- params["NW"]
   Nv <- params["NV"]
-  R0sen <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
-  R0res <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
+  R0sen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
+  R0res <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
   c("R0sen" = R0sen, "R0res" = R0res)
 }
 
 
 calculate_R_from_row_of_df <- function(params, this_row) {
   Nc <- this_row$CS
-  Np <- this_row$PS
+  Nps <- this_row$PS
+  Npf <- this_row$PF
   Nw <- this_row$WS
   Nv <- this_row$VSt + this_row$VSf
-  Rsen <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
-  Rres <- R_calc_sen_or_res(params, Nc, Np, Nw, Nv, is_strain_sensitive = "no", basic = "no")
+  Rsen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
+  Rres <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
   c("Rsen" = Rsen, "Rres" = Rres)
 }
 
