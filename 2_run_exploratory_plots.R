@@ -121,7 +121,7 @@ Rplot <- all_scenarios_summary %>%
   geom_point(aes(y = Rsen_final, x = R0sen, colour = as.factor(partial_susceptibility), 
                   shape = as.factor(treatment_type))) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "red")
-#Rplot
+Rplot
 
 
 #glimpse(all_scenarios_summary)
