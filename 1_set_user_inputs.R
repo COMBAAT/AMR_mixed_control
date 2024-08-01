@@ -24,14 +24,14 @@ get_user_inputs <- function() {
     append_current_time_to_output_file = FALSE,
     folder = "output/",
     general_descriptor = "simulation_set_",
-    current_descriptor = "NEW_explore_proph"
+    current_descriptor = "NEW_explore_quick_treatment"
   )
   user_inputs
 }
 
 create_multiple_scenarios <- function() {
   max_time <- 10000
-  treatment_type <- c("proph") # quick, proph or both
+  treatment_type <- c("quick") # quick, proph or both
   cattle_number <- 50
   #wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
@@ -64,7 +64,7 @@ create_multiple_scenarios <- function() {
 
 create_single_scenario <- function() {
   max_time <- 10000
-  treatment_type <- "proph" # quick, proph or both
+  treatment_type <- "quick" # quick, proph or both
   cattle_number <- 50
   wildlife_number <- 250
   treat_prop <- 0.5
