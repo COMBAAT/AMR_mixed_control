@@ -50,7 +50,7 @@ for (row in 1:nrow(scenarios_df)) {
 
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters_NEW(this_scenario)
-  full_scenario <- merge_params_into_this_scenario(this_scenario, params)
+  full_scenario <- convert_named_vector_to_wide_df(params)
   full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$current_descriptor)
   full_scenario <- move_populations_first(full_scenario)
 
@@ -113,14 +113,15 @@ save(test, baseline_parameters, scenarios_df, file = filename)
 #quick_plot(expanded_output)
 #quick_plot2(expanded_output)
 quick_plot3(expanded_output)
-R0_plot(expanded_output)
+R0_and_R_trajectories(expanded_output)
 
 Rplot <- all_scenarios_summary %>%
-  filter(R0sen < 5) %>%
+  filter(R0sen < 5) %>% 
+  mutate(reaches_equilibrium = case_when(time_final < 10000 ~ TRUE, time_final == 10000 ~ FALSE)) %>%
   ggplot() +
-  geom_point(aes(y = Rsen_final, x = R0sen, colour = as.factor(partial_susceptibility), 
+  geom_point(aes(y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium), 
                   shape = as.factor(treatment_type))) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "red")
+  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 Rplot
 
 

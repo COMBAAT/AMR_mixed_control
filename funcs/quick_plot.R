@@ -246,12 +246,23 @@ quick_plot3 <- function(df) {
 }
 
 
-R0_plot <- function(df){
-  
-  ggplot(df) +
-    geom_line(aes(x = time, y = R0sen), colour = "black") +
-    geom_line(aes(x = time, y = R0res), colour = "red") +
-    geom_line(aes(x = time, y = Rsen), colour = "black") +
-    geom_line(aes(x = time, y = Rres), colour = "red") +
-    geom_hline(yintercept = 1, linetype = "dashed")
+R0_and_R_trajectories <- function(df) {
+  my_colours <- c("R0sen" = "black", "R0res" = "red", "Rsen" = "black", "Rres" = "red")
+  my_lines <- c("R0sen" = "dotted", "R0res" = "dotted", "Rsen" = "solid", "Rres" = "solid")
+
+  df_long <- df %>%
+    select(time, R0res, R0sen, Rres, Rsen) %>%
+    pivot_longer(!time, names_to = "R_type", values_to = "R0_R_value")
+
+  p <- ggplot(df_long) +
+    geom_line(aes(x = time, y = R0_R_value, colour = R_type, linetype = R_type)) +
+    scale_color_manual(values = my_colours) +
+    scale_linetype_manual(values = my_lines) +
+    geom_hline(yintercept = 1, linetype = "dotted")
+    ylab("R0 or R value") +
+    guides(
+      color = guide_legend(title = ""),
+      linetype = guide_legend(title = "")
+    )
+  p
 }
