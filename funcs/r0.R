@@ -7,7 +7,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
-  partial_susceptibility <- params["partial_susceptibility"]
+  partial_susceptibility_proph_cattle <- params["partial_susceptibility_proph_cattle"]
   prob_infection_to_vector <- params["prob_infection_to_vector"]
   fit_adj <- params["fit_adj"]
 
@@ -47,7 +47,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   RCV <- as.numeric(RCV)
 
   if (is_strain_sensitive == "yes") {
-  RPV <- biterate * partial_susceptibility * prob_infection_to_host * Nps / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
+  RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
   } 
   if (is_strain_sensitive == "no") {
     RPV <- biterate * prob_infection_to_host * (Nps + Npf) / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)

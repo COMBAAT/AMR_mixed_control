@@ -82,7 +82,7 @@ AAT_AMR_dens_dep <- function(times, init, parms){
   fit_adj          <- parms["fit_adj"]
   waning           <- parms["waning"]
   waning_f2s       <- parms["waning_f2s"]
-  partial_susceptibility <- parms["partial_susceptibility"]
+  partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
   
   ## ----- Wildlife
   birth_w            <- parms["birth_w"]
@@ -221,8 +221,8 @@ AAT_AMR_dens_dep <- function(times, init, parms){
 
   
   dPS.dt <-  waning_f2s * PF -                               # Waning of prophylactically treated cattle to semi protected
-  # biterate * partial_susceptibility * prob_infection_to_host * PS * VIs / N -               # Infection of sensitive strain
-    biterate * partial_susceptibility * prob_infection_to_host * PS_P_frac * VIs * (P / N) - 
+  # biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N -               # Infection of sensitive strain
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_P_frac * VIs * (P / N) - 
   # biterate * prob_infection_to_host * fit_adj * PS * VIr / N +   # Infection of resistant strain
     biterate * prob_infection_to_host * fit_adj * PS_P_frac * VIr * (P / N) +
     sigma_c  * PIs +                                        # sigma_c from sensitive strain infection
@@ -234,8 +234,8 @@ AAT_AMR_dens_dep <- function(times, init, parms){
     proph_ongoing * PS
     
   dPEs.dt <- 
-  # biterate * partial_susceptibility * prob_infection_to_host * PS * VIs / N -      # Infection of sensitive strain
-    biterate * partial_susceptibility * prob_infection_to_host * PS_P_frac * VIs * (P / N) -
+  # biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N -      # Infection of sensitive strain
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_P_frac * VIs * (P / N) -
     gamma_c * PEs -                                   # Movement from exposed to infectious
     emergence_p * PEs -
     waning *PEs -                                            # Waning of infection to non-prophylactic class

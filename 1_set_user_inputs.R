@@ -49,11 +49,11 @@ create_multiple_scenarios <- function() {
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
-  partial_susceptibility <- c(1.0)
+  partial_susceptibility_proph_cattle <- c(1.0)
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility = partial_susceptibility,
+    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
@@ -78,11 +78,11 @@ create_single_scenario <- function() {
   emergence <- 0.0
   rec_adj <- 1.0
   reversion <- 0.0
-  partial_susceptibility <- 0.8
+  partial_susceptibility_proph_cattle <- 0.8
 
   df <- expand.grid(
     NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility = partial_susceptibility,
+    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth, 
