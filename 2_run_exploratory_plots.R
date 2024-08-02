@@ -71,7 +71,6 @@ for (row in 1:nrow(scenarios_df)) {
     # if R0 >= 1.0 run full simulation
     inits <- set_inital_conditions2(params, initial_sensitive_infections = 1, initial_resistant_infections = 0)
     times <- seq(0, this_scenario$max_time, 1)
-    
   }
 
   ## RUN MODEL ----
@@ -100,32 +99,33 @@ for (row in 1:nrow(scenarios_df)) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
   print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
   print(paste0("R = ", final_state_with_full_scenario$Rsen_final))
-  
 }
 
 
 # save outputs as dataframe called test
 test <- all_scenarios_summary
 filename <- get_filename()
-save(test, baseline_parameters, scenarios_df, file = filename) 
+save(test, baseline_parameters, scenarios_df, file = filename)
 
 # some exploratory plots showing final simulation in scenario set
-#quick_plot(expanded_output)
-#quick_plot2(expanded_output)
+# quick_plot(expanded_output)
+# quick_plot2(expanded_output)
 quick_plot3(expanded_output)
 R0_and_R_trajectories(expanded_output)
 
 Rplot <- all_scenarios_summary %>%
-  filter(R0sen < 5) %>% 
+  filter(R0sen < 5) %>%
   mutate(reaches_equilibrium = case_when(time_final < 10000 ~ TRUE, time_final == 10000 ~ FALSE)) %>%
   ggplot() +
-  geom_point(aes(y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium), 
-                  shape = as.factor(treatment_type))) +
+  geom_point(aes(
+    y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
+    shape = as.factor(treatment_type)
+  )) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 Rplot
 
 
-#glimpse(all_scenarios_summary)
+# glimpse(all_scenarios_summary)
 all_scenarios_summary$Cattle_total_final
 all_scenarios_summary$Prophylactic_total_final
 all_scenarios_summary$All_cows_final

@@ -33,16 +33,16 @@ create_multiple_scenarios <- function() {
   max_time <- 10000
   treatment_type <- c("quick") # quick, proph or both
   cattle_number <- 50
-  #wildlife_number <- c(0, 50, 100, 150, 200, 250)
+  # wildlife_number <- c(0, 50, 100, 150, 200, 250)
   wildlife_number <- c(0, 100, 250)
-  treat_propA <- seq(0.0, 0.9, by = 0.2) 
+  treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
   treat_prop <- c(treat_propA, treat_propB)
   carrying_capacity <- c(10000, 6000, 2000, 1000, 500)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
   prop_cattle_with_insecticide <- c(0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5)
-  prop_prophylaxis_at_birth <- c(0.0) #seq(0, 0.9, 0.1)
-  proph_ongoing <- c(0) #seq(0, 0.9, 0.1)
+  prop_prophylaxis_at_birth <- c(0.0) # seq(0, 0.9, 0.1)
+  proph_ongoing <- c(0) # seq(0, 0.9, 0.1)
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -52,7 +52,7 @@ create_multiple_scenarios <- function() {
   partial_susceptibility_proph_cattle <- c(1.0)
 
   df <- expand.grid(
-    NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
+    NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
@@ -71,7 +71,7 @@ create_single_scenario <- function() {
   carrying_capacity <- 2000
   prop_cattle_with_insecticide <- 0.0
   prop_prophylaxis_at_birth <- 0.9
-  proph_ongoing <- 0.0 #seq(0, 0.9, 0.1)
+  proph_ongoing <- 0.0 # seq(0, 0.9, 0.1)
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -81,12 +81,12 @@ create_single_scenario <- function() {
   partial_susceptibility_proph_cattle <- 0.8
 
   df <- expand.grid(
-    NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence, 
+    NC = cattle_number, reversion = reversion, rec_adj = rec_adj, emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
-    birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth, 
-    treatment_type = treatment_type, max_time = max_time 
+    birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
+    treatment_type = treatment_type, max_time = max_time
   )
   df
 }

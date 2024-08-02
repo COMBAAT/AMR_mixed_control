@@ -9,63 +9,69 @@ library(tidyr)
 # Source files and function
 source("funcs/plot_helper.R")
 
-quick_plot <- function(df){
-  
+quick_plot <- function(df) {
   par(mfrow = c(2, 2))
-  plot(df$CS ~ df$time, type = 'l', ylim = c(0, 55), 
-       lwd = 3, col = 'blue', main = "Cattle (no Prophylaxis)", 
-       xlab = "Time", ylab = "Number")
-  lines(df$CEs ~ df$time, lwd = 3, col = 'orange') # Exposed
-  lines(df$CEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(df$CIs ~ df$time, lwd = 3, col = 'red') # Infected
-  lines(df$CIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines(df$CTs ~ df$time, lwd = 3, col = 'green') # Treated
-  lines(df$CTr ~ df$time, lwd = 3, col = 'green', lty = 2) # Treated
-  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS) ~df$time,lty = 2)
-  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
-            df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS + df$PF+ df$PPr + df$PPs) ~df$time,lty = 2, col = "pink")
-  #legend("topright", col = c("blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey"),
+  plot(df$CS ~ df$time,
+    type = "l", ylim = c(0, 55),
+    lwd = 3, col = "blue", main = "Cattle (no Prophylaxis)",
+    xlab = "Time", ylab = "Number"
+  )
+  lines(df$CEs ~ df$time, lwd = 3, col = "orange") # Exposed
+  lines(df$CEr ~ df$time, lwd = 3, col = "orange", lty = 2) # Exposed
+  lines(df$CIs ~ df$time, lwd = 3, col = "red") # Infected
+  lines(df$CIr ~ df$time, lwd = 3, col = "red", lty = 2) # Infected
+  lines(df$CTs ~ df$time, lwd = 3, col = "green") # Treated
+  lines(df$CTr ~ df$time, lwd = 3, col = "green", lty = 2) # Treated
+  lines((df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS) ~ df$time, lty = 2)
+  lines((df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
+    df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS + df$PF + df$PPr + df$PPs) ~ df$time, lty = 2, col = "pink")
+  # legend("topright", col = c("blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey"),
   #       y = c("CS", "CEs", "CEr", "CIs", "CIr","CTs", "CTr"), pch = 15)
-  
-  plot( df$PF ~ df$time, type = 'l', ylim = c(0, 55),col = 'purple',
-        lwd = 3,main = "Cattle (with Prophylaxis)",xlab = "Time", ylab = "Number")
-  lines(df$PS ~ df$time, lwd = 3, col = 'blue') # Exposed
-  lines(df$PEs ~ df$time, lwd = 3, col = 'orange') # Exposed
-  lines(df$PEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(df$PIs ~ df$time, lwd = 3, col = 'red') # Infected
-  lines(df$PIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines(df$PTs ~ df$time, lwd = 3, col = 'green') # Treated
-  lines(df$PTr ~ df$time, lwd = 3, col = 'green', lty = 2) # Treated
-  lines(df$PPs ~ df$time, lwd = 3, col = 'grey') # Treated
-  lines(df$PPr ~ df$time, lwd = 3, col = 'grey', lty = 2) # Treated
-  lines((df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr  + df$PS + df$PF + df$PPr + df$PPs) ~df$time, lty = 2)
-  lines(( df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
-            df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS+ df$PF+ df$PPr + df$PPs) ~df$time,lty = 2, col = "pink")
-  #legend("topright", col = c("purple","blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey", "black", "grey"),
+
+  plot(df$PF ~ df$time,
+    type = "l", ylim = c(0, 55), col = "purple",
+    lwd = 3, main = "Cattle (with Prophylaxis)", xlab = "Time", ylab = "Number"
+  )
+  lines(df$PS ~ df$time, lwd = 3, col = "blue") # Exposed
+  lines(df$PEs ~ df$time, lwd = 3, col = "orange") # Exposed
+  lines(df$PEr ~ df$time, lwd = 3, col = "orange", lty = 2) # Exposed
+  lines(df$PIs ~ df$time, lwd = 3, col = "red") # Infected
+  lines(df$PIr ~ df$time, lwd = 3, col = "red", lty = 2) # Infected
+  lines(df$PTs ~ df$time, lwd = 3, col = "green") # Treated
+  lines(df$PTr ~ df$time, lwd = 3, col = "green", lty = 2) # Treated
+  lines(df$PPs ~ df$time, lwd = 3, col = "grey") # Treated
+  lines(df$PPr ~ df$time, lwd = 3, col = "grey", lty = 2) # Treated
+  lines((df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS + df$PF + df$PPr + df$PPs) ~ df$time, lty = 2)
+  lines((df$CEs + df$CEr + df$CIs + df$CIr + df$CTs + df$CTr + df$CS +
+    df$PEs + df$PEr + df$PIs + df$PIr + df$PTs + df$PTr + df$PS + df$PF + df$PPr + df$PPs) ~ df$time, lty = 2, col = "pink")
+  # legend("topright", col = c("purple","blue", "orange", "darkorange", "red","darkred", "green", "darkgreen", "grey", "black", "grey"),
   #       y = c("PF","PS", "PEs", "PEr", "PIs", "PIr","PTs", "PTr", "PPs", "PPr"), pch = 15)
-  
-  plot(df$WS ~ df$time,type = 'l', ylim = c(0, max(df$WS+10)),col = 'blue',lwd = 3,
-       main = "Wildlife", xlab = "Time", ylab = "Number")
-  lines(df$WEs ~ df$time, lwd = 3, col = 'orange') # Exposed
-  lines(df$WEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(df$WIs ~ df$time, lwd = 3, col = 'red') # Infected
-  lines(df$WIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
-  lines((df$WEs + df$WEr + df$WIs + df$WIr + df$WS) ~ df$time,lty = 2)
-  #legend("topright", col = c("blue", "orange", "darkorange", "red","darkred"),
+
+  plot(df$WS ~ df$time,
+    type = "l", ylim = c(0, max(df$WS + 10)), col = "blue", lwd = 3,
+    main = "Wildlife", xlab = "Time", ylab = "Number"
+  )
+  lines(df$WEs ~ df$time, lwd = 3, col = "orange") # Exposed
+  lines(df$WEr ~ df$time, lwd = 3, col = "orange", lty = 2) # Exposed
+  lines(df$WIs ~ df$time, lwd = 3, col = "red") # Infected
+  lines(df$WIr ~ df$time, lwd = 3, col = "red", lty = 2) # Infected
+  lines((df$WEs + df$WEr + df$WIs + df$WIr + df$WS) ~ df$time, lty = 2)
+  # legend("topright", col = c("blue", "orange", "darkorange", "red","darkred"),
   #       y = c("WS", "WEs", "WEr", "WIs", "WIr"), pch = 15)
-  
-  plot(df$VSt ~ df$time, type = 'l', ylim = c(0, max(df$VSt)+100), col = 'blue',
-       lwd = 3, main = "Vector", xlab = "Time", ylab = "Number")
-  lines(df$VSf ~ df$time, lwd = 3, col = 'lightblue') # Exposed
-  lines(df$VEs ~ df$time, lwd = 3, col = 'orange') # Exposed
-  lines(df$VEr ~ df$time, lwd = 3, col = 'orange', lty = 2) # Exposed
-  lines(df$VIs ~ df$time, lwd = 3, col = 'red') # Infected
-  lines(df$VIr ~ df$time, lwd = 3, col = 'red', lty = 2) # Infected
+
+  plot(df$VSt ~ df$time,
+    type = "l", ylim = c(0, max(df$VSt) + 100), col = "blue",
+    lwd = 3, main = "Vector", xlab = "Time", ylab = "Number"
+  )
+  lines(df$VSf ~ df$time, lwd = 3, col = "lightblue") # Exposed
+  lines(df$VEs ~ df$time, lwd = 3, col = "orange") # Exposed
+  lines(df$VEr ~ df$time, lwd = 3, col = "orange", lty = 2) # Exposed
+  lines(df$VIs ~ df$time, lwd = 3, col = "red") # Infected
+  lines(df$VIr ~ df$time, lwd = 3, col = "red", lty = 2) # Infected
   lines((df$VEs + df$VEr + df$VIs + df$VIr + df$VSt + df$VSf) ~
-          df$time, lty = 2)
-  #legend("topright", col = c("blue", "lightblue","orange", "darkorange", "red","darkred"),
+    df$time, lty = 2)
+  # legend("topright", col = c("blue", "lightblue","orange", "darkorange", "red","darkred"),
   #  €   y = c("VSt","VSf", "VEs", "VEr", "VIs", "VIr"), pch = 15)
-  
 }
 
 
@@ -207,7 +213,7 @@ quick_plot3 <- function(df) {
     "PIs" = "red", "PIr" = "red", "PPs" = "grey", "PPr" = "grey", "PTs" = "green", "PTr" = "green",
     "WS" = "blue", "WEs" = "orange", "WEr" = "orange", "WIs" = "red", "WIr" = "red",
     "VSt" = "purple", "Vsf" = "blue", "VEs" = "orange", "VEr" = "orange",
-    "VIs" = "red", "VIr" = "red", "Cattle_total" = "pink", "Vector_total" = "black", 
+    "VIs" = "red", "VIr" = "red", "Cattle_total" = "pink", "Vector_total" = "black",
     "Wildlife_total" = "black"
   )
   plot_C <- new_df %>%
@@ -216,7 +222,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle, no prophylaxis") 
+    ggtitle("Cattle, no prophylaxis")
 
   plot_P <- new_df %>%
     filter(Animal_type == "P") %>%
@@ -224,7 +230,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle with prophylaxis") 
+    ggtitle("Cattle with prophylaxis")
 
   plot_W <- new_df %>%
     filter(Animal_type == "W") %>%
@@ -232,7 +238,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Wildlife") 
+    ggtitle("Wildlife")
 
   plot_V <- new_df %>%
     filter(Animal_type == "V") %>%
@@ -240,7 +246,7 @@ quick_plot3 <- function(df) {
     geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Vector") 
+    ggtitle("Vector")
 
   plot_C + plot_P + plot_W + plot_V
 }
@@ -259,7 +265,7 @@ R0_and_R_trajectories <- function(df) {
     scale_color_manual(values = my_colours) +
     scale_linetype_manual(values = my_lines) +
     geom_hline(yintercept = 1, linetype = "dotted")
-    ylab("R0 or R value") +
+  ylab("R0 or R value") +
     guides(
       color = guide_legend(title = ""),
       linetype = guide_legend(title = "")

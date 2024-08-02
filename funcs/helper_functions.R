@@ -11,7 +11,7 @@ get_full_path <- function() {
 
 get_filename <- function() {
   user_inputs <- get_user_inputs()
-  full_path  <- get_full_path()
+  full_path <- get_full_path()
   if (user_inputs$append_current_time_to_output_file == TRUE) {
     current_time <- get_formatted_time()
     filename <- paste0(full_path, "_", current_time, ".Rda")
@@ -33,14 +33,14 @@ append_descriptor <- function(df, descriptor) {
   df
 }
 
-merge_dfs_without_duplicate_columns <- function(df1, df2){
+merge_dfs_without_duplicate_columns <- function(df1, df2) {
   duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
   df2_reduced <- df2 %>% select(-all_of(duplicated_names))
   merged_df <- merge(df1, df2_reduced)
   merged_df
 }
 
-move_populations_first <- function(df){
+move_populations_first <- function(df) {
   df <- df %>% select(NC, CS, PF, PS, NW, NV, everything())
   df
 }
@@ -57,8 +57,8 @@ convert_df_row_to_named_vector <- function(df_row) {
   named_vector
 }
 
-convert_named_vector_to_wide_df <- function(named_vector){
-  df = data.frame(as.list(named_vector)) 
+convert_named_vector_to_wide_df <- function(named_vector) {
+  df <- data.frame(as.list(named_vector))
   df
 }
 
@@ -80,18 +80,17 @@ append_suffix_to_column_names <- function(df, suffix) {
 
 
 
-my_rootfun <- function (t, y, params) {
-  dstate <- unlist(AAT_AMR_dens_dep(t, y, params)) # rate of change vector
-  Nc <- y['CS']
-  Npf <- y['PF']
-  Nps <- y['PS']
-  Nw <- y['WS']
-  Nv <- y['VSt'] + y['VSf']
+my_rootfun <- function(t, y, params) {
+  Nc <- y["CS"]
+  Npf <- y["PF"]
+  Nps <- y["PS"]
+  Nw <- y["WS"]
+  Nv <- y["VSt"] + y["VSf"]
   Rsen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
-  
+
   condition1 <- (Rsen - 1.01)
-  condition2 <- (y['CIs'] - 1e-5)
-  
+  condition2 <- (y["CIs"] - 1e-5)
+
   return(c(condition1, condition2))
 }
 
@@ -104,25 +103,28 @@ get_formatted_time <- function() {
 
 get_latest_Rda_file <- function() {
   datafiles <- list.files("output", pattern = ".Rda", full.names = TRUE)
-  info <- file.info(datafiles) 
+  info <- file.info(datafiles)
   most_recent_creation_time <- max(info$ctime)
-  latest_file <- rownames(info[info$ctime == most_recent_creation_time,])
+  latest_file <- rownames(info[info$ctime == most_recent_creation_time, ])
   latest_file
 }
 
 
 get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
-                            waning_f2s, death_p, waning, proph_ongoing) {
-  
+                                                          waning_f2s, death_p, waning, proph_ongoing) {
   # get matrix from odes for PF, PS and CS in absence of disease
-  M <- matrix(c( death_p + waning_f2s, -proph_ongoing, -proph_ongoing,
-                 waning_f2s, -(waning + death_p + proph_ongoing), 0,
-                 0, -waning, death_c + proph_ongoing), byrow = TRUE, ncol = 3)
-  
-  this_vec <- c( birth_c * (prop_prophylaxis_at_birth) * NC, 
-                 0,
-                 birth_c * (1 - prop_prophylaxis_at_birth) * NC)
-  
+  M <- matrix(c(
+    death_p + waning_f2s, -proph_ongoing, -proph_ongoing,
+    waning_f2s, -(waning + death_p + proph_ongoing), 0,
+    0, -waning, death_c + proph_ongoing
+  ), byrow = TRUE, ncol = 3)
+
+  this_vec <- c(
+    birth_c * (prop_prophylaxis_at_birth) * NC,
+    0,
+    birth_c * (1 - prop_prophylaxis_at_birth) * NC
+  )
+
   # solve linear system of equations by inverting matrix and mutliplying rhs
   answer <- solve(M) %*% this_vec
   names(answer) <- c("PF", "PS", "CS")
@@ -144,6 +146,3 @@ findGlobals(fun = merge_dfs_without_duplicate_columns, merge = FALSE)$variables
 findGlobals(fun = append_descriptor, merge = FALSE)$variables
 findGlobals(fun = merge_params_into_this_scenario, merge = FALSE)$variables
 findGlobals(fun = move_populations_first, merge = FALSE)$variables
-
-
-

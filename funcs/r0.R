@@ -47,8 +47,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   RCV <- as.numeric(RCV)
 
   if (is_strain_sensitive == "yes") {
-  RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
-  } 
+    RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
+  }
   if (is_strain_sensitive == "no") {
     RPV <- biterate * prob_infection_to_host * (Nps + Npf) / Nh * gamma_p / (gamma_p + death_p + proph_ongoing) * 1 / (death_v)
   }
@@ -71,11 +71,11 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   time_in_CT <- 1 / (sigma_treated + death_c)
   prob_CI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
   prob_CI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
-  
+
   time_in_PI <- 1 / (treatment_p + treatment_q + sigma_p + death_p + waning + proph_ongoing)
   time_in_PT <- 1 / (sigma_treated + death_p + waning)
   time_in_PP <- 1 / (sigma_treated + death_p + waning)
-  
+
   prob_PI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_p + death_p + waning + proph_ongoing)
   prob_PI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_p + death_p + waning + proph_ongoing)
   prob_waning_from_PI <- waning / (treatment_p + treatment_q + sigma_p + death_p + waning + proph_ongoing)
@@ -83,54 +83,54 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   prob_waning_from_PP <- waning / (sigma_treated + death_p + waning)
   prob_proph_from_CI <- proph_ongoing / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
   prob_proph_from_PI <- proph_ongoing / (treatment_p + treatment_q + sigma_p + death_p + waning + proph_ongoing)
-  
-  
+
+
   RVC <- rate_vectors_infected *
-    ( time_in_CI * 1 / (1 - p1c * p2c) +
-        prob_CI_treat_q * time_in_CT * 1 / (1 - p1c * p2c) +
-        prob_CI_treat_p * time_in_PP * 1 / (1 - p1c * p2c) +
-        prob_proph_from_CI * time_in_PP * 1 / (1 - p1c * p2c) 
-      )
+    (time_in_CI * 1 / (1 - p1c * p2c) +
+      prob_CI_treat_q * time_in_CT * 1 / (1 - p1c * p2c) +
+      prob_CI_treat_p * time_in_PP * 1 / (1 - p1c * p2c) +
+      prob_proph_from_CI * time_in_PP * 1 / (1 - p1c * p2c)
+    )
   RVC <- as.numeric(RVC)
-    
+
   # RVC <- biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) *
   #   (1 / (treatment_p + treatment_q + sigma_c + death_c) * 1 / (1 - p1c * p2c) +
   #      treatment_q / (treatment_p + treatment_q + sigma_c + death_c) * 1 / (death_c + sigma_treated) * 1 / (1 - p1c * p2c) +
   #      treatment_p / (treatment_p + treatment_q + sigma_c + death_c) * 1 / (death_c + sigma_treated + waning) *
   #      1 / (1 - p1c * p2c))
   # RVC <- as.numeric(RVC)
-  #print(paste0(is_strain_sensitive, " ", basic, " ", RVCnew, " ", RVC))
-  
-  
-  RVP <- rate_vectors_infected * time_in_PI +  prob_waning_from_PI * RVC +                            # contribution from PIs
-         rate_vectors_infected * prob_PI_treat_q * time_in_PT +
-         rate_vectors_infected * prob_PI_treat_q * prob_waning_from_PT * time_in_CT +
+  # print(paste0(is_strain_sensitive, " ", basic, " ", RVCnew, " ", RVC))
 
-         rate_vectors_infected * prob_PI_treat_p * time_in_PP +          # contrib from PPs
-                                            # contribution from waning back to CIS
-         prob_PI_treat_p * prob_waning_from_PP * RVC +
 
-         rate_vectors_infected * prob_proph_from_PI * time_in_PP +
-         prob_proph_from_PI * prob_waning_from_PP * RVC
+  RVP <- rate_vectors_infected * time_in_PI + prob_waning_from_PI * RVC + # contribution from PIs
+    rate_vectors_infected * prob_PI_treat_q * time_in_PT +
+    rate_vectors_infected * prob_PI_treat_q * prob_waning_from_PT * time_in_CT +
+
+    rate_vectors_infected * prob_PI_treat_p * time_in_PP + # contrib from PPs
+    # contribution from waning back to CIS
+    prob_PI_treat_p * prob_waning_from_PP * RVC +
+
+    rate_vectors_infected * prob_proph_from_PI * time_in_PP +
+    prob_proph_from_PI * prob_waning_from_PP * RVC
   RVP <- as.numeric(RVP)
-  
-  
-  
+
+
+
   # RVP <- biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) *
   #       (1 / (treatment_p + treatment_q + sigma_p + death_p + waning)) + # contribution from PIs
-  # 
+  #
   #       (waning / (treatment_p + treatment_q + sigma_p + death_p + waning)) * RVC + # contribution from waning back to CIS
-  # 
+  #
   #       biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * (
   #         treatment_q / (treatment_p + treatment_q + sigma_p + death_p + waning) * (1 / (death_p + sigma_treated + waning) + # contribution from PTs
   #           waning / (death_p + sigma_treated + waning) * 1 / (sigma_treated + death_c))) + # waning from PTs back to CTs
-  # 
+  #
   #       biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v) * (
   #         treatment_p / (treatment_p + treatment_q + sigma_p + death_p + waning)) * 1 / (sigma_treated + death_p + waning) + # contrib from PPs
-  # 
+  #
   #       treatment_p / (treatment_p + treatment_q + sigma_p + death_p + waning) *
   #         waning / (sigma_treated + death_p + waning) * RVC # contribution from PPs waning back to CIs
-  # 
+  #
   # RVP <- as.numeric(RVP)
   # print(paste0(is_strain_sensitive, " ", basic, " ", RVPnew, " ", RVP))
 
