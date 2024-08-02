@@ -184,7 +184,7 @@ plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
-  
+
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(

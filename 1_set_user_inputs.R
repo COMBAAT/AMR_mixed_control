@@ -30,7 +30,7 @@ get_user_inputs <- function() {
 }
 
 create_multiple_scenarios <- function() {
-  max_time <- 10000
+  max_time <- 10
   treatment_type <- c("quick") # quick, proph or both
   cattle_number <- 50
   # wildlife_number <- c(0, 50, 100, 150, 200, 250)
