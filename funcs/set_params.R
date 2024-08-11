@@ -8,18 +8,18 @@ get_baseline_parameters <- function() {
   days_per_year <- set_days_per_year()
 
   # Using day as unit of time
-  cattle_lifespan <- 5 * days_per_year
-  cattle_incubation_period <- 15
+  cattle_lifespan <- 5 * days_per_year # 1000 for Hargrove
+  cattle_incubation_period <- 15 # 0.0001 for Hargrove
   cattle_infection_period <- 100
   cattle_proph_full_protection_period <- 60
   cattle_proph_partial_protection_period <- 30
-  cattle_treatment_period <- 3
+  cattle_treatment_period <- 3 # 0.1 for Hargrove
 
   wildlife_lifespan <- 1 * days_per_year
   wildlife_infection_period <- cattle_infection_period
   wildlife_incubation_period <- 20
 
-  # biterate <- 0.8 / 4
+  biterate_scaling <- 0.7 # as per Hargrove
   prob_infection_to_host <- 0.46
   prob_infection_to_vector <- 0.025
   vector_teneral_period <- 4
@@ -34,7 +34,7 @@ get_baseline_parameters <- function() {
     cattle_treatment_period, wildlife_lifespan, wildlife_infection_period,
     wildlife_incubation_period, prob_infection_to_host, prob_infection_to_vector,
     vector_teneral_period, days_between_feeds, prob_vector_surviving_feed,
-    prob_vector_surviving_nonfeeding_day, vector_incubation_period
+    prob_vector_surviving_nonfeeding_day, vector_incubation_period, biterate_scaling
   )
   baseline_params <- convert_array_to_named_vector(baseline_params)
   baseline_params
@@ -122,7 +122,7 @@ set_parameters_NEW <- function(this_scenario) {
   death_w <- birth_w
 
   ## -----  Vectors
-  biterate <- 1 / baseline_params["days_between_feeds"]
+  biterate <- baseline_params["biterate_scaling"] / baseline_params["days_between_feeds"]
   ten2fed <- 1 / baseline_params["vector_teneral_period"]
   prop_hosts_with_insecticide <- prop_cattle_with_insecticide * NC / (NC + NW) # Proportion of insecticide adjusted for wildlife
 
@@ -140,10 +140,10 @@ set_parameters_NEW <- function(this_scenario) {
   )
 
   # death_v <- death_v_no_insecticide + baseline_params["biterate"] * prop_hosts_with_insecticide   # not best way if pi is close to 1
-  # incubation <- 20 # original formulation but incorrect
-  # gamma_v <- death_v * exp(-death_v * incubation) / (1 - exp(-death_v * incubation))  # original formulation but incorrect
-  # biterate <- 0.8/4   # original formulation but incorrect
-  gamma_v <- 1 / baseline_params["vector_incubation_period"] # correct way
+  #death_v_no_insecticide <- 0.03 # use for Hargrove
+  #death_v <- 0.03 # use for Hargrove
+  incubation <-  baseline_params["vector_incubation_period"]
+  gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation))  # fixed original formulation
 
   birth_v <- birth_adj * death_v_no_insecticide
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
