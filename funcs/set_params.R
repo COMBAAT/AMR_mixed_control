@@ -148,11 +148,13 @@ set_parameters_NEW <- function(this_scenario) {
   birth_v <- birth_adj * death_v_no_insecticide
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
   NV <- equil_vector_pop
+  VSt <- NV * death_v_no_insecticide / (death_v_no_insecticide + ten2fed)
+  VSf <- NV - VSt
 
   ## ----- Parameters output
   derived_params <- cbind(
     biterate,
-    NV, PF, PS, CS, equil_vector_pop,
+    NV, PF, PS, CS, VSt, VSf, equil_vector_pop,
     birth_c, death_c, gamma_c, sigma_c,
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,

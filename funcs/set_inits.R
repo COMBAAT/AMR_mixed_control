@@ -98,7 +98,10 @@ set_inital_conditions2 <- function(params, initial_sensitive_infections, initial
   cattle_with_prophylaxis["PF"] <- params["PF"]
   cattle_with_prophylaxis["PS"] <- params["PS"]
   wildlife["WS"] <- params["NW"]
-  vectors["VSt"] <- params["equil_vector_pop"]
+  #vectors["VSt"] <- params["equil_vector_pop"]
+  vectors["VSt"] <- params["VSt"]
+  vectors["VSf"] <- params["VSf"]
+  
 
   cattle_no_prophylaxis["CIs"] <- initial_sensitive_infections # Infected (drug resistant strain)
   cattle_no_prophylaxis["CIr"] <- initial_resistant_infections
