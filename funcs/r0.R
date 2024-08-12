@@ -87,10 +87,10 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   # RVC <- as.numeric(RVC)
   # print(paste0(is_strain_sensitive, " ", basic, " ", RVCnew, " ", RVC))
   
-  RVC <- rate_vectors_infected * time_infectious_route1
+  RVC <- rate_vectors_infected * time_infectious_route1 * prob_I_from_E
   RVC <- as.numeric(RVC)
   
-  RCV <- biterate * prob_infection_to_host * Nc / Nh * prob_I_from_E * 1 / (death_v)
+  RCV <- biterate * prob_infection_to_host * Nc / Nh * 1 / (death_v)
   RCV <- as.numeric(RCV)
 
   # transmission via P
