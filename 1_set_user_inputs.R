@@ -1,15 +1,13 @@
 library(codetools)
 
 messages_and_issues <- function() {
-  message0 <- "teneral stage not working as intended - REMOVE?"
+  message0 <- "teneral stage - needs susceptibility parameter"
   message1 <- "vector incubation was been wrongly calculated - FIXED"
-  message2 <- "Fixed gamma_v and biterate, but R0 now too high - HOW TO FIX?"
   message3 <- "add reversion for wildlife - DONE"
   message4 <- "need to allow for partial susceptibility of PS animals - DONE"
   message5 <- "allow for bite preferences - IN PROGRESS"
   message6 <- "fix exposed class after proph treatment - need new class and impact on resistance - NOT DONE"
   message7 <- "fix plotting to allow for multiple treatment types - PARTIAL"
-  message8 <- "add back in recovered class to check against Hargrove - OPTIONAL"
 }
 
 set_days_per_year <- function() {
@@ -19,8 +17,8 @@ set_days_per_year <- function() {
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = TRUE,
-    use_root_functions = TRUE,
+    multiple_scenarios = FALSE,
+    use_root_functions = FALSE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
     general_descriptor = "simulation_set_",
@@ -63,16 +61,16 @@ create_multiple_scenarios <- function() {
 }
 
 create_single_scenario <- function() {
-  max_time <- 10000
-  treatment_type <- "quick" # quick, proph or both
+  max_time <- 2000
+  treatment_type <- sample(c("quick", "proph"), size = 1) # quick, proph or both
   cattle_number <- 50
-  wildlife_number <- 250
-  treat_prop <- 0.5
-  carrying_capacity <- 2000
-  prop_cattle_with_insecticide <- 0.0
-  prop_prophylaxis_at_birth <- 0.9
-  proph_ongoing <- 0.0 # seq(0, 0.9, 0.1)
-  fit_adj <- 0.95
+  wildlife_number <- 0
+  treat_prop <- 0.3 * runif(1)
+  carrying_capacity <- 10000
+  prop_cattle_with_insecticide <- 0.1 * runif(1)
+  prop_prophylaxis_at_birth <- 0.2 * runif(1)
+  proph_ongoing <- sample(c(0, 1/60, 1/30), 1) # seq(0, 0.9, 0.1)
+  fit_adj <- 0.95 +0.05 * runif(1)
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
