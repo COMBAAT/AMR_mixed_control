@@ -35,8 +35,8 @@ if (user_inputs$multiple_scenarios == TRUE) {
   scenarios_df <- create_single_scenario()
 }
 baseline_parameters <- get_baseline_parameters()
-plot_baseline_parameters(baseline_parameters)
-plot_scenarios(scenarios_df)
+#plot_baseline_parameters(baseline_parameters)
+#plot_scenarios(scenarios_df)
 
 # Create empty dataframe to store outputs
 all_scenarios_summary <- data.frame()
@@ -122,13 +122,15 @@ Rplot <- all_scenarios_summary %>%
     shape = as.factor(treatment_type)
   )) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black")
-Rplot
+#Rplot
 
 
 # glimpse(all_scenarios_summary)
 all_scenarios_summary$Cattle_total_final
 all_scenarios_summary$Prophylactic_total_final
 all_scenarios_summary$All_cows_final
+all_scenarios_summary$R0sen
+all_scenarios_summary$R0res
 all_scenarios_summary$Rsen_final
 all_scenarios_summary$Rres_final
 
