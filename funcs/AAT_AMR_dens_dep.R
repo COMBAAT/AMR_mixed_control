@@ -33,6 +33,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   CIr <- init["CIr"] # Infected (drug resistant strain)
   CTs <- init["CTs"] # Treated (drug sensitive strain)
   CTr <- init["CTr"] # Treated (drug resistant strain)
+  CEsX <- init["CEsX"] # Exposed (drug sensitive strain)
+  CErX <- init["CErX"] # Exposed (drug resistant strain)
   # CR  <- init["CR"] # Recovered
 
   # P - Prophylactically treated cattle
@@ -46,6 +48,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   PTr <- init["PTr"] # Treated (drug resistant strain)
   PPs <- init["PPs"] # Recovered
   PPr <- init["PPr"] # Recovered
+  PEsX <- init["PEsX"] # Exposed (drug sensitive strain)
+  PErX <- init["PErX"] # Exposed (drug resistant strain)
 
   # W - Wildlife
   WS <- init["WS"] # Susceptible
@@ -101,16 +105,12 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
 
   # Population total ----
-  N <- CS + CEs + CEr + CIs + CIr + CTs + CTr +
-    PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr +
-    WS + WEs + WEr + WIs + WIr
-  C <- CS + CEs + CEr + CIs + CIr + CTs + CTr
-  P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr
-  PC <- CS + CEs + CEr + CIs + CIr + CTs + CTr +
-    PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr
+  C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEsX + CErX
+  P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
   W <- WS + WEs + WEr + WIs + WIr
   V <- VSt + VSf + VEs + VEr + VIs + VIr
-
+  PC <- P + C
+  N <- C + P + W
 
   CS_C_frac <- ifelse(C > 0, CS / C, 0)
   CIs_C_frac <- ifelse(C > 0, CIs / C, 0)
@@ -158,6 +158,14 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * CEs +
     reversion * CEr -
     proph_ongoing * CEs
+  
+  dCEsX.dt <-
+    proph_ongoing * CEs -
+    sigma_st * CEsX -
+    gamma_c * CEsX -
+    #waning * PEsX -
+    death_c * CEsX +
+    reversion * CErX
 
   dCEr.dt <-
     # biterate * (prob_infection_to_host * fit_adj) * CS * VIr / N -
@@ -167,6 +175,14 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * CEr -
     reversion * CEr -
     proph_ongoing * CEr
+  
+  dCErX.dt <-
+    proph_ongoing * CEr -
+    sigma_c * CErX -
+    gamma_c * CErX -
+    #waning * PErX -
+    death_c * CErX -
+    reversion * CErX
 
   dCIs.dt <- gamma_c * CEs -
     treatment_q * CIs -
@@ -212,11 +228,13 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_f2s * PF - # Waning prophylaxis from fully protected to partially protected
     death_c * PF +
     proph_ongoing * PS +
-    proph_ongoing * PEs +
-    proph_ongoing * PEr +
+    #proph_ongoing * PEs +
+    #proph_ongoing * PEr +
     proph_ongoing * CS +
-    proph_ongoing * CEs +
-    proph_ongoing * CEr
+    sigma_st * CEsX +
+    sigma_c * CErX +
+    sigma_st * PEsX +
+    sigma_c * PErX
 
 
   dPS.dt <- waning_f2s * PF - # Waning of prophylactically treated cattle to semi protected
@@ -241,6 +259,15 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * PEs + # Death of prophylactic exposed (sensitive strain)
     reversion * PEr -
     proph_ongoing * PEs
+  
+  dPEsX.dt <-
+    proph_ongoing * PEs -
+    gamma_c * PEsX - # Movement from exposed to infectious
+    sigma_st * PEsX -
+    #emergence_p * PEsX -
+    #waning * PEsX - # Waning of infection to non-prophylactic class
+    death_c * PEsX  # Death of prophylactic exposed (sensitive strain)
+    #reversion * PErX 
 
   dPEr.dt <-
     # biterate * prob_infection_to_host * fit_adj * PS *VIr / N +    # Infection of resistant strain
@@ -253,6 +280,15 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * PEr - # Death of prophylactic exposed (resistant strain)
     reversion * PEr -
     proph_ongoing * PEr
+  
+  dPErX.dt <-
+    proph_ongoing * PEr -
+    gamma_c * PErX - # Movement from exposed to infectious
+    sigma_c * PErX -
+    #emergence_p * PEsX -
+    #waning * PErX - # Waning of infection to non-prophylactic class
+    death_c * PErX  # Death of prophylactic exposed (sensitive strain)
+    #reversion * PErX 
 
   dPIs.dt <- gamma_c * PEs - # Movement from exposed to infectious
     treatment_q * PIs - # Treatment with quick acting drug
@@ -299,7 +335,9 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * PPs + # Death of sensitive treated (prophylactic)
     reversion * PPr +
     proph_ongoing * PIs +
-    proph_ongoing * CIs
+    proph_ongoing * CIs +
+    gamma_c * CEsX +
+    gamma_c * PEsX
 
 
   dPPr.dt <- treatment_p * PIr + # Treatment with prophylactic acting drug
@@ -310,7 +348,9 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * PPr - # Death of resistant treated (prophylactic)
     reversion * PPr +
     proph_ongoing * PIr +
-    proph_ongoing * CIr
+    proph_ongoing * CIr +
+    gamma_c * CErX +
+    gamma_c * PErX
 
   # Wildlife ----
   #
@@ -460,8 +500,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
   # Model output ----
   dX <- c(
-    dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt,
-    dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt,
+    dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt, dCEsX.dt, dCErX.dt,
+    dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt, dPEsX.dt, dPErX.dt,
     dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt,
     dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt
   )

@@ -1,71 +1,9 @@
 library(codetools)
 
-set_inital_conditions <- function(params, disease_present) {
-  NC <- params["NC"]
-  PF <- params["PF"]
-  PS <- params["PS"]
-  CS <- params["CS"]
-  NW <- params["NW"]
-  NV <- params["equil_vector_pop"]
-
-  if (disease_present == TRUE) {
-    CIr <- 0 # Infected (drug resistant strain)
-    CIs <- 1 # Infected (drug sensitive strain)
-  } else {
-    CIr <- 0 # Infected (drug resistant strain)
-    CIs <- 0 # Infected (drug sensitive strain)
-  }
-
-  CS <- CS - CIs - CIr # Susceptible
-  CEs <- 0 # Exposed (drug sensitive strain)
-  CEr <- 0 # Exposed (drug resistant strain)
-  CTs <- 0 # Treated (drug sensitive strain)
-  CTr <- 0 # Treated (drug resistant strain)
-
-  PEs <- 0 # Exposed (drug sensitive strain)
-  PEr <- 0 # Exposed (drug resistant strain)
-  PIs <- 0 # Infected (drug sensitive strain)
-  PIr <- 0 # Infected (drug resistant strain)
-  PTs <- 0 # Treated (drug sensitive strain)
-  PTr <- 0 # Treated (drug resistant strain)
-  PR <- 0 # Recovered
-  PPs <- 0
-  PPr <- 0
-
-
-  WIs <- 0 # Infected (drug sensitive strain)
-  WS <- NW - WIs # Susceptible
-  WEs <- 0 # Exposed (drug sensitive strain)
-  WEr <- 0 # Exposed (drug resistant strain)
-  WIr <- 0 # Infected (drug resistant strain)
-
-  ## -----  Vectors
-  VSt <- NV # Susceptible
-  VSf <- 0
-  VEs <- 0 # Exposed (drug sensitive strain)
-  VEr <- 0 # Exposed (drug resistant strain)
-  VIs <- 0 # Infected (drug sensitive strain)
-  VIr <- 0 # Infected (drug resistant strain)
-
-  ## ----- Initial conditions output
-
-  inits <- cbind(
-    CS, CEs, CEr, CIs, CIr, CTs, CTr, PF, PS, PEs, PEr, PIs,
-    PIr, PTs, PTr, PPs, PPr, WS, WEs, WEr, WIs, WIr, VSt, VSf, VEs,
-    VEr, VIs, VIr
-  )
-  names <- colnames(inits)
-  inits <- as.vector(inits)
-  names(inits) <- names
-
-  qual_check_no0(inits) # ensure there are no negative values
-
-  return(inits = inits)
-}
 
 get_variables <- function() {
-  cattle_no_prophylaxis <- c("CS", "CEs", "CEr", "CIs", "CIr", "CTs", "CTr")
-  cattle_with_prophylaxis <- c("PF", "PS", "PEs", "PEr", "PIs", "PIr", "PTs", "PTr", "PPs", "PPr")
+  cattle_no_prophylaxis <- c("CS", "CEs", "CEr", "CIs", "CIr", "CTs", "CTr", "CEsX", "CErX")
+  cattle_with_prophylaxis <- c("PF", "PS", "PEs", "PEr", "PIs", "PIr", "PTs", "PTr", "PPs", "PPr", "PEsX", "PErX")
   wildlife <- c("WS", "WEs", "WEr", "WIs", "WIr")
   vectors <- c("VSt", "VSf", "VEs", "VEr", "VIs", "VIr")
 
@@ -98,7 +36,10 @@ set_inital_conditions2 <- function(params, initial_sensitive_infections, initial
   cattle_with_prophylaxis["PF"] <- params["PF"]
   cattle_with_prophylaxis["PS"] <- params["PS"]
   wildlife["WS"] <- params["NW"]
-  vectors["VSt"] <- params["equil_vector_pop"]
+  #vectors["VSt"] <- params["equil_vector_pop"]
+  vectors["VSt"] <- params["VSt"]
+  vectors["VSf"] <- params["VSf"]
+  
 
   cattle_no_prophylaxis["CIs"] <- initial_sensitive_infections # Infected (drug resistant strain)
   cattle_no_prophylaxis["CIr"] <- initial_resistant_infections
@@ -112,7 +53,6 @@ set_inital_conditions2 <- function(params, initial_sensitive_infections, initial
   return(inits)
 }
 
-findGlobals(fun = set_inital_conditions, merge = FALSE)$variables
 findGlobals(fun = get_variables, merge = FALSE)$variables
 findGlobals(fun = initialise_variables_with_zeros, merge = FALSE)$variables
 findGlobals(fun = set_inital_conditions2, merge = FALSE)$variables

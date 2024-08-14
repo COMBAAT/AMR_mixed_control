@@ -212,7 +212,7 @@ quick_plot3 <- function(df) {
     "PF" = "purple", "PS" = "skyblue", "PEs" = "orange", "PEr" = "orange",
     "PIs" = "red", "PIr" = "red", "PPs" = "grey", "PPr" = "grey", "PTs" = "green", "PTr" = "green",
     "WS" = "blue", "WEs" = "orange", "WEr" = "orange", "WIs" = "red", "WIr" = "red",
-    "VSt" = "purple", "Vsf" = "blue", "VEs" = "orange", "VEr" = "orange",
+    "VSt" = "purple", "VSf" = "blue", "VEs" = "orange", "VEr" = "orange",
     "VIs" = "red", "VIr" = "red", "Cattle_total" = "pink", "Vector_total" = "black",
     "Wildlife_total" = "black"
   )
