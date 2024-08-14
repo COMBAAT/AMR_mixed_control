@@ -8,7 +8,7 @@ append_epi_outputs_to_df <- function(df) {
     No_trt_cat = (treatment_q * CIs_final + treatment_p * PIs_final) * days_per_year,
     Incidence = gamma_c * (PEs_final + CEs_final) * days_per_year,
     Prob_onward_tran = 1 - dpois(0, Rres_final),
-    RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final,
+    RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final + CEsX_final + PEsX_final,
     RiskE = Prob_onward_tran * RiskA,
     prevalence = (PIs_final + CIs_final) / All_cows_final
   )
