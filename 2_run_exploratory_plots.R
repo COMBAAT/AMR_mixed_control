@@ -98,7 +98,9 @@ for (row in 1:nrow(scenarios_df)) {
 
   print(paste0("final time = ", round(final_state$time, 1), " days"))
   print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
-  print(paste0("R = ", final_state_with_full_scenario$Rsen_final))
+  print(paste0("Rsen_final = ", final_state_with_full_scenario$Rsen_final))
+  print(paste0("Rres_final = ", final_state_with_full_scenario$Rres_final))
+  
 }
 
 
