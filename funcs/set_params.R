@@ -1,3 +1,27 @@
+
+# =========================================================
+# Function Names: get_baseline_parameters, calculate_vector_death_rate, set_parameters_NEW
+# Description: This script provides functions to define and retrieve baseline parameters for an epidemiological model.
+#              It includes setting up essential parameters such as lifespans, infection periods, and protection periods,
+#              as well as calculating vector death rates and other specific parameters for different species involved in the model.
+#
+# Parameters:
+#   None explicitly required for input; parameters are set within the functions.
+#
+# Returns:
+#   A list or vector of baseline parameters, depending on the function called.
+#
+# Example of use:
+#   baseline_params <- get_baseline_parameters()
+#   vector_death_rate <- calculate_vector_death_rate(params)
+#   new_params <- set_parameters_NEW(some_input)
+#
+# Dependencies: Requires the 'codetools' package for managing code properties.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 ## --------------------- Params
 
 library(codetools)

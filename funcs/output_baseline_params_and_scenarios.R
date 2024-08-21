@@ -1,3 +1,29 @@
+
+# =========================================================
+# Function Names: plot_baseline_parameters, add_treatment_type_in_numeric_form, get_simplified_scenarios
+# Description: This script facilitates the visualization of baseline parameters and the manipulation of scenario data for analysis.
+#              It includes functions to plot parameters, add numerical representations of treatment types to scenarios, and simplify scenario dataframes
+#              for easier analysis.
+#
+# Parameters:
+#   params - Named vector of parameters used for generating plots.
+#   scenarios_df - Data frame of scenarios to be manipulated or simplified.
+#
+# Returns:
+#   Plots or modified data frames depending on the function called.
+#
+# Example of use:
+#   params <- c(param1 = 1, param2 = 2)
+#   plot_baseline_parameters(params)
+#   scenarios_df <- read.csv("path/to/scenarios.csv")
+#   updated_scenarios_df <- get_simplified_scenarios(scenarios_df)
+#
+# Dependencies: Requires 'codetools', 'dplyr', 'ggplot2', 'patchwork', and 'tidyr' packages for data manipulation and visualization.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 library(dplyr)
 library(ggplot2)

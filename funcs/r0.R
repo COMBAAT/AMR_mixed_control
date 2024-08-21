@@ -1,3 +1,30 @@
+
+# =========================================================
+# Function Names: R_calc_sen_or_res, calculate_R0, calculate_R_from_row_of_df, add_R_trajectories, add_R0
+# Description: This script provides functions for calculating the basic reproduction number (R0) and other related
+#              reproduction metrics for sensitive or resistant strains of a disease. These functions account for various
+#              epidemiological parameters, treatment effects, and population compartments to determine the potential
+#              spread of an infectious disease within a population.
+#
+# Parameters:
+#   params - A named list of parameters including rates of transmission, infection, and other disease dynamics.
+#   Nc, Npf, Nps, Nw, Nv - Numeric values representing different compartments of the population.
+#   is_strain_sensitive - Boolean indicating if the strain is sensitive.
+#   basic - Boolean indicating if the calculation is for basic R0 or includes additional factors.
+#
+# Returns:
+#   Numeric values representing calculated R0 or reproduction trajectories.
+#
+# Example of use:
+#   params <- list(...)
+#   R0_value <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, TRUE, FALSE)
+#
+# Dependencies: Requires the 'codetools' package for managing code properties.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 
 ## --------------------- R0

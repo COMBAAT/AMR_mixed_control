@@ -1,3 +1,29 @@
+
+# =========================================================
+# Function Names: get_variables, initialise_variables_with_zeros, set_inital_conditions2
+# Description: This script provides functions to initialize variables and set initial conditions for an epidemiological model.
+#              It includes functions to retrieve variable names for different model compartments, initialize these variables
+#              with zeros, and set specific initial conditions based on model parameters and infection statuses.
+#
+# Parameters:
+#   variable_names - List of variable names to be initialized.
+#   params - Parameters specifying initial conditions and other model settings.
+#   initial_sensitive_infections, initial_resistant_infections - Initial counts of infections, sensitive and resistant.
+#
+# Returns:
+#   Depending on the function, returns lists of variable names, initialized variables, or modified parameters.
+#
+# Example of use:
+#   vars <- get_variables()
+#   zeros <- initialise_variables_with_zeros(vars$cattle_no_prophylaxis)
+#   initial_conditions <- set_inital_conditions2(params, 100, 10)
+#
+# Dependencies: Requires the 'codetools' package for managing code properties.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 
 

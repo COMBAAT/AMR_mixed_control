@@ -1,3 +1,38 @@
+
+# =========================================================
+# Function Names: get_full_path, get_filename, merge_params_into_this_scenario, append_descriptor,
+#                 merge_dfs_without_duplicate_columns, move_populations_first, convert_array_to_named_vector,
+#                 convert_df_row_to_named_vector, convert_named_vector_to_wide_df, convert_named_vector_to_long_df,
+#                 include_full_scenario, append_suffix_to_column_names, my_rootfun, get_formatted_time,
+#                 get_latest_Rda_file, get_disease_free_equilibrium_for_PF_PS_and_CS
+# Description: This script contains utility functions for file and data management in R. Functions include generating
+#              full file paths, filenames based on user settings, merging parameters into data scenarios, handling
+#              data frames to ensure no duplicate columns when merging, and other specific utilities for managing
+#              complex data structures in epidemiological analysis.
+#
+# Parameters:
+#   df - A dataframe to be manipulated or merged.
+#   params - Named vectors or lists that contain parameters to be merged into data frames.
+#   user_inputs, descriptor - Inputs and descriptors used to manage filenames and paths dynamically.
+#
+# Returns:
+#   Depending on the function, returns full file paths, filenames, or modified data frames with merged parameters or appended descriptors.
+#
+# Example of use:
+#   user_inputs <- list(folder="data/", general_descriptor="experiment1", current_descriptor="run1")
+#   full_path <- get_full_path()
+#   filename <- get_filename()
+#   df <- read.csv("path/to/data.csv")
+#   params <- c(param1 = "value1", param2 = "value2")
+#   updated_df <- merge_params_into_this_scenario(df, params)
+#   final_df <- append_descriptor(updated_df, "new_descriptor")
+#
+# Dependencies: Requires 'codetools', 'lubridate', and 'dplyr' packages.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 library(lubridate)
 library(dplyr)

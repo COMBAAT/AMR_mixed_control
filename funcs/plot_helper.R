@@ -1,3 +1,34 @@
+
+# =========================================================
+# Function Names: my_linewidth, my_pointsize, my_label, my_pdfwidth, my_pdfheight, my_theme,
+#                 plot_type1_y_versus_treat_prop_facet_NW,
+#                 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide,
+#                 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_highlight,
+#                 plot_type4_y_versus_treat_prop_facet_NW,
+#                 plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW,
+#                 plot_type6_y_versus_treat_prop_facet_NW_K
+# Description: This script provides utility functions for standardizing plot formatting in R visualizations.
+#              It includes functions to adjust line widths, point sizes, generate appropriate labels for various variables,
+#              and set other plot properties such as PDF dimensions, ensuring consistency across multiple plots.
+#
+# Parameters:
+#   variable - A string indicating the variable name for which a label is needed.
+#
+# Returns:
+#   Depending on the function, returns numeric values for sizes or strings for labels.
+#
+# Example of use:
+#   ggplot(data, aes(x, y)) +
+#       geom_line(size = my_linewidth()) +
+#       geom_point(size = my_pointsize()) +
+#       labs(title = my_label("R0sen"))
+#
+# Dependencies: Requires 'dplyr', 'ggplot2', and 'gghighlight' packages for data manipulation and enhanced visualization.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(dplyr)
 library(ggplot2)
 library(gghighlight)

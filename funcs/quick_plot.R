@@ -1,3 +1,30 @@
+
+# =========================================================
+# Function Names: quick_plot, quick_plot2, quick_plot3, R0_and_R_trajectories
+# Description: This script provides functions for generating quick visualizations of epidemiological data, including time series
+#              plots of disease stages and treatments as well as R0 and reproduction number trajectories. These functions utilize
+#              both base R plotting and `ggplot2` for detailed visual representations.
+#
+# Parameters:
+#   df - A dataframe containing time series data and various epidemiological measures to be plotted.
+#
+# Returns:
+#   Graphical outputs displayed in an R plotting window, showing the progress of disease stages and treatments over time, along
+#   with R0 and reproduction number trajectories.
+#
+# Example of use:
+#   data <- read.csv("path/to/data.csv")
+#   quick_plot(data)
+#   quick_plot2(data)
+#   quick_plot3(data)
+#   R0_and_R_trajectories(data)
+#
+# Dependencies: Requires 'ggplot2', 'gghighlight', 'dplyr', 'patchwork', 'stringr', and 'tidyr' for data manipulation and visualization.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(ggplot2)
 library(gghighlight)
 library(dplyr)
