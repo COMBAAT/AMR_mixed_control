@@ -25,9 +25,45 @@
 # Date Created: August 2024
 # Last Modified: August 2024
 # =========================================================
+
+
 library(codetools)
 
-## --------------------- R0
+#-------------------------------------------------------------------------------
+# Function Name: R_calc_sen_or_res
+#
+# Description:
+#   This function calculates the basic reproduction number (R0) or the reproduction number (R)
+#   for either sensitive or resistant strains of a disease within a host-vector population model.
+#   It incorporates various epidemiological parameters to compute the transmission potential
+#   via different routes (cattle, prophylactic cattle, and wildlife) and integrates the impact
+#   of treatments and prophylaxis.
+#
+# Parameters:
+#   params - A named vector or list containing the model parameters, including transmission rates,
+#            treatment efficacy, and demographic factors.
+#   Nc - Number of cattle susceptible to infection.
+#   Npf - Number of prophylactic cattle fully protected from infection.
+#   Nps - Number of prophylactic cattle partially protected from infection.
+#   Nw - Number of wildlife susceptible to infection.
+#   Nv - Number of vectors capable of transmitting the infection.
+#   is_strain_sensitive - A string ("yes" or "no") indicating whether the strain is sensitive or resistant.
+#   basic - A string ("yes" or "no") indicating whether to calculate the basic reproduction number (R0) or the reproduction number (R).
+#
+# Returns:
+#   A numeric value representing the calculated reproduction number (R0 or R) for the specified strain
+#   within the host-vector population.
+#
+# Example of use:
+#   params <- c(NC = 1000, NW = 500, biterate = 0.5, prob_infection_to_host = 0.1, ...)
+#   R0sen <- R_calc_sen_or_res(params, Nc = 1000, Npf = 500, Nps = 300, Nw = 200, Nv = 100, is_strain_sensitive = "yes", basic = "yes")
+#
+# Dependencies:
+#   The function relies on the presence of the necessary epidemiological parameters within the `params`
+#   vector or list. It assumes that all required parameters are provided and correctly named.
+#
+#-------------------------------------------------------------------------------
+
 
 R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
   Nh <- params["NC"] + params["NW"]
@@ -163,6 +199,41 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   reproduction_number
 }
 
+
+#-------------------------------------------------------------------------------
+# Function Name: calculate_R0
+#
+# Description:
+#   This function calculates the basic reproduction number (R0) for both sensitive and resistant 
+#   strains of a disease within a host-vector population model. It utilizes the `R_calc_sen_or_res` 
+#   function to compute R0 values based on the provided epidemiological parameters.
+#
+# Parameters:
+#   params - A named vector or list containing the model parameters, including:
+#            - PF: Number of fully protected prophylactic cattle.
+#            - PS: Number of partially protected prophylactic cattle.
+#            - CS: Number of cattle susceptible to infection.
+#            - NW: Number of wildlife susceptible to infection.
+#            - NV: Number of vectors capable of transmitting the infection.
+#
+# Returns:
+#   A named numeric vector with two elements:
+#   - R0sen: The basic reproduction number for the sensitive strain.
+#   - R0res: The basic reproduction number for the resistant strain.
+#
+# Example of use:
+#   params <- c(PF = 500, PS = 300, CS = 1000, NW = 200, NV = 100, ...)
+#   R0_values <- calculate_R0(params)
+#   print(R0_values)
+#
+# Dependencies:
+#   This function relies on the `R_calc_sen_or_res` function to compute the R0 values for both 
+#   sensitive and resistant strains. The `params` vector or list must contain all necessary 
+#   parameters with the correct names.
+#
+#-------------------------------------------------------------------------------
+
+
 calculate_R0 <- function(params) {
   Npf <- params["PF"]
   Nps <- params["PS"]
@@ -175,6 +246,45 @@ calculate_R0 <- function(params) {
 }
 
 
+#-------------------------------------------------------------------------------
+# Function Name: calculate_R_from_row_of_df
+#
+# Description:
+#   This function calculates the reproduction number (R) for both sensitive and resistant strains 
+#   of a disease based on a single row of data from a dataframe. The function extracts the relevant 
+#   population counts from the provided row and uses the `R_calc_sen_or_res` function to compute 
+#   the R values.
+#
+# Parameters:
+#   params - A named vector or list containing the model parameters necessary for calculating the 
+#            reproduction number (R).
+#   this_row - A single row from a dataframe containing the population counts for:
+#              - CS: Number of cattle susceptible to infection.
+#              - PS: Number of partially protected prophylactic cattle.
+#              - PF: Number of fully protected prophylactic cattle.
+#              - WS: Number of wildlife susceptible to infection.
+#              - VSt: Number of susceptible vectors.
+#              - VSf: Number of fully protected vectors.
+#
+# Returns:
+#   A named numeric vector with two elements:
+#   - Rsen: The reproduction number for the sensitive strain.
+#   - Rres: The reproduction number for the resistant strain.
+#
+# Example of use:
+#   df <- read.csv("path/to/data.csv")
+#   this_row <- df[1, ]
+#   R_values <- calculate_R_from_row_of_df(params, this_row)
+#   print(R_values)
+#
+# Dependencies:
+#   This function relies on the `R_calc_sen_or_res` function to compute the R values for both 
+#   sensitive and resistant strains. The `this_row` dataframe row must contain all necessary 
+#   population counts with the correct column names.
+#
+#-------------------------------------------------------------------------------
+
+
 calculate_R_from_row_of_df <- function(params, this_row) {
   Nc <- this_row$CS
   Nps <- this_row$PS
@@ -185,6 +295,45 @@ calculate_R_from_row_of_df <- function(params, this_row) {
   Rres <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
   c("Rsen" = Rsen, "Rres" = Rres)
 }
+
+
+#-------------------------------------------------------------------------------
+# Function Name: add_R_trajectories
+#
+# Description:
+#   This function computes the reproduction number (R) trajectories for both sensitive and resistant 
+#   strains across all rows of a dataframe. It iterates through each row of the dataframe, calculates 
+#   the R values using the `calculate_R_from_row_of_df` function, and appends these values as new columns 
+#   (Rsen and Rres) to the dataframe.
+#
+# Parameters:
+#   params - A named vector or list containing the model parameters necessary for calculating the 
+#            reproduction number (R).
+#   df - A dataframe containing time series data for different population groups and their respective 
+#        stages of disease progression. The dataframe must include columns for:
+#        - CS: Number of cattle susceptible to infection.
+#        - PS: Number of partially protected prophylactic cattle.
+#        - PF: Number of fully protected prophylactic cattle.
+#        - WS: Number of wildlife susceptible to infection.
+#        - VSt: Number of susceptible vectors.
+#        - VSf: Number of fully protected vectors.
+#
+# Returns:
+#   The input dataframe `df`, with two additional columns:
+#   - Rsen: The reproduction number trajectory for the sensitive strain.
+#   - Rres: The reproduction number trajectory for the resistant strain.
+#
+# Example of use:
+#   df <- read.csv("path/to/data.csv")
+#   df_with_R <- add_R_trajectories(params, df)
+#   head(df_with_R)
+#
+# Dependencies:
+#   This function relies on the `calculate_R_from_row_of_df` function to compute the R values for each 
+#   row in the dataframe. The input dataframe `df` must contain all necessary population counts with 
+#   the correct column names.
+#
+#-------------------------------------------------------------------------------
 
 
 add_R_trajectories <- function(params, df) {
@@ -203,6 +352,36 @@ add_R_trajectories <- function(params, df) {
   df$Rres <- Rres_vec
   df
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: add_R0
+#
+# Description:
+#   This function calculates the basic reproduction number (R0) for both sensitive and resistant 
+#   strains of a disease using the `calculate_R0` function. It then appends these R0 values as 
+#   new columns (`R0sen` and `R0res`) to the provided dataframe.
+#
+# Parameters:
+#   params - A named vector or list containing the model parameters necessary for calculating the 
+#            basic reproduction number (R0).
+#   df - A dataframe to which the calculated R0 values will be added as new columns.
+#
+# Returns:
+#   The input dataframe `df`, with two additional columns:
+#   - R0sen: The basic reproduction number for the sensitive strain.
+#   - R0res: The basic reproduction number for the resistant strain.
+#
+# Example of use:
+#   df <- read.csv("path/to/data.csv")
+#   df_with_R0 <- add_R0(params, df)
+#   head(df_with_R0)
+#
+# Dependencies:
+#   This function relies on the `calculate_R0` function to compute the R0 values. The `params` vector 
+#   or list must contain all necessary parameters with the correct names.
+#
+#-------------------------------------------------------------------------------
+
 
 add_R0 <- function(params, df) {
   R0sen_and_R0res <- calculate_R0(params)
