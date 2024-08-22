@@ -27,29 +27,12 @@
 # Date Created: August 2024
 # Last Modified: August 2024
 # =========================================================
-
-
 library(codetools)
 library(dplyr)
 
-#-------------------------------------------------------------------------------
-# Function Name: append_epi_outputs_to_df
-#
-# Parameters:
-#   df - A dataframe containing initial epidemiological data.
-#
-# Outputs:
-#   A modified dataframe with new columns for epidemiological metrics such as treatment categories,
-#   incidence, probability of onward transmission, risk assessments, and prevalence.
-#
-# Dependencies:
-#   dplyr, set_days_per_year()
-#
-#-------------------------------------------------------------------------------
-
 append_epi_outputs_to_df <- function(df) {
   days_per_year <- set_days_per_year()
-  
+
   df <- df %>% mutate(
     No_trt_cat = (treatment_q * CIs_final + treatment_p * PIs_final) * days_per_year,
     Incidence = gamma_c * (PEs_final + CEs_final) * days_per_year,
@@ -61,19 +44,6 @@ append_epi_outputs_to_df <- function(df) {
   df
 }
 
-#-------------------------------------------------------------------------------
-# Function Name: add_population_totals
-#
-# Parameters:
-#   df - A dataframe with epidemiological data needing population totals calculated.
-#
-# Outputs:
-#   A modified dataframe with additional columns summing total population counts by category.
-#
-# Dependencies:
-#   dplyr
-#
-#-------------------------------------------------------------------------------
 
 add_population_totals <- function(df) {
   df_new <- df %>% mutate(
@@ -83,11 +53,9 @@ add_population_totals <- function(df) {
     Wildlife_total = rowSums(select(., starts_with("W"))),
     All_cows = Cattle_total + Prophylactic_total
   )
-  
+
   return(df_new)
 }
-
-
 
 
 # calculate_epi_outputs <- function(treatment_type, params, final_state) {
