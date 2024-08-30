@@ -1,8 +1,49 @@
+
+# =========================================================
+# Function Names: plot_baseline_parameters, add_treatment_type_in_numeric_form, get_simplified_scenarios
+# Description: This script facilitates the visualization of baseline parameters and the manipulation of scenario data for analysis.
+#              It includes functions to plot parameters, add numerical representations of treatment types to scenarios, and simplify scenario dataframes
+#              for easier analysis.
+#
+# Parameters:
+#   params - Named vector of parameters used for generating plots.
+#   scenarios_df - Data frame of scenarios to be manipulated or simplified.
+#
+# Returns:
+#   Plots or modified data frames depending on the function called.
+#
+# Example of use:
+#   params <- c(param1 = 1, param2 = 2)
+#   plot_baseline_parameters(params)
+#   scenarios_df <- read.csv("path/to/scenarios.csv")
+#   updated_scenarios_df <- get_simplified_scenarios(scenarios_df)
+#
+# Dependencies: Requires 'codetools', 'dplyr', 'ggplot2', 'patchwork', and 'tidyr' packages for data manipulation and visualization.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
 library(tidyr)
+
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_baseline_parameters
+#
+# Parameters:
+#   params - Named vector of parameters used for generating plots.
+#
+# Outputs:
+#   p - A ggplot object representing the baseline parameter plot.
+#
+# Dependencies:
+#   ggplot2, convert_named_vector_to_long_df(), add_labels_to_baseline_parameters_dotplot()
+#
+#-------------------------------------------------------------------------------
 
 plot_baseline_parameters <- function(params) {
   plot_this <- convert_named_vector_to_long_df(params)
@@ -12,6 +53,20 @@ plot_baseline_parameters <- function(params) {
   p <- p + ggtitle("baseline parameters")
   p
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: add_treatment_type_in_numeric_form
+#
+# Parameters:
+#   scenarios_df - Data frame of scenarios to be manipulated.
+#
+# Outputs:
+#   scenarios_df - Modified dataframe with additional columns indicating treatment types numerically.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
 
 add_treatment_type_in_numeric_form <- function(scenarios_df) {
   scenarios_df$quick_treatment_on <- 0
@@ -30,6 +85,20 @@ add_treatment_type_in_numeric_form <- function(scenarios_df) {
   scenarios_df
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: get_simplified_scenarios
+#
+# Parameters:
+#   scenarios_df - Data frame of scenarios to be simplified.
+#
+# Outputs:
+#   simplified_scenarios - A dataframe with simplified scenario data.
+#
+# Dependencies:
+#   dplyr, tidyr
+#
+#-------------------------------------------------------------------------------
+
 get_simplified_scenarios <- function(scenarios_df) {
   scenarios_df <- add_treatment_type_in_numeric_form(scenarios_df)
   scenarios_numeric <- scenarios_df %>% select(where(is.numeric))
@@ -38,6 +107,20 @@ get_simplified_scenarios <- function(scenarios_df) {
   simplified_scenarios
 }
 
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_scenarios
+#
+# Parameters:
+#   scenarios_df - Data frame containing scenario data.
+#
+# Outputs:
+#   p - A ggplot object representing various scenario plots.
+#
+# Dependencies:
+#   ggplot2, dplyr, patchwork
+#
+#-------------------------------------------------------------------------------
 
 plot_scenarios <- function(scenarios_df) {
   simplified_scenarios <- get_simplified_scenarios(scenarios_df)
@@ -77,6 +160,20 @@ plot_scenarios <- function(scenarios_df) {
   p
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: plot_parameters
+#
+# Parameters:
+#   df - Data frame with parameter data.
+#   ymax - Maximum value for the y-axis.
+#
+# Outputs:
+#   p - A ggplot object for parameter plotting.
+#
+# Dependencies:
+#   ggplot2
+#
+#-------------------------------------------------------------------------------
 
 plot_parameters <- function(df, ymax) {
   my_size <- 5
@@ -93,6 +190,22 @@ plot_parameters <- function(df, ymax) {
 }
 
 
+#-------------------------------------------------------------------------------
+# Function Name: add_labels_to_baseline_parameters_dotplot
+#
+# Parameters:
+#   p - The plot object to add labels to.
+#   df - Data frame containing the data.
+#   ymax - Maximum value for y-axis adjustment for label placement.
+#
+# Outputs:
+#   p - Modified plot object with labels added.
+#
+# Dependencies:
+#   ggplot2
+#
+#-------------------------------------------------------------------------------
+
 add_labels_to_baseline_parameters_dotplot <- function(p, df, ymax) {
   my_vjust <- 0.25
   my_hjust <- 0.5
@@ -102,6 +215,21 @@ add_labels_to_baseline_parameters_dotplot <- function(p, df, ymax) {
   p
 }
 
+
+#-------------------------------------------------------------------------------
+# Function Name: add_labels_to_scenarios_dotplot
+#
+# Parameters:
+#   p - The plot object to add labels to.
+#   df - Data frame containing the data.
+#
+# Outputs:
+#   p - Modified plot object with labels added.
+#
+# Dependencies:
+#   ggplot2
+#
+#-------------------------------------------------------------------------------
 
 add_labels_to_scenarios_dotplot <- function(p, df) {
   my_vjust <- 0.5
@@ -113,6 +241,11 @@ add_labels_to_scenarios_dotplot <- function(p, df) {
   p
 }
 
+
+#-------------------------------------------------------------------------------
+# Global variable identification 
+#
+#-------------------------------------------------------------------------------
 
 findGlobals(fun = plot_parameters, merge = FALSE)$variables
 findGlobals(fun = add_labels_to_baseline_parameters_dotplot, merge = FALSE)$variables

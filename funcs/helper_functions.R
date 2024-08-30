@@ -1,6 +1,56 @@
+
+# =========================================================
+# Function Names: get_full_path, get_filename, merge_params_into_this_scenario, append_descriptor,
+#                 merge_dfs_without_duplicate_columns, move_populations_first, convert_array_to_named_vector,
+#                 convert_df_row_to_named_vector, convert_named_vector_to_wide_df, convert_named_vector_to_long_df,
+#                 include_full_scenario, append_suffix_to_column_names, my_rootfun, get_formatted_time,
+#                 get_latest_Rda_file, get_disease_free_equilibrium_for_PF_PS_and_CS
+# Description: This script contains utility functions for file and data management in R. Functions include generating
+#              full file paths, filenames based on user settings, merging parameters into data scenarios, handling
+#              data frames to ensure no duplicate columns when merging, and other specific utilities for managing
+#              complex data structures in epidemiological analysis.
+#
+# Parameters:
+#   df - A dataframe to be manipulated or merged.
+#   params - Named vectors or lists that contain parameters to be merged into data frames.
+#   user_inputs, descriptor - Inputs and descriptors used to manage filenames and paths dynamically.
+#
+# Returns:
+#   Depending on the function, returns full file paths, filenames, or modified data frames with merged parameters or appended descriptors.
+#
+# Example of use:
+#   user_inputs <- list(folder="data/", general_descriptor="experiment1", current_descriptor="run1")
+#   full_path <- get_full_path()
+#   filename <- get_filename()
+#   df <- read.csv("path/to/data.csv")
+#   params <- c(param1 = "value1", param2 = "value2")
+#   updated_df <- merge_params_into_this_scenario(df, params)
+#   final_df <- append_descriptor(updated_df, "new_descriptor")
+#
+# Dependencies: Requires 'codetools', 'lubridate', and 'dplyr' packages.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: August 2024
+# Last Modified: August 2024
+# =========================================================
 library(codetools)
 library(lubridate)
 library(dplyr)
+
+
+#-------------------------------------------------------------------------------
+# Function Name: get_full_path
+#
+# Parameters:
+#   None - Uses user_inputs() to fetch required information.
+#
+# Outputs:
+#   full_path - A string representing the full path constructed from user inputs.
+#
+# Dependencies:
+#   None explicitly required.
+#
+#-------------------------------------------------------------------------------
 
 get_full_path <- function() {
   user_inputs <- get_user_inputs()
@@ -8,6 +58,21 @@ get_full_path <- function() {
   full_path
 }
 
+
+
+#-------------------------------------------------------------------------------
+# Function Name: get_filename
+#
+# Parameters:
+#   None - Uses user_inputs() and get_full_path() to fetch and compute required information.
+#
+# Outputs:
+#   filename - A string representing the constructed filename, potentially with a timestamp.
+#
+# Dependencies:
+#   get_full_path(), get_formatted_time()
+#
+#-------------------------------------------------------------------------------
 
 get_filename <- function() {
   user_inputs <- get_user_inputs()
@@ -21,6 +86,20 @@ get_filename <- function() {
   filename
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: merge_params_into_this_scenario
+#
+# Parameters:
+#   df - Dataframe to which parameters are to be merged.
+#   params - Named vector of parameters to be merged.
+#
+# Outputs:
+#   merged_df - Dataframe after merging the parameters without duplicating columns.
+#
+# Dependencies:
+#   dplyr, convert_named_vector_to_wide_df()
+#
+#-------------------------------------------------------------------------------
 
 merge_params_into_this_scenario <- function(df, params) {
   params_df <- convert_named_vector_to_wide_df(params)
@@ -28,10 +107,41 @@ merge_params_into_this_scenario <- function(df, params) {
   merged_df
 }
 
+
+
+#-------------------------------------------------------------------------------
+# Function Name: append_descriptor
+#
+# Parameters:
+#   df - Dataframe to be manipulated.
+#   descriptor - String or factor to append as a new column.
+#
+# Outputs:
+#   df - Modified dataframe with a new column for the descriptor.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
+
 append_descriptor <- function(df, descriptor) {
   df <- df %>% mutate(descriptor = descriptor)
   df
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: merge_dfs_without_duplicate_columns
+#
+# Parameters:
+#   df1, df2 - Dataframes to be merged.
+#
+# Outputs:
+#   merged_df - Resulting dataframe after merging df1 and df2 without duplicate columns.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
 
 merge_dfs_without_duplicate_columns <- function(df1, df2) {
   duplicated_names <- names(df2)[(names(df2) %in% names(df1))]
@@ -40,10 +150,41 @@ merge_dfs_without_duplicate_columns <- function(df1, df2) {
   merged_df
 }
 
+
+
+#-------------------------------------------------------------------------------
+# Function Name: move_populations_first
+#
+# Parameters:
+#   df - Dataframe with population data.
+#
+# Outputs:
+#   df - Dataframe with reordered columns prioritizing population data.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
+
+
 move_populations_first <- function(df) {
   df <- df %>% select(NC, CS, PF, PS, NW, NV, everything())
   df
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: convert_array_to_named_vector
+#
+# Parameters:
+#   this_array - Array to be converted.
+#
+# Outputs:
+#   this_vector - Named vector converted from the array.
+#
+# Dependencies:
+#   None explicitly required.
+#
+#-------------------------------------------------------------------------------
 
 convert_array_to_named_vector <- function(this_array) {
   names <- colnames((this_array))
@@ -52,20 +193,77 @@ convert_array_to_named_vector <- function(this_array) {
   this_vector
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: convert_df_row_to_named_vector
+#
+# Parameters:
+#   df_row - Single row from a dataframe.
+#
+# Outputs:
+#   named_vector - Named vector converted from the dataframe row.
+#
+# Dependencies:
+#   None explicitly required.
+#
+#-------------------------------------------------------------------------------
+
 convert_df_row_to_named_vector <- function(df_row) {
   named_vector <- unlist(df_row)
   named_vector
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: convert_named_vector_to_wide_df
+#
+# Parameters:
+#   named_vector - Named vector to be converted to a dataframe.
+#
+# Outputs:
+#   df - Dataframe created from the named vector.
+#
+# Dependencies:
+#   None explicitly required.
+#
+#-------------------------------------------------------------------------------
 
 convert_named_vector_to_wide_df <- function(named_vector) {
   df <- data.frame(as.list(named_vector))
   df
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: convert_named_vector_to_long_df
+#
+# Parameters:
+#   named_vector - Named vector to be converted to a long format dataframe.
+#
+# Outputs:
+#   df - Long format dataframe created from the named vector.
+#
+# Dependencies:
+#   None explicitly required.
+#
+#-------------------------------------------------------------------------------
+
 convert_named_vector_to_long_df <- function(named_vector) {
   df <- data.frame(value = as.numeric(named_vector), name = names(named_vector))
   df
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: include_full_scenario
+#
+# Parameters:
+#   params - Parameters to include in the scenario.
+#   df - Dataframe to which the parameters are to be added.
+#
+# Outputs:
+#   df_with_params - Combined dataframe including both parameters and original data.
+#
+# Dependencies:
+#   convert_named_vector_to_wide_df()
+#
+#-------------------------------------------------------------------------------
 
 include_full_scenario <- function(params, df) {
   params_df <- convert_named_vector_to_wide_df(params)
@@ -73,12 +271,41 @@ include_full_scenario <- function(params, df) {
   df_with_params
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: append_suffix_to_column_names
+#
+# Parameters:
+#   df - Dataframe whose column names need suffixes appended.
+#   suffix - Suffix to append to each column name.
+#
+# Outputs:
+#   df - Modified dataframe with updated column names.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
+
 append_suffix_to_column_names <- function(df, suffix) {
   df <- df %>% rename_with(~ paste0(., suffix))
 }
 
 
-
+#-------------------------------------------------------------------------------
+# Function Name: my_rootfun
+#
+# Parameters:
+#   t - Time parameter for the function.
+#   y - Current values of the variables being modeled.
+#   params - Model parameters.
+#
+# Outputs:
+#   Computed conditions based on model dynamics.
+#
+# Dependencies:
+#   R_calc_sen_or_res()
+#
+#-------------------------------------------------------------------------------
 
 my_rootfun <- function(t, y, params) {
   Nc <- y["CS"]

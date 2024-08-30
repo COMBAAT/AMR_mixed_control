@@ -1,26 +1,30 @@
-## This is an ordinary differential equation model of African Animal
-## Trypanosomiasis (AAT) that incorporates the emergence, spread and loss of
-## antimicrobial resistance (AMR) between cattle, tsetse fly vectors and
-## wildlife.
 
-## VERSION 4 - May 2022
-##
-## This version includes compartments to account for the teneral phenomenon.
+# =========================================================
+# Function Name: AAT_AMR_dens_dep
+# Description: This script models the dynamics of African Animal Trypanosomiasis (AAT)
+#              incorporating the emergence, spread, and loss of antimicrobial resistance (AMR)
+#              among cattle, tsetse flies, and wildlife. This version includes compartments
+#              for the teneral phenomenon, enhancing the model's accuracy in depicting
+#              disease transmission and resistance dynamics under various scenarios.
+#
+# Parameters:
+#   No parameters are directly set in this script; it is designed to be sourced and used with
+#   scenario-specific parameters set in separate script files.
+#
+# Returns:
+#   The model does not return values directly but updates global variables and can be used
+#   to simulate disease spread and intervention scenarios when called from other scripts.
+#
+#
+# Dependencies: Requires deSolve
+#               Assumes that scenario-specific settings are managed in separate 
+#               scripts within the repository.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: May 2022
+# Last Modified: August 2024
+# =========================================================
 
-
-## Authors:   Shaun Keegan (shaun.keegan@glasgow.ac.uk)
-##            Louise Matthews (louise.mattthews@glasgow.ac.uk)
-
-
-## FORMAT: This file uses plain text descriptions of model parameters for user
-##         accessibility. Mathematical model descriptions and corresponding
-##         parameter tables can be found at:
-##         http://github.com/shaunkeegan/AAT_AMR_main/model
-
-## USAGE:  This file has been designed to be run and sourced from other files
-##         in the git repository, so that the model file is left untouched when
-##         exploring scenarios which are included at:
-##         http://github.com/shaunkeegan/AAT_AMR_main/scenarios
 
 library(codetools)
 
