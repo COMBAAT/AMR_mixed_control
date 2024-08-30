@@ -30,6 +30,22 @@
 library(codetools)
 library(dplyr)
 
+
+#-------------------------------------------------------------------------------
+# Function Name: append_epi_outputs_to_df
+#
+# Parameters:
+#   df - A dataframe containing initial epidemiological data.
+#
+# Outputs:
+#   A modified dataframe with new columns for epidemiological metrics such as treatment categories,
+#   incidence, probability of onward transmission, risk assessments, and prevalence.
+#
+# Dependencies:
+#   dplyr, set_days_per_year()
+#
+#-------------------------------------------------------------------------------
+
 append_epi_outputs_to_df <- function(df) {
   days_per_year <- set_days_per_year()
 
@@ -43,6 +59,22 @@ append_epi_outputs_to_df <- function(df) {
   )
   df
 }
+
+
+
+#-------------------------------------------------------------------------------
+# Function Name: add_population_totals
+#
+# Parameters:
+#   df - A dataframe with epidemiological data needing population totals calculated.
+#
+# Outputs:
+#   A modified dataframe with additional columns summing total population counts by category.
+#
+# Dependencies:
+#   dplyr
+#
+#-------------------------------------------------------------------------------
 
 
 add_population_totals <- function(df) {

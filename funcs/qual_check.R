@@ -26,6 +26,21 @@ library(codetools)
 
 ## ------------------------------------------------------ Check Inputs
 
+#-------------------------------------------------------------------------------
+# Function Name: qual_check_no0
+#
+# Parameters:
+#   input - A vector or other data structure containing values to be checked.
+#
+# Outputs:
+#   Produces console messages warning if any values are less than zero.
+#   The function is designed to identify and warn about negative values in the input data,
+#   providing a straightforward audit of non-positive values within a given dataset.
+#
+# Dependencies:
+#   crayon (for colored messaging)
+#
+#-------------------------------------------------------------------------------
 
 qual_check_no0 <- function(input) {
   test <- c(1:length(input))

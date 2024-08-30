@@ -87,6 +87,23 @@ my_theme <- function() {
 
 # Specify plot functions -------------------------------------------------------
 
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_type1_y_versus_treat_prop_facet_NW
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   y_var - String, the y-variable to be plotted.
+#
+# Outputs:
+#   Returns a ggplot object.
+#
+# Dependencies:
+#   dplyr, ggplot2, gghighlight
+#
+#-------------------------------------------------------------------------------
+
+
 plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
@@ -108,6 +125,22 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var) {
     my_theme()
   p
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   this_K - Specific value of K to filter by.
+#   y_var - String, the y-variable to be plotted.
+#
+# Outputs:
+#   Returns a ggplot object with highlighted areas based on condition.
+#
+# Dependencies:
+#   dplyr, ggplot2, gghighlight
+#
+#-------------------------------------------------------------------------------
 
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df, this_K, y_var) {
   df$y <- df[, y_var]
@@ -131,6 +164,24 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
     my_theme()
   p
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_highlight
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   this_K - Specific value of K to filter by.
+#   y_var - String, the y-variable to be plotted.
+#   threshold_var - String, the variable used for threshold condition.
+#   threshold - Numeric, the value of the threshold for highlighting.
+#
+# Outputs:
+#   Returns a ggplot object with areas highlighted based on the threshold condition.
+#
+# Dependencies:
+#   dplyr, ggplot2, gghighlight
+#
+#-------------------------------------------------------------------------------
 
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight <- function(
     df, this_K, y_var, threshold_var, threshold) {
@@ -164,6 +215,22 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
   p
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: plot_type4_y_versus_treat_prop_facet_NW
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   y_var - String, the y-variable to be plotted.
+#   this_K - Specific value of K to filter by.
+#
+# Outputs:
+#   Returns a ggplot object.
+#
+# Dependencies:
+#   dplyr, ggplot2
+#
+#-------------------------------------------------------------------------------
+
 plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
@@ -185,6 +252,22 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K) {
     my_theme()
   p
 }
+
+#-------------------------------------------------------------------------------
+# Function Name: plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   y_var - String, the y-variable to be plotted.
+#   this_K - Specific value of K to filter by.
+#
+# Outputs:
+#   Returns a ggplot object.
+#
+# Dependencies:
+#   dplyr, ggplot2
+#
+#-------------------------------------------------------------------------------
 
 plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var, this_K) {
   df$y <- df[, y_var]
@@ -210,6 +293,20 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
   p
 }
 
+#-------------------------------------------------------------------------------
+# Function Name: plot_type6_y_versus_treat_prop_facet_NW_K
+#
+# Parameters:
+#   df - Dataframe containing data.
+#   y_var - String, the y-variable to be plotted.
+#
+# Outputs:
+#   Returns a ggplot object.
+#
+# Dependencies:
+#   dplyr, ggplot2
+#
+#-------------------------------------------------------------------------------
 
 plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var) {
   df$y <- df[, y_var]
