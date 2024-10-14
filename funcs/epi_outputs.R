@@ -89,6 +89,5 @@ add_population_totals <- function(df) {
   return(df_new)
 }
 
-# findGlobals(fun = calculate_epi_outputs, merge = FALSE)$variables
 findGlobals(fun = add_population_totals, merge = FALSE)$variables
 findGlobals(fun = append_epi_outputs_to_df, merge = FALSE)$variables
