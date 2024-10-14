@@ -89,38 +89,6 @@ add_population_totals <- function(df) {
   return(df_new)
 }
 
-
-# calculate_epi_outputs <- function(treatment_type, params, final_state) {
-#   if (treatment_type == "quick") {
-#     No_trt_cat <- as.numeric(params["treatment_q"]) * final_state$CIs * 365.25
-#     Incidence <- as.numeric(params["gamma_c"]) * final_state$CEs * 365.25
-#     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
-#     RiskA <- (final_state$CTs + final_state$PTs)
-#     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$CTs + final_state$PTs)
-#   }
-#
-#   if (treatment_type == "proph") {
-#     No_trt_cat <- as.numeric(params["treatment_q"]) * (final_state$PIs + final_state$CIs) * 365.25
-#     Incidence <- as.numeric(params["gamma_c"]) * (final_state$PEs + final_state$CEs) * 365.25
-#     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
-#     RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs)
-#     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs)
-#   }
-#
-#   if (treatment_type == "B") {
-#     No_trt_cat <- (as.numeric(params["treatment_q"]) + as.numeric(params["treatment_p"])) * (final_state$PIs + final_state$CIs) * 365.25
-#     Inc <- as.numeric(params["gamma_c"]) * (final_state$PEs + final_state$CEs) * 365.25
-#     Prob_onward_tran <- 1 - dpois(0, final_state$Rres[1])
-#     RiskA <- (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
-#     RiskE <- (1 - dpois(0, final_state$Rres[1])) * (final_state$PEs + final_state$PIs + final_state$PPs + final_state$CTs + final_state$PTs)
-#   }
-#   prevalence <- (final_state$PIs + final_state$CIs) / final_state$All_cows
-#
-#   epi_outputs <- as.data.frame(cbind(No_trt_cat, Incidence, prevalence, Prob_onward_tran, RiskA, RiskE))
-#   return(epi_outputs)
-# }
-
-
 # findGlobals(fun = calculate_epi_outputs, merge = FALSE)$variables
 findGlobals(fun = add_population_totals, merge = FALSE)$variables
 findGlobals(fun = append_epi_outputs_to_df, merge = FALSE)$variables
