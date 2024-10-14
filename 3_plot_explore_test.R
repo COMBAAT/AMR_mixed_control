@@ -19,27 +19,30 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/quick_treatment_option4.Rda")
+  load("output/test_merge.Rda")
   plot_descriptor <- test$descriptor[1]
-  folder_name <- "output/merged/"
+  folder_name <- "output/test_merge/"
   dir.create(folder_name)
 }
 
+# select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
+option = 1
+subset <- create_data_subsets(test, option)
 
-reduced_scenarios <- scenarios_df %>%
-  select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide) %>%
-  distinct()
-reduced_scenarios
+# subset further by scenario if addiotnal parameters varied, default is first row
 selected_row <- 1
-subset_for_plotting <- left_join(reduced_scenarios[selected_row, ], test)
+subset_for_plotting <- select_scenario(scenarios_df, subset, selected_row)
+
+# Adjust fitness post simulation
+subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.6)
 
 # Generate plots ---------------------------------------------------------------
 # Plot and save baseline parameters
 output_label <- "00_baseline_parameters"
 p <- plot_baseline_parameters(baseline_parameters)
-plot_name <- "00_baseline_parameters.pdf"
+output_filename <- paste0(folder_name, output_label, ".pdf")
 ggsave(
-  filename = paste0(folder_name, output_label, ".pdf"),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 write.csv(baseline_parameters, file = paste0(folder_name, output_label, ".csv"))
@@ -47,8 +50,9 @@ write.csv(baseline_parameters, file = paste0(folder_name, output_label, ".csv"))
 # Plot and save scenarios
 output_label <- "00_scenarios"
 p <- plot_scenarios(scenarios_df)
+output_filename <- paste0(folder_name, output_label, ".pdf")
 ggsave(p,
-  filename = paste0(folder_name, output_label, ".pdf"),
+  filename = output_filename,
   width = my_pdfwidth(), height = 1.5 * my_pdfheight()
 )
 scenarios_for_output <- get_simplified_scenarios(scenarios_df)
@@ -67,9 +71,10 @@ subset_for_plotting %>%
   labs(colour = my_label("K")) +
   my_theme()
 
-plot_name <- paste0("plot_type0_R0sen", "_", plot_descriptor, ".pdf")
+output_label <- "plot_type0_R0sen"
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
 ggsave(
-  filename = paste0(folder_name, plot_name),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -78,7 +83,7 @@ ggsave(
 lhs <- subset_for_plotting %>%
   mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
   filter(prop_cattle_with_insecticide == 0) %>%
-  ggplot(aes(treat_prop, Rres_final / Rsen_final, colour = NW, shape = K)) +
+  ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
   xlab(my_label("treat_prop")) +
@@ -93,9 +98,10 @@ rhs
 # use guides = collect to remove duplicate legends
 lhs + rhs + plot_layout(ncol = 2, guides = "collect")
 
-plot_name <- paste0("plot_type0_R_res_R_sen_ratio", "_", plot_descriptor, ".pdf")
+output_label <- paste0("plot_type0_Rres_Rsen_ratio")
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
 ggsave(
-  filename = paste0(folder_name, plot_name),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -109,9 +115,10 @@ y_vars <- c(
 for (y_var in y_vars) {
   plot_type1_y_versus_treat_prop_facet_NW(subset_for_plotting, y_var)
 
-  plot_name <- paste0("plot_type1_", y_var, "_", plot_descriptor, ".pdf")
+  output_label <- paste0("plot_type1_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
   ggsave(
-    filename = paste0(folder_name, plot_name),
+    filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
@@ -121,20 +128,22 @@ for (y_var in y_vars) {
 # Plot y versus_treat_prop faceted by prop_cattle_with_insecticide
 
 y_var <- "RiskA"
-this_K <- 10000
+this_K <- 4000
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var)
-plot_name <- paste0("plot_type2_", y_var, "_", plot_descriptor, ".pdf")
+output_label <- paste0("plot_type2_", y_var)
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
 ggsave(
-  filename = paste0(folder_name, plot_name),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
 y_var <- "RiskE"
-this_K <- 10000
+#this_K <- 4000
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var)
-plot_name <- paste0("plot_type2_", y_var, "_", plot_descriptor, ".pdf")
+output_label <- paste0("plot_type2_", y_var)
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
 ggsave(
-  filename = paste0(folder_name, plot_name),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -143,15 +152,16 @@ ggsave(
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by prop_cattle_with_insecticide with highlighting
 y_var <- "RiskE"
-this_K <- 10000
+#this_K <- 2000
 threshold_var <- "prevalence"
 threshold <- 0.1
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight(
   subset_for_plotting, this_K, y_var, threshold_var, threshold
 )
-plot_name <- paste0("plot_type3_", y_var, "_", plot_descriptor, ".pdf")
+output_label <- paste0("plot_type3_", y_var)
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
 ggsave(
-  filename = paste0(folder_name, plot_name),
+  filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
 
@@ -159,15 +169,16 @@ ggsave(
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
-y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
-this_K <- 6000
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE")
+#this_K <- 2000
 
 for (y_var in y_vars) {
   plot_type4_y_versus_treat_prop_facet_NW(subset_for_plotting, y_var, this_K)
 
-  plot_name <- paste0("plot_type4_", y_var, "_", plot_descriptor, ".pdf")
+  output_label <- paste0("plot_type4_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
   ggsave(
-    filename = paste0(folder_name, plot_name),
+    filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
@@ -176,29 +187,99 @@ for (y_var in y_vars) {
 # ----------------------------------------
 # Plot y versus prop_cattle_with_insecticide faceted by NW, coloured by treat_prop
 y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
-this_K <- 6000
 
 for (y_var in y_vars) {
   plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW(subset_for_plotting, y_var, this_K)
 
-  plot_name <- paste0("plot_type5_", y_var, "_", plot_descriptor, ".pdf")
+  output_label <- paste0("plot_type5_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
   ggsave(
-    filename = paste0(folder_name, plot_name),
+    filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
   )
 }
 # ----------------------------------------
 
 # ----------------------------------------
-# Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
-y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
+# # Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
+# y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
+# 
+# for (y_var in y_vars) {
+#   plot_type6_y_versus_treat_prop_facet_NW_K(subset_for_plotting, y_var)
+# 
+#   output_label <- paste0("plot_type6_", y_var)
+#   output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
+#   ggsave(
+#     filename = output_filename,
+#     width = my_pdfwidth(), height = 2 * my_pdfheight()
+#   )
+# }
 
-for (y_var in y_vars) {
-  plot_type6_y_versus_treat_prop_facet_NW_K(subset_for_plotting, y_var)
+# ----------------------------------------
 
-  plot_name <- paste0("plot_type6_", y_var, "_", plot_descriptor, ".pdf")
-  ggsave(
-    filename = paste0(folder_name, plot_name),
-    width = my_pdfwidth(), height = 2 * my_pdfheight()
-  )
-}
+# ----------------------------------------
+# # Plot y versus prevalence faceted by NW
+# plot_type7_y_versus_prevalence_facet_NW(subset_for_plotting, "RiskA", this_K = 6000)
+# output_label <- paste0("plot_type7", "_RiskA")
+# output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
+# 
+# # ----------------------------------------
+# 
+# # ----------------------------------------
+# # Plot y versus treat_prop faceted by prop_cattle_with_insecticide
+# plot_type8_y_versus_treat_prop_facet_insecticide(subset_for_plotting, "RiskA", this_K = 6000)
+# output_label <- paste0("plot_type8", "_RiskA")
+# output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
+# 
+# # ----------------------------------------
+plot_type10_R0sen_versus_Rsen(subset_for_plotting)
+output_label <- "plot_type10_R0sen_versus_Rsen"
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+
+plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K)
+output_label <- paste0("plot_type11_selective_advantage")
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+
+plot_type11b_selective_advantage_by_NW_and_insectide(subset_for_plotting, this_K, ymax = 5, this_NW = 100)
+output_label <- paste0("plot_type11b_selective_advantage")
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+
+y_var <- "RiskE"
+plot_type12_yvar_by_NW_and_insectide(subset_for_plotting, y_var, this_K, ymax = 5, this_NW = 100)
+output_label <- paste0("plot_type12_", y_var)
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+
+y_var <- "prevalence"
+plot_type12_yvar_by_NW_and_insectide(subset_for_plotting, y_var, this_K, ymax = 1, this_NW = 100)
+output_label <- paste0("plot_type12_", y_var)
+output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+
+
