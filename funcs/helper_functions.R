@@ -386,10 +386,11 @@ create_data_subsets <- function(test, option) {
       filter(proph_ongoing == 0, treatment_type == "quick") %>%
       mutate(label = "responsive_quick") %>%
       distinct()
-    if (length(unique(subset$treat_prop)) == 1) {
-      print("No quick treatment scenarios with treat_prop > 0")
+    n <- nrow(subset)
+    if (length(unique(subset$treat_prop)) <= 1) {
+      print("Error: no quick treatment scenarios with treat_prop > 0")
     } else {
-      print("Quick treatment scenarios")
+      print(paste0(n, " Quick treatment scenarios"))
       return(subset)
     }
   }
@@ -398,10 +399,11 @@ create_data_subsets <- function(test, option) {
       filter(proph_ongoing == 0, treatment_type == "proph") %>%
       mutate(label = "responsive_proph") %>%
       distinct()
-    if (length(unique(subset$treat_prop)) == 1) {
-      print("No proph treatment scenarios with treat_prop > 0")
+    n <- nrow(subset)
+    if (length(unique(subset$treat_prop)) <= 1) {
+      print("Error: no proph treatment scenarios with treat_prop > 0")
     } else {
-      print("Responsive prophylactic treatment scenarios")
+      print(paste0(n, " Responsive prophylactic treatment scenarios"))
       return(subset)
     }
   }
@@ -411,10 +413,11 @@ create_data_subsets <- function(test, option) {
       mutate(coverage = PF_final / All_cows_final, treat_prop = coverage,
              label = "proph_ongoing") %>%
       distinct()
-    if (length(unique(subset$proph_ongoing)) == 1) {
-      print("No ongoing pophylactic treatment scenarios")
+    n <- nrow(subset)
+    if (length(unique(subset$proph_ongoing)) <= 1) {
+      print("Error: no ongoing pophylactic treatment scenarios")
     } else {
-      print("Ongoing pophylactic treatment scenarios")
+      print(paste0(n, " Ongoing pophylactic treatment scenarios"))
       return(subset)
     }
   }
