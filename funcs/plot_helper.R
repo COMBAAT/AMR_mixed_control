@@ -33,6 +33,8 @@ library(dplyr)
 library(ggplot2)
 library(gghighlight)
 
+source("funcs/extra_funcs.R")
+
 # Specify plot formatting ------------------------------------------------------
 my_linewidth <- function() {
   1
@@ -151,7 +153,7 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
-      prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
+      #prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
       NW %in% c(0, 100, 250),
       K == this_K
     ) %>%
