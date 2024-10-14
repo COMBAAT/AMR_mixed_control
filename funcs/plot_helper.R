@@ -274,12 +274,17 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
   df$y <- df[, y_var]
   this_xlab <- my_label("prop_cattle_with_insecticide")
   this_ylab <- my_label(y_var)
+  
+  desired_vector <- c(0, 0.2, 0.4, 0.6, 0.8, 0.91) # desired values
+  actual_vector <- unique(df$treat_prop)
+  nearest_vector <- find_nearest_vector(desired_vector, actual_vector)
 
   p <- df %>%
     mutate_at(c("treat_prop", "NW", "K"), as.factor) %>%
     filter(
       prop_cattle_with_insecticide <= 0.5,
-      treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.91),
+      #treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.91),
+      treat_prop %in% nearest_vector,
       NW %in% c(0, 100, 250),
       K == this_K
     ) %>%
