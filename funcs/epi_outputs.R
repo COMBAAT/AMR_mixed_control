@@ -19,7 +19,6 @@
 #   data <- read.csv("path/to/data.csv")
 #   data <- append_epi_outputs_to_df(data)
 #   data <- add_population_totals(data)
-#   data <- calculate_epi_outputs(treatment_type, params, final_state)
 #
 # Dependencies: Requires the 'dplyr' package for data manipulation.
 #
