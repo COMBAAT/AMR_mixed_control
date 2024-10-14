@@ -252,7 +252,9 @@ set_parameters_NEW <- function(this_scenario) {
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
   waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
-  waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  # waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  waning_baseline <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  waning_f2s <- waning_baseline * waning_baseline / (waning_baseline + proph_ongoing)
 
 
   equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(
