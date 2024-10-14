@@ -49,21 +49,22 @@ my_label <- function(variable) {
   if (variable == "Incidence") this_label <- "Incidence"
   if (variable == "No_trt_cat") this_label <- "Number treated cattle"
   if (variable == "Prob_onward_tran") this_label <- "Prob onward transmission"
-  if (variable == "RiskE") this_label <- "Risk of emergence and spread"
+  if (variable == "RiskE") this_label <- "Risk of emergence \n and spread"
   if (variable == "RiskA") this_label <- "Risk of emergence"
   if (variable == "treat_prop") this_label <- "Treatment proportion"
-  if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide coverage"
+  if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide \n coverage"
   if (variable == "NW") this_label <- "Wildlife"
   if (variable == "K") this_label <- "Carrying capacity"
+  if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
   this_label
 }
 
 my_pdfwidth <- function() {
-  9
+  7
 }
 
 my_pdfheight <- function() {
-  6
+  7*2/3
 }
 
 my_pointsize <- function() {
@@ -79,9 +80,9 @@ my_theme <- function() {
       axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
       axis.text.y = element_text(size = 12),
       axis.title.x = element_text(size = 16),
-      axis.title.y = element_text(size = 19) # ,
-      # panel.grid.major = element_blank() #,
-      # panel.grid.minor = element_blank()
+      axis.title.y = element_text(size = 19),
+      panel.grid.major = element_blank()
+      #panel.grid.minor = element_blank()
     )
 }
 
