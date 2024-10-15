@@ -217,6 +217,7 @@ set_parameters_NEW <- function(this_scenario) {
   rec_adj <- this_scenario$rec_adj
   reversion <- this_scenario$reversion
   option <- this_scenario$option
+  maintain_vector_pop <- this_scenario$maintain_vector_pop
 
   baseline_params <- get_baseline_parameters()
 
@@ -296,7 +297,12 @@ set_parameters_NEW <- function(this_scenario) {
   incubation <-  baseline_params["vector_incubation_period"]
   gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation))  # fixed original formulation
 
-  birth_v <- birth_adj * death_v_no_insecticide
+  if (maintain_vector_pop == TRUE) {
+    birth_v <- birth_adj * death_v 
+  } else {
+    birth_v <- birth_adj * death_v_no_insecticide
+  }
+  
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
   NV <- equil_vector_pop
   VSt <- NV * death_v_no_insecticide / (death_v_no_insecticide + ten2fed)
