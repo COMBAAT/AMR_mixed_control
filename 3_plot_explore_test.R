@@ -11,7 +11,7 @@ source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- TRUE
+load_latest_file <- FALSE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
@@ -19,9 +19,9 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/test_merge.Rda")
+  load("output/simulation_set_OctoberC.Rda")
   plot_descriptor <- test$descriptor[1]
-  folder_name <- "output/test_merge/"
+  folder_name <- "output/simulation_set_OctoberC/"
   dir.create(folder_name)
 }
 
@@ -218,28 +218,6 @@ for (y_var in y_vars) {
 # ----------------------------------------
 
 # ----------------------------------------
-# # Plot y versus prevalence faceted by NW
-# plot_type7_y_versus_prevalence_facet_NW(subset_for_plotting, "RiskA", this_K = 6000)
-# output_label <- paste0("plot_type7", "_RiskA")
-# output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
-# ggsave(
-#   filename = output_filename,
-#   width = my_pdfwidth(), height = my_pdfheight()
-# )
-# 
-# # ----------------------------------------
-# 
-# # ----------------------------------------
-# # Plot y versus treat_prop faceted by prop_cattle_with_insecticide
-# plot_type8_y_versus_treat_prop_facet_insecticide(subset_for_plotting, "RiskA", this_K = 6000)
-# output_label <- paste0("plot_type8", "_RiskA")
-# output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
-# ggsave(
-#   filename = output_filename,
-#   width = my_pdfwidth(), height = my_pdfheight()
-# )
-# 
-# # ----------------------------------------
 plot_type10_R0sen_versus_Rsen(subset_for_plotting)
 output_label <- "plot_type10_R0sen_versus_Rsen"
 output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
