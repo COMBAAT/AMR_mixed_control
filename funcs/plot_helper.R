@@ -33,8 +33,6 @@ library(dplyr)
 library(ggplot2)
 library(gghighlight)
 
-source("funcs/extra_funcs.R")
-
 # Specify plot formatting ------------------------------------------------------
 my_linewidth <- function() {
   1
@@ -361,7 +359,7 @@ plot_type10_R0sen_versus_Rsen <- function(df) {
 
 # Plot R resistant/R sensitive versus wildlife
 plot_type11_selective_advantage_by_NW <- function(df, this_K, lw = my_linewidth(), ps = my_pointsize()) {
-  p <- subset_for_plotting %>%
+  p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(prop_cattle_with_insecticide == 0, K == this_K) %>%
     #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
@@ -428,3 +426,51 @@ plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, this_K, ymax, this_N
     my_theme()
   p
 }
+
+
+# functions for plotting
+create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, label, plot_title) {
+  p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, lw = 0.7, ps = 2)
+  p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K)
+  p1b <- p1b + ggtitle(plot_title) +
+    geom_rect(aes(xmin = 0.0, xmax = 0.5, ymin = 0.0, ymax = 2.0),
+              fill = "transparent", color = "black", linewidth = 0.5, linetype = "dashed"
+    )
+  p1b
+  
+  
+  p1c <- p1a +
+    coord_cartesian(ylim = c(0.0, 1.5), xlim = c(0, 0.5)) +
+    geom_segment(
+      x = 0.0, y = 0.65, xend = 0.0, yend = 0.95, colour = "grey20", linewidth = 0.75,
+      arrow = arrow(length = unit(0.03, "npc"), ends = "both")
+    ) +
+    theme(legend.position="none")
+  p1c
+  # add text annotation to arrow
+  p1c_v <- p1c + annotate("text", x = 0.22, y = 0.8, label = "fitness cost", size = 5, colour = "grey20")
+  p1c_v
+  p1_vertical <- p1b / p1c_v + plot_layout(nrow = 2, guides = "collect", axis_titles = "collect") +
+    plot_annotation("A", caption = " ")
+  p1_vertical
+  
+  p1c_inset <- p1c + annotate("text", x = 0.02, y = 0.82, label = "fitness cost", size = 4, colour = "grey20", hjust = 0.0)
+  
+  p1d <- p1c_inset +
+    theme(
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      #axis.text.x = element_blank(),
+      #axis.text.y = element_blank(),
+      #axis.ticks.x = element_blank(),
+      #axis.ticks.y = element_blank()
+      axis.text.x = element_text(size = 7),
+      axis.text.y = element_text(size = 7)
+    )
+  p1_with_inset <- p1b + inset_element(p1d, 0.02, 0.32, 0.74, 0.97) + plot_layout(guides = "collect")
+  p1_with_inset
+  
+  list(p1_vertical, p1_with_inset)
+}
+
+# End of script ---------------------------------------------------------------
