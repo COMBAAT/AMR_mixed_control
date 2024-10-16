@@ -434,6 +434,7 @@ select_scenario <- function(scenarios_df, subset, scenario = 1) {
   subset_for_plotting
 }
 
+
 adjust_fitness <- function(subset_for_plotting, fit_adj_new) {
   subset_for_plotting <- subset_for_plotting %>% 
     mutate(fit_adj_new = fit_adj_new) %>%
@@ -446,7 +447,34 @@ adjust_fitness <- function(subset_for_plotting, fit_adj_new) {
 }
 
 
+find_nearest_vector <- function(desired_vector, actual_vector) {
+  selected_vector <- c()
+  for (element in desired_vector) {
+    diff <- abs(actual_vector - element)
+    selected_element <- actual_vector[which.min(diff)]
+    selected_vector <- c(selected_vector, selected_element)
+  }
+  selected_vector
+}
 
+
+
+get_subset_for_plotting <- function(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.6) {
+  # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
+  subset <- create_data_subsets(test, option)
+  
+  # subset further by scenario if addiotnal parameters varied, default is first row
+  selected_row <- 1
+  subset_for_plotting <- select_scenario(scenarios_df, subset, selected_row)
+  
+  # Adjust fitness post simulation
+  subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = fit_adj_new)
+  subset_for_plotting
+}
+
+findGlobals(fun = get_subset_for_plotting, merge = FALSE)$variables
+findGlobals(fun = create_data_subsets, merge = FALSE)$variables
+findGlobals(fun = find_nearest_vector, merge = FALSE)$variables
 findGlobals(fun = get_disease_free_equilibrium_for_PF_PS_and_CS, merge = FALSE)$variables
 findGlobals(fun = get_filename, merge = FALSE)$variables
 findGlobals(fun = get_full_path, merge = FALSE)$variables
