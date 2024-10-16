@@ -11,7 +11,7 @@ source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- FALSE
+load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
