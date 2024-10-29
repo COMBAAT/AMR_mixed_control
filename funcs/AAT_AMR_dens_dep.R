@@ -82,7 +82,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   sigma_st <- parms["sigma_st"]
   emergence_p <- parms["emergence_p"]
   emergence_q <- parms["emergence_q"]
-  rec_adj <- parms["rec_adj"]
+  #rec_adj <- parms["rec_adj"]
   prop_prophylaxis_at_birth <- parms["prop_prophylaxis_at_birth"]
   proph_ongoing <- parms["proph_ongoing"]
   fit_adj <- parms["fit_adj"]
@@ -236,7 +236,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
   dPEr.dt <-
     biterate * prob_infection_to_host * fit_adj * PS * VIr / N + # Infection of resistant strain
-    biterate * (prob_infection_to_host * fit_adj * 1) * PF * VIr / N - # Infection of resistant strain
+    biterate * prob_infection_to_host * fit_adj * PF * VIr / N - # Infection of resistant strain
     gamma_c * PEr + # Movement from exposed to infectious
     emergence_p * PEs -
     waning * PEr - # Waning of infection to non-prophylactic class
