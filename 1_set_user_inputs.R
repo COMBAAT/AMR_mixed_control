@@ -22,7 +22,7 @@ get_user_inputs <- function() {
     append_current_time_to_output_file = FALSE,
     folder = "output/",
     general_descriptor = "simulation_set_",
-    current_descriptor = "OctoberD"
+    current_descriptor = "OctoberF"
   )
   user_inputs
 }
@@ -30,19 +30,19 @@ get_user_inputs <- function() {
 create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 10000
-  treatment_type <- c("proph") # quick, proph or both
+  treatment_type <- c("quick", "proph") # quick, proph or both
   cattle_number <- 100
   # wildlife_number <- c(0, 50, 100, 150, 200, 250)
-  wildlife_number <- c(0, 100, 250) #c(0, 50, 100, 250)
+  wildlife_number <- c(0, 250) #c(0, 50, 100, 250)
   treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
   treat_prop <- c(treat_propA, treat_propB)
-  carrying_capacity <- c(6000, 4000, 2000) #c(6000, 4000, 2000, 1000, 500)
+  carrying_capacity <- c(6000) #c(6000, 4000, 2000, 1000, 500)
   maintain_vector_pop <- TRUE
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- c(0, 0.05, 0.1, 0.15) #c(0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5)
-  prop_prophylaxis_at_birth <- c(0.0) 
-  proph_ongoing <- 0.0 #seq(0, 3, 1) / days_per_year
+  prop_cattle_with_insecticide <- c(0.0, 0.1, 0.2) #c(0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5)
+  prop_prophylaxis_at_birth <- c(0.1) 
+  proph_ongoing <- seq(0, 3, 1) / days_per_year
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -67,15 +67,15 @@ create_multiple_scenarios <- function() {
 create_single_scenario <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 5000
-  treatment_type <- sample(c("quick"), 1) # quick or proph
-  cattle_number <- 50
-  wildlife_number <- 50
-  treat_prop <- 0.15 
+  treatment_type <- sample(c("proph"), 1) # quick or proph
+  cattle_number <- 100
+  wildlife_number <- 200
+  treat_prop <- 0.09
   carrying_capacity <- 10000
   maintain_vector_pop <- FALSE
-  prop_cattle_with_insecticide <- 0.05
-  prop_prophylaxis_at_birth <- 0.1 
-  proph_ongoing <- sample(seq(0, 12, 1) / days_per_year, 1)
+  prop_cattle_with_insecticide <- 0.0
+  prop_prophylaxis_at_birth <- 0.3 
+  proph_ongoing <- 0.07 #sample(seq(0, 12, 1) / days_per_year, 1)
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
