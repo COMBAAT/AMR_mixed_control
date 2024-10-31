@@ -18,6 +18,7 @@ source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
 source("funcs/r0.R")
+source("funcs/r0_upgrade.R")
 source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
@@ -60,6 +61,12 @@ for (row in 1:nrow(scenarios_df)) {
   R0res <- R0sen_and_R0res["R0res"]
   full_scenario$R0sen <- R0sen
   full_scenario$R0res <- R0res
+  
+  R0sen_and_R0res2 <- calculate_R02(params)
+  R0sen2 <- R0sen_and_R0res2["R0sen"]
+  R0res2 <- R0sen_and_R0res2["R0res"]
+  full_scenario$R0sen2 <- R0sen2
+  full_scenario$R0res2 <- R0res2
 
   ## Make the simulation time dependent on R0 value
   ## Only run full simulation if R0 >= 1.0
@@ -87,6 +94,7 @@ for (row in 1:nrow(scenarios_df)) {
 
   expanded_output <- add_population_totals(time_trajectory)
   expanded_output <- add_R_trajectories(params, expanded_output)
+  expanded_output <- add_R_trajectories2(params, expanded_output)
   expanded_output <- add_R0(params, expanded_output)
 
   final_state <- tail(expanded_output, 1)
