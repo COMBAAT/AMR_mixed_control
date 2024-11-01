@@ -193,13 +193,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
   dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * PC - # Adding new prophylactically treated cattle
     biterate * (prob_infection_to_host * fit_adj) * PF * VIr / N + # Infection of resistant strain
-    sigma_st * PPs + # sigma from treated (prophylactic) sensitive strain infection
-    sigma_c * PPr - # sigma from treated (prophylactic) resistant strain infection
-    waning_F2S * PF - # waning_from_partial_protection prophylaxis from fully protected to partially protected
+    sigma_st * PPs + 
+    sigma_c * PPr - 
+    waning_F2S * PF - # waning from fully protected to partially protected
     death_c * PF +
     proph_ongoing * PS +
-    # proph_ongoing * PEs +
-    # proph_ongoing * PEr +
     proph_ongoing * CS +
     sigma_st * CEsX +
     sigma_c * CErX +
@@ -207,32 +205,32 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PErX
 
 
-  dPS.dt <- waning_F2S * PF - # waning_from_partial_protection of prophylactically treated cattle to semi protected
+  dPS.dt <- waning_F2S * PF - # waning from fully protected to partially protected
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - # Infection of sensitive strain
     biterate * prob_infection_to_host * fit_adj * PS * VIr / N + # Infection of resistant strain
-    sigma_c * PIs + # sigma_c from sensitive strain infection
-    sigma_c * PIr + # sigma_c from resistant strain infection
-    sigma_st * PTs + # sigma from treated (quick acting) sensitive strain infection
-    sigma_c * PTr - # sigma from treated (quick acting) resistant strain infection
-    waning_from_partial_protection * PS - # waning_from_partial_protection of infection to non-prophylactic class
-    death_c * PS - # Death of prophylactic susceptibles (partially protected)
+    sigma_c * PIs + 
+    sigma_c * PIr + 
+    sigma_st * PTs + 
+    sigma_c * PTr - 
+    waning_from_partial_protection * PS - 
+    death_c * PS -
     proph_ongoing * PS
 
   dPEs.dt <-
-    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - # Infection of sensitive strain
-    gamma_c * PEs - # Movement from exposed to infectious
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - 
+    gamma_c * PEs - 
     emergence_p * PEs -
-    waning_from_partial_protection * PEs - # waning_from_partial_protection of infection to non-prophylactic class
-    death_c * PEs - # Death of prophylactic exposed (sensitive strain)
+    waning_from_partial_protection * PEs - 
+    death_c * PEs - 
     proph_ongoing * PEs
 
   dPEsX.dt <-
     proph_ongoing * PEs -
-    gamma_c * PEsX - # Movement from exposed to infectious
+    gamma_c * PEsX - 
     sigma_st * PEsX -
     # emergence_p * PEsX -
     # waning_from_partial_protection * PEsX - # waning_from_partial_protection of infection to non-prophylactic class
-    death_c * PEsX # Death of prophylactic exposed (sensitive strain)
+    death_c * PEsX 
 
   dPEr.dt <-
     biterate * prob_infection_to_host * fit_adj * PS * VIr / N + # Infection of resistant strain

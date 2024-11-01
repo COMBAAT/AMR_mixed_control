@@ -247,8 +247,8 @@ set_parameters_NEW <- function(this_scenario) {
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
   waning_from_partial_protection <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
-  # waning_F2S <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   waning_from_full_protection <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  # waning from F to S needs to account for ongoing proph treatment of individuals in F, increasing time spent in F
   waning_F2S <- waning_from_full_protection * waning_from_full_protection / (waning_from_full_protection + proph_ongoing)
 
 
