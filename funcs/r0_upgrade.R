@@ -52,7 +52,7 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   
   treatment_p <- params["treatment_p"]
   treatment_q <- params["treatment_q"]
-  waning <- params["waning"]
+  waning_from_partial_protection <- params["waning_from_partial_protection"]
   
   gamma_c <- params["gamma_c"]
   death_c <- params["death_c"]
@@ -92,7 +92,7 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   
   # CE equation
   Sigma[1, 1] <- -(death_c + gamma_c + proph_ongoing) # CE death, become infected, proph
-  Sigma[1, 5] <- waning                               # waning from PE
+  Sigma[1, 5] <- waning_from_partial_protection                               # waning_from_partial_protection from PE
   
   # CEX equation
   Sigma[2, 1] <- proph_ongoing                        # from CE
@@ -101,16 +101,16 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   # CI equation
   Sigma[3, 1] <- gamma_c                              # from CE
   Sigma[3, 3] <- -(death_c + sigma_c + treatment_p + treatment_q + proph_ongoing) # death, reovery or treatment of CI
-  Sigma[3, 7] <- waning                               # waning from PI
-  Sigma[3, 9] <- waning                               # waning from PP
+  Sigma[3, 7] <- waning_from_partial_protection                               # waning_from_partial_protection from PI
+  Sigma[3, 9] <- waning_from_partial_protection                               # waning_from_partial_protection from PP
   
   # CT equation
   Sigma[4, 3] <- treatment_q                          # from CI
   Sigma[4, 4] <- -(death_c + sigma_treated)           # CT death, recovery due to treatment
-  Sigma[4, 8] <- waning                               # waning from PT
+  Sigma[4, 8] <- waning_from_partial_protection                               # waning_from_partial_protection from PT
   
   # PE equation
-  Sigma[5, 5] <- -(death_p + gamma_p + proph_ongoing + waning) # PE death, become infected, proph, waning
+  Sigma[5, 5] <- -(death_p + gamma_p + proph_ongoing + waning_from_partial_protection) # PE death, become infected, proph, waning_from_partial_protection
   
   # PEX equation
   Sigma[6, 5] <- proph_ongoing                        # from PE
@@ -118,18 +118,18 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   
   # PI equation
   Sigma[7, 5] <- gamma_p                              # from PE
-  Sigma[7, 7] <- -(death_p + sigma_p + treatment_p + treatment_q + proph_ongoing + waning) # death, recovery or treatment of PI
+  Sigma[7, 7] <- -(death_p + sigma_p + treatment_p + treatment_q + proph_ongoing + waning_from_partial_protection) # death, recovery or treatment of PI
   
   # PT equation
   Sigma[8, 7] <- treatment_q                          # from PI
-  Sigma[8, 8] <- -(death_p + sigma_treated + waning)  # PT death, recovery due to treatment
+  Sigma[8, 8] <- -(death_p + sigma_treated + waning_from_partial_protection)  # PT death, recovery due to treatment
   
   # PP equation
   Sigma[9, 2] <- gamma_c                              # from CEX
   Sigma[9, 3] <- treatment_p + proph_ongoing          # from CI
   Sigma[9, 7] <- treatment_p + proph_ongoing         # from PI
   Sigma[9, 6] <- gamma_p                              # from PEX
-  Sigma[9, 9] <- -(death_p + sigma_treated + waning)  # PP death, recovery due to treatment
+  Sigma[9, 9] <- -(death_p + sigma_treated + waning_from_partial_protection)  # PP death, recovery due to treatment
   
   # WE equation
   Sigma[10, 10] <- -(death_w + gamma_w)               # death, become infected

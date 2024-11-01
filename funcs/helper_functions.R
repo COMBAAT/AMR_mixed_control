@@ -359,12 +359,12 @@ merge_two_Rda_files <- function(file1, file2, file_label) {
 }
 
 get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
-                                                          waning_F2S, death_p, waning, proph_ongoing) {
+                                                          waning_F2S, death_p, waning_from_partial_protection, proph_ongoing) {
   # get matrix from odes for PF, PS and CS in absence of disease
   M <- matrix(c(
     death_p + waning_F2S, -proph_ongoing, -proph_ongoing,
-    waning_F2S, -(waning + death_p + proph_ongoing), 0,
-    0, -waning, death_c + proph_ongoing
+    waning_F2S, -(waning_from_partial_protection + death_p + proph_ongoing), 0,
+    0, -waning_from_partial_protection, death_c + proph_ongoing
   ), byrow = TRUE, ncol = 3)
 
   this_vec <- c(

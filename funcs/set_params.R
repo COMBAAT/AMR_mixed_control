@@ -246,15 +246,15 @@ set_parameters_NEW <- function(this_scenario) {
 
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
-  waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
+  waning_from_partial_protection <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
   # waning_F2S <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
-  waning_baseline <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
-  waning_F2S <- waning_baseline * waning_baseline / (waning_baseline + proph_ongoing)
+  waning_from_full_protection <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  waning_F2S <- waning_from_full_protection * waning_from_full_protection / (waning_from_full_protection + proph_ongoing)
 
 
   equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(
     birth_c, prop_prophylaxis_at_birth, NC, death_c,
-    waning_F2S, death_p, waning, proph_ongoing
+    waning_F2S, death_p, waning_from_partial_protection, proph_ongoing
   )
 
   PF <- equilibrium_values["PF"]
@@ -310,7 +310,7 @@ set_parameters_NEW <- function(this_scenario) {
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st,
-    emergence_p, emergence_q, waning, waning_F2S
+    emergence_p, emergence_q, waning_from_partial_protection, waning_F2S
   )
   derived_params <- convert_array_to_named_vector(derived_params)
 
