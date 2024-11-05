@@ -17,7 +17,7 @@ if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
 } else {
-  load("output/test_merge.Rda")
+  load("output/test_merge2.Rda")
 }
 # create a directory for the plots
 path <- "output/grant_plots4/"
