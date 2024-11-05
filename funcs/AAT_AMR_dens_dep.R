@@ -106,35 +106,39 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   gamma_v <- parms["gamma_v"]
   ten2fed <- parms["ten2fed"]
 
+  # Total infected hosts
+  Is <- CIs + CTs + PIs + PTs + PPs + WIs
+  Ir <- CIr + CTr + PIr + PTr + PPr + WIr
 
   # Population total ----
   C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEsX + CErX
   P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
   W <- WS + WEs + WEr + WIs + WIr
   V <- VSt + VSf + VEs + VEr + VIs + VIr
-  PC <- P + C
+  NC <- P + C
   N <- C + P + W
 
   # Cattle without long-lasting drug treatment ----
 
   dCS.dt <-
-    birth_c * (1 - prop_prophylaxis_at_birth) * PC +
+    birth_c * (1 - prop_prophylaxis_at_birth) * NC +
     waning_from_partial_protection * PS -
     biterate * prob_infection_to_host * CS * VIs / N -
-    biterate * prob_infection_to_host * fit_adj * CS * VIr / N +
+    biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
+    proph_ongoing * CS +
     sigma_c * CIs +
     sigma_c * CIr +
     sigma_st * CTs +
     sigma_c * CTr -
-    death_c * CS -
-    proph_ongoing * CS
+    death_c * CS
+    
 
   dCEs.dt <-
     biterate * prob_infection_to_host * CS * VIs / N -
     gamma_c * CEs +
     waning_from_partial_protection * PEs -
-    death_c * CEs -
-    proph_ongoing * CEs
+    proph_ongoing * CEs -
+    death_c * CEs
 
   dCEsX.dt <-
     proph_ongoing * CEs -
@@ -147,8 +151,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
     gamma_c * CEr +
     waning_from_partial_protection * PEr -
-    death_c * CEr -
-    proph_ongoing * CEr
+    proph_ongoing * CEr -
+    death_c * CEr
 
   dCErX.dt <-
     proph_ongoing * CEr -
@@ -160,20 +164,22 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dCIs.dt <- gamma_c * CEs -
     treatment_q * CIs -
     treatment_p * CIs -
+    proph_ongoing * CIs -
     sigma_c * CIs +
     waning_from_partial_protection * PIs +
     waning_from_partial_protection * PPs -
-    death_c * CIs -
-    proph_ongoing * CIs
+    death_c * CIs
+    
 
   dCIr.dt <- gamma_c * CEr -
     treatment_q * CIr -
     treatment_p * CIr -
+    proph_ongoing * CIr -
     sigma_c * CIr +
     waning_from_partial_protection * PIr +
     waning_from_partial_protection * PPr -
-    death_c * CIr -
-    proph_ongoing * CIr
+    death_c * CIr
+    
 
   dCTs.dt <- treatment_q * CIs -
     sigma_st * CTs -
@@ -189,39 +195,39 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
 # Cattle with long lasting drug treatment ----
   
-  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * PC - # Adding new prophylactically treated cattle
+  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * NC - # Adding new prophylactically treated cattle
     biterate * prob_infection_to_host * fit_adj * PF * VIr / N + # Infection with resistant strain
     sigma_st * PPs + 
     sigma_c * PPr - 
-    waning_F2S * PF - # waning from fully protected to partially protected
-    death_c * PF +
+    waning_F2S * PF + # waning from fully protected to partially protected
     proph_ongoing * PS +
     proph_ongoing * CS +
     sigma_st * CEsX +
     sigma_c * CErX +
     sigma_st * PEsX +
-    sigma_c * PErX
-
+    sigma_c * PErX -
+    death_c * PF
 
   dPS.dt <- 
     waning_F2S * PF - # waning from fully protected to partially protected
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - # Infection with sensitive strain
-    biterate * prob_infection_to_host * fit_adj * PS * VIr / N + # Infection with resistant strain
+    biterate * prob_infection_to_host * fit_adj * PS * VIr / N - # Infection with resistant strain
+    proph_ongoing * PS +
     sigma_c * PIs + 
     sigma_c * PIr + 
     sigma_st * PTs + 
     sigma_c * PTr - 
     waning_from_partial_protection * PS - 
-    death_c * PS -
-    proph_ongoing * PS
+    death_c * PS
+    
 
   dPEs.dt <-
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - 
     gamma_c * PEs - 
     emergence_p * PEs -
     waning_from_partial_protection * PEs - 
-    death_c * PEs - 
-    proph_ongoing * PEs
+    proph_ongoing * PEs -
+    death_c * PEs
 
   dPEsX.dt <-
     proph_ongoing * PEs -
@@ -237,8 +243,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     gamma_c * PEr + 
     emergence_p * PEs -
     waning_from_partial_protection * PEr - 
-    death_c * PEr -
-    proph_ongoing * PEr
+    proph_ongoing * PEr -
+    death_c * PEr
 
   dPErX.dt <-
     proph_ongoing * PEr -
@@ -254,8 +260,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PIs - 
     emergence_p * PIs - 
     waning_from_partial_protection * PIs - 
-    death_c * PIs - 
-    proph_ongoing * PIs
+    proph_ongoing * PIs -
+    death_c * PIs
 
   dPIr.dt <- gamma_c * PEr - 
     treatment_q * PIr - 
@@ -263,9 +269,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PIr + 
     emergence_p * PIs - 
     waning_from_partial_protection * PIr - 
-    death_c * PIr - 
-    proph_ongoing * PIr
-
+    proph_ongoing * PIr -
+    death_c * PIr
 
   dPTs.dt <- treatment_q * PIs - 
     sigma_st * PTs - 
@@ -285,33 +290,33 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * CIs - 
     emergence_p * PPs -
     sigma_st * PPs - 
-    waning_from_partial_protection * PPs - 
-    death_c * PPs + 
+    waning_from_partial_protection * PPs +
     proph_ongoing * PIs +
     proph_ongoing * CIs +
     gamma_c * CEsX +
-    gamma_c * PEsX
+    gamma_c * PEsX -
+    death_c * PPs
 
   dPPr.dt <- treatment_p * PIr + 
     treatment_p * CIr + 
     emergence_p * PPs -
     sigma_c * PPr - 
-    waning_from_partial_protection * PPr - 
-    death_c * PPr + 
+    waning_from_partial_protection * PPr + 
     proph_ongoing * PIr +
     proph_ongoing * CIr +
     gamma_c * CErX +
-    gamma_c * PErX
+    gamma_c * PErX -
+    death_c * PPr
 
   
   # Wildlife ----
 
   dWS.dt <- birth_w * W -
     biterate * prob_infection_to_host * WS * VIs / N -
-    biterate * (prob_infection_to_host * fit_adj) * WS * VIr / N -
-    death_w * WS +
+    biterate * (prob_infection_to_host * fit_adj) * WS * VIr / N +
     sigma_w * WIs +
-    sigma_w * WIr
+    sigma_w * WIr -
+    death_w * WS
 
   dWEs.dt <-
     biterate * prob_infection_to_host * WS * VIs / N -
@@ -330,24 +335,24 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   # Tsetse ----
 
   dVSt.dt <- birth_v * V * (1 - V / K) -
-    prob_infection_to_vector * biterate * VSt * (CIs + CTs + PIs + PTs + PPs + WIs) / N -
-    prob_infection_to_vector * biterate * VSt * (CIr + CTr + PIr + PTr + PPr + WIr) / N -
+    prob_infection_to_vector * biterate * VSt * Is / N -
+    prob_infection_to_vector * biterate * VSt * Ir / N -
     ten2fed * VSt -
     death_v * VSt
 
   dVSf.dt <- ten2fed * VSt -
-    prob_infection_to_vector * biterate * VSf * (CIs + CTs + PIs + PTs + PPs + WIs) / N -
-    prob_infection_to_vector * biterate * VSf * (CIr + CTr + PIr + PTr + PPr + WIr) / N -
+    prob_infection_to_vector * biterate * VSf * Is / N -
+    prob_infection_to_vector * biterate * VSf * Ir / N -
     death_v * VSf
 
   dVEs.dt <- 
-    prob_infection_to_vector * biterate * VSt * (CIs + CTs + PIs + PTs + PPs + WIs) / N +
-    prob_infection_to_vector * biterate * VSf * (CIs + CTs + PIs + PTs + PPs + WIs) / N -
+    prob_infection_to_vector * biterate * VSt * Is  / N +
+    prob_infection_to_vector * biterate * VSf * Is  / N -
     gamma_v * VEs - death_v * VEs
 
   dVEr.dt <-
-    prob_infection_to_vector * biterate * VSt * (CIr + CTr + PIr + PTr + PPr + WIr) / N +
-    prob_infection_to_vector * biterate * VSf * (CIr + CTr + PIr + PTr + PPr + WIr) / N -
+    prob_infection_to_vector * biterate * VSt * Ir / N +
+    prob_infection_to_vector * biterate * VSf * Ir / N -
     gamma_v * VEr - death_v * VEr
 
   dVIs.dt <- gamma_v * VEs - death_v * VIs
