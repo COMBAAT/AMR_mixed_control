@@ -132,7 +132,7 @@ Rplot <- all_scenarios_summary %>%
     shape = as.factor(treatment_type)
   )) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black")
-Rplot
+#Rplot
 
 
 # glimpse(all_scenarios_summary)
