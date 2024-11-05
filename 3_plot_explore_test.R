@@ -26,7 +26,7 @@ if (load_latest_file == TRUE) {
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-option = 1
+option = 2
 subset <- create_data_subsets(test, option)
 
 # subset further by scenario if addiotnal parameters varied, default is first row
