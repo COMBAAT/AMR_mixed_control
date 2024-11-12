@@ -12,7 +12,7 @@ source("funcs/helper_functions.R")
 #source("funcs/plots_for_grant_helper.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- FALSE
+load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
@@ -20,21 +20,26 @@ if (load_latest_file == TRUE) {
   load("output/test_merge2.Rda")
 }
 # create a directory for the plots
-path <- "output/grant_plots4/"
+path <- "output/Nov12_quick_proph/"
 dir.create(path)
 
 plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
 data_subsets <- list()
 for (option in 1:2) {
-  data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.6)
+  data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.8)
 }
+
+################################################################################
+this_K <- 4000
+this_NW <- 100
+################################################################################
 
 # create the selective advantage plots
 pSA_vertical <- list()
 pSA_inset <- list()
 for (option in 1:2) {
-  pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], 4000, labels[[option]], plot_titles[option])
+  pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, labels[[option]], plot_titles[option])
   pSA_vertical[[option]] <- pSA_plots[[1]]
   pSA_inset[[option]] <- pSA_plots[[2]]
   ggsave(paste0(path, "pSA_vertical_", labels[option], ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
@@ -48,18 +53,12 @@ ggsave(paste0(path, "pSA_inset_both.pdf"), pSA_inset_both, width = 5.1, height =
 
 
 ################################################################################
-this_K <- 4000
-this_NW <- 100
 ################################################################################
-p2_plots <- list()
-p3_plots <- list()
 p4_plots <- list()
 p5_plots <- list()
 panel_plots <- list()
 
 for (option in 1:2) {
-  p2_plots[[option]] <- plot_type11b_selective_advantage_by_NW_and_insectide(data_subsets[[option]], this_K, ymax = 3, this_NW) + ggtitle(plot_titles[option])
-  p3_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "prevalence", this_K, ymax = 1, this_NW) 
   p4_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "RiskE", this_K, ymax = 5, this_NW) 
   p5_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "Incidence", this_K, ymax = 500, this_NW) 
   panel_plots[[option]] <-(p5_plots[[option]] + p4_plots[[option]]) + plot_layout(guides = "collect", axes = "collect", nrow = 1, widths = c(1, 1)) + 
