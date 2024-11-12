@@ -337,7 +337,7 @@ get_latest_Rda_file <- function() {
   latest_file
 }
 
-merge_two_Rda_files <- function(file1, file2, file_label) {
+merge_two_Rda_files <- function(file1, file2, merged_file) {
   load(file1)
   test1 <- test
   scenarios_df1 <- scenarios_df
@@ -354,7 +354,7 @@ merge_two_Rda_files <- function(file1, file2, file_label) {
   test <- distinct(rbind(test1, test2))
   scenarios_df <- distinct(rbind(scenarios_df1, scenarios_df2))
   
-  filename <- paste0("output/", file_label, ".Rda")
+  filename <- paste0("output/", merged_file)
   save(test, scenarios_df, baseline_parameters, file = filename)
 }
 
