@@ -105,7 +105,7 @@ my_theme <- function() {
 #-------------------------------------------------------------------------------
 
 
-plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var) {
+plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
@@ -114,7 +114,7 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var) {
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
       prop_cattle_with_insecticide == 0,
-      NW %in% c(0, 100, 250)
+      NW %in% this_NW_set
     ) %>%
     ggplot(aes(treat_prop, y, shape = K, colour = NW)) +
     geom_point(size = my_pointsize()) +
@@ -143,7 +143,7 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var) {
 #
 #-------------------------------------------------------------------------------
 
-plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df, this_K, y_var) {
+plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df, this_K, y_var, this_NW_set) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
@@ -152,7 +152,7 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
       #prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
-      NW %in% c(0, 100, 250),
+      NW %in% this_NW_set,
       K == this_K
     ) %>%
     ggplot(aes(treat_prop, RiskA, shape = NW, colour = prop_cattle_with_insecticide)) +
@@ -185,7 +185,7 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
 #-------------------------------------------------------------------------------
 
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight <- function(
-    df, this_K, y_var, threshold_var, threshold) {
+    df, this_K, y_var, threshold_var, threshold, this_NW_set) {
   df$y <- df[, y_var]
   df$threshold_var <- df[, threshold_var]
   this_xlab <- my_label("treat_prop")
@@ -195,7 +195,7 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
       prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
-      NW %in% c(0, 100, 250),
+      NW %in% this_NW_set,
       K == this_K
     ) %>%
     ggplot(aes(treat_prop, y,
@@ -232,7 +232,7 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
 #
 #-------------------------------------------------------------------------------
 
-plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K) {
+plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K, this_NW_set) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
@@ -241,7 +241,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K) {
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
       K == this_K,
-      NW %in% c(0, 100, 250)
+      NW %in% this_NW_set
     ) %>%
     ggplot(aes(treat_prop, y, shape = K, colour = prop_cattle_with_insecticide)) +
     geom_point(size = my_pointsize()) +
@@ -270,7 +270,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_K) {
 #
 #-------------------------------------------------------------------------------
 
-plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var, this_K) {
+plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var, this_K, this_NW_set) {
   df$y <- df[, y_var]
   this_xlab <- my_label("prop_cattle_with_insecticide")
   this_ylab <- my_label(y_var)
@@ -285,7 +285,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
       prop_cattle_with_insecticide <= 0.5,
       #treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.91),
       treat_prop %in% nearest_vector,
-      NW %in% c(0, 100, 250),
+      NW %in% this_NW_set,
       K == this_K
     ) %>%
     ggplot(aes(prop_cattle_with_insecticide, y, shape = K, colour = treat_prop)) +
@@ -314,7 +314,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
 #
 #-------------------------------------------------------------------------------
 
-plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var) {
+plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var, this_NW_set) {
   df$y <- df[, y_var]
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label(y_var)
@@ -323,7 +323,7 @@ plot_type6_y_versus_treat_prop_facet_NW_K <- function(df, y_var) {
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
       K %in% c(500, 1000, 6000),
-      NW %in% c(0, 100, 250)
+      NW %in% this_NW_set
     ) %>%
     ggplot(aes(treat_prop, y, shape = K, colour = prop_cattle_with_insecticide)) +
     geom_point(size = my_pointsize()) +
@@ -358,10 +358,10 @@ plot_type10_R0sen_versus_Rsen <- function(df) {
 
 
 # Plot R resistant/R sensitive versus wildlife
-plot_type11_selective_advantage_by_NW <- function(df, this_K, lw = my_linewidth(), ps = my_pointsize()) {
+plot_type11_selective_advantage_by_NW <- function(df, this_K, this_insecticide, lw = my_linewidth(), ps = my_pointsize()) {
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    filter(prop_cattle_with_insecticide == 0, K == this_K) %>%
+    filter(prop_cattle_with_insecticide == this_insecticide, K == this_K) %>%
     #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
     ggplot(aes(treat_prop, ratio, colour = NW)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
@@ -377,19 +377,41 @@ plot_type11_selective_advantage_by_NW <- function(df, this_K, lw = my_linewidth(
   p
 }
 
-plot_type11b_selective_advantage_by_NW_and_insectide <- function(df, this_K, ymax, this_NW) {
+plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, lw = my_linewidth(), ps = my_pointsize()) {
+  p <- df %>%
+    mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
+    mutate(danger = ifelse(R0sen  > 1, "no", "yes")) %>%
+    filter(NW == this_NW, K == this_K, R0sen > 1) %>%
+    #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
+    ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide, linetype = prop_cattle_with_insecticide)) +
+    geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
+    geom_point(size = ps) +
+    geom_line(linewidth = lw) +
+    xlim(c(0,1)) +
+    xlab(my_label("treat_prop")) +
+    #ylab("Selective advantage to \n resistant strain") +
+    #labs(colour = my_label("NW"), shape = my_label("K")) +
+    labs(colour = my_label("prop_cattle_with_insecticide"), linetype = my_label("prop_cattle_with_insecticide")) +
+    my_theme()
+  
+  p
+}
+
+
+plot_type11_selective_advantage_by_NW_and_insectide <- function(df, this_K, ymax, this_NW) {
   insecticide_vector <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5) #unique(df$prop_cattle_with_insecticide)
   this_xlab <- my_label("treat_prop")
   this_ylab <- my_label("ratio")
   
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "prop_cattle_with_insecticide"), as.factor) %>%
-    #filter(K == this_K, prop_cattle_with_insecticide %in% insecticide_vector, NW %in% c(0, 10, 50, 100, 250)) %>%
-    filter(K == this_K, prop_cattle_with_insecticide %in% insecticide_vector, NW == this_NW) %>%
+    filter(K == this_K, prop_cattle_with_insecticide %in% insecticide_vector, NW %in% c(0, 10, 50, 100, 250)) %>%
+    #filter(K == this_K, prop_cattle_with_insecticide %in% insecticide_vector, NW == this_NW) %>%
     #ggplot(aes(treat_prop, ratio, shape = NW, colour = prop_cattle_with_insecticide)) +
     ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
-    #facet_wrap(~NW, nrow = 1) +
+    facet_wrap(~NW, nrow = 1) +
+    #facet_wrap(~prop_cattle_with_insecticide, nrow = 1) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
@@ -429,9 +451,11 @@ plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, this_K, ymax, this_N
 
 
 # functions for plotting
-create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, label, plot_title) {
-  p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, lw = 0.7, ps = 2)
-  p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K)
+create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, this_NW, label, plot_title) {
+  p1a <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, lw = 0.7, ps = 2)
+  p1b <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW)
+  p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0, lw = 0.7, ps = 2)
+  p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0)
   p1b <- p1b + ggtitle(plot_title) +
     geom_rect(aes(xmin = 0.0, xmax = 0.5, ymin = 0.0, ymax = 2.0),
               fill = "transparent", color = "black", linewidth = 0.5, linetype = "dashed"
