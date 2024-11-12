@@ -425,7 +425,8 @@ R0_and_R_trajectories <- function(df) {
     geom_line(aes(x = time, y = R0_R_value, colour = R_type, linetype = R_type)) +
     scale_color_manual(values = my_colours) +
     scale_linetype_manual(values = my_lines) +
-    geom_hline(yintercept = 1, linetype = "dotted")
+    geom_hline(yintercept = 1, linetype = "dotted") + 
+    expand_limits(x = 0, y = 0)
   ylab("R0 or R value") +
     guides(
       color = guide_legend(title = ""),
