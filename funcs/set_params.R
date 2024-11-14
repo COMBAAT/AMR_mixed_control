@@ -218,6 +218,8 @@ set_parameters_NEW <- function(this_scenario) {
   reversion <- this_scenario$reversion
   option <- this_scenario$option
   maintain_vector_pop <- this_scenario$maintain_vector_pop
+  
+  NH <- NC + NW
 
   baseline_params <- get_baseline_parameters()
 
@@ -304,7 +306,7 @@ set_parameters_NEW <- function(this_scenario) {
 
   ## ----- Parameters output
   derived_params <- cbind(
-    biterate,
+    biterate, NH,
     NV, PF, PS, CS, VSt, VSf, equil_vector_pop,
     birth_c, death_c, gamma_c, sigma_c,
     birth_w, death_w, gamma_w, sigma_w,

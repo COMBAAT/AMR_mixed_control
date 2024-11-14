@@ -42,7 +42,7 @@ calculate_R_from_row_of_df2 <- function(params, this_row) {
 
 
 R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  NH <- params["NC"] + params["NW"]
+  NH <- params["NH"] #+ params["NW"]
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]

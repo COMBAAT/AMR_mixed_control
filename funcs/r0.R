@@ -68,7 +68,7 @@ library(codetools)
 
 
 R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  NH <- params["NC"] + params["NW"]
+  NH <- params["NH"] #+ params["NW"]
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
