@@ -68,7 +68,7 @@ library(codetools)
 
 
 R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  Nh <- params["NC"] + params["NW"]
+  NH <- params["NC"] + params["NW"]
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
@@ -118,7 +118,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
 
 
-  rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / Nh * gamma_v / (gamma_v + death_v)
+  rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v)
   prob_CI_from_CE <- gamma_c / (gamma_c + death_c + proph_ongoing)
   prob_PI_from_PE <- gamma_p / (gamma_p + death_p + proph_ongoing + waning_from_partial_protection)
   time_in_CI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
@@ -147,7 +147,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
                            prob_CI_from_CE, time_in_CT)
   RVC <- as.numeric(RVC)
   
-  RCV <- biterate * prob_infection_to_host * (Nc / Nh) * 1 / (death_v)
+  RCV <- biterate * prob_infection_to_host * (Nc / NH) * 1 / (death_v)
   RCV <- as.numeric(RCV)
   
   # transmission via P
@@ -162,24 +162,26 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   
   
   if (is_strain_sensitive == "yes") {
-    RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / Nh * 1 / (death_v)
+    RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / NH * 1 / (death_v)
   }
   if (is_strain_sensitive == "no") {
-    RPV <- biterate * prob_infection_to_host * ((Nps + Npf) / Nh) * 1 / (death_v)
+    RPV <- biterate * prob_infection_to_host * ((Nps + Npf) / NH) * 1 / (death_v)
   }
   RPV <- as.numeric(RPV)
 
   # transmission via W
-  RVW <- biterate * prob_infection_to_vector * Nv / Nh * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
+  RVW <- biterate * prob_infection_to_vector * Nv / NH * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
   RVW <- as.numeric(RVW)
   
-  RWV <- biterate * prob_infection_to_host * Nw / Nh * gamma_w / (gamma_w + death_w) * 1 / (death_v)
+  RWV <- biterate * prob_infection_to_host * Nw / NH * gamma_w / (gamma_w + death_w) * 1 / (death_v)
   RWV <- as.numeric(RWV)
   
 
   reproduction_number <- RCV * RVC + RPV * RVP + RWV * RVW
   reproduction_number
 }
+
+#################################################################################
 
 #################################################################################
 #################################################################################
@@ -195,27 +197,23 @@ calculate_R1 <- function(time_in_CI, prob_CI_treat_q, prob_CI_treat_p, prob_prop
   R1
 }
 
-
+#################################################################################
 calculate_RVC <- function(time_in_CI, prob_CI_treat_q, prob_CI_treat_p, prob_proph_from_CI, prob_proph_from_PE, prob_disease_from_CEX,
                           rate_vectors_infected, p1c, p2c, prob_waning_from_partial_protection_from_PP, time_in_PP, prob_proph_from_CE,
                           prob_CI_from_CE, time_in_CT) {
   
-  time_infectious_route1 <- (time_in_CI +
-    prob_CI_treat_q * time_in_CT +
-    prob_CI_treat_p * time_in_PP +
-    prob_proph_from_CI * time_in_PP) / (1 - p1c * p2c)
+  R1 <- calculate_R1(time_in_CI, prob_CI_treat_q, prob_CI_treat_p, prob_proph_from_CI,
+                     rate_vectors_infected, p1c, p2c, time_in_CT, time_in_PP)
 
 
   prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
 
   # transmission via C
-  R1 <- rate_vectors_infected * time_infectious_route1
   RVC <- prob_CI_from_CE * R1 + prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * R1 + prob_PP_from_CE * time_in_PP * rate_vectors_infected
   RVC <- as.numeric(RVC)
   RVC
 }
 
-#################################################################################
 #################################################################################
 calculate_RVP <- function(rate_vectors_infected, time_in_PI, prob_waning_from_partial_protection_from_PI,
                           prob_PI_treat_q, time_in_PT, prob_PI_treat_p, time_in_PP, prob_proph_from_PI,
@@ -253,7 +251,6 @@ calculate_RVP <- function(rate_vectors_infected, time_in_PI, prob_waning_from_pa
   RVP <- as.numeric(RVP)
 }
 
-#################################################################################
 #################################################################################
 
 #-------------------------------------------------------------------------------

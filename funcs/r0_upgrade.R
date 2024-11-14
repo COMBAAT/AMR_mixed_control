@@ -42,7 +42,7 @@ calculate_R_from_row_of_df2 <- function(params, this_row) {
 
 
 R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  Nh <- params["NC"] + params["NW"]
+  NH <- params["NC"] + params["NW"]
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
@@ -152,21 +152,21 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   Transmission <- matrix(0, size_of_infectious_subsystem, size_of_infectious_subsystem)
 
   # CE equation
-  Transmission[1, 13] <- biterate * prob_infection_to_host * Nc / Nh
+  Transmission[1, 13] <- biterate * prob_infection_to_host * Nc / NH
 
   # PE equation
-  Transmission[5, 13] <- biterate * prob_infection_to_host * Npsus / Nh
+  Transmission[5, 13] <- biterate * prob_infection_to_host * Npsus / NH
 
   # WE equation
-  Transmission[10, 13] <- biterate * prob_infection_to_host * Nw / Nh
+  Transmission[10, 13] <- biterate * prob_infection_to_host * Nw / NH
 
   # VE equation
-  Transmission[12, 3] <- biterate * prob_infection_to_vector * Nv / Nh
-  Transmission[12, 4] <- biterate * prob_infection_to_vector * Nv / Nh
-  Transmission[12, 7] <- biterate * prob_infection_to_vector * Nv / Nh
-  Transmission[12, 8] <- biterate * prob_infection_to_vector * Nv / Nh
-  Transmission[12, 9] <- biterate * prob_infection_to_vector * Nv / Nh
-  Transmission[12, 11] <- biterate * prob_infection_to_vector * Nv / Nh
+  Transmission[12, 3] <- biterate * prob_infection_to_vector * Nv / NH
+  Transmission[12, 4] <- biterate * prob_infection_to_vector * Nv / NH
+  Transmission[12, 7] <- biterate * prob_infection_to_vector * Nv / NH
+  Transmission[12, 8] <- biterate * prob_infection_to_vector * Nv / NH
+  Transmission[12, 9] <- biterate * prob_infection_to_vector * Nv / NH
+  Transmission[12, 11] <- biterate * prob_infection_to_vector * Nv / NH
 
 
   NGM <- -Transmission %*% Inv_sigma
