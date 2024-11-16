@@ -1,4 +1,3 @@
-
 # =========================================================
 # Function Names: R_calc_sen_or_res, calculate_R0, calculate_R_from_row_of_df, add_R_trajectories, add_R0
 # Description: This script provides functions for calculating the basic reproduction number (R0) and other related
@@ -68,35 +67,20 @@ library(codetools)
 
 
 R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  NH <- params["NH"] 
+  NH <- params["NH"]
 
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
   partial_susceptibility_proph_cattle <- params["partial_susceptibility_proph_cattle"]
   prob_infection_to_vector <- params["prob_infection_to_vector"]
   fit_adj <- params["fit_adj"]
-
-  # treatment_p <- params["treatment_p"]
-  # treatment_q <- params["treatment_q"]
-  # waning_from_partial_protection <- params["waning_from_partial_protection"]
-  # 
-  # gamma_c <- params["gamma_c"]
-  # death_c <- params["death_c"]
   sigma_c <- params["sigma_c"]
   sigma_st <- params["sigma_st"]
-
-  #gamma_p <- params["gamma_c"]
-  #death_p <- params["death_c"]
-  # sigma_p <- params["sigma_c"]
-
   gamma_w <- params["gamma_w"]
   death_w <- params["death_w"]
   sigma_w <- params["sigma_w"]
-
   gamma_v <- params["gamma_v"]
   death_v <- params["death_v"]
-  #proph_ongoing <- params["proph_ongoing"]
-
 
   if (is_strain_sensitive == "yes") {
     sigma_treated <- sigma_st
@@ -108,9 +92,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
     prob_infection_to_host <- prob_infection_to_host * fit_adj
   }
 
-
   rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v)
-  
+
   transition_probabilities <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
   time_in_state <- create_named_vector_of_times_in_state(params, is_strain_sensitive)
 
@@ -118,16 +101,16 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   # from exposed host to infected vector
   RVC <- calculate_RVC(rate_vectors_infected, time_in_state, transition_probabilities)
   RVC <- as.numeric(RVC)
-  
+
   # from infected vector to exposed host
   RCV <- biterate * prob_infection_to_host * (Nc / NH) * 1 / (death_v)
   RCV <- as.numeric(RCV)
-  
+
   # transmission via P - cattle with prophylaxis
   # from exposed P to infected vector
   RVP <- calculate_RVP(rate_vectors_infected, time_in_state, transition_probabilities)
   RVP <- as.numeric(RVP)
-  
+
   # from infected vector to exposed P
   if (is_strain_sensitive == "yes") {
     RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / NH * 1 / (death_v)
@@ -141,11 +124,10 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   # from infected wildlife to infected vector
   RVW <- biterate * prob_infection_to_vector * Nv / NH * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
   RVW <- as.numeric(RVW)
-  
+
   # from infected vector to infected wildlife
   RWV <- biterate * prob_infection_to_host * Nw / NH * gamma_w / (gamma_w + death_w) * 1 / (death_v)
   RWV <- as.numeric(RWV)
-  
 
   reproduction_number <- RCV * RVC + RPV * RVP + RWV * RVW
   reproduction_number
@@ -155,71 +137,67 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 
 #################################################################################
 #################################################################################
-  calculate_R1 <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  
+calculate_R1 <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
   time_infectious_route1 <- with(as.list(c(time_in_state, transition_probabilities)), {
-                              result <- (time_in_CI +
-                               prob_CI_treat_q * time_in_CT +
-                               prob_CI_treat_p * time_in_PP +
-                               prob_proph_from_CI * time_in_PP) / (1 - p1c * p2c)
-                              result
-                              })
-                              
+    result <- (time_in_CI +
+      prob_CI_treat_q * time_in_CT +
+      prob_CI_treat_p * time_in_PP +
+      prob_proph_from_CI * time_in_PP) / (1 - p1c * p2c)
+    result
+  })
+
   R1 <- rate_vectors_infected * time_infectious_route1
   R1
 }
 
 #################################################################################
-  calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  
+calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
   R1 <- calculate_R1(rate_vectors_infected, time_in_state, transition_probabilities)
-  
-  RVC <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, R1)), {
-  
-  prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
 
-  # transmission via C
-  RVC <- prob_CI_from_CE * R1 + prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * R1 + prob_PP_from_CE * time_in_PP * rate_vectors_infected
-  RVC <- as.numeric(RVC)
-  RVC
+  RVC <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, R1)), {
+    prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
+
+    # transmission via C
+    RVC <- prob_CI_from_CE * R1 + prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * R1 + prob_PP_from_CE * time_in_PP * rate_vectors_infected
+    RVC <- as.numeric(RVC)
+    RVC
   })
 
   return(RVC)
 }
 
 #################################################################################
-  calculate_RVP <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  
+calculate_RVP <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
   R1 <- calculate_R1(rate_vectors_infected, time_in_state, transition_probabilities)
   RVC <- calculate_RVC(rate_vectors_infected, time_in_state, transition_probabilities)
-  
+
   RVP <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, R1)), {
-  # transmission via P
-  #prob_proph_from_PE2 <- proph_ongoing / (gamma_p + death_p + proph_ongoing + waning_from_partial_protection) *
-  #  gamma_p / (gamma_p + death_p + sigma_treated)
-  prob_PP_from_PE <- prob_proph_from_PE * prob_disease_from_PEX
+    # transmission via P
+    # prob_proph_from_PE2 <- proph_ongoing / (gamma_p + death_p + proph_ongoing + waning_from_partial_protection) *
+    #  gamma_p / (gamma_p + death_p + sigma_treated)
+    prob_PP_from_PE <- prob_proph_from_PE * prob_disease_from_PEX
 
-  RVP1 <- rate_vectors_infected * time_in_PI + prob_waning_from_partial_protection_from_PI * R1 + # contribution from PIs
-    rate_vectors_infected * prob_PI_treat_q * time_in_PT +
-    rate_vectors_infected * prob_PI_treat_q * prob_waning_from_partial_protection_from_PT * time_in_CT +
+    RVP1 <- rate_vectors_infected * time_in_PI + prob_waning_from_partial_protection_from_PI * R1 + # contribution from PIs
+      rate_vectors_infected * prob_PI_treat_q * time_in_PT +
+      rate_vectors_infected * prob_PI_treat_q * prob_waning_from_partial_protection_from_PT * time_in_CT +
 
-    rate_vectors_infected * prob_PI_treat_p * time_in_PP + # contrib from PPs
-    # contribution from waning_from_partial_protection back to CIS
-    prob_PI_treat_p * prob_waning_from_partial_protection_from_PP * R1 +
+      rate_vectors_infected * prob_PI_treat_p * time_in_PP + # contrib from PPs
+      # contribution from waning_from_partial_protection back to CIS
+      prob_PI_treat_p * prob_waning_from_partial_protection_from_PP * R1 +
 
-    rate_vectors_infected * prob_proph_from_PI * time_in_PP +
-    prob_proph_from_PI * prob_waning_from_partial_protection_from_PP * R1
-
-
-  RVP2 <- prob_PP_from_PE * time_in_PP * rate_vectors_infected +
-    prob_PP_from_PE * prob_waning_from_partial_protection_from_PP * R1
+      rate_vectors_infected * prob_proph_from_PI * time_in_PP +
+      prob_proph_from_PI * prob_waning_from_partial_protection_from_PP * R1
 
 
-  RVP <- RVP1 * prob_PI_from_PE + RVP2 + prob_waning_from_partial_protection_from_PE * RVC
-  RVP <- as.numeric(RVP)
-  RVP
+    RVP2 <- prob_PP_from_PE * time_in_PP * rate_vectors_infected +
+      prob_PP_from_PE * prob_waning_from_partial_protection_from_PP * R1
+
+
+    RVP <- RVP1 * prob_PI_from_PE + RVP2 + prob_waning_from_partial_protection_from_PE * RVC
+    RVP <- as.numeric(RVP)
+    RVP
   })
-  
+
   return(RVP)
 }
 
@@ -229,8 +207,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 # Function Name: calculate_R0
 #
 # Description:
-#   This function calculates the basic reproduction number (R0) for both sensitive and resistant 
-#   strains of a disease within a host-vector population model. It utilizes the `R_calc_sen_or_res` 
+#   This function calculates the basic reproduction number (R0) for both sensitive and resistant
+#   strains of a disease within a host-vector population model. It utilizes the `R_calc_sen_or_res`
 #   function to compute R0 values based on the provided epidemiological parameters.
 #
 # Parameters:
@@ -252,8 +230,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 #   print(R0_values)
 #
 # Dependencies:
-#   This function relies on the `R_calc_sen_or_res` function to compute the R0 values for both 
-#   sensitive and resistant strains. The `params` vector or list must contain all necessary 
+#   This function relies on the `R_calc_sen_or_res` function to compute the R0 values for both
+#   sensitive and resistant strains. The `params` vector or list must contain all necessary
 #   parameters with the correct names.
 #
 #-------------------------------------------------------------------------------
@@ -274,13 +252,13 @@ calculate_R0 <- function(params) {
 # Function Name: calculate_R_from_row_of_df
 #
 # Description:
-#   This function calculates the reproduction number (R) for both sensitive and resistant strains 
-#   of a disease based on a single row of data from a dataframe. The function extracts the relevant 
-#   population counts from the provided row and uses the `R_calc_sen_or_res` function to compute 
+#   This function calculates the reproduction number (R) for both sensitive and resistant strains
+#   of a disease based on a single row of data from a dataframe. The function extracts the relevant
+#   population counts from the provided row and uses the `R_calc_sen_or_res` function to compute
 #   the R values.
 #
 # Parameters:
-#   params - A named vector or list containing the model parameters necessary for calculating the 
+#   params - A named vector or list containing the model parameters necessary for calculating the
 #            reproduction number (R).
 #   this_row - A single row from a dataframe containing the population counts for:
 #              - CS: Number of cattle susceptible to infection.
@@ -302,8 +280,8 @@ calculate_R0 <- function(params) {
 #   print(R_values)
 #
 # Dependencies:
-#   This function relies on the `R_calc_sen_or_res` function to compute the R values for both 
-#   sensitive and resistant strains. The `this_row` dataframe row must contain all necessary 
+#   This function relies on the `R_calc_sen_or_res` function to compute the R values for both
+#   sensitive and resistant strains. The `this_row` dataframe row must contain all necessary
 #   population counts with the correct column names.
 #
 #-------------------------------------------------------------------------------
@@ -323,15 +301,15 @@ calculate_R_from_row_of_df <- function(params, this_row) {
 # Function Name: add_R_trajectories
 #
 # Description:
-#   This function computes the reproduction number (R) trajectories for both sensitive and resistant 
-#   strains across all rows of a dataframe. It iterates through each row of the dataframe, calculates 
-#   the R values using the `calculate_R_from_row_of_df` function, and appends these values as new columns 
+#   This function computes the reproduction number (R) trajectories for both sensitive and resistant
+#   strains across all rows of a dataframe. It iterates through each row of the dataframe, calculates
+#   the R values using the `calculate_R_from_row_of_df` function, and appends these values as new columns
 #   (Rsen and Rres) to the dataframe.
 #
 # Parameters:
-#   params - A named vector or list containing the model parameters necessary for calculating the 
+#   params - A named vector or list containing the model parameters necessary for calculating the
 #            reproduction number (R).
-#   df - A dataframe containing time series data for different population groups and their respective 
+#   df - A dataframe containing time series data for different population groups and their respective
 #        stages of disease progression. The dataframe must include columns for:
 #        - CS: Number of cattle susceptible to infection.
 #        - PS: Number of partially protected prophylactic cattle.
@@ -351,8 +329,8 @@ calculate_R_from_row_of_df <- function(params, this_row) {
 #   head(df_with_R)
 #
 # Dependencies:
-#   This function relies on the `calculate_R_from_row_of_df` function to compute the R values for each 
-#   row in the dataframe. The input dataframe `df` must contain all necessary population counts with 
+#   This function relies on the `calculate_R_from_row_of_df` function to compute the R values for each
+#   row in the dataframe. The input dataframe `df` must contain all necessary population counts with
 #   the correct column names.
 #
 #-------------------------------------------------------------------------------
@@ -378,12 +356,12 @@ add_R_trajectories <- function(params, df) {
 # Function Name: add_R0
 #
 # Description:
-#   This function calculates the basic reproduction number (R0) for both sensitive and resistant 
-#   strains of a disease using the `calculate_R0` function. It then appends these R0 values as 
+#   This function calculates the basic reproduction number (R0) for both sensitive and resistant
+#   strains of a disease using the `calculate_R0` function. It then appends these R0 values as
 #   new columns (`R0sen` and `R0res`) to the provided dataframe.
 #
 # Parameters:
-#   params - A named vector or list containing the model parameters necessary for calculating the 
+#   params - A named vector or list containing the model parameters necessary for calculating the
 #            basic reproduction number (R0).
 #   df - A dataframe to which the calculated R0 values will be added as new columns.
 #
@@ -398,7 +376,7 @@ add_R_trajectories <- function(params, df) {
 #   head(df_with_R0)
 #
 # Dependencies:
-#   This function relies on the `calculate_R0` function to compute the R0 values. The `params` vector 
+#   This function relies on the `calculate_R0` function to compute the R0 values. The `params` vector
 #   or list must contain all necessary parameters with the correct names.
 #
 #-------------------------------------------------------------------------------
