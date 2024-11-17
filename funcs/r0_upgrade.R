@@ -42,35 +42,8 @@ calculate_R_from_row_of_df2 <- function(params, this_row) {
 
 
 R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
-  NH <- params["NH"] #+ params["NW"]
 
-  biterate <- params["biterate"]
-  prob_infection_to_host <- params["prob_infection_to_host"]
-  partial_susceptibility_proph_cattle <- params["partial_susceptibility_proph_cattle"]
-  prob_infection_to_vector <- params["prob_infection_to_vector"]
-  fit_adj <- params["fit_adj"]
-
-  treatment_p <- params["treatment_p"]
-  treatment_q <- params["treatment_q"]
-  waning_from_partial_protection <- params["waning_from_partial_protection"]
-
-  gamma_c <- params["gamma_c"]
-  death_c <- params["death_c"]
-  sigma_c <- params["sigma_c"]
-  sigma_st <- params["sigma_st"]
-
-  gamma_p <- params["gamma_c"]
-  death_p <- params["death_c"]
-  sigma_p <- params["sigma_c"]
-
-  gamma_w <- params["gamma_w"]
-  death_w <- params["death_w"]
-  sigma_w <- params["sigma_w"]
-
-  gamma_v <- params["gamma_v"]
-  death_v <- params["death_v"]
-  proph_ongoing <- params["proph_ongoing"]
-
+  R0 <- with(as.list(params), {
 
   if (is_strain_sensitive == "yes") {
     sigma_treated <- sigma_st
@@ -110,26 +83,26 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   Sigma[4, 8] <- waning_from_partial_protection # waning_from_partial_protection from PT
 
   # PE equation
-  Sigma[5, 5] <- -(death_p + gamma_p + proph_ongoing + waning_from_partial_protection) # PE death, become infected, proph, waning_from_partial_protection
+  Sigma[5, 5] <- -(death_c + gamma_c + proph_ongoing + waning_from_partial_protection) # PE death, become infected, proph, waning_from_partial_protection
 
   # PEX equation
   Sigma[6, 5] <- proph_ongoing # from PE
-  Sigma[6, 6] <- -(death_p + gamma_p + sigma_treated) # PEX death, become infected, recovery due to treatment
+  Sigma[6, 6] <- -(death_c + gamma_c + sigma_treated) # PEX death, become infected, recovery due to treatment
 
   # PI equation
-  Sigma[7, 5] <- gamma_p # from PE
-  Sigma[7, 7] <- -(death_p + sigma_p + treatment_p + treatment_q + proph_ongoing + waning_from_partial_protection) # death, recovery or treatment of PI
+  Sigma[7, 5] <- gamma_c # from PE
+  Sigma[7, 7] <- -(death_c + sigma_c + treatment_p + treatment_q + proph_ongoing + waning_from_partial_protection) # death, recovery or treatment of PI
 
   # PT equation
   Sigma[8, 7] <- treatment_q # from PI
-  Sigma[8, 8] <- -(death_p + sigma_treated + waning_from_partial_protection) # PT death, recovery due to treatment
+  Sigma[8, 8] <- -(death_c + sigma_treated + waning_from_partial_protection) # PT death, recovery due to treatment
 
   # PP equation
   Sigma[9, 2] <- gamma_c # from CEX
   Sigma[9, 3] <- treatment_p + proph_ongoing # from CI
   Sigma[9, 7] <- treatment_p + proph_ongoing # from PI
-  Sigma[9, 6] <- gamma_p # from PEX
-  Sigma[9, 9] <- -(death_p + sigma_treated + waning_from_partial_protection) # PP death, recovery due to treatment
+  Sigma[9, 6] <- gamma_c # from PEX
+  Sigma[9, 9] <- -(death_c + sigma_treated + waning_from_partial_protection) # PP death, recovery due to treatment
 
   # WE equation
   Sigma[10, 10] <- -(death_w + gamma_w) # death, become infected
@@ -174,5 +147,7 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
 
   lambda <- max(Re(eigen(NGM)$values))
   R0 <- lambda^2
+  R0
+  })
   R0
 }

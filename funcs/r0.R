@@ -134,11 +134,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 }
 
 #################################################################################
-
-#################################################################################
-calculate_loop_probabilities <- function(params, is_strain_sensitive) {
-  loop_probabiities <- with(as.list(params, is_strain_sensitive), {
-    
+create_named_vector_of_transition_probabilities <- function(params, is_strain_sensitive) {
+  transition_probabilities <- with(as.list(params, is_strain_sensitive), {
     if (is_strain_sensitive == "yes") {
       sigma_treated <- sigma_st
     }
@@ -146,82 +143,67 @@ calculate_loop_probabilities <- function(params, is_strain_sensitive) {
       sigma_treated <- sigma_c
     }
     
-    # Probability of I -> Tp
-    p1c <- (treatment_p + proph_ongoing) / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
-
-    # Probability of Tp -> I
-    # p2c <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_st + death_c)
-    p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
-    list(p1c = p1c, p2c = p2c)
+    loop_probabilities <- calculate_loop_probabilities(params, is_strain_sensitive)
+    p1c <- loop_probabilities$p1c
+    p2c <- loop_probabilities$p2c
+    
+    prob_CI_from_CE <- gamma_c / (gamma_c + death_c + proph_ongoing)
+    prob_PI_from_PE <- gamma_c / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
+    prob_CI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+    prob_CI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+    prob_PI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_PI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_waning_from_partial_protection_from_PE <- waning_from_partial_protection / (gamma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_waning_from_partial_protection_from_PI <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_waning_from_partial_protection_from_PT <- waning_from_partial_protection / (sigma_treated + death_c + waning_from_partial_protection)
+    prob_waning_from_partial_protection_from_PP <- waning_from_partial_protection / (sigma_treated + death_c + waning_from_partial_protection)
+    prob_proph_from_CI <- proph_ongoing / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+    prob_proph_from_PI <- proph_ongoing / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_proph_from_CE <- proph_ongoing / (gamma_c + death_c + proph_ongoing)
+    prob_proph_from_PE <- proph_ongoing / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
+    prob_disease_from_CEX <- gamma_c / (gamma_c + death_c + sigma_treated)
+    prob_disease_from_PEX <- gamma_c / (gamma_c + death_c + sigma_treated)
+    
+    probs <- cbind(
+      p1c, p2c,
+      prob_CI_from_CE, prob_PI_from_PE, prob_CI_treat_q, prob_CI_treat_p, prob_PI_treat_q, prob_PI_treat_p,
+      prob_waning_from_partial_protection_from_PE, prob_waning_from_partial_protection_from_PI,
+      prob_waning_from_partial_protection_from_PT, prob_waning_from_partial_protection_from_PP,
+      prob_proph_from_CI, prob_proph_from_PI, prob_proph_from_CE, prob_proph_from_PE, prob_disease_from_CEX,
+      prob_disease_from_PEX
+    )
+    probs <- convert_array_to_named_vector(probs)
+    probs
   })
-  loop_probabiities
+  
+  transition_probabilities
+}
+
+
+create_named_vector_of_times_in_state <- function(params, is_strain_sensitive) {
+  times_in_state <- with(as.list(params), {
+    if (is_strain_sensitive == "yes") {
+      sigma_treated <- sigma_st
+    }
+    if (is_strain_sensitive == "no") {
+      sigma_treated <- sigma_c
+    }
+    
+    time_in_CI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+    time_in_CT <- 1 / (sigma_treated + death_c)
+    time_in_PI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    time_in_PT <- 1 / (sigma_treated + death_c + waning_from_partial_protection)
+    time_in_PP <- 1 / (sigma_treated + death_c + waning_from_partial_protection)
+    times <- cbind(time_in_CI, time_in_CT, time_in_PI, time_in_PT, time_in_PP)
+    times <- convert_array_to_named_vector(times)
+    times
+  })
+  
+  return(times_in_state)
 }
 
 #################################################################################
-calculate_R1 <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  time_infectious_route1 <- with(as.list(c(time_in_state, transition_probabilities)), {
 
-    result <- (time_in_CI +
-      prob_CI_treat_q * time_in_CT +
-      prob_CI_treat_p * time_in_PP +
-      prob_proph_from_CI * time_in_PP) / (1 - p1c * p2c)
-    result
-  })
-
-  R1 <- rate_vectors_infected * time_infectious_route1
-  R1
-}
-
-#################################################################################
-calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  R1 <- calculate_R1(rate_vectors_infected, time_in_state, transition_probabilities)
-
-  RVC <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, R1)), {
-    prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
-
-    # transmission via C
-    RVC <- prob_CI_from_CE * R1 + prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * R1 + prob_PP_from_CE * time_in_PP * rate_vectors_infected
-    RVC <- as.numeric(RVC)
-    RVC
-  })
-
-  return(RVC)
-}
-
-#################################################################################
-calculate_RVP <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-  R1 <- calculate_R1(rate_vectors_infected, time_in_state, transition_probabilities)
-  RVC <- calculate_RVC(rate_vectors_infected, time_in_state, transition_probabilities)
-
-  RVP <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, R1)), {
-    # transmission via P
-    # prob_proph_from_PE2 <- proph_ongoing / (gamma_p + death_p + proph_ongoing + waning_from_partial_protection) *
-    #  gamma_p / (gamma_p + death_p + sigma_treated)
-    prob_PP_from_PE <- prob_proph_from_PE * prob_disease_from_PEX
-
-    RVP1 <- rate_vectors_infected * time_in_PI + prob_waning_from_partial_protection_from_PI * R1 + # contribution from PIs
-      rate_vectors_infected * prob_PI_treat_q * time_in_PT +
-      rate_vectors_infected * prob_PI_treat_q * prob_waning_from_partial_protection_from_PT * time_in_CT +
-
-      rate_vectors_infected * prob_PI_treat_p * time_in_PP + # contrib from PPs
-      # contribution from waning_from_partial_protection back to CIS
-      prob_PI_treat_p * prob_waning_from_partial_protection_from_PP * R1 +
-
-      rate_vectors_infected * prob_proph_from_PI * time_in_PP +
-      prob_proph_from_PI * prob_waning_from_partial_protection_from_PP * R1
-
-
-    RVP2 <- prob_PP_from_PE * time_in_PP * rate_vectors_infected +
-      prob_PP_from_PE * prob_waning_from_partial_protection_from_PP * R1
-
-
-    RVP <- RVP1 * prob_PI_from_PE + RVP2 + prob_waning_from_partial_protection_from_PE * RVC
-    RVP <- as.numeric(RVP)
-    RVP
-  })
-
-  return(RVP)
-}
 
 #################################################################################
 
@@ -420,6 +402,5 @@ findGlobals(fun = add_R0, merge = FALSE)$variables
 # findGlobals(fun = add_R0, merge = FALSE)$variables
 findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
 findGlobals(fun = add_R_trajectories, merge = FALSE)$variables
-findGlobals(fun = calculate_RVC, merge = FALSE)$variables
-findGlobals(fun = calculate_RVP, merge = FALSE)$variables
-findGlobals(fun = calculate_R1, merge = FALSE)$variables
+findGlobals(fun = create_named_vector_of_transition_probabilities, merge = FALSE)$variables
+findGlobals(fun = create_named_vector_of_times_in_state, merge = FALSE)$variables
