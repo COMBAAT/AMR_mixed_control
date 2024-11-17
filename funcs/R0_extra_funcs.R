@@ -83,7 +83,6 @@ calculate_time2B <- function(prob_PT_treat_p, prob_waning_from_partial_protectio
                              rate_vectors_infected, time_in_PP,
                              prob_waning_from_partial_protection_from_PP,
                              proph_ongoing, waning_from_partial_protection, time_in_CT) {
-  
   time2A <- calculate_time2A(prob_CI_treat_q, prob_CI_treat_p, prob_proph_from_CI, time_in_CI, time_in_CT, time_in_PP)
 
   # sum of probabilities of transitioning from PI to PP, from PI to PT, and from PI to CI
@@ -104,9 +103,8 @@ calculate_time2B <- function(prob_PT_treat_p, prob_waning_from_partial_protectio
 calculate_RVC2 <- function(time_in_CI, prob_CI_treat_q, prob_CI_treat_p, prob_proph_from_CI, prob_proph_from_PE, prob_disease_from_CEX,
                            rate_vectors_infected, p1c, p2c, prob_waning_from_partial_protection_from_PP, time_in_PP, prob_proph_from_CE,
                            prob_CI_from_CE, time_in_CT) {
-  
   time2A <- calculate_time2A(prob_CI_treat_q, prob_CI_treat_p, prob_proph_from_CI, time_in_CI, time_in_CT, time_in_PP)
-  
+
   component1 <- prob_CI_from_CE * (time2A +
     (prob_CI_treat_p + prob_proph_from_CI) * prob_waning_from_partial_protection_from_PP * time_2B)
 
