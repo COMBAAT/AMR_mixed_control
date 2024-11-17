@@ -1,0 +1,379 @@
+# =========================================================
+# Function Name: AAT_AMR_dens_dep
+# Description: This script models the dynamics of African Animal Trypanosomiasis (AAT)
+#              incorporating the emergence, spread, and loss of antimicrobial resistance (AMR)
+#              among cattle, tsetse flies, and wildlife. This version includes compartments
+#              for the teneral phenomenon, enhancing the model's accuracy in depicting
+#              disease transmission and resistance dynamics under various scenarios.
+#
+# Parameters:
+#   No parameters are directly set in this script; it is designed to be sourced and used with
+#   scenario-specific parameters set in separate script files.
+#
+# Returns:
+#   The model does not return values directly but updates global variables and can be used
+#   to simulate disease spread and intervention scenarios when called from other scripts.
+#
+#
+# Dependencies: Requires deSolve
+#               Assumes that scenario-specific settings are managed in separate
+#               scripts within the repository.
+#
+# Author: Shaun Keegan & Louise Matthews
+# Date Created: May 2022
+# Last Modified: August 2024
+# =========================================================
+
+
+library(codetools)
+
+AAT_AMR_dens_dep <- function(times, init, parms) {
+  # C - Cattle
+  CS <- init["CS"] # Susceptible
+  CEs <- init["CEs"] # Exposed (drug sensitive strain)
+  CEr <- init["CEr"] # Exposed (drug resistant strain)
+  CIs <- init["CIs"] # Infected (drug sensitive strain)
+  CIr <- init["CIr"] # Infected (drug resistant strain)
+  CTs <- init["CTs"] # Treated (drug sensitive strain)
+  CTr <- init["CTr"] # Treated (drug resistant strain)
+  CEsX <- init["CEsX"] # Exposed (drug sensitive strain)
+  CErX <- init["CErX"] # Exposed (drug resistant strain)
+  # CR  <- init["CR"] # Recovered
+
+  # P - Prophylactically treated cattle
+  PF <- init["PF"] # Susceptible Fully protected
+  PS <- init["PS"] # Susceptible
+  PEs <- init["PEs"] # Exposed (drug sensitive strain)
+  PEr <- init["PEr"] # Exposed (drug resistant strain)
+  PIs <- init["PIs"] # Infected (drug sensitive strain)
+  PIr <- init["PIr"] # Infected (drug resistant strain)
+  PTs <- init["PTs"] # Treated (drug sensitive strain)
+  PTr <- init["PTr"] # Treated (drug resistant strain)
+  PPs <- init["PPs"] # Recovered
+  PPr <- init["PPr"] # Recovered
+  PEsX <- init["PEsX"] # Exposed (drug sensitive strain)
+  PErX <- init["PErX"] # Exposed (drug resistant strain)
+
+  # W - Wildlife
+  WS <- init["WS"] # Susceptible
+  WEs <- init["WEs"] # Exposed (drug sensitive strain)
+  WEr <- init["WEr"] # Exposed (drug resistant strain)
+  WIs <- init["WIs"] # Infected (drug sensitive strain)
+  WIr <- init["WIr"] # Infected (drug resistant strain)
+  # WR  <- init["WR"] # Recovered
+
+  # V - Vectors
+  VSt <- init["VSt"] # Susceptible teneral
+  VSf <- init["VSf"] # Susceptible fed
+  VEs <- init["VEs"] # Exposed (drug sensitive strain)
+  VEr <- init["VEr"] # Exposed (drug resistant strain)
+  VIs <- init["VIs"] # Infected (drug sensitive strain)
+  VIr <- init["VIr"] # Infected (drug resistant strain)
+
+  ## ----- Cattle
+  birth_c <- parms["birth_c"]
+  biterate <- parms["biterate"]
+  prob_infection_to_host <- parms["prob_infection_to_host"]
+  gamma_c <- parms["gamma_c"]
+  death_c <- parms["death_c"]
+  sigma_c <- parms["sigma_c"]
+  treatment_q <- parms["treatment_q"]
+  treatment_p <- parms["treatment_p"]
+  sigma_st <- parms["sigma_st"]
+  emergence_p <- parms["emergence_p"]
+  emergence_q <- parms["emergence_q"]
+  #rec_adj <- parms["rec_adj"]
+  prop_prophylaxis_at_birth <- parms["prop_prophylaxis_at_birth"]
+  proph_ongoing <- parms["proph_ongoing"]
+  fit_adj <- parms["fit_adj"]
+  waning_from_partial_protection <- parms["waning_from_partial_protection"]
+  waning_F2S <- parms["waning_F2S"]
+  partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
+
+  ## ----- Wildlife
+  birth_w <- parms["birth_w"]
+  gamma_w <- parms["gamma_w"]
+  death_w <- parms["death_w"]
+  sigma_w <- parms["sigma_w"]
+  #reversion <- parms["reversion"]
+
+  ## ----- Vectors
+  K <- parms["K"]
+  feeding.rate <- parms["feeding.rate"]
+  prob_infection_to_vector <- parms["prob_infection_to_vector"]
+  death_v <- parms["death_v"]
+  birth_v <- parms["birth_v"]
+  gamma_v <- parms["gamma_v"]
+  ten2fed <- parms["ten2fed"]
+
+  # Total infected hosts
+  Is <- CIs + CTs + PIs + PTs + PPs + WIs
+  Ir <- CIr + CTr + PIr + PTr + PPr + WIr
+
+  # Population total ----
+  C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEsX + CErX
+  P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
+  W <- WS + WEs + WEr + WIs + WIr
+  V <- VSt + VSf + VEs + VEr + VIs + VIr
+  NC <- P + C
+  N <- C + P + W
+
+  # Cattle without long-lasting drug treatment ----
+
+  dCS.dt <-
+    birth_c * (1 - prop_prophylaxis_at_birth) * NC +
+    waning_from_partial_protection * PS -
+    biterate * prob_infection_to_host * CS * VIs / N -
+    biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
+    proph_ongoing * CS +
+    sigma_c * CIs +
+    sigma_c * CIr +
+    sigma_st * CTs +
+    sigma_c * CTr -
+    death_c * CS
+    
+
+  dCEs.dt <-
+    biterate * prob_infection_to_host * CS * VIs / N -
+    gamma_c * CEs +
+    waning_from_partial_protection * PEs -
+    proph_ongoing * CEs -
+    death_c * CEs
+
+  dCEsX.dt <-
+    proph_ongoing * CEs -
+    sigma_st * CEsX -
+    gamma_c * CEsX -
+    # waning_from_partial_protection * PEsX -
+    death_c * CEsX
+
+  dCEr.dt <-
+    biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
+    gamma_c * CEr +
+    waning_from_partial_protection * PEr -
+    proph_ongoing * CEr -
+    death_c * CEr
+
+  dCErX.dt <-
+    proph_ongoing * CEr -
+    sigma_c * CErX -
+    gamma_c * CErX -
+    # waning_from_partial_protection * PErX -
+    death_c * CErX
+
+  dCIs.dt <- gamma_c * CEs -
+    treatment_q * CIs -
+    treatment_p * CIs -
+    proph_ongoing * CIs -
+    sigma_c * CIs +
+    waning_from_partial_protection * PIs -
+    #waning_from_partial_protection * PPs - #NEW
+    death_c * CIs
+    
+
+  dCIr.dt <- gamma_c * CEr -
+    treatment_q * CIr -
+    treatment_p * CIr -
+    proph_ongoing * CIr -
+    sigma_c * CIr +
+    waning_from_partial_protection * PIr -
+    #waning_from_partial_protection * PPr - #NEW
+    death_c * CIr
+    
+
+  dCTs.dt <- treatment_q * CIs -
+    sigma_st * CTs -
+    emergence_q * CTs +
+    waning_from_partial_protection * PTs -
+    death_c * CTs
+
+  dCTr.dt <- treatment_q * CIr -
+    sigma_c * CTr +
+    emergence_q * CTs +
+    waning_from_partial_protection * PTr -
+    death_c * CTr
+
+# Cattle with long lasting drug treatment ----
+  
+  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * NC - # Adding new prophylactically treated cattle
+    biterate * prob_infection_to_host * fit_adj * PF * VIr / N + # Infection with resistant strain
+    sigma_st * PPs + 
+    sigma_c * PPr - 
+    waning_F2S * PF + # waning from fully protected to partially protected
+    proph_ongoing * PS +
+    proph_ongoing * CS +
+    sigma_st * CEsX +
+    sigma_c * CErX +
+    sigma_st * PEsX +
+    sigma_c * PErX -
+    death_c * PF
+
+  dPS.dt <- 
+    waning_F2S * PF - # waning from fully protected to partially protected
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - # Infection with sensitive strain
+    biterate * prob_infection_to_host * fit_adj * PS * VIr / N - # Infection with resistant strain
+    proph_ongoing * PS +
+    sigma_c * PIs + 
+    sigma_c * PIr + 
+    sigma_st * PTs + 
+    sigma_c * PTr - 
+    waning_from_partial_protection * PS - 
+    death_c * PS
+    
+
+  dPEs.dt <-
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - 
+    gamma_c * PEs - 
+    emergence_p * PEs -
+    waning_from_partial_protection * PEs - 
+    proph_ongoing * PEs -
+    death_c * PEs
+
+  dPEsX.dt <-
+    proph_ongoing * PEs -
+    gamma_c * PEsX - 
+    sigma_st * PEsX -
+    # emergence_p * PEsX -
+    # waning_from_partial_protection * PEsX - 
+    death_c * PEsX 
+
+  dPEr.dt <-
+    biterate * prob_infection_to_host * fit_adj * PS * VIr / N + # Infection with resistant strain
+    biterate * prob_infection_to_host * fit_adj * PF * VIr / N - # Infection with resistant strain
+    gamma_c * PEr + 
+    emergence_p * PEs -
+    waning_from_partial_protection * PEr - 
+    proph_ongoing * PEr -
+    death_c * PEr
+
+  dPErX.dt <-
+    proph_ongoing * PEr -
+    gamma_c * PErX - 
+    sigma_c * PErX -
+    # emergence_p * PEsX -
+    # waning_from_partial_protection * PErX - 
+    death_c * PErX 
+
+  dPIs.dt <- gamma_c * PEs - 
+    treatment_q * PIs - 
+    treatment_p * PIs - 
+    sigma_c * PIs - 
+    emergence_p * PIs - 
+    waning_from_partial_protection * PIs +
+    waning_from_partial_protection * PPs - #NEW
+    proph_ongoing * PIs -
+    death_c * PIs 
+
+  dPIr.dt <- gamma_c * PEr - 
+    treatment_q * PIr - 
+    treatment_p * PIr - 
+    sigma_c * PIr + 
+    emergence_p * PIs - 
+    waning_from_partial_protection * PIr + 
+    waning_from_partial_protection * PPr - #NEW
+    proph_ongoing * PIr -
+    death_c * PIr
+
+  dPTs.dt <- treatment_q * PIs - 
+    sigma_st * PTs - 
+    emergence_p * PTs -
+    emergence_q * PTs - 
+    waning_from_partial_protection * PTs - 
+    death_c * PTs 
+
+  dPTr.dt <- treatment_q * PIr - 
+    sigma_c * PTr + 
+    emergence_p * PTs +
+    emergence_q * PTs - 
+    waning_from_partial_protection * PTr - 
+    death_c * PTr 
+
+  dPPs.dt <- treatment_p * PIs + 
+    treatment_p * CIs - 
+    emergence_p * PPs -
+    sigma_st * PPs - 
+    waning_from_partial_protection * PPs +
+    proph_ongoing * PIs +
+    proph_ongoing * CIs +
+    gamma_c * CEsX +
+    gamma_c * PEsX -
+    death_c * PPs
+
+  dPPr.dt <- treatment_p * PIr + 
+    treatment_p * CIr + 
+    emergence_p * PPs -
+    sigma_c * PPr - 
+    waning_from_partial_protection * PPr + 
+    proph_ongoing * PIr +
+    proph_ongoing * CIr +
+    gamma_c * CErX +
+    gamma_c * PErX -
+    death_c * PPr
+
+  
+  # Wildlife ----
+
+  dWS.dt <- birth_w * W -
+    biterate * prob_infection_to_host * WS * VIs / N -
+    biterate * (prob_infection_to_host * fit_adj) * WS * VIr / N +
+    sigma_w * WIs +
+    sigma_w * WIr -
+    death_w * WS
+
+  dWEs.dt <-
+    biterate * prob_infection_to_host * WS * VIs / N -
+    gamma_w * WEs -
+    death_w * WEs
+
+  dWEr.dt <-
+    biterate * (prob_infection_to_host * fit_adj) * WS * VIr / N -
+    gamma_w * WEr -
+    death_w * WEr
+
+  dWIs.dt <- gamma_w * WEs - sigma_w * WIs - death_w * WIs
+
+  dWIr.dt <- gamma_w * WEr - sigma_w * WIr - death_w * WIr
+
+  # Tsetse ----
+
+  dVSt.dt <- birth_v * V * (1 - V / K) -
+    prob_infection_to_vector * biterate * VSt * Is / N -
+    prob_infection_to_vector * biterate * VSt * Ir / N -
+    ten2fed * VSt -
+    death_v * VSt
+
+  dVSf.dt <- ten2fed * VSt -
+    prob_infection_to_vector * biterate * VSf * Is / N -
+    prob_infection_to_vector * biterate * VSf * Ir / N -
+    death_v * VSf
+
+  dVEs.dt <- 
+    prob_infection_to_vector * biterate * VSt * Is  / N +
+    prob_infection_to_vector * biterate * VSf * Is  / N -
+    gamma_v * VEs - death_v * VEs
+
+  dVEr.dt <-
+    prob_infection_to_vector * biterate * VSt * Ir / N +
+    prob_infection_to_vector * biterate * VSf * Ir / N -
+    gamma_v * VEr - death_v * VEr
+
+  dVIs.dt <- gamma_v * VEs - death_v * VIs
+
+  dVIr.dt <- gamma_v * VEr - death_v * VIr
+
+  # Model output ----
+  dX <- c(
+    dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt, dCEsX.dt, dCErX.dt,
+    dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt, dPEsX.dt, dPErX.dt,
+    dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt,
+    dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt
+  )
+  # dX <- c(dCS.dt, dCEs.dt, 0.0, dCIs.dt, 0.0, dCTs.dt, 0.0,
+  #        dPF.dt, dPS.dt, dPEs.dt, 0.0, dPIs.dt, 0.0, dPTs.dt, 0.0, dPPs.dt, 0.0,
+  #        dWS.dt, dWEs.dt, 0.0, dWIs.dt, 0.0,
+  #       dVSt.dt, dVSf.dt, dVEs.dt, 0.0, dVIs.dt, 0.0)
+  list(dX)
+}
+
+
+findGlobals(fun = AAT_AMR_dens_dep, merge = FALSE)$variables
