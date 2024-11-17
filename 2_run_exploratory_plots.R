@@ -17,14 +17,14 @@ source("1_set_user_inputs.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
-source("funcs/r0.R")
-source("funcs/r0_upgrade.R")
-source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
 source("funcs/quick_plot.R")
 source("funcs/output_baseline_params_and_scenarios.R")
-
+source("funcs/r0.R")
+source("funcs/r0_upgrade.R")
+source("funcs/R0_extra_funcs.R")
+source("funcs/AAT_AMR_dens_dep.R")
 
 
 ## ----
@@ -132,7 +132,8 @@ Rplot <- all_scenarios_summary %>%
     shape = as.factor(treatment_type)
   )) + 
   expand_limits(x = 0, y = 0) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+  geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
+  geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
 Rplot
 
 
@@ -147,4 +148,21 @@ all_scenarios_summary$Rres_final
 
 toc()
 
+all_scenarios_summary %>% filter(Rsen_final < 100) %>%
+ggplot() +
+  geom_point(aes(y = R0sen_final, x = treat_prop, colour = as.factor(treatment_type)) )
+
+all_scenarios_summary %>% filter(Rsen_final < 100) %>%
+  ggplot() +
+  geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type)) ) +
+  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+
+all_scenarios_summary %>% filter(Rsen_final < 100) %>%
+  ggplot() +
+  geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type)) ) +
+  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+
+glimpse(all_scenarios_summary)
+
+all_scenarios_summary %>% select(starts_with("R"))
 
