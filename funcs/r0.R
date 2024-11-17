@@ -136,9 +136,31 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 #################################################################################
 
 #################################################################################
+calculate_loop_probabilities <- function(params, is_strain_sensitive) {
+  loop_probabiities <- with(as.list(params, is_strain_sensitive), {
+    
+    if (is_strain_sensitive == "yes") {
+      sigma_treated <- sigma_st
+    }
+    if (is_strain_sensitive == "no") {
+      sigma_treated <- sigma_c
+    }
+    
+    # Probability of I -> Tp
+    p1c <- (treatment_p + proph_ongoing) / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+
+    # Probability of Tp -> I
+    # p2c <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_st + death_c)
+    p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
+    list(p1c = p1c, p2c = p2c)
+  })
+  loop_probabiities
+}
+
 #################################################################################
 calculate_R1 <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
   time_infectious_route1 <- with(as.list(c(time_in_state, transition_probabilities)), {
+
     result <- (time_in_CI +
       prob_CI_treat_q * time_in_CT +
       prob_CI_treat_p * time_in_PP +

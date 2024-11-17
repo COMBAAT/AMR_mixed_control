@@ -6,13 +6,11 @@ create_named_vector_of_transition_probabilities <- function(params, is_strain_se
     if (is_strain_sensitive == "no") {
       sigma_treated <- sigma_c
     }
-    # Probability of I -> Tp
-    p1c <- (treatment_p + proph_ongoing) / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
-
-    # Probability of Tp -> I
-    # p2c <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_st + death_c)
-    p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
-
+    
+    loop_probabilities <- calculate_loop_probabilities(params, is_strain_sensitive)
+    p1c <- loop_probabilities$p1c
+    p2c <- loop_probabilities$p2c
+    
     prob_CI_from_CE <- gamma_c / (gamma_c + death_c + proph_ongoing)
     prob_PI_from_PE <- gamma_c / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
     prob_CI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
