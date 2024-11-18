@@ -1,26 +1,26 @@
-calculate_loop_probabilities <- function(params, is_strain_sensitive) {
-  loop_probabiities <- with(as.list(params, is_strain_sensitive), {
-    
-    if (is_strain_sensitive == "yes") {
-      sigma_treated <- sigma_st
-    }
-    if (is_strain_sensitive == "no") {
-      sigma_treated <- sigma_c
-    }
-    
-    # Probability of I -> Tp
-    p1c <- (treatment_p + proph_ongoing) / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
-    
-    # Probability of Tp -> I
-    # p2c <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_st + death_c)
-    p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
-    list(p1c = p1c, p2c = p2c)
-  })
-  loop_probabiities
-}
+# calculate_loop_probabilities <- function(params, is_strain_sensitive) {
+#   loop_probabiities <- with(as.list(params, is_strain_sensitive), {
+#     
+#     if (is_strain_sensitive == "yes") {
+#       sigma_treated <- sigma_st
+#     }
+#     if (is_strain_sensitive == "no") {
+#       sigma_treated <- sigma_c
+#     }
+#     
+#     # Probability of I -> Tp
+#     p1c <- (treatment_p + proph_ongoing) / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
+#     
+#     # Probability of Tp -> I
+#     # p2c <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_st + death_c)
+#     p2c <- waning_from_partial_protection / (waning_from_partial_protection + sigma_treated + death_c) # LM corrected
+#     list(p1c = p1c, p2c = p2c)
+#   })
+#   loop_probabiities
+# }
 
 
-calculate_loop_probabilities_alt <- function(transition_probabilities, is_strain_sensitive) {
+calculate_loop_probabilities <- function(transition_probabilities, is_strain_sensitive) {
   loop_probabiities <- with(as.list(transition_probabilities, is_strain_sensitive), {
     
     # Probability of I -> Tp

@@ -138,7 +138,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 create_named_vector_of_all_transition_probabilities <- function(params, is_strain_sensitive) {
   transition_probs1 <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
   #transition_probs2 <- calculate_loop_probabilities(params, is_strain_sensitive)
-  transition_probs2 <- calculate_loop_probabilities_alt(transition_probs1, is_strain_sensitive)
+  transition_probs2 <- calculate_loop_probabilities(transition_probs1, is_strain_sensitive)
   transition_probs <- c(transition_probs1, transition_probs2)
   transition_probs
 }
