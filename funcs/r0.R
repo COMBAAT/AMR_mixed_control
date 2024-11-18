@@ -94,7 +94,8 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 
   rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v)
 
-  transition_probabilities <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
+  #transition_probabilities <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
+  transition_probabilities <- create_named_vector_of_all_transition_probabilities(params, is_strain_sensitive)
   time_in_state <- create_named_vector_of_times_in_state(params, is_strain_sensitive)
 
   # transmission via C - cattle with no prophylaxis
@@ -134,6 +135,14 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 }
 
 #################################################################################
+create_named_vector_of_all_transition_probabilities <- function(params, is_strain_sensitive) {
+  transition_probs1 <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
+  #transition_probs2 <- calculate_loop_probabilities(params, is_strain_sensitive)
+  transition_probs2 <- calculate_loop_probabilities_alt(transition_probs1, is_strain_sensitive)
+  transition_probs <- c(transition_probs1, transition_probs2)
+  transition_probs
+}
+
 create_named_vector_of_transition_probabilities <- function(params, is_strain_sensitive) {
   transition_probabilities <- with(as.list(params, is_strain_sensitive), {
     if (is_strain_sensitive == "yes") {
@@ -143,9 +152,9 @@ create_named_vector_of_transition_probabilities <- function(params, is_strain_se
       sigma_treated <- sigma_c
     }
     
-    loop_probabilities <- calculate_loop_probabilities(params, is_strain_sensitive)
-    p1c <- loop_probabilities$p1c
-    p2c <- loop_probabilities$p2c
+    #loop_probabilities <- calculate_loop_probabilities(params, is_strain_sensitive)
+    #p1c <- loop_probabilities$p1c
+    #p2c <- loop_probabilities$p2c
     
     prob_CI_from_CE <- gamma_c / (gamma_c + death_c + proph_ongoing)
     prob_PI_from_PE <- gamma_c / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
@@ -165,7 +174,7 @@ create_named_vector_of_transition_probabilities <- function(params, is_strain_se
     prob_disease_from_PEX <- gamma_c / (gamma_c + death_c + sigma_treated)
     
     probs <- cbind(
-      p1c, p2c,
+      #p1c, p2c,
       prob_CI_from_CE, prob_PI_from_PE, prob_CI_treat_q, prob_CI_treat_p, prob_PI_treat_q, prob_PI_treat_p,
       prob_waning_from_partial_protection_from_PE, prob_waning_from_partial_protection_from_PI,
       prob_waning_from_partial_protection_from_PT, prob_waning_from_partial_protection_from_PP,
