@@ -130,7 +130,7 @@ Rplot <- all_scenarios_summary %>%
   geom_point(aes(
     y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
     shape = as.factor(treatment_type)
-  )) + 
+  )) +
   expand_limits(x = 0, y = 0) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
   geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
@@ -165,4 +165,3 @@ all_scenarios_summary %>% filter(Rsen_final < 100) %>%
 glimpse(all_scenarios_summary)
 
 all_scenarios_summary %>% select(starts_with("R"))
-
