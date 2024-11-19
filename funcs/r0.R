@@ -96,7 +96,7 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
 
   #transition_probabilities <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
   transition_probabilities <- create_named_vector_of_all_transition_probabilities(params, is_strain_sensitive)
-  time_in_state <- create_named_vector_of_times_in_state(params, is_strain_sensitive)
+  time_in_state <- create_named_vector_of_time_in_state(params, is_strain_sensitive)
 
   # transmission via C - cattle with no prophylaxis
   # from exposed host to infected vector
@@ -189,8 +189,8 @@ create_named_vector_of_transition_probabilities <- function(params, is_strain_se
 }
 
 
-create_named_vector_of_times_in_state <- function(params, is_strain_sensitive) {
-  times_in_state <- with(as.list(params), {
+create_named_vector_of_time_in_state <- function(params, is_strain_sensitive) {
+  time_in_state <- with(as.list(params), {
     if (is_strain_sensitive == "yes") {
       sigma_treated <- sigma_st
     }
@@ -208,7 +208,7 @@ create_named_vector_of_times_in_state <- function(params, is_strain_sensitive) {
     times
   })
   
-  return(times_in_state)
+  return(time_in_state)
 }
 
 #################################################################################
@@ -412,4 +412,4 @@ findGlobals(fun = add_R0, merge = FALSE)$variables
 findGlobals(fun = calculate_R_from_row_of_df, merge = FALSE)$variables
 findGlobals(fun = add_R_trajectories, merge = FALSE)$variables
 findGlobals(fun = create_named_vector_of_transition_probabilities, merge = FALSE)$variables
-findGlobals(fun = create_named_vector_of_times_in_state, merge = FALSE)$variables
+findGlobals(fun = create_named_vector_of_time_in_state, merge = FALSE)$variables
