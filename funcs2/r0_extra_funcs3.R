@@ -1,24 +1,4 @@
-# calculate_loop_probabilities <- function(transition_probabilities, is_strain_sensitive) {
-#   loop_probabiities <- with(as.list(transition_probabilities, is_strain_sensitive), {
-#     
-#     pCItoPP <- prob_CI_treat_p + prob_proph_from_CI
-#     pCItoPI <- (prob_CI_treat_p + prob_proph_from_CI) * prob_waning_from_partial_protection_from_PP
-#     pPItoCI <- prob_waning_from_partial_protection_from_PI
-#     
-#     pPItoPP <- prob_PI_treat_p + prob_proph_from_PI
-#     pPPtoPI <- prob_waning_from_partial_protection_from_PP
-#     
-#     ploop1toloop2 <- pCItoPP * pPPtoPI / (1 - pPItoPP * pPPtoPI) * pPItoCI
-#     ploop2toloop1 <- pPItoCI 
-#     
-#     # sum of probabilities of transitioning from PI to PP
-#     #p1c <- prob_PI_treat_p + prob_proph_from_PI + prob_waning_from_partial_protection_from_PI * (prob_CI_treat_p + prob_proph_from_CI)
-#     # sum of probabilities of transitioning from PP to PI
-#     #p2c <- prob_waning_from_partial_protection_from_PP
-#     list(pCItoPI = pCItoPI, pPItoCI = pPItoCI, pPItoPP = pPItoPP, pPPtoPI = pPPtoPI, 
-#          ploop1toloop2 = ploop1toloop2, ploop2toloop1 = ploop2toloop1)
-#   })
-  
+
   calculate_loop_probabilities <- function(transition_probabilities, is_strain_sensitive) {
     loop_probabiities <- with(as.list(transition_probabilities, is_strain_sensitive), {
       
