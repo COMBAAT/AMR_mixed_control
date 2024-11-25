@@ -157,19 +157,19 @@ create_named_vector_of_transition_probabilities <- function(params, is_strain_se
     #p2c <- loop_probabilities$p2c
     
     prob_CI_from_CE <- gamma_c / (gamma_c + death_c + proph_ongoing)
-    prob_PI_from_PE <- gamma_c / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
+    prob_PI_from_PE <- gamma_c / (gamma_c + death_c + proph_ongoing + waning_from_PE)
     prob_CI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
     prob_CI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
-    prob_PI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
-    prob_PI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
-    prob_waning_from_partial_protection_from_PE <- waning_from_partial_protection / (gamma_c + death_c + waning_from_partial_protection + proph_ongoing)
-    prob_waning_from_partial_protection_from_PI <- waning_from_partial_protection / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    prob_PI_treat_q <- treatment_q / (treatment_p + treatment_q + sigma_c + death_c + waning_from_PI + proph_ongoing)
+    prob_PI_treat_p <- treatment_p / (treatment_p + treatment_q + sigma_c + death_c + waning_from_PI + proph_ongoing)
+    prob_waning_from_partial_protection_from_PE <- waning_from_PE / (gamma_c + death_c + waning_from_PE + proph_ongoing)
+    prob_waning_from_partial_protection_from_PI <- waning_from_PI / (treatment_p + treatment_q + sigma_c + death_c + waning_from_PI + proph_ongoing)
     prob_waning_from_partial_protection_from_PT <- waning_from_partial_protection / (sigma_treated + death_c + waning_from_partial_protection)
-    prob_waning_from_partial_protection_from_PP <- waning_from_partial_protection / (sigma_treated + death_c + waning_from_partial_protection)
+    prob_waning_from_partial_protection_from_PP <- waning_from_PP / (sigma_treated + death_c + waning_from_PP)
     prob_proph_from_CI <- proph_ongoing / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
     prob_proph_from_PI <- proph_ongoing / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
     prob_proph_from_CE <- proph_ongoing / (gamma_c + death_c + proph_ongoing)
-    prob_proph_from_PE <- proph_ongoing / (gamma_c + death_c + proph_ongoing + waning_from_partial_protection)
+    prob_proph_from_PE <- proph_ongoing / (gamma_c + death_c + proph_ongoing + waning_from_PE)
     prob_disease_from_CEX <- gamma_c / (gamma_c + death_c + sigma_treated)
     prob_disease_from_PEX <- gamma_c / (gamma_c + death_c + sigma_treated)
     
@@ -200,9 +200,9 @@ create_named_vector_of_time_in_state <- function(params, is_strain_sensitive) {
     
     time_in_CI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + proph_ongoing)
     time_in_CT <- 1 / (sigma_treated + death_c)
-    time_in_PI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + waning_from_partial_protection + proph_ongoing)
+    time_in_PI <- 1 / (treatment_p + treatment_q + sigma_c + death_c + waning_from_PI + proph_ongoing)
     time_in_PT <- 1 / (sigma_treated + death_c + waning_from_partial_protection)
-    time_in_PP <- 1 / (sigma_treated + death_c + waning_from_partial_protection)
+    time_in_PP <- 1 / (sigma_treated + death_c + waning_from_PP)
     times <- cbind(time_in_CI, time_in_CT, time_in_PI, time_in_PT, time_in_PP)
     times <- convert_array_to_named_vector(times)
     times

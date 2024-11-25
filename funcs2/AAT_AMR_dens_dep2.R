@@ -87,6 +87,9 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   proph_ongoing <- parms["proph_ongoing"]
   fit_adj <- parms["fit_adj"]
   waning_from_partial_protection <- parms["waning_from_partial_protection"]
+  waning_from_PE <- parms["waning_from_PE"]
+  waning_from_PP <- parms["waning_from_PP"]
+  waning_from_PI <- parms["waning_from_PI"]
   waning_F2S <- parms["waning_F2S"]
   partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
 
@@ -136,7 +139,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dCEs.dt <-
     biterate * prob_infection_to_host * CS * VIs / N -
     gamma_c * CEs +
-    waning_from_partial_protection * PEs -
+    waning_from_PE * PEs -
     proph_ongoing * CEs -
     death_c * CEs
 
@@ -150,7 +153,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dCEr.dt <-
     biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
     gamma_c * CEr +
-    waning_from_partial_protection * PEr -
+    waning_from_PE * PEr -
     proph_ongoing * CEr -
     death_c * CEr
 
@@ -166,7 +169,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * CIs -
     proph_ongoing * CIs -
     sigma_c * CIs +
-    waning_from_partial_protection * PIs -
+    waning_from_PI * PIs -
     #waning_from_partial_protection * PPs - #NEW
     death_c * CIs
     
@@ -176,7 +179,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * CIr -
     proph_ongoing * CIr -
     sigma_c * CIr +
-    waning_from_partial_protection * PIr -
+    waning_from_PI * PIr -
     #waning_from_partial_protection * PPr - #NEW
     death_c * CIr
     
@@ -225,7 +228,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS * VIs / N - 
     gamma_c * PEs - 
     emergence_p * PEs -
-    waning_from_partial_protection * PEs - 
+    waning_from_PE * PEs - 
     proph_ongoing * PEs -
     death_c * PEs
 
@@ -242,7 +245,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * fit_adj * PF * VIr / N - # Infection with resistant strain
     gamma_c * PEr + 
     emergence_p * PEs -
-    waning_from_partial_protection * PEr - 
+    waning_from_PE * PEr - 
     proph_ongoing * PEr -
     death_c * PEr
 
@@ -259,8 +262,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * PIs - 
     sigma_c * PIs - 
     emergence_p * PIs - 
-    waning_from_partial_protection * PIs +
-    waning_from_partial_protection * PPs - #NEW
+    waning_from_PI * PIs +
+    waning_from_PP * PPs - #NEW
     proph_ongoing * PIs -
     death_c * PIs 
 
@@ -269,8 +272,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * PIr - 
     sigma_c * PIr + 
     emergence_p * PIs - 
-    waning_from_partial_protection * PIr + 
-    waning_from_partial_protection * PPr - #NEW
+    waning_from_PI * PIr + 
+    waning_from_PP * PPr - #NEW
     proph_ongoing * PIr -
     death_c * PIr
 
@@ -292,7 +295,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * CIs - 
     emergence_p * PPs -
     sigma_st * PPs - 
-    waning_from_partial_protection * PPs +
+    waning_from_PP * PPs +
     proph_ongoing * PIs +
     proph_ongoing * CIs +
     gamma_c * CEsX +
@@ -303,7 +306,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     treatment_p * CIr + 
     emergence_p * PPs -
     sigma_c * PPr - 
-    waning_from_partial_protection * PPr + 
+    waning_from_PP * PPr + 
     proph_ongoing * PIr +
     proph_ongoing * CIr +
     gamma_c * CErX +
