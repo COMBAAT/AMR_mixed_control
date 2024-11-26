@@ -47,7 +47,10 @@ calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_proba
   RVC <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, time2A, time2B)), {
     
     component1 <- prob_CI_from_CE * time2A
-    component2 <- 0
+    
+    prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
+    component2 <- prob_PP_from_CE * time_in_PP + 
+           prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * (time2B + time2A * p4 / (1 - p5 * p3))
     
     # transmission via C
     RVC <- (component1 + component2) * rate_vectors_infected
@@ -56,32 +59,6 @@ calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_proba
   })
   RVC
 }
-
-# #################################################################################
-# calculate_RVC <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
-#   time2A <- calculate_time2A(time_in_state, transition_probabilities)
-#   time2B <- calculate_time2B(time_in_state, transition_probabilities)
-#   #print(time2A)
-#   #print(time2B)
-#   
-#   RVC <- with(as.list(c(time_in_state, transition_probabilities, rate_vectors_infected, time2A, time2B)), {
-#     
-#     #prob_CI_from_CE <- prob_CI_treat_p + prob_proph_from_CI #?
-#     #print(prob_CI_from_CE)
-#     component1 <- prob_CI_from_CE * time2A
-#     
-#     prob_PP_from_CE <- prob_proph_from_CE * prob_disease_from_CEX
-#     component2 <- prob_PP_from_CE * time_in_PP + 
-#       prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * (time2B + time2A * p4 / (1 - p5 * p3))
-#       #prob_PP_from_CE * prob_waning_from_partial_protection_from_PP * prob_waning_from_partial_protection_from_PI * time2A
-#     
-#     # transmission via C
-#     RVC <- (component1 + component2) * rate_vectors_infected
-#     RVC <- as.numeric(RVC)
-#     RVC
-#   })
-#   RVC
-# }
 
 calculate_RVP <- function(rate_vectors_infected, time_in_state, transition_probabilities) {
   time2A <- calculate_time2A(time_in_state, transition_probabilities)
@@ -92,11 +69,13 @@ calculate_RVP <- function(rate_vectors_infected, time_in_state, transition_proba
   
   component1 <- prob_PI_from_PE * (time2B + time2A * p4 / (1 - p5 * p3))
 
-  component2 <- 0
+  prob_PP_from_PE <- prob_proph_from_PE * prob_disease_from_PEX
+  component2 <- prob_PP_from_PE * time_in_PP + 
+    prob_PP_from_PE * prob_waning_from_partial_protection_from_PP * (time2B + time2A * p4 / (1 - p5 * p3))
   
   component3 <- prob_waning_from_partial_protection_from_PE * RVC
 
-  RVP <- (component1 + component2 + component3) * rate_vectors_infected
+  RVP <- (component1 + component2) * rate_vectors_infected + component3
   RVP <- as.numeric(RVP)
   RVP
   })
