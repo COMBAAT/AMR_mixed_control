@@ -85,6 +85,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   #rec_adj <- parms["rec_adj"]
   prop_prophylaxis_at_birth <- parms["prop_prophylaxis_at_birth"]
   proph_ongoing <- parms["proph_ongoing"]
+  proph_ongoing2 <- parms["proph_ongoing2"]
   fit_adj <- parms["fit_adj"]
   waning_from_partial_protection <- parms["waning_from_partial_protection"]
   waning_from_PE <- parms["waning_from_PE"]
@@ -140,11 +141,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * CS * VIs / N -
     gamma_c * CEs +
     waning_from_PE * PEs -
-    proph_ongoing * CEs -
+    proph_ongoing2 * CEs -
     death_c * CEs
 
   dCEsX.dt <-
-    proph_ongoing * CEs -
+    proph_ongoing2 * CEs -
     sigma_st * CEsX -
     gamma_c * CEsX -
     # waning_from_partial_protection * PEsX -
@@ -154,11 +155,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
     gamma_c * CEr +
     waning_from_PE * PEr -
-    proph_ongoing * CEr -
+    proph_ongoing2 * CEr -
     death_c * CEr
 
   dCErX.dt <-
-    proph_ongoing * CEr -
+    proph_ongoing2 * CEr -
     sigma_c * CErX -
     gamma_c * CErX -
     # waning_from_partial_protection * PErX -
@@ -229,11 +230,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     gamma_c * PEs - 
     emergence_p * PEs -
     waning_from_PE * PEs - 
-    proph_ongoing * PEs -
+    proph_ongoing2 * PEs -
     death_c * PEs
 
   dPEsX.dt <-
-    proph_ongoing * PEs -
+    proph_ongoing2 * PEs -
     gamma_c * PEsX - 
     sigma_st * PEsX -
     # emergence_p * PEsX -
@@ -246,11 +247,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     gamma_c * PEr + 
     emergence_p * PEs -
     waning_from_PE * PEr - 
-    proph_ongoing * PEr -
+    proph_ongoing2 * PEr -
     death_c * PEr
 
   dPErX.dt <-
-    proph_ongoing * PEr -
+    proph_ongoing2 * PEr -
     gamma_c * PErX - 
     sigma_c * PErX -
     # emergence_p * PEsX -
