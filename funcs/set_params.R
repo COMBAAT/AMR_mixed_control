@@ -245,10 +245,20 @@ set_parameters_NEW <- function(this_scenario) {
     emergence_p <- emergence
     emergence_q <- 0
   }
+  if (treatment_type == "both") {
+    treatment_q <- 0.5*treatment
+    treatment_p <- 2*treatment
+    emergence_p <- emergence
+    emergence_q <- emergence
+  }
 
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
-  waning_from_partial_protection <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
+  waning_from_partial_protection_baseline <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
+  waning_from_partial_protection <- waning_from_partial_protection_baseline
+  waning_from_PE <- 1 * runif(1) * waning_from_partial_protection_baseline #- from PE
+  waning_from_PP <- 2 * runif(1) * waning_from_partial_protection_baseline #- from PP
+  waning_from_PI <- 2 * runif(1) * waning_from_partial_protection_baseline #- from PIs
   waning_from_full_protection <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
   # waning from F to S needs to account for ongoing proph treatment of individuals in F, increasing time spent in F
   waning_F2S <- waning_from_full_protection * waning_from_full_protection / (waning_from_full_protection + proph_ongoing)
@@ -312,7 +322,12 @@ set_parameters_NEW <- function(this_scenario) {
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st,
-    emergence_p, emergence_q, waning_from_partial_protection, waning_F2S
+    emergence_p, emergence_q, 
+    waning_from_partial_protection, 
+    waning_from_PE, 
+    waning_from_PP, 
+    waning_from_PI, 
+    waning_from_full_protection, waning_F2S
   )
   derived_params <- convert_array_to_named_vector(derived_params)
 
