@@ -263,7 +263,10 @@ calculate_R0 <- function(params) {
   Nv <- params["NV"]
   R0sen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
   R0res <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
-  c("R0sen" = R0sen, "R0res" = R0res)
+  R0sen2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "yes")
+  R0res2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "yes")
+    
+  c("R0sen" = R0sen, "R0res" = R0res, "R0sen2" = R0sen2, "R0res2" = R0res2)
 }
 
 #-------------------------------------------------------------------------------
@@ -312,7 +315,9 @@ calculate_R_from_row_of_df <- function(params, this_row) {
   Nv <- this_row$VSt + this_row$VSf
   Rsen <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
   Rres <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
-  c("Rsen" = Rsen, "Rres" = Rres)
+  Rsen2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
+  Rres2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
+  c("Rsen" = Rsen, "Rres" = Rres, "Rsen2" = Rsen, "Rres2" = Rres)
 }
 
 #-------------------------------------------------------------------------------
@@ -356,17 +361,25 @@ calculate_R_from_row_of_df <- function(params, this_row) {
 add_R_trajectories <- function(params, df) {
   Rsen_vec <- c()
   Rres_vec <- c()
+  Rsen2_vec <- c()
+  Rres2_vec <- c()
   for (i in 1:nrow(df)) {
     this_row <- df[i, ]
     Rsen_and_Rres <- calculate_R_from_row_of_df(params, this_row)
     Rsen <- Rsen_and_Rres["Rsen"]
     Rres <- Rsen_and_Rres["Rres"]
+    Rsen2 <- Rsen_and_Rres["Rsen2"]
+    Rres2 <- Rsen_and_Rres["Rres2"]
     Rsen_vec <- c(Rsen_vec, Rsen)
     Rres_vec <- c(Rres_vec, Rres)
+    Rsen2_vec <- c(Rsen2_vec, Rsen2)
+    Rres2_vec <- c(Rres2_vec, Rres2)
   }
 
   df$Rsen <- Rsen_vec
+  df$Rsen2 <- Rsen2_vec
   df$Rres <- Rres_vec
+  df$Rres2 <- Rres2_vec
   df
 }
 
@@ -404,8 +417,12 @@ add_R0 <- function(params, df) {
   R0sen_and_R0res <- calculate_R0(params)
   R0sen <- R0sen_and_R0res["R0sen"]
   R0res <- R0sen_and_R0res["R0res"]
+  R0sen2 <- R0sen_and_R0res["R0sen2"]
+  R0res2 <- R0sen_and_R0res["R0res2"]
   df$R0sen <- R0sen
+  df$R0sen2 <- R0sen2
   df$R0res <- R0res
+  df$R0res2 <- R0res2
   df
 }
 
