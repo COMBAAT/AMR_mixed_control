@@ -16,12 +16,14 @@ load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
+  path <- gsub(".Rda", "/", latest_file)
+  dir.create(path)
 } else {
-  load("output/test_merge2.Rda")
+  load("output/Nov28_quick_proph.Rda")
+  path <- "output/Nov28_quick_proph/"
+  dir.create(path)
 }
-# create a directory for the plots
-path <- "output/Nov12_quick_proph/"
-dir.create(path)
+
 
 plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
