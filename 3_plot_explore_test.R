@@ -15,18 +15,16 @@ load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
-  plot_descriptor <- test$descriptor[1]
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
   load("output/simulation_set_OctoberC.Rda")
-  plot_descriptor <- test$descriptor[1]
   folder_name <- "output/simulation_set_OctoberC/"
   dir.create(folder_name)
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-option = 2
+option = 1
 subset <- create_data_subsets(test, option)
 
 # subset further by scenario if addiotnal parameters varied, default is first row
@@ -34,7 +32,7 @@ selected_row <- 1
 subset_for_plotting <- select_scenario(scenarios_df, subset, selected_row)
 
 # Adjust fitness post simulation
-subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.6)
+subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 
 # Generate plots ---------------------------------------------------------------
 # Plot and save baseline parameters
