@@ -262,6 +262,7 @@ set_parameters_NEW <- function(this_scenario) {
   waning_from_PE <- 1 * waning_from_partial_protection_baseline
   waning_from_PP <- 1 * waning_from_partial_protection_baseline 
   waning_from_PI <- 1 * waning_from_partial_protection_baseline 
+  waning_from_PT <- 1 * waning_from_partial_protection_baseline 
   
   equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(
     birth_c, prop_prophylaxis_at_birth, NC, death_c,
@@ -326,6 +327,7 @@ set_parameters_NEW <- function(this_scenario) {
     waning_from_PE, 
     waning_from_PP, 
     waning_from_PI, 
+    waning_from_PT, 
     waning_from_full_protection, waning_F2S
   )
   derived_params <- convert_array_to_named_vector(derived_params)

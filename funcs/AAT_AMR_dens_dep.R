@@ -90,6 +90,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   waning_from_PE <- parms["waning_from_PE"]
   waning_from_PP <- parms["waning_from_PP"]
   waning_from_PI <- parms["waning_from_PI"]
+  waning_from_PT <- parms["waning_from_PT"]
   waning_F2S <- parms["waning_F2S"]
   partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
 
@@ -182,13 +183,13 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dCTs.dt <- treatment_q * CIs -
     sigma_st * CTs -
     emergence_q * CTs +
-    waning_from_partial_protection * PTs -
+    waning_from_PT * PTs -
     death_c * CTs
 
   dCTr.dt <- treatment_q * CIr -
     sigma_c * CTr +
     emergence_q * CTs +
-    waning_from_partial_protection * PTr -
+    waning_from_PT * PTr -
     death_c * CTr
 
 # Cattle with long lasting drug treatment ----
@@ -274,14 +275,14 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_st * PTs - 
     emergence_p * PTs -
     emergence_q * PTs - 
-    waning_from_partial_protection * PTs - 
+    waning_from_PT * PTs - 
     death_c * PTs 
 
   dPTr.dt <- treatment_q * PIr - 
     sigma_c * PTr + 
     emergence_p * PTs +
     emergence_q * PTs - 
-    waning_from_partial_protection * PTr - 
+    waning_from_PT * PTr - 
     death_c * PTr 
 
   dPPs.dt <- treatment_p * PIs + 
