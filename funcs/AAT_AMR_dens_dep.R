@@ -364,10 +364,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt,
     dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt
   )
-  # dX <- c(dCS.dt, dCEs.dt, 0.0, dCIs.dt, 0.0, dCTs.dt, 0.0,
-  #        dPF.dt, dPS.dt, dPEs.dt, 0.0, dPIs.dt, 0.0, dPTs.dt, 0.0, dPPs.dt, 0.0,
-  #        dWS.dt, dWEs.dt, 0.0, dWIs.dt, 0.0,
-  #       dVSt.dt, dVSf.dt, dVEs.dt, 0.0, dVIs.dt, 0.0)
   list(dX)
 }
 
