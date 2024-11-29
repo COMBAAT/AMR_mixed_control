@@ -86,11 +86,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   prop_prophylaxis_at_birth <- parms["prop_prophylaxis_at_birth"]
   proph_ongoing <- parms["proph_ongoing"]
   fit_adj <- parms["fit_adj"]
-  waning_from_partial_protection <- parms["waning_from_partial_protection"]
   waning_from_PE <- parms["waning_from_PE"]
   waning_from_PP <- parms["waning_from_PP"]
   waning_from_PI <- parms["waning_from_PI"]
   waning_from_PT <- parms["waning_from_PT"]
+  waning_from_PS <- parms["waning_from_PS"]
   waning_F2S <- parms["waning_F2S"]
   partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
 
@@ -125,7 +125,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
   dCS.dt <-
     birth_c * (1 - prop_prophylaxis_at_birth) * NC +
-    waning_from_partial_protection * PS -
+    waning_from_PS * PS -
     biterate * prob_infection_to_host * CS * VIs / N -
     biterate * prob_infection_to_host * fit_adj * CS * VIr / N -
     proph_ongoing * CS +
@@ -216,7 +216,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PIr + 
     sigma_st * PTs + 
     sigma_c * PTr - 
-    waning_from_partial_protection * PS - 
+    waning_from_PS * PS - 
     death_c * PS
     
 
