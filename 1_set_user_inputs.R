@@ -49,12 +49,11 @@ create_multiple_scenarios <- function() {
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
-  rec_adj <- 1.0
   partial_susceptibility_proph_cattle <- 0.8
   
 
   df <- expand.grid(
-    NC = cattle_number, rec_adj = rec_adj, emergence = emergence,
+    NC = cattle_number, emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing, 
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity, maintain_vector_pop = maintain_vector_pop,
@@ -82,11 +81,10 @@ create_single_scenario <- function() {
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
-  rec_adj <- 1.0
   partial_susceptibility_proph_cattle <- 0.8
 
   df <- expand.grid(
-    NC = cattle_number, rec_adj = rec_adj, emergence = emergence,
+    NC = cattle_number, emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity, maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,

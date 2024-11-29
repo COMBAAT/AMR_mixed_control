@@ -172,7 +172,6 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #       - treatment_type: Type of treatment (e.g., "quick", "proph").
 #       - dose_adj: Dose adjustment factor.
 #       - emergence: Emergence rate of resistance.
-#       - rec_adj: Recovery adjustment factor.
 #       - option: Any additional scenario-specific options.
 #
 # Returns:
@@ -213,7 +212,6 @@ set_parameters_NEW <- function(this_scenario) {
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence <- this_scenario$emergence
-  rec_adj <- this_scenario$rec_adj
   option <- this_scenario$option
   maintain_vector_pop <- this_scenario$maintain_vector_pop
   

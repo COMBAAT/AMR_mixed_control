@@ -82,7 +82,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   sigma_st <- parms["sigma_st"]
   emergence_p <- parms["emergence_p"]
   emergence_q <- parms["emergence_q"]
-  #rec_adj <- parms["rec_adj"]
   prop_prophylaxis_at_birth <- parms["prop_prophylaxis_at_birth"]
   proph_ongoing <- parms["proph_ongoing"]
   fit_adj <- parms["fit_adj"]
