@@ -146,7 +146,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CEs -
     sigma_st * CEsX -
     gamma_c * CEsX -
-    # waning_from_partial_protection * PEsX -
     death_c * CEsX
 
   dCEr.dt <-
@@ -160,7 +159,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CEr -
     sigma_c * CErX -
     gamma_c * CErX -
-    # waning_from_partial_protection * PErX -
     death_c * CErX
 
   dCIs.dt <- gamma_c * CEs -
@@ -169,7 +167,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CIs -
     sigma_c * CIs +
     waning_from_PI * PIs -
-    #waning_from_partial_protection * PPs - #NEW
     death_c * CIs
     
 
@@ -179,7 +176,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CIr -
     sigma_c * CIr +
     waning_from_PI * PIr -
-    #waning_from_partial_protection * PPr - #NEW
     death_c * CIr
     
 
@@ -236,7 +232,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     gamma_c * PEsX - 
     sigma_st * PEsX -
     # emergence_p * PEsX -
-    # waning_from_partial_protection * PEsX - 
     death_c * PEsX 
 
   dPEr.dt <-
@@ -253,7 +248,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     gamma_c * PErX - 
     sigma_c * PErX -
     # emergence_p * PEsX -
-    # waning_from_partial_protection * PErX - 
     death_c * PErX 
 
   dPIs.dt <- gamma_c * PEs - 
@@ -262,7 +256,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PIs - 
     emergence_p * PIs - 
     waning_from_PI * PIs +
-    waning_from_PP * PPs - #NEW
+    waning_from_PP * PPs - 
     proph_ongoing * PIs -
     death_c * PIs 
 
@@ -272,7 +266,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     sigma_c * PIr + 
     emergence_p * PIs - 
     waning_from_PI * PIr + 
-    waning_from_PP * PPr - #NEW
+    waning_from_PP * PPr - 
     proph_ongoing * PIr -
     death_c * PIr
 
