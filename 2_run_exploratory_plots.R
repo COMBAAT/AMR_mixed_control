@@ -21,10 +21,11 @@ source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
 source("funcs/quick_plot.R")
 source("funcs/output_baseline_params_and_scenarios.R")
-source("funcs/r0.R")
-source("funcs/r0_upgrade.R")
-source("funcs/R0_extra_funcs.R")
 source("funcs/AAT_AMR_dens_dep.R")
+source("funcs/r0_intuitive.R")
+source("funcs/r0_NGM.R")
+source("funcs/r0_helper.R")
+
 
 
 ## ----
@@ -59,13 +60,11 @@ for (row in 1:nrow(scenarios_df)) {
   R0sen_and_R0res <- calculate_R0(params)
   R0sen <- R0sen_and_R0res["R0sen"]
   R0res <- R0sen_and_R0res["R0res"]
+  R0sen2 <- R0sen_and_R0res["R0sen2"]
+  R0res2 <- R0sen_and_R0res["R0res2"]
   full_scenario$R0sen <- R0sen
-  full_scenario$R0res <- R0res
-  
-  R0sen_and_R0res2 <- calculate_R02(params)
-  R0sen2 <- R0sen_and_R0res2["R0sen"]
-  R0res2 <- R0sen_and_R0res2["R0res"]
   full_scenario$R0sen2 <- R0sen2
+  full_scenario$R0res <- R0res
   full_scenario$R0res2 <- R0res2
 
   ## Make the simulation time dependent on R0 value
@@ -94,7 +93,7 @@ for (row in 1:nrow(scenarios_df)) {
 
   expanded_output <- add_population_totals(time_trajectory)
   expanded_output <- add_R_trajectories(params, expanded_output)
-  expanded_output <- add_R_trajectories2(params, expanded_output)
+  #expanded_output <- add_R_trajectories2(params, expanded_output)
   expanded_output <- add_R0(params, expanded_output)
 
   final_state <- tail(expanded_output, 1)
@@ -124,8 +123,8 @@ quick_plot3(expanded_output)
 R0_and_R_trajectories(expanded_output)
 
 Rplot <- all_scenarios_summary %>%
-  filter(R0sen < 5) %>%
-  mutate(reaches_equilibrium = case_when(time_final < 10000 ~ TRUE, time_final == 10000 ~ FALSE)) %>%
+  filter(R0sen < 50) %>%
+  mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
   ggplot() +
   geom_point(aes(
     y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
@@ -135,22 +134,6 @@ Rplot <- all_scenarios_summary %>%
   geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
   geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
 Rplot
-
-
-# glimpse(all_scenarios_summary)
-all_scenarios_summary$Cattle_total_final
-all_scenarios_summary$Prophylactic_total_final
-all_scenarios_summary$All_cows_final
-all_scenarios_summary$R0sen
-all_scenarios_summary$R0res
-all_scenarios_summary$Rsen_final
-all_scenarios_summary$Rres_final
-
-toc()
-
-all_scenarios_summary %>% filter(Rsen_final < 100) %>%
-ggplot() +
-  geom_point(aes(y = R0sen_final, x = treat_prop, colour = as.factor(treatment_type)) )
 
 all_scenarios_summary %>% filter(Rsen_final < 100) %>%
   ggplot() +
@@ -162,6 +145,6 @@ all_scenarios_summary %>% filter(Rsen_final < 100) %>%
   geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type)) ) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 
-glimpse(all_scenarios_summary)
-
 all_scenarios_summary %>% select(starts_with("R"))
+
+toc()
