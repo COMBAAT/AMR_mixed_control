@@ -252,16 +252,17 @@ set_parameters_NEW <- function(this_scenario) {
 
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
-  waning_from_partial_protection_baseline <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
-  waning_from_partial_protection <- waning_from_partial_protection_baseline
-  waning_from_PE <- waning_from_partial_protection_baseline
-  waning_from_PP <- waning_from_partial_protection_baseline 
-  waning_from_PI <- waning_from_partial_protection_baseline 
+  
   waning_from_full_protection <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  waning_from_partial_protection_baseline <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
+  
   # waning from F to S needs to account for ongoing proph treatment of individuals in F, increasing time spent in F
   waning_F2S <- waning_from_full_protection * waning_from_full_protection / (waning_from_full_protection + proph_ongoing)
-
-
+  waning_from_partial_protection <- 0 * waning_from_partial_protection_baseline
+  waning_from_PE <- 1 * waning_from_partial_protection_baseline
+  waning_from_PP <- 1 * waning_from_partial_protection_baseline 
+  waning_from_PI <- 1 * waning_from_partial_protection_baseline 
+  
   equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(
     birth_c, prop_prophylaxis_at_birth, NC, death_c,
     waning_F2S, death_p, waning_from_partial_protection, proph_ongoing
