@@ -173,7 +173,6 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #       - dose_adj: Dose adjustment factor.
 #       - emergence: Emergence rate of resistance.
 #       - rec_adj: Recovery adjustment factor.
-#       - reversion: Rate of reversion to susceptibility.
 #       - option: Any additional scenario-specific options.
 #
 # Returns:
@@ -215,7 +214,6 @@ set_parameters_NEW <- function(this_scenario) {
   dose_adj <- this_scenario$dose_adj
   emergence <- this_scenario$emergence
   rec_adj <- this_scenario$rec_adj
-  reversion <- this_scenario$reversion
   option <- this_scenario$option
   maintain_vector_pop <- this_scenario$maintain_vector_pop
   

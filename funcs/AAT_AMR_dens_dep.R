@@ -98,7 +98,6 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   gamma_w <- parms["gamma_w"]
   death_w <- parms["death_w"]
   sigma_w <- parms["sigma_w"]
-  #reversion <- parms["reversion"]
 
   ## ----- Vectors
   K <- parms["K"]
