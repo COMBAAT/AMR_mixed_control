@@ -145,6 +145,6 @@ all_scenarios_summary %>% filter(Rsen_final < 100) %>%
   geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type)) ) +
   geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 
-all_scenarios_summary %>% select(starts_with("R"))
+all_scenarios_summary %>% select(starts_with("R0sen"), treatment_type)
 
 toc()
