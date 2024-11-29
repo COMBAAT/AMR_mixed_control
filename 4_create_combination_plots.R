@@ -29,7 +29,7 @@ plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
 data_subsets <- list()
 for (option in 1:2) {
-  data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.8)
+  data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.6)
 }
 
 ################################################################################
