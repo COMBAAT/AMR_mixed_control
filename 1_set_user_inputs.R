@@ -24,7 +24,7 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Nov28_",
+    general_descriptor = "Dec3_",
     current_descriptor = "proph_quick_proph_ongoing"
   )
   user_inputs
@@ -35,14 +35,14 @@ create_multiple_scenarios <- function() {
   max_time <- 10000
   treatment_type <- c("proph", "quick") # quick, proph or both
   cattle_number <- 100
-  wildlife_number <- 0 #c(0, 100, 250)
+  wildlife_number <- c(0, 100, 250)
   treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
-  treat_prop <- 0.6 #c(treat_propA, treat_propB)
-  carrying_capacity <- 10000 #c(10000, 6000, 4000, 2000)
+  treat_prop <- c(treat_propA, treat_propB)
+  carrying_capacity <- c(10000, 6000, 4000, 2000)
   maintain_vector_pop <- TRUE
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- 0.0 #seq(0.0, 0.5, by = 0.05)
+  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.05)
   prop_prophylaxis_at_birth <- c(0.0) 
   proph_ongoing <- 0 #c(0, 2, 4) / days_per_year
   fit_adj <- 0.8
