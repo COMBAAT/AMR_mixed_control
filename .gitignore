@@ -58,10 +58,5 @@ output/
 
 # useful folder
 useful/
-useful_old/
-
-# file comparison
-file_comparison/
-
-# extra funcs
-funcs_old/
+old/
+messages.R

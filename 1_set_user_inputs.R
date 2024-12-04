@@ -1,18 +1,5 @@
 library(codetools)
 
-messages_and_issues <- function() {
-  message0 <- "teneral stage - needs susceptibility parameter - NOT DONE"
-  message1 <- "vector incubation was been wrongly calculated - FIXED"
-  message3 <- "removed reversion at nt currently used - DONE"
-  message4 <- "partial susceptibility of PS animals - DONE"
-  message5 <- "allow for bite preferences - cancelled for now"
-  message6 <- "included new CEX and PEX stages for ongoing prophylatic treatment - DONE"
-  message7 <- "fix plotting to allow for multiple treatment types - PARTIAL"
-  message8 <- "check initial equilibrium being correctly calculated"
-  message9 <- "why is R0 slightly higher for prophylactic versus curative treatment?"
-  message10 <- "fix R0 to have PP state wane to PI not CI - DONE"
-}
-
 set_days_per_year <- function() {
   days_per_year <- 365.25
   days_per_year
@@ -20,8 +7,8 @@ set_days_per_year <- function() {
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = TRUE,
-    use_root_functions = TRUE,
+    multiple_scenarios = FALSE,
+    use_root_functions = FALSE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
     general_descriptor = "Dec3_",
@@ -68,20 +55,20 @@ create_multiple_scenarios <- function() {
 create_single_scenario <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 5000
-  treatment_type <- sample(c("proph"), 1) # quick or proph
+  treatment_type <- "quick" # quick or proph
   cattle_number <- 100
-  wildlife_number <- 0
-  treat_prop <- 0.0
-  carrying_capacity <- 6000
+  wildlife_number <- 250
+  treat_prop <- 0.5
+  carrying_capacity <- 10000
   maintain_vector_pop <- TRUE
   prop_cattle_with_insecticide <- 0.0
   prop_prophylaxis_at_birth <- 0.1 
-  proph_ongoing <- 2 / days_per_year
+  proph_ongoing <- 0 / days_per_year
   fit_adj <- 0.95
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
-  partial_susceptibility_proph_cattle <- 0.8
+  partial_susceptibility_proph_cattle <- 0.5
 
   df <- expand.grid(
     NC = cattle_number, emergence = emergence,

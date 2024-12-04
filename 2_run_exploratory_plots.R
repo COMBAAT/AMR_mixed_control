@@ -47,7 +47,8 @@ all_scenarios_summary <- data.frame()
 tic()
 
 ## ---- Execute model
-for (row in 1:nrow(scenarios_df)) {
+number_of_scenarios <- nrow(scenarios_df)
+for (row in 1:number_of_scenarios) {
   print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
 
   this_scenario <- scenarios_df[row, ]
@@ -93,7 +94,6 @@ for (row in 1:nrow(scenarios_df)) {
 
   expanded_output <- add_population_totals(time_trajectory)
   expanded_output <- add_R_trajectories(params, expanded_output)
-  #expanded_output <- add_R_trajectories2(params, expanded_output)
   expanded_output <- add_R0(params, expanded_output)
 
   final_state <- tail(expanded_output, 1)
@@ -117,33 +117,36 @@ filename <- get_filename()
 save(test, baseline_parameters, scenarios_df, file = filename)
 
 # some exploratory plots showing final simulation in scenario set
-# quick_plot(expanded_output)
-# quick_plot2(expanded_output)
-quick_plot3(expanded_output)
 R0_and_R_trajectories(expanded_output)
+quick_plot3(expanded_output)
 
-Rplot <- all_scenarios_summary %>%
-  filter(R0sen < 50) %>%
-  mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
-  ggplot() +
-  geom_point(aes(
-    y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
-    shape = as.factor(treatment_type)
-  )) +
-  expand_limits(x = 0, y = 0) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
-  geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
-Rplot
 
-all_scenarios_summary %>% filter(Rsen_final < 100) %>%
-  ggplot() +
-  geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type)) ) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+if (number_of_scenarios > 1) {
+  Rplot <- all_scenarios_summary %>%
+    filter(R0sen < 50) %>%
+    mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
+    ggplot() +
+    geom_point(aes(
+      y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
+      shape = as.factor(treatment_type)
+    )) +
+    expand_limits(x = 0, y = 0) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
+    geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
+  Rplot
 
-all_scenarios_summary %>% filter(Rsen_final < 100) %>%
-  ggplot() +
-  geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type)) ) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+  all_scenarios_summary %>%
+    filter(Rsen_final < 100) %>%
+    ggplot() +
+    geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type))) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+
+  all_scenarios_summary %>%
+    filter(Rsen_final < 100) %>%
+    ggplot() +
+    geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type))) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+}
 
 all_scenarios_summary %>% select(starts_with("R0sen"), treatment_type)
 
