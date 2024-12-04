@@ -58,6 +58,7 @@ for (row in 1:number_of_scenarios) {
   full_scenario <- move_populations_first(full_scenario)
 
   # Add R0 to full_scenario
+  # R0sen2 and R0res2 are calculated using the next generation matrix method as a check
   R0sen_and_R0res <- calculate_R0(params)
   R0sen <- R0sen_and_R0res["R0sen"]
   R0res <- R0sen_and_R0res["R0res"]
