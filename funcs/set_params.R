@@ -1,6 +1,6 @@
 
 # =========================================================
-# Function Names: get_baseline_parameters, calculate_vector_death_rate, set_parameters_NEW
+# Function Names: get_baseline_parameters, calculate_vector_death_rate, set_parameters
 # Description: This script provides functions to define and retrieve baseline parameters for an epidemiological model.
 #              It includes setting up essential parameters such as lifespans, infection periods, and protection periods,
 #              as well as calculating vector death rates and other specific parameters for different species involved in the model.
@@ -14,7 +14,7 @@
 # Example of use:
 #   baseline_params <- get_baseline_parameters()
 #   vector_death_rate <- calculate_vector_death_rate(params)
-#   new_params <- set_parameters_NEW(some_input)
+#   new_params <- set_parameters(some_input)
 #
 # Dependencies: Requires the 'codetools' package for managing code properties.
 #
@@ -150,7 +150,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 }
 
 #-------------------------------------------------------------------------------
-# Function Name: set_parameters_NEW
+# Function Name: set_parameters
 #
 # Description:
 #   This function sets and calculates various parameters necessary for an epidemiological model based on 
@@ -184,7 +184,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #   - Scenario-specific adjustments.
 #
 # Example of use:
-#   scenario_params <- set_parameters_NEW(this_scenario)
+#   scenario_params <- set_parameters(this_scenario)
 #   print(scenario_params)
 #
 # Dependencies:
@@ -199,7 +199,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 
 
 
-set_parameters_NEW <- function(this_scenario) {
+set_parameters <- function(this_scenario) {
   birth_adj <- this_scenario$birth_adj
   fit_adj <- this_scenario$fit_adj
   K <- this_scenario$K
@@ -341,4 +341,4 @@ set_parameters_NEW <- function(this_scenario) {
 
 findGlobals(fun = get_baseline_parameters, merge = FALSE)$variables
 findGlobals(fun = calculate_vector_death_rate, merge = FALSE)$variables
-findGlobals(fun = set_parameters_NEW, merge = FALSE)$variables
+findGlobals(fun = set_parameters, merge = FALSE)$variables
