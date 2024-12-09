@@ -7,12 +7,12 @@ set_days_per_year <- function() {
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = FALSE,
-    use_root_functions = FALSE,
+    multiple_scenarios = TRUE,
+    use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Dec3_",
-    current_descriptor = "proph_quick_proph_ongoing"
+    general_descriptor = "Dec6_",
+    current_descriptor = "proph_quick"
   )
   user_inputs
 }
@@ -36,7 +36,7 @@ create_multiple_scenarios <- function() {
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
-  partial_susceptibility_proph_cattle <- 0.8
+  partial_susceptibility_proph_cattle <- 0.5
   
 
   df <- expand.grid(
