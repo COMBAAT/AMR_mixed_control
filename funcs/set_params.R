@@ -1,6 +1,6 @@
 
 # =========================================================
-# Function Names: get_baseline_parameters, calculate_vector_death_rate, set_parameters_NEW
+# Function Names: get_baseline_parameters, calculate_vector_death_rate, set_parameters
 # Description: This script provides functions to define and retrieve baseline parameters for an epidemiological model.
 #              It includes setting up essential parameters such as lifespans, infection periods, and protection periods,
 #              as well as calculating vector death rates and other specific parameters for different species involved in the model.
@@ -14,7 +14,7 @@
 # Example of use:
 #   baseline_params <- get_baseline_parameters()
 #   vector_death_rate <- calculate_vector_death_rate(params)
-#   new_params <- set_parameters_NEW(some_input)
+#   new_params <- set_parameters(some_input)
 #
 # Dependencies: Requires the 'codetools' package for managing code properties.
 #
@@ -150,7 +150,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 }
 
 #-------------------------------------------------------------------------------
-# Function Name: set_parameters_NEW
+# Function Name: set_parameters
 #
 # Description:
 #   This function sets and calculates various parameters necessary for an epidemiological model based on 
@@ -169,11 +169,9 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #       - NC: Population size of cattle.
 #       - prop_prophylaxis_at_birth: Proportion of animals receiving prophylaxis at birth.
 #       - proph_ongoing: Proportion of ongoing prophylaxis.
-#       - treatment_type: Type of treatment (e.g., "quick", "proph", "both").
+#       - treatment_type: Type of treatment (e.g., "quick", "proph").
 #       - dose_adj: Dose adjustment factor.
 #       - emergence: Emergence rate of resistance.
-#       - rec_adj: Recovery adjustment factor.
-#       - reversion: Rate of reversion to susceptibility.
 #       - option: Any additional scenario-specific options.
 #
 # Returns:
@@ -186,7 +184,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #   - Scenario-specific adjustments.
 #
 # Example of use:
-#   scenario_params <- set_parameters_NEW(this_scenario)
+#   scenario_params <- set_parameters(this_scenario)
 #   print(scenario_params)
 #
 # Dependencies:
@@ -201,7 +199,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 
 
 
-set_parameters_NEW <- function(this_scenario) {
+set_parameters <- function(this_scenario) {
   birth_adj <- this_scenario$birth_adj
   fit_adj <- this_scenario$fit_adj
   K <- this_scenario$K
@@ -214,9 +212,10 @@ set_parameters_NEW <- function(this_scenario) {
   treatment_type <- this_scenario$treatment_type
   dose_adj <- this_scenario$dose_adj
   emergence <- this_scenario$emergence
-  rec_adj <- this_scenario$rec_adj
-  reversion <- this_scenario$reversion
   option <- this_scenario$option
+  maintain_vector_pop <- this_scenario$maintain_vector_pop
+  
+  NH <- NC + NW
 
   baseline_params <- get_baseline_parameters()
 
@@ -251,13 +250,21 @@ set_parameters_NEW <- function(this_scenario) {
 
   sigma_st_full_dose <- (1 / baseline_params["cattle_treatment_period"])
   sigma_st <- sigma_st_full_dose * dose_adj + sigma_c * (1 - dose_adj)
-  waning <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
-  waning_f2s <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
-
-
+  
+  waning_from_full_protection <- 1 / (baseline_params["cattle_proph_full_protection_period"] * dose_adj)
+  waning_from_PP <- 1 * waning_from_full_protection
+  # waning from F to S needs to account for ongoing proph treatment of individuals in F, increasing time spent in F
+  waning_F2S <- waning_from_full_protection * waning_from_full_protection / (waning_from_full_protection + proph_ongoing)
+  
+  waning_from_partial_protection_baseline <- 1 / (baseline_params["cattle_proph_partial_protection_period"] * dose_adj)
+  waning_from_PE <- 1 * waning_from_partial_protection_baseline
+  waning_from_PI <- 1 * waning_from_partial_protection_baseline 
+  waning_from_PT <- 1 * waning_from_partial_protection_baseline
+  waning_from_PS <- 1 * waning_from_partial_protection_baseline 
+  
   equilibrium_values <- get_disease_free_equilibrium_for_PF_PS_and_CS(
     birth_c, prop_prophylaxis_at_birth, NC, death_c,
-    waning_f2s, death_p, waning, proph_ongoing
+    waning_F2S, death_p, waning_from_PS, proph_ongoing
   )
 
   PF <- equilibrium_values["PF"]
@@ -294,7 +301,12 @@ set_parameters_NEW <- function(this_scenario) {
   incubation <-  baseline_params["vector_incubation_period"]
   gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation))  # fixed original formulation
 
-  birth_v <- birth_adj * death_v_no_insecticide
+  if (maintain_vector_pop == TRUE) {
+    birth_v <- birth_adj * death_v 
+  } else {
+    birth_v <- birth_adj * death_v_no_insecticide
+  }
+  
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
   NV <- equil_vector_pop
   VSt <- NV * death_v_no_insecticide / (death_v_no_insecticide + ten2fed)
@@ -302,13 +314,20 @@ set_parameters_NEW <- function(this_scenario) {
 
   ## ----- Parameters output
   derived_params <- cbind(
-    biterate,
+    biterate, NH,
     NV, PF, PS, CS, VSt, VSf, equil_vector_pop,
     birth_c, death_c, gamma_c, sigma_c,
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st,
-    emergence_p, emergence_q, waning, waning_f2s
+    emergence_p, emergence_q, 
+    #waning_from_partial_protection, 
+    waning_from_PE, 
+    waning_from_PP, 
+    waning_from_PI, 
+    waning_from_PT, 
+    waning_from_PS, 
+    waning_from_full_protection, waning_F2S
   )
   derived_params <- convert_array_to_named_vector(derived_params)
 
@@ -322,4 +341,4 @@ set_parameters_NEW <- function(this_scenario) {
 
 findGlobals(fun = get_baseline_parameters, merge = FALSE)$variables
 findGlobals(fun = calculate_vector_death_rate, merge = FALSE)$variables
-findGlobals(fun = set_parameters_NEW, merge = FALSE)$variables
+findGlobals(fun = set_parameters, merge = FALSE)$variables

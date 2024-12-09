@@ -318,7 +318,8 @@ my_rootfun <- function(t, y, params) {
   condition1 <- (Rsen - 1.01)
   condition2 <- (y["CIs"] - 1e-5)
 
-  return(c(condition1, condition2))
+  #return(c(condition1, condition2))
+  return(c(condition1))
 }
 
 get_formatted_time <- function() {
@@ -336,14 +337,34 @@ get_latest_Rda_file <- function() {
   latest_file
 }
 
+merge_two_Rda_files <- function(file1, file2, merged_file) {
+  load(file1)
+  test1 <- test
+  scenarios_df1 <- scenarios_df
+  baseline_parameters1 <- baseline_parameters
+  load(file2)
+  test2 <- test
+  scenarios_df2 <- scenarios_df
+  baseline_parameters2 <- baseline_parameters
+  
+  if (!(identical(baseline_parameters1, baseline_parameters2))) {
+    stop("Baseline parameters do not match")
+  }
+  
+  test <- distinct(rbind(test1, test2))
+  scenarios_df <- distinct(rbind(scenarios_df1, scenarios_df2))
+  
+  filename <- paste0("output/", merged_file)
+  save(test, scenarios_df, baseline_parameters, file = filename)
+}
 
 get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
-                                                          waning_f2s, death_p, waning, proph_ongoing) {
+                                                          waning_F2S, death_p, waning_from_PS, proph_ongoing) {
   # get matrix from odes for PF, PS and CS in absence of disease
   M <- matrix(c(
-    death_p + waning_f2s, -proph_ongoing, -proph_ongoing,
-    waning_f2s, -(waning + death_p + proph_ongoing), 0,
-    0, -waning, death_c + proph_ongoing
+    death_p + waning_F2S, -proph_ongoing, -proph_ongoing,
+    waning_F2S, -(waning_from_PS + death_p + proph_ongoing), 0,
+    0, -waning_from_PS, death_c + proph_ongoing
   ), byrow = TRUE, ncol = 3)
 
   this_vec <- c(
@@ -358,6 +379,102 @@ get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophyla
   answer
 }
 
+
+create_data_subsets <- function(test, option) {
+  if (option == 1) {
+    subset <- test %>%
+      filter(proph_ongoing == 0, treatment_type == "quick") %>%
+      mutate(label = "responsive_quick") %>%
+      distinct()
+    n <- nrow(subset)
+    if (length(unique(subset$treat_prop)) <= 1) {
+      print("Error: no quick treatment scenarios with treat_prop > 0")
+    } else {
+      print(paste0(n, " Quick treatment scenarios"))
+      return(subset)
+    }
+  }
+  if (option == 2) {
+    subset <- test %>%
+      filter(proph_ongoing == 0, treatment_type == "proph") %>%
+      mutate(label = "responsive_proph") %>%
+      distinct()
+    n <- nrow(subset)
+    if (length(unique(subset$treat_prop)) <= 1) {
+      print("Error: no proph treatment scenarios with treat_prop > 0")
+    } else {
+      print(paste0(n, " Responsive prophylactic treatment scenarios"))
+      return(subset)
+    }
+  }
+  if (option == 3) {
+    subset <- test %>%
+      filter(treat_prop == 0) %>% 
+      mutate(coverage = PF_final / All_cows_final, treat_prop = coverage,
+             label = "proph_ongoing") %>%
+      distinct()
+    n <- nrow(subset)
+    if (length(unique(subset$proph_ongoing)) <= 1) {
+      print("Error: no ongoing pophylactic treatment scenarios")
+    } else {
+      print(paste0(n, " Ongoing pophylactic treatment scenarios"))
+      return(subset)
+    }
+  }
+}
+
+
+select_scenario <- function(scenarios_df, subset, scenario = 1) {
+  reduced_scenarios <- scenarios_df %>%
+    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -proph_ongoing, -treatment_type) %>%
+    distinct()
+  reduced_scenarios
+  selected_row <- scenario
+  subset_for_plotting <- left_join(reduced_scenarios[selected_row, ], subset)
+  subset_for_plotting
+}
+
+
+adjust_fitness <- function(subset_for_plotting, fit_adj_new) {
+  subset_for_plotting <- subset_for_plotting %>% 
+    mutate(fit_adj_new = fit_adj_new) %>%
+    mutate(Rres_final = (fit_adj_new / fit_adj) * Rres_final) %>%
+    mutate(Prob_onward_tran = 1 - dpois(0, Rres_final)) %>%
+    mutate(RiskE = Prob_onward_tran * RiskA) %>%
+    mutate(ratio = Rres_final / Rsen_final)
+  
+  subset_for_plotting
+}
+
+
+find_nearest_vector <- function(desired_vector, actual_vector) {
+  selected_vector <- c()
+  for (element in desired_vector) {
+    diff <- abs(actual_vector - element)
+    selected_element <- actual_vector[which.min(diff)]
+    selected_vector <- c(selected_vector, selected_element)
+  }
+  selected_vector
+}
+
+
+
+get_subset_for_plotting <- function(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.6) {
+  # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
+  subset <- create_data_subsets(test, option)
+  
+  # subset further by scenario if addiotnal parameters varied, default is first row
+  selected_row <- 1
+  subset_for_plotting <- select_scenario(scenarios_df, subset, selected_row)
+  
+  # Adjust fitness post simulation
+  subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = fit_adj_new)
+  subset_for_plotting
+}
+
+findGlobals(fun = get_subset_for_plotting, merge = FALSE)$variables
+findGlobals(fun = create_data_subsets, merge = FALSE)$variables
+findGlobals(fun = find_nearest_vector, merge = FALSE)$variables
 findGlobals(fun = get_disease_free_equilibrium_for_PF_PS_and_CS, merge = FALSE)$variables
 findGlobals(fun = get_filename, merge = FALSE)$variables
 findGlobals(fun = get_full_path, merge = FALSE)$variables

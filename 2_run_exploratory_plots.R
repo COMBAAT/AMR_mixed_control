@@ -17,12 +17,14 @@ source("1_set_user_inputs.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
-source("funcs/r0.R")
-source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
 source("funcs/quick_plot.R")
 source("funcs/output_baseline_params_and_scenarios.R")
+source("funcs/AAT_AMR_dens_dep.R")
+source("funcs/r0_intuitive.R")
+source("funcs/r0_NGM.R")
+source("funcs/r0_helper.R")
 
 
 
@@ -45,21 +47,27 @@ all_scenarios_summary <- data.frame()
 tic()
 
 ## ---- Execute model
-for (row in 1:nrow(scenarios_df)) {
+number_of_scenarios <- nrow(scenarios_df)
+for (row in 1:number_of_scenarios) {
   print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
 
   this_scenario <- scenarios_df[row, ]
-  params <- set_parameters_NEW(this_scenario)
+  params <- set_parameters(this_scenario)
   full_scenario <- merge_params_into_this_scenario(this_scenario, params)
   full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$current_descriptor)
   full_scenario <- move_populations_first(full_scenario)
 
   # Add R0 to full_scenario
+  # R0sen2 and R0res2 are calculated using the next generation matrix method as a check
   R0sen_and_R0res <- calculate_R0(params)
   R0sen <- R0sen_and_R0res["R0sen"]
   R0res <- R0sen_and_R0res["R0res"]
+  R0sen2 <- R0sen_and_R0res["R0sen2"]
+  R0res2 <- R0sen_and_R0res["R0res2"]
   full_scenario$R0sen <- R0sen
+  full_scenario$R0sen2 <- R0sen2
   full_scenario$R0res <- R0res
+  full_scenario$R0res2 <- R0res2
 
   ## Make the simulation time dependent on R0 value
   ## Only run full simulation if R0 >= 1.0
@@ -110,30 +118,37 @@ filename <- get_filename()
 save(test, baseline_parameters, scenarios_df, file = filename)
 
 # some exploratory plots showing final simulation in scenario set
-# quick_plot(expanded_output)
-# quick_plot2(expanded_output)
-quick_plot3(expanded_output)
 R0_and_R_trajectories(expanded_output)
-
-Rplot <- all_scenarios_summary %>%
-  filter(R0sen < 5) %>%
-  mutate(reaches_equilibrium = case_when(time_final < 10000 ~ TRUE, time_final == 10000 ~ FALSE)) %>%
-  ggplot() +
-  geom_point(aes(
-    y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
-    shape = as.factor(treatment_type)
-  )) +
-  geom_abline(aes(slope = 1, intercept = 0), colour = "black")
-#Rplot
+quick_plot3(expanded_output)
 
 
-# glimpse(all_scenarios_summary)
-all_scenarios_summary$Cattle_total_final
-all_scenarios_summary$Prophylactic_total_final
-all_scenarios_summary$All_cows_final
-all_scenarios_summary$R0sen
-all_scenarios_summary$R0res
-all_scenarios_summary$Rsen_final
-all_scenarios_summary$Rres_final
+if (number_of_scenarios > 1) {
+  Rplot <- all_scenarios_summary %>%
+    filter(R0sen < 50) %>%
+    mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
+    ggplot() +
+    geom_point(aes(
+      y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
+      shape = as.factor(treatment_type)
+    )) +
+    expand_limits(x = 0, y = 0) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
+    geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
+  Rplot
+
+  all_scenarios_summary %>%
+    filter(Rsen_final < 100) %>%
+    ggplot() +
+    geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type))) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+
+  all_scenarios_summary %>%
+    filter(Rsen_final < 100) %>%
+    ggplot() +
+    geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type))) +
+    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
+}
+
+all_scenarios_summary %>% select(starts_with("R0sen"), treatment_type)
 
 toc()

@@ -1,3 +1,4 @@
+
 # History files
 .Rhistory
 .Rapp.history
@@ -20,6 +21,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -56,6 +58,5 @@ output/
 
 # useful folder
 useful/
-
-# file comparison
-file_comparison/
+old/
+messages.R
