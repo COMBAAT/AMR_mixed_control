@@ -11,7 +11,7 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Dec6_",
+    general_descriptor = "Jan23_",
     current_descriptor = "proph_quick"
   )
   user_inputs
@@ -39,16 +39,20 @@ create_multiple_scenarios <- function() {
   partial_susceptibility_proph_cattle <- 0.5
   
 
-  df <- expand.grid(
+  tb1 <- expand_grid(NW = wildlife_number, K = carrying_capacity)
+  
+  tb2 <- expand_grid(
     NC = cattle_number, emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing, 
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
-    treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity, maintain_vector_pop = maintain_vector_pop,
+    treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
     treatment_type = treatment_type, max_time = max_time
   )
+  tb <- expand_grid(tb1, tb2)
   
+  df <- as.data.frame(tb) %>% mutate(treatment_type = as.factor(treatment_type))
   df
 }
 
