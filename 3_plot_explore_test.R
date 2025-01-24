@@ -24,7 +24,7 @@ if (load_latest_file == TRUE) {
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-option = 1
+option = 2
 subset <- create_data_subsets(test, option)
 
 # subset further by scenario if addiotnal parameters varied, default is first row
@@ -59,7 +59,7 @@ write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv")
 # Specify K and NW for plotting
 this_K <- 6000
 this_NW <- 100
-this_NW_set <- c(0, 100, 250)
+this_NW_set <- c(0, 100, 300)
 
 # Plot R0 versus wildlife faceted by treat_prop
 subset_for_plotting %>%
