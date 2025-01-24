@@ -426,7 +426,7 @@ create_data_subsets <- function(test, option) {
 
 select_scenario <- function(scenarios_df, subset, scenario = 1) {
   reduced_scenarios <- scenarios_df %>%
-    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -proph_ongoing, -treatment_type) %>%
+    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -proph_ongoing, -treatment_type, -host_vector_ratio, -hosts) %>%
     distinct()
   reduced_scenarios
   selected_row <- scenario
