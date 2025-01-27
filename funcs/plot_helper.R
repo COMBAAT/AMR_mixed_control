@@ -56,6 +56,8 @@ my_label <- function(variable) {
   if (variable == "NW") this_label <- "Wildlife"
   if (variable == "K") this_label <- "Carrying capacity"
   if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
+  if (variable == "Rres_final") this_label <- "Rres at equilibrium"
+  if (variable == "Rsen_final") this_label <- "Rsen at equilibrium"
   this_label
 }
 
@@ -194,7 +196,7 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
     filter(
-      prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
+      #prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.15, 0.2),
       NW %in% this_NW_set,
       K == this_K
     ) %>%
