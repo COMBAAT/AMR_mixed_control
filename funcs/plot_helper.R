@@ -54,7 +54,7 @@ my_label <- function(variable) {
   if (variable == "treat_prop") this_label <- "Treatment proportion"
   if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide \n coverage"
   if (variable == "NW") this_label <- "Wildlife"
-  if (variable == "K") this_label <- "Carrying capacity"
+  if (variable == "K") this_label <- "Vector measure" #"Carrying capacity"
   if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
   if (variable == "Rres_final") this_label <- "Rres at equilibrium"
   if (variable == "Rsen_final") this_label <- "Rsen at equilibrium"
