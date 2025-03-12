@@ -11,8 +11,8 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Jan23_",
-    current_descriptor = "proph_quick"
+    general_descriptor = "Mar12",
+    current_descriptor = "explore"
   )
   user_inputs
 }
@@ -20,55 +20,52 @@ get_user_inputs <- function() {
 create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 10000
-  treatment_type <- c("proph", "quick") # quick, proph or both
+  treatment_type <- c("quick") # quick, proph or both
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
   treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
   treat_prop <- c(treat_propA, treat_propB)
-  maintain_vector_pop <- TRUE
+  maintain_vector_pop <- FALSE
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.05)
-  prop_prophylaxis_at_birth <- c(0.0) 
-  proph_ongoing <- 0 #c(0, 2, 4) / days_per_year
+  prop_cattle_with_insecticide <- 0.0 #seq(0.0, 0.5, by = 0.1)
+  prop_prophylaxis_at_birth <- c(0.0)
+  proph_ongoing <- 0 # c(0, 2, 4) / days_per_year
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
-  
-  # choose whether to specify carrying capacity directly or via host vector ratio
-  use_carrying_capacity <- TRUE
-  carrying_capacity <- c(10000, 6000, 4000, 2000)
-  host_vector_ratio <- seq(5, 50, by = 5)
-  if (use_carrying_capacity == TRUE) {
-    tb1a <- expand_grid(NC = cattle_number, NW = wildlife_number, K = carrying_capacity) %>% 
-      mutate(hosts = NC + NW, host_vector_ratio = K / hosts)
-    tb1a$use_carrying_capacity <- use_carrying_capacity
-    tb1a
-    tb1 <- tb1a
-  } else {
-    tb1b <- expand_grid(NC = cattle_number, NW = wildlife_number, host_vector_ratio = host_vector_ratio) %>% 
-      mutate(hosts = NC + NW)
-    tb1b$K <- tb1b$hosts * tb1b$host_vector_ratio
-    tb1b$use_carrying_capacity <- use_carrying_capacity
-    tb1b
-    tb1 <- tb1b
-  }
 
-  #tb1 <- expand_grid(NW = wildlife_number, K = carrying_capacity)
-  
-  tb2 <- expand_grid(
+  tb1 <- expand_grid(
     emergence = emergence,
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing, 
+    dose_adj = dose_adj, proph_ongoing = proph_ongoing,
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
     treatment_type = treatment_type, max_time = max_time
   )
-  tb <- expand_grid(tb1, tb2)
+
+  # now specify vector pop in terms of carrying capacity or host vector ratio
+  tb_hosts <- expand_grid(NC = cattle_number, NW = wildlife_number) %>% mutate(hosts = NC + NW)
+  tb_hosts
+
+  carrying_capacity <- c(10000, 6000, 4000, 2000)
+  host_vector_ratio <- seq(10, 50, by = 20)
+  tb2a <- expand_grid(tb_hosts, K = carrying_capacity) %>%
+    mutate(use_carrying_capacity = TRUE, host_vector_ratio = K / hosts) %>% 
+    select(NC, NW, hosts, use_carrying_capacity, host_vector_ratio, K)
   
+  tb2b <- expand_grid(tb_hosts, host_vector_ratio = host_vector_ratio) %>%
+    mutate(use_carrying_capacity = FALSE, K = hosts * host_vector_ratio) %>% 
+    select(NC, NW, hosts, use_carrying_capacity, host_vector_ratio, K)
+  
+  tb2 <- rbind(tb2a, tb2b)
+  tb2
+
+  tb <- expand_grid(tb2, tb1)
+
   df <- as.data.frame(tb) %>% mutate(treatment_type = as.factor(treatment_type))
   df
 }
