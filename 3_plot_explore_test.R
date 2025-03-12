@@ -18,21 +18,30 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/simulation_set_OctoberC.Rda")
-  folder_name <- "output/simulation_set_OctoberC/"
+  load("output/Jan27_proph_quick_new.Rda")
+  folder_name <- "output/Jan27_proph_quick_new/"
   dir.create(folder_name)
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-option = 2
+option = 1
 subset <- create_data_subsets(test, option)
 
-# subset further by scenario if addiotnal parameters varied, default is first row
-selected_row <- 1
-subset_for_plotting <- select_scenario(scenarios_df, subset, selected_row)
+# subset further by scenario if additional parameters varied, default is first row
+scenario_choice <- show_scenarios(scenarios_df)
+scenario_choice
+selected_row <- 2
+subset_for_plotting <- select_scenario(scenario_choice, subset, selected_row)
 
-# Adjust fitness post simulation
+# adjust fitness post simulation, if desired
 subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
+
+subset_for_plotting <- subset_for_plotting %>% mutate(K = host_vector_ratio)
+
+# Specify K and NW for plotting
+this_K <- 30 #6000
+this_NW <- 100
+this_NW_set <- c(0, 100, 300)
 
 # Generate plots ---------------------------------------------------------------
 # Plot and save baseline parameters
@@ -55,11 +64,6 @@ ggsave(p,
 )
 scenarios_for_output <- get_simplified_scenarios(scenarios_df)
 write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv"))
-
-# Specify K and NW for plotting
-this_K <- 6000
-this_NW <- 100
-this_NW_set <- c(0, 100, 300)
 
 # Plot R0 versus wildlife faceted by treat_prop
 subset_for_plotting %>%
@@ -85,7 +89,7 @@ ggsave(
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
 lhs <- subset_for_plotting %>%
   mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-  filter(prop_cattle_with_insecticide == 0) %>%
+  filter(prop_cattle_with_insecticide == 0.0) %>%
   ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
@@ -94,7 +98,8 @@ lhs <- subset_for_plotting %>%
   labs(colour = my_label("NW"), shape = my_label("K")) +
   my_theme()
 
-rhs <- lhs + ylim(c(0, 2)) + geom_abline(intercept = 1, slope = 0, linetype = "dashed")
+rhs <- lhs + ylim(c(0, 2)) + 
+  geom_abline(intercept = 1.0, slope = 0, linetype = "dashed")
 rhs
 
 # use patchwork package to stick plots together
@@ -111,7 +116,7 @@ ggsave(
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW
 y_vars <- c(
-  "R0sen", "prevalence", "Incidence", "No_trt_cat", "Prob_onward_tran",
+  "prevalence", "Incidence","R0sen", "Rsen_final", "Rres_final", "ratio", "No_trt_cat", "Prob_onward_tran",
   "RiskE", "RiskA"
 )
 
