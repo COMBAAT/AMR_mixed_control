@@ -423,14 +423,17 @@ create_data_subsets <- function(test, option) {
   }
 }
 
-
-select_scenario <- function(scenarios_df, subset, scenario = 1) {
-  reduced_scenarios <- scenarios_df %>%
+show_scenarios <- function(scenarios_df) {
+  scenario_choice <- scenarios_df %>%
     select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -proph_ongoing, -treatment_type, -host_vector_ratio, -hosts) %>%
     distinct()
-  reduced_scenarios
-  selected_row <- scenario
-  subset_for_plotting <- left_join(reduced_scenarios[selected_row, ], subset)
+  print("Scenarios choice")
+  scenario_choice
+  print(scenario_choice)
+}
+
+select_scenario <- function(scenario_choice, subset, selected_row = 1) {
+  subset_for_plotting <- left_join(scenario_choice[selected_row, ], subset)
   subset_for_plotting
 }
 
