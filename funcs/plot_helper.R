@@ -382,8 +382,8 @@ plot_type11_selective_advantage_by_NW <- function(df, this_K, this_insecticide, 
 plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, lw = my_linewidth(), ps = my_pointsize()) {
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    mutate(danger = ifelse(R0sen  > 1, "no", "yes")) %>%
-    filter(NW == this_NW, K == this_K, R0sen > 1) %>%
+    #mutate(danger = ifelse(R0sen  > 1, "no", "yes")) %>%
+    filter(NW == this_NW, K == this_K) %>%
     #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
     ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide, linetype = prop_cattle_with_insecticide)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
@@ -394,8 +394,9 @@ plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, 
     #ylab("Selective advantage to \n resistant strain") +
     #labs(colour = my_label("NW"), shape = my_label("K")) +
     labs(colour = my_label("prop_cattle_with_insecticide"), linetype = my_label("prop_cattle_with_insecticide")) +
-    my_theme()
+    my_theme() 
   
+  p <- p #+ gghighlight(R0sen_final > 1) #, unhighlighted_params = list(colour = "darkgrey"))
   p
 }
 
@@ -426,11 +427,16 @@ plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, this_K, ymax, this_N
 
 
 # functions for plotting
-create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, this_NW, label, plot_title) {
-  p1a <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, lw = 0.7, ps = 2)
-  p1b <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW)
-  p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0, lw = 0.7, ps = 2)
-  p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0)
+create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, this_NW, label, plot_title, plot_choice) {
+  if (plot_choice == "by_NW") {
+    p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0, lw = 0.7, ps = 2)
+    p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0)
+  }
+  if (plot_choice == "by_insecticide") {
+    p1a <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, lw = 0.7, ps = 2)
+    p1b <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW)
+  }
+  
   p1b <- p1b + ggtitle(plot_title) +
     geom_rect(aes(xmin = 0.0, xmax = 0.5, ymin = 0.0, ymax = 2.0),
               fill = "transparent", color = "black", linewidth = 0.5, linetype = "dashed"
