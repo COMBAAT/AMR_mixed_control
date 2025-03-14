@@ -19,8 +19,8 @@ if (load_latest_file == TRUE) {
   path <- gsub(".Rda", "/", latest_file)
   dir.create(path)
 } else {
-  load("output/Nov28_quick_proph.Rda")
-  path <- "output/Nov28_quick_proph/"
+  load("output/Jan27_proph_quick_new.Rda")
+  path <- "output/testing_combo_plots/"
   dir.create(path)
 }
 
@@ -28,12 +28,23 @@ if (load_latest_file == TRUE) {
 plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
 data_subsets <- list()
+use_cc <- TRUE
+mainvecpop <- TRUE
+spec <- paste0("_", use_cc, "_", mainvecpop)
 for (option in 1:2) {
-  data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, scenario = 1, fit_adj_new = 0.6)
+  subset <- create_data_subsets(test, option)
+  scenario_choice <- show_scenarios(scenarios_df)
+  print(scenario_choice)
+  subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
+  # adjust fitness post simulation, if desired
+  subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
+  #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, use_cc, mainvecpop, fit_adj_new = 0.6)
+  subset_for_plotting <- subset_for_plotting %>% mutate(K = host_vector_ratio)
+  data_subsets[[option]] <- subset_for_plotting
 }
 
 ################################################################################
-this_K <- 4000
+this_K <- 30 #6000 #4000
 this_NW <- 100
 ################################################################################
 
@@ -44,14 +55,14 @@ for (option in 1:2) {
   pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, labels[[option]], plot_titles[option])
   pSA_vertical[[option]] <- pSA_plots[[1]]
   pSA_inset[[option]] <- pSA_plots[[2]]
-  ggsave(paste0(path, "pSA_vertical_", labels[option], ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
-  ggsave(paste0(path, "pSA_inset_", labels[option], ".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
+  ggsave(paste0(path, "pSA_vertical_", labels[option], spec, ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
+  ggsave(paste0(path, "pSA_inset_", labels[option], spec,".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
 }
 
 pSA_inset_both <- (pSA_inset[[1]] / pSA_inset[[2]]) + 
   plot_layout(guides = "collect", axes = "collect", nrow = 2) + 
   plot_annotation('B', caption = ' ')
-ggsave(paste0(path, "pSA_inset_both.pdf"), pSA_inset_both, width = 5.1, height = 7.0)
+ggsave(paste0(path, "pSA_inset_both", spec, ".pdf"), pSA_inset_both, width = 5.1, height = 7.0)
 
 
 ################################################################################
@@ -65,15 +76,15 @@ for (option in 1:2) {
   p5_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "Incidence", this_K, ymax = 500, this_NW) 
   panel_plots[[option]] <-(p5_plots[[option]] + p4_plots[[option]]) + plot_layout(guides = "collect", axes = "collect", nrow = 1, widths = c(1, 1)) + 
     plot_annotation(caption = " ", title = plot_titles[option], theme=theme(plot.title=element_text(hjust=0.5, size = 20))) 
-  ggsave(paste0(path, "panel_", labels[option],"_", "incidence", ".pdf"), panel_plots[[option]], width = 10.2, height = 4.5)
+  ggsave(paste0(path, "panel_", labels[option],"_", "incidence", spec, ".pdf"), panel_plots[[option]], width = 10.2, height = 4.5)
 }
 
 panel_both <- wrap_elements(panel_plots[[1]]) / wrap_elements(panel_plots[[2]]) 
 panel_both  <- panel_both + 
   plot_annotation('A', caption = ' ')
-ggsave(paste0(path, "panel_both_", "incidence", ".pdf"), panel_both, width = 10.2, height = 9.0)
+ggsave(paste0(path, "panel_both_", "incidence", spec, ".pdf"), panel_both, width = 10.2, height = 9.0)
 
 
 panel_final <- wrap_elements(panel_both) + wrap_elements(pSA_inset_both) + plot_layout(guides = "collect", axes = "collect", widths = c(2, 1.5))
 panel_final
-ggsave(paste0(path, "panel_figureX_with_", "incidence", ".pdf"), panel_final, width = 12.2, height = 9.0)
+ggsave(paste0(path, "panel_figureX_with_", "incidence", spec, ".pdf"), panel_final, width = 12.2, height = 9.0)
