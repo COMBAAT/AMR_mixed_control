@@ -382,9 +382,7 @@ plot_type11_selective_advantage_by_NW <- function(df, this_K, this_insecticide, 
 plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, lw = my_linewidth(), ps = my_pointsize()) {
   p <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    #mutate(danger = ifelse(R0sen  > 1, "no", "yes")) %>%
     filter(NW == this_NW, K == this_K) %>%
-    #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
     ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide, linetype = prop_cattle_with_insecticide)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
     geom_point(size = ps) +
