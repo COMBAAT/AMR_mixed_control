@@ -24,22 +24,24 @@ if (load_latest_file == TRUE) {
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-option = 1
-subset <- create_data_subsets(test, option)
+ttype = 1
+subset <- create_data_subsets(test, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
-selected_row <- 2
-subset_for_plotting <- select_scenario(scenario_choice, subset, selected_row)
+use_cc <- TRUE
+mainvecpop <- TRUE
+spec <- paste0(use_cc, "_", mainvecpop)
+subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
 
 # adjust fitness post simulation, if desired
 subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 
-subset_for_plotting <- subset_for_plotting %>% mutate(K = host_vector_ratio)
+subset_for_plotting <- subset_for_plotting #%>% mutate(K = host_vector_ratio)
 
 # Specify K and NW for plotting
-this_K <- 30 #6000
+this_K <- 6000
 this_NW <- 100
 this_NW_set <- c(0, 100, 300)
 
@@ -79,7 +81,7 @@ subset_for_plotting %>%
   my_theme()
 
 output_label <- "plot_type0_R0sen"
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
@@ -107,7 +109,7 @@ rhs
 lhs + rhs + plot_layout(ncol = 2, guides = "collect")
 
 output_label <- paste0("plot_type0_Rres_Rsen_ratio")
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
@@ -124,7 +126,7 @@ for (y_var in y_vars) {
   plot_type1_y_versus_treat_prop_facet_NW(subset_for_plotting, y_var, this_NW_set)
 
   output_label <- paste0("plot_type1_", y_var)
-  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
   ggsave(
     filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
@@ -138,7 +140,7 @@ for (y_var in y_vars) {
 y_var <- "RiskA"
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
 output_label <- paste0("plot_type2_", y_var)
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
@@ -147,7 +149,7 @@ ggsave(
 y_var <- "RiskE"
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
 output_label <- paste0("plot_type2_", y_var)
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
@@ -164,7 +166,7 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight(
   subset_for_plotting, this_K, y_var, threshold_var, threshold, this_NW_set
 )
 output_label <- paste0("plot_type3_", y_var)
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
@@ -174,13 +176,13 @@ ggsave(
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
-y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE")
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE", "Rsen_final", "Rres_final")
 
 for (y_var in y_vars) {
   plot_type4_y_versus_treat_prop_facet_NW(subset_for_plotting, y_var, this_K, this_NW_set)
 
   output_label <- paste0("plot_type4_", y_var)
-  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
   ggsave(
     filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
@@ -196,7 +198,7 @@ for (y_var in y_vars) {
   plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW(subset_for_plotting, y_var, this_K, this_NW_set)
 
   output_label <- paste0("plot_type5_", y_var)
-  output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
   ggsave(
     filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
@@ -212,7 +214,7 @@ for (y_var in y_vars) {
 #   plot_type6_y_versus_treat_prop_facet_NW_K(subset_for_plotting, y_var)
 # 
 #   output_label <- paste0("plot_type6_", y_var)
-#   output_filename <- paste0(folder_name, output_label, "_subset", selected_row, ".pdf")
+#   output_filename <- paste0(folder_name, output_label, "_spec_", spec, ".pdf")
 #   ggsave(
 #     filename = output_filename,
 #     width = my_pdfwidth(), height = 2 * my_pdfheight()
@@ -224,10 +226,9 @@ for (y_var in y_vars) {
 # ----------------------------------------
 plot_type10_R0sen_versus_Rsen(subset_for_plotting)
 output_label <- "plot_type10_R0sen_versus_Rsen"
-output_filename <- paste0(folder_name, output_label, "_option", option, "_subset", selected_row, ".pdf")
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 ggsave(
   filename = output_filename,
   width = my_pdfwidth(), height = my_pdfheight()
 )
-
 
