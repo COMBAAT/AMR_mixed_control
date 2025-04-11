@@ -157,7 +157,7 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
       #NW %in% this_NW_set,
       K == this_K
     ) %>%
-    ggplot(aes(treat_prop, RiskA, shape = NW, colour = prop_cattle_with_insecticide)) +
+    ggplot(aes(treat_prop, y, shape = NW, colour = prop_cattle_with_insecticide)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     facet_wrap(~prop_cattle_with_insecticide) +
