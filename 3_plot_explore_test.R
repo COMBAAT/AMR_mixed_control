@@ -191,7 +191,7 @@ ggsave(
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
-y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE", "Rsen_final", "Rres_final")
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE", "Rsen_final", "Rres_final", "R0sen")
 
 for (y_var in y_vars) {
   plot_type4_y_versus_treat_prop_facet_NW(subset_for_plotting, y_var, this_K, this_NW_set)
@@ -207,7 +207,7 @@ for (y_var in y_vars) {
 
 # ----------------------------------------
 # Plot y versus prop_cattle_with_insecticide faceted by NW, coloured by treat_prop
-y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE")
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskE", "RiskA", "Rsen_final", "Rres_final")
 
 for (y_var in y_vars) {
   plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW(subset_for_plotting, y_var, this_K, this_NW_set)
