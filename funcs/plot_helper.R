@@ -432,14 +432,14 @@ plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, this_K, ymax, this_N
 
 
 # functions for plotting
-create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, this_NW, label, plot_title, plot_choice) {
+create_selective_advantage_combination_plots <- function(subset_for_plotting, this_K, this_NW, this_insecticide, R0_threshold, label, plot_title, plot_choice) {
   if (plot_choice == "by_NW") {
-    p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0, lw = 0.7, ps = 2)
-    p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide = 0.0)
+    p1a <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide, R0_threshold, lw = 0.7, ps = 2)
+    p1b <- plot_type11_selective_advantage_by_NW(subset_for_plotting, this_K, this_insecticide, R0_threshold)
   }
   if (plot_choice == "by_insecticide") {
-    p1a <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, lw = 0.7, ps = 2)
-    p1b <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW)
+    p1a <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, R0_threshold, lw = 0.7, ps = 2)
+    p1b <- plot_type11_selective_advantage_by_insecticide(subset_for_plotting, this_K, this_NW, R0_threshold)
   }
   
   p1b <- p1b + ggtitle(plot_title) +
