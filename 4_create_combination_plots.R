@@ -24,11 +24,13 @@ if (load_latest_file == TRUE) {
   dir.create(path)
 }
 
+test <- test #%>% filter(R0sen <= 2)
+
 
 plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
 data_subsets <- list()
-use_cc <- TRUE
+use_cc <- FALSE
 mainvecpop <- TRUE
 spec <- paste0("_", use_cc, "_", mainvecpop)
 for (option in 1:2) {
@@ -39,31 +41,43 @@ for (option in 1:2) {
   # adjust fitness post simulation, if desired
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
   #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, use_cc, mainvecpop, fit_adj_new = 0.6)
-  subset_for_plotting <- subset_for_plotting %>% mutate(K = host_vector_ratio)
+  subset_for_plotting <- subset_for_plotting #%>% mutate(K = host_vector_ratio)
   data_subsets[[option]] <- subset_for_plotting
 }
 
 ################################################################################
-this_K <- 30 #6000 #4000
+if (use_cc == TRUE) {
+  this_K <- 6000
+  data_subsets[[1]] <- data_subsets[[1]] 
+  data_subsets[[2]] <- data_subsets[[2]]
+} else {
+  this_K <- 30
+  data_subsets[[1]] <- data_subsets[[1]] %>% mutate(K = host_vector_ratio)
+  data_subsets[[2]] <- data_subsets[[2]] %>% mutate(K = host_vector_ratio)
+}
 this_NW <- 100
+R0_threshold <- 1.0
+this_insecticide <- 0.2
 ################################################################################
 
 # create the selective advantage plots
 pSA_vertical <- list()
 pSA_inset <- list()
-for (option in 1:2) {
-  pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, labels[[option]], plot_titles[option])
-  pSA_vertical[[option]] <- pSA_plots[[1]]
-  pSA_inset[[option]] <- pSA_plots[[2]]
-  ggsave(paste0(path, "pSA_vertical_", labels[option], spec, ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
-  ggsave(paste0(path, "pSA_inset_", labels[option], spec,".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
+for (plot_choice in c("by_NW", "by_insecticide")) {
+  for (option in 1:2) {
+    pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, this_insecticide, R0_threshold, labels[[option]], plot_titles[option], plot_choice)
+    pSA_vertical[[option]] <- pSA_plots[[1]]
+    pSA_inset[[option]] <- pSA_plots[[2]]
+    ggsave(paste0(path, "pSA_vertical_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
+    #ggsave(paste0(path, "pSA_inset_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
+  }
+
+
+  pSA_inset_both <- (pSA_inset[[1]] / pSA_inset[[2]]) +
+    plot_layout(guides = "collect", axes = "collect", nrow = 2) +
+    plot_annotation("B", caption = " ")
+  #ggsave(paste0(path, "pSA_inset_both", "_", plot_choice, spec, ".pdf"), pSA_inset_both, width = 5.1, height = 7.0)
 }
-
-pSA_inset_both <- (pSA_inset[[1]] / pSA_inset[[2]]) + 
-  plot_layout(guides = "collect", axes = "collect", nrow = 2) + 
-  plot_annotation('B', caption = ' ')
-ggsave(paste0(path, "pSA_inset_both", spec, ".pdf"), pSA_inset_both, width = 5.1, height = 7.0)
-
 
 ################################################################################
 ################################################################################
