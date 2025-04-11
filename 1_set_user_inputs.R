@@ -11,8 +11,8 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Mar12",
-    current_descriptor = "explore"
+    general_descriptor = "Mar28",
+    current_descriptor = "quick_proph"
   )
   user_inputs
 }
@@ -20,15 +20,15 @@ get_user_inputs <- function() {
 create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 10000
-  treatment_type <- c("quick") # quick, proph or both
+  treatment_type <- c("quick", "proph") # quick, proph or both
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
-  treat_propA <- seq(0.0, 0.9, by = 0.2)
+  treat_propA <- seq(0.0, 0.9, by = 0.05)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
   treat_prop <- c(treat_propA, treat_propB)
-  maintain_vector_pop <- FALSE
+  maintain_vector_pop <- c(TRUE, FALSE)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- 0.0 #seq(0.0, 0.5, by = 0.1)
+  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.025)
   prop_prophylaxis_at_birth <- c(0.0)
   proph_ongoing <- 0 # c(0, 2, 4) / days_per_year
   fit_adj <- 0.8
