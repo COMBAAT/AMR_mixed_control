@@ -60,6 +60,20 @@ append_epi_outputs_to_df <- function(df) {
   df
 }
 
+add_competition_and_invasion_columns <- function(df) {
+  df <- df %>% 
+    mutate(
+    x1 = R0sen_final > 1,  # expect non-zero prevalence of sensitivte strain at equilibrium and Rsen = 1
+    x2 = Rres_final > 1,   # Resistant strain is able to invade at equilibrium 
+    x3 = Rres_final > Rsen_final) %>% # Resistant strain outcompetes sensitive strain
+    mutate(Region = case_when(
+      x1 & x3 ~ "Res outcompetes Sen",
+      x1 & (!x3) ~ "Sen outcompetes Res",
+      (!x1) & x2 ~ "No Sen & Res can invade",
+      (!x1) & (!x2) ~ "No Sen & Res can't invade",
+      TRUE ~ "NA"
+    ))
+}
 
 
 #-------------------------------------------------------------------------------
