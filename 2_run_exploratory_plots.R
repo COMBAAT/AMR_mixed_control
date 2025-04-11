@@ -111,6 +111,9 @@ for (row in 1:number_of_scenarios) {
   
 }
 
+# add columns indicating outcome of cometition with or invasion by resistant strains
+all_scenarios_summary <- add_competition_and_invasion_columns(all_scenarios_summary)
+
 
 # save outputs as dataframe called test
 test <- all_scenarios_summary
