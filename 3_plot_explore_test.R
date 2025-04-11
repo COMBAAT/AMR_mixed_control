@@ -30,7 +30,7 @@ subset <- create_data_subsets(test, ttype)
 # subset further by scenario if additional parameters varied, default is first row
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
-use_cc <- TRUE
+use_cc <- FALSE
 mainvecpop <- TRUE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
@@ -38,10 +38,14 @@ subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecp
 # adjust fitness post simulation, if desired
 subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 
-subset_for_plotting <- subset_for_plotting #%>% mutate(K = host_vector_ratio)
-
 # Specify K and NW for plotting
-this_K <- 6000
+if (use_cc == TRUE) {
+  subset_for_plotting <- subset_for_plotting
+  this_K <- 6000
+} else {
+  subset_for_plotting <- subset_for_plotting %>% mutate(K = host_vector_ratio)
+  this_K <- 30
+}
 this_NW <- 100
 this_NW_set <- c(0, 100, 300)
 
@@ -137,23 +141,34 @@ for (y_var in y_vars) {
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by prop_cattle_with_insecticide
 
-y_var <- "RiskA"
-plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
-output_label <- paste0("plot_type2_", y_var)
-output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-ggsave(
-  filename = output_filename,
-  width = my_pdfwidth(), height = my_pdfheight()
-)
+# y_var <- "RiskA"
+# plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
+# output_label <- paste0("plot_type2_", y_var)
+# output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
+# 
+# y_var <- "RiskE"
+# plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
+# output_label <- paste0("plot_type2_", y_var)
+# output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
 
-y_var <- "RiskE"
-plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
-output_label <- paste0("plot_type2_", y_var)
-output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-ggsave(
-  filename = output_filename,
-  width = my_pdfwidth(), height = my_pdfheight()
-)
+y_vars <- c("RiskE", "RiskA", "Rsen_final", "Rres_final")
+for (y_var in y_vars) {
+  plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide(subset_for_plotting, this_K, y_var, this_NW_set)
+  output_label <- paste0("plot_type2_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+  ggsave(
+    filename = output_filename,
+    width = my_pdfwidth(), height = my_pdfheight()
+  )
+}
 
 # ----------------------------------------
 
