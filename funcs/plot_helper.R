@@ -39,7 +39,7 @@ my_linewidth <- function() {
 }
 
 my_pointsize <- function() {
-  3
+  2
 }
 
 
@@ -69,9 +69,9 @@ my_pdfheight <- function() {
   7*2/3
 }
 
-my_pointsize <- function() {
-  3
-}
+#my_pointsize <- function() {
+#  3
+#}
 
 my_theme <- function() {
   theme_grey(base_size = 16) +
