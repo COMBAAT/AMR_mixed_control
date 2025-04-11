@@ -360,44 +360,51 @@ plot_type10_R0sen_versus_Rsen <- function(df) {
 
 
 # Plot R resistant/R sensitive versus wildlife
-plot_type11_selective_advantage_by_NW <- function(df, this_K, this_insecticide, lw = my_linewidth(), ps = my_pointsize()) {
-  p <- df %>%
+plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, R0_threshold, lw = my_linewidth(), ps = my_pointsize()) {
+  plot_this <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    filter(prop_cattle_with_insecticide == this_insecticide, K == this_K) %>%
-    #ggplot(aes(treat_prop, ratio, colour = NW, shape = K)) +
-    ggplot(aes(treat_prop, ratio, colour = NW)) +
+    filter(NW == this_NW, K == this_K)
+  plot_this2 <- plot_this %>% filter(R0sen_final < R0_threshold)
+  
+  p <- plot_this %>%
+    ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide, linetype = prop_cattle_with_insecticide, shape = NW)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
     geom_point(size = ps) +
     geom_line(linewidth = lw) +
-    xlim(c(0,1)) +
+    xlim(c(0,1)) + ylim(c(0, 5)) +
     xlab(my_label("treat_prop")) +
     ylab("Selective advantage to \n resistant strain") +
-    #labs(colour = my_label("NW"), shape = my_label("K")) +
-    labs(colour = my_label("NW")) +
-    my_theme()
+    labs(colour = my_label("prop_cattle_with_insecticide"), linetype = my_label("prop_cattle_with_insecticide"), shape = my_label("NW")) +
+    my_theme() +
+    # added grey out data subset
+    #geom_point(data = plot_this2, aes(treat_prop, ratio), size = ps, colour = "grey", alpha = 1.0) +
+    geom_line(data = plot_this2, aes(treat_prop, ratio, group = prop_cattle_with_insecticide), linetype = "solid", linewidth = 1, colour = "white", alpha = 1.0) 
   
   p
 }
 
-plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, lw = my_linewidth(), ps = my_pointsize()) {
-  p <- df %>%
+plot_type11_selective_advantage_by_NW <- function(df, this_K, this_insecticide, R0_threshold, lw = my_linewidth(), ps = my_pointsize()) {
+  plot_this <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    filter(NW == this_NW, K == this_K) %>%
-    ggplot(aes(treat_prop, ratio, colour = prop_cattle_with_insecticide, linetype = prop_cattle_with_insecticide)) +
+    filter(prop_cattle_with_insecticide == this_insecticide, K == this_K)
+  plot_this2 <- plot_this %>% filter(R0sen_final < R0_threshold)
+  
+  p <- plot_this %>%
+    ggplot(aes(treat_prop, ratio, colour = NW, linetype = NW, shape = prop_cattle_with_insecticide)) +
     geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5) +
     geom_point(size = ps) +
     geom_line(linewidth = lw) +
-    xlim(c(0,1)) +
+    xlim(c(0,1)) + ylim(c(0,20)) +
     xlab(my_label("treat_prop")) +
-    #ylab("Selective advantage to \n resistant strain") +
-    #labs(colour = my_label("NW"), shape = my_label("K")) +
-    labs(colour = my_label("prop_cattle_with_insecticide"), linetype = my_label("prop_cattle_with_insecticide")) +
-    my_theme() 
+    ylab("Selective advantage to \n resistant strain") +
+    labs(colour = my_label("NW"), linetype = my_label("NW"), shape = my_label("prop_cattle_with_insecticide")) +
+    my_theme() +
+    # added grey out data subset
+    #geom_point(data = plot_this2, aes(treat_prop, ratio), size = ps, colour = "grey") +
+    geom_line(data = plot_this2, aes(treat_prop, ratio, group = NW), linetype = "solid", linewidth = 1, colour = "white") 
   
-  p <- p #+ gghighlight(R0sen_final > 1) #, unhighlighted_params = list(colour = "darkgrey"))
   p
 }
-
 
 plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, this_K, ymax, this_NW) {
   insecticide_vector <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5) #unique(df$prop_cattle_with_insecticide)
