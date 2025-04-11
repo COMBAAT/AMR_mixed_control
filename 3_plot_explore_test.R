@@ -9,6 +9,7 @@ library(patchwork)
 source("funcs/plot_helper.R")
 source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
+source("funcs/epi_outputs.R")
 
 # Load data files --------------------------------------------------------------
 load_latest_file <- TRUE
@@ -31,12 +32,13 @@ subset <- create_data_subsets(test, ttype)
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
 use_cc <- FALSE
-mainvecpop <- TRUE
+mainvecpop <- FALSE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
 
 # adjust fitness post simulation, if desired
-subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
+subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.9)
+subset_for_plotting <- add_competition_and_invasion_columns(subset_for_plotting)
 
 # Specify K and NW for plotting
 if (use_cc == TRUE) {
