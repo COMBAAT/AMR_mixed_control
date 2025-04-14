@@ -31,7 +31,7 @@ subset <- create_data_subsets(test, ttype)
 # subset further by scenario if additional parameters varied, default is first row
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
-use_cc <- FALSE
+use_cc <- TRUE
 mainvecpop <- FALSE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
