@@ -30,7 +30,7 @@ test <- test #%>% filter(R0sen <= 2)
 plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
 labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
 data_subsets <- list()
-use_cc <- FALSE
+use_cc <- TRUE
 mainvecpop <- TRUE
 spec <- paste0("_", use_cc, "_", mainvecpop)
 for (option in 1:2) {
@@ -47,7 +47,7 @@ for (option in 1:2) {
 
 ################################################################################
 if (use_cc == TRUE) {
-  this_K <- 6000
+  this_K <- 4000
   data_subsets[[1]] <- data_subsets[[1]] 
   data_subsets[[2]] <- data_subsets[[2]]
 } else {
@@ -63,20 +63,20 @@ this_insecticide <- 0.2
 # create the selective advantage plots
 pSA_vertical <- list()
 pSA_inset <- list()
-for (plot_choice in c("by_NW", "by_insecticide")) {
+for (plot_choice in c("by_insecticide", "by_NW")) {
   for (option in 1:2) {
     pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, this_insecticide, R0_threshold, labels[[option]], plot_titles[option], plot_choice)
     pSA_vertical[[option]] <- pSA_plots[[1]]
     pSA_inset[[option]] <- pSA_plots[[2]]
     ggsave(paste0(path, "pSA_vertical_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
-    #ggsave(paste0(path, "pSA_inset_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
+    ggsave(paste0(path, "pSA_inset_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_inset[[option]], width = 7.2, height = 5.1)
   }
 
 
   pSA_inset_both <- (pSA_inset[[1]] / pSA_inset[[2]]) +
     plot_layout(guides = "collect", axes = "collect", nrow = 2) +
     plot_annotation("B", caption = " ")
-  #ggsave(paste0(path, "pSA_inset_both", "_", plot_choice, spec, ".pdf"), pSA_inset_both, width = 5.1, height = 7.0)
+  ggsave(paste0(path, "pSA_inset_both", "_", plot_choice, spec, ".pdf"), pSA_inset_both, width = 5.1, height = 7.0)
 }
 
 ################################################################################
