@@ -363,7 +363,7 @@ plot_type10_R0sen_versus_Rsen <- function(df) {
 plot_type11_selective_advantage_by_insecticide <- function(df, this_K, this_NW, R0_threshold, lw = my_linewidth(), ps = my_pointsize()) {
   plot_this <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", "K"), as.factor) %>%
-    filter(NW == this_NW, K == this_K)
+    filter(NW == this_NW, K == this_K, prop_cattle_with_insecticide %in% c(0, 0.1, 0.2, 0.3, 0.4, 0.5))
   plot_this2 <- plot_this %>% filter(R0sen_final < R0_threshold)
   
   p <- plot_this %>%
