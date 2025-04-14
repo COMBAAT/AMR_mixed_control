@@ -11,7 +11,7 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Mar28",
+    general_descriptor = "April11",
     current_descriptor = "quick_proph"
   )
   user_inputs
