@@ -19,8 +19,8 @@ if (load_latest_file == TRUE) {
   path <- gsub(".Rda", "/", latest_file)
   dir.create(path)
 } else {
-  load("output/Jan27_proph_quick_new.Rda")
-  path <- "output/testing_combo_plots/"
+  load("output/April11_quick_proph.Rda")
+  path <- "output/April11_quick_proph//"
   dir.create(path)
 }
 
@@ -47,13 +47,15 @@ for (option in 1:2) {
 
 ################################################################################
 if (use_cc == TRUE) {
-  this_K <- 4000
+  this_vector_measure <- "K"
+  this_vector_measure_value <- 6000
   data_subsets[[1]] <- data_subsets[[1]] 
   data_subsets[[2]] <- data_subsets[[2]]
 } else {
-  this_K <- 30
-  data_subsets[[1]] <- data_subsets[[1]] %>% mutate(K = host_vector_ratio)
-  data_subsets[[2]] <- data_subsets[[2]] %>% mutate(K = host_vector_ratio)
+  this_vector_measure_value <- 30
+  this_vector_measure <- "host_vector_ratio"
+  data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = host_vector_ratio)
+  data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = host_vector_ratio)
 }
 this_NW <- 100
 R0_threshold <- 1.0
@@ -65,7 +67,7 @@ pSA_vertical <- list()
 pSA_inset <- list()
 for (plot_choice in c("by_insecticide", "by_NW")) {
   for (option in 1:2) {
-    pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_K, this_NW, this_insecticide, R0_threshold, labels[[option]], plot_titles[option], plot_choice)
+    pSA_plots <- create_selective_advantage_combination_plots(data_subsets[[option]], this_NW, this_insecticide, R0_threshold, labels[[option]], plot_titles[option], plot_choice, this_vector_measure, this_vector_measure_value)
     pSA_vertical[[option]] <- pSA_plots[[1]]
     pSA_inset[[option]] <- pSA_plots[[2]]
     ggsave(paste0(path, "pSA_vertical_", plot_choice, "_", labels[option], spec, ".pdf"), pSA_vertical[[option]], width = 5.1, height = 7.2)
@@ -86,8 +88,8 @@ p5_plots <- list()
 panel_plots <- list()
 
 for (option in 1:2) {
-  p4_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "RiskE", this_K, ymax = 5, this_NW) 
-  p5_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "Incidence", this_K, ymax = 500, this_NW) 
+  p4_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "RiskE", ymax = 5, this_NW, this_vector_measure, this_vector_measure_value) 
+  p5_plots[[option]] <- plot_type12_yvar_by_NW_and_insectide(data_subsets[[option]], "Incidence", ymax = 500, this_NW, this_vector_measure, this_vector_measure_value) 
   panel_plots[[option]] <-(p5_plots[[option]] + p4_plots[[option]]) + plot_layout(guides = "collect", axes = "collect", nrow = 1, widths = c(1, 1)) + 
     plot_annotation(caption = " ", title = plot_titles[option], theme=theme(plot.title=element_text(hjust=0.5, size = 20))) 
   ggsave(paste0(path, "panel_", labels[option],"_", "incidence", spec, ".pdf"), panel_plots[[option]], width = 10.2, height = 4.5)
