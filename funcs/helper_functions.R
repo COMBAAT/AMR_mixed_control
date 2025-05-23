@@ -487,6 +487,21 @@ calc_frac_with_zero <- function(x, total) {
   }
 }
 
+bite_frac_cattle  <- function(NC, N) {
+  # Function to calculate the fraction of bites on cattle
+  # It calculates the fraction of bites on cattle based on the number of cattle and wildlife
+  NC / N
+  0.6
+}
+
+bite_frac_wildlife <- function(NW, N) {
+  # Function to calculate the fraction of bites on wildlife
+  # It calculates the fraction of bites on wildlife based on the number of wildlife and total population
+  NW / N
+  0.4
+}
+
+
 findGlobals(fun = calc_frac_with_zero, merge = FALSE)$variables
 findGlobals(fun = get_subset_for_plotting, merge = FALSE)$variables
 findGlobals(fun = create_data_subsets, merge = FALSE)$variables
@@ -506,3 +521,5 @@ findGlobals(fun = merge_dfs_without_duplicate_columns, merge = FALSE)$variables
 findGlobals(fun = append_descriptor, merge = FALSE)$variables
 findGlobals(fun = merge_params_into_this_scenario, merge = FALSE)$variables
 findGlobals(fun = move_populations_first, merge = FALSE)$variables
+findGlobals(fun = bite_frac_cattle, merge = FALSE)$variables
+findGlobals(fun = bite_frac_wildlife, merge = FALSE)$variables

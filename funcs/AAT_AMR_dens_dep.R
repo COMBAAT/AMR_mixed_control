@@ -389,16 +389,5 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   list(dX)
 }
 
-bite_frac_cattle  <- function(NC, N) {
-  # Function to calculate the fraction of bites on cattle
-  # It calculates the fraction of bites on cattle based on the number of cattle and wildlife
-  NC / N
-}
-
-bite_frac_wildlife <- function(NW, N) {
-  # Function to calculate the fraction of bites on wildlife
-  # It calculates the fraction of bites on wildlife based on the number of wildlife and total population
-  NW / N
-}
 
 findGlobals(fun = AAT_AMR_dens_dep, merge = FALSE)$variables
