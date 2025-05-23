@@ -24,6 +24,8 @@ if (load_latest_file == TRUE) {
   dir.create(folder_name)
 }
 
+test <- test %>% filter(prevalence <= 1) # fix fudge
+
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 ttype = 1
 subset <- create_data_subsets(test, ttype)
@@ -32,30 +34,58 @@ subset <- create_data_subsets(test, ttype)
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
 use_cc <- TRUE
-mainvecpop <- FALSE
+mainvecpop <- TRUE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
 
 # adjust fitness post simulation, if desired
-subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.9)
+subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 subset_for_plotting <- add_competition_and_invasion_columns(subset_for_plotting)
 
 # Specify K and NW for plotting
 if (use_cc == TRUE) {
-  subset_for_plotting <- subset_for_plotting
-  this_vector_measure <- "K"
-  this_vector_measure_value <- 6000
+  subset_for_plotting <- subset_for_plotting %>% mutate(Baseline_vector_population = K / 2) # fix fudge
+  this_vector_measure <- "Baseline_vector_population"
+  this_vector_measure_value <- 3000
 } else {
-  subset_for_plotting <- subset_for_plotting #%>% mutate(host_vector_ratio = host_vector_ratio)
+  subset_for_plotting <- subset_for_plotting %>% mutate(Baseline_vector_host_ratio = host_vector_ratio / 2) # fix fudge
   #this_host_vector_ratio <- 30
-  this_vector_measure_value <- 30
-  this_vector_measure <- "host_vector_ratio"
+  this_vector_measure_value <- 15
+  this_vector_measure <- "Baseline_vector_host_ratio"
 }
 this_NW <- 100
 this_NW_set <- c(0, 100, 300)
-subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% c(0.0, 0.1, 0.2, 0.3, 0.4, 0.5))
+subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% seq(0, 0.5, 0.1))
+
+
+
 
 # Generate plots ---------------------------------------------------------------
+# Identify the boundary where R0 closest to 1
+subset_for_plotting <- subset_for_plotting %>%
+  group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>% 
+  mutate(R0sen_gt_1 = ifelse(R0sen_final > 1, "R0sen > 1", "R0sen < 1")) %>%
+  mutate(R0sen_temp = case_when(R0sen_final < 1 ~ 0, TRUE ~ R0sen_final)) %>% 
+  mutate(closest_to_1_location = which.min(abs(R0sen_temp - 1)),
+         closest_to_1_value = prop_cattle_with_insecticide[closest_to_1_location]) %>% ungroup()
+
+subset_for_plotting <- subset_for_plotting %>% 
+  mutate(closest_true_false = ifelse(closest_to_1_value == prop_cattle_with_insecticide, TRUE, FALSE
+  ))
+
+# Plot the results
+restricted_subset <- subset_for_plotting #%>% filter(R0sen > 0, ratio > 1)
+plot_invasion_landscape(1, restricted_subset)
+restricted_subset <- subset_for_plotting %>% filter(R0sen > 0, ratio > 1)
+plot_invasion_landscape(1, restricted_subset)
+#restricted_subset <- subset_for_plotting %>% filter(prevalence > 0)
+plot_other_landscape(0.3, restricted_subset, "prevalence")
+plot_other_landscape(0.3, restricted_subset, "ratio")
+
+
+
+
+
 # Plot and save baseline parameters
 output_label <- "00_baseline_parameters"
 p <- plot_baseline_parameters(baseline_parameters)
