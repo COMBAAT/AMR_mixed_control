@@ -43,31 +43,35 @@ my_pointsize <- function() {
 }
 
 
-my_label <- function(variable) {
+my_label <- function(variable, split_across_lines = "default") {
   if (variable == "R0sen") this_label <- "R0 sensitive"
   if (variable == "prevalence") this_label <- "Prevalence"
   if (variable == "Incidence") this_label <- "Incidence"
   if (variable == "No_trt_cat") this_label <- "Number treated cattle"
   if (variable == "Prob_onward_tran") this_label <- "Prob onward transmission"
-  if (variable == "RiskE") this_label <- "Risk of emergence \n and spread"
+  if (variable == "RiskE") this_label <- "Risk of emergence and spread"
   if (variable == "RiskA") this_label <- "Risk of emergence"
-  if (variable == "treat_prop") this_label <- "Treatment proportion"
+  if (variable == "treat_prop") this_label <- "Case treatment \n proportion"
   if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide \n coverage"
+  if (variable == "prop_cattle_with_insecticide" & split_across_lines == "other") this_label <- "Insecticide coverage \n "
   if (variable == "NW") this_label <- "Wildlife"
   if (variable == "K") this_label <- "Carrying capacity"
   if (variable == "host_vector_ratio") this_label <- "Vector host ratio"
   if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
   if (variable == "Rres_final") this_label <- "Rres at equilibrium"
   if (variable == "Rsen_final") this_label <- "Rsen at equilibrium"
+  if (variable == "R0sen_gt_1") this_label <- "R0sen with control"
+  if (variable == "Baseline_vector_population") this_label <- "Vector number"
+  if (variable == "Baseline_vector_host_ratio") this_label <- "Vector host ratio"
   this_label
 }
 
 my_pdfwidth <- function() {
-  7
+  8 #7
 }
 
 my_pdfheight <- function() {
-  7*2/3
+  8*2/3 #7*2/3
 }
 
 #my_pointsize <- function() {
