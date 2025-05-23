@@ -11,7 +11,7 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "April11",
+    general_descriptor = "April19",
     current_descriptor = "quick_proph"
   )
   user_inputs
@@ -30,7 +30,7 @@ create_multiple_scenarios <- function() {
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
   prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.025)
   prop_prophylaxis_at_birth <- c(0.0)
-  proph_ongoing <- 0 # c(0, 2, 4) / days_per_year
+  proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
