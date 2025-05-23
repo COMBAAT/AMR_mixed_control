@@ -136,7 +136,7 @@ y_vars <- c(
   "RiskE", "RiskA"
 )
 y_vars <- c(
-  "prevalence"
+  "prevalence", "Incidence", "No_trt_cat", "RiskA", "RiskE", "R0sen"
 )
 
 for (y_var in y_vars) {
