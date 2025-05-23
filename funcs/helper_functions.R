@@ -478,6 +478,16 @@ get_subset_for_plotting <- function(scenarios_df, test, option, use_cc, mainvecp
   subset_for_plotting
 }
 
+calc_frac_with_zero <- function(x, total) {
+  tolerance <- 1e-6
+  if (total > tolerance) {
+    x / total
+  } else {
+    0
+  }
+}
+
+findGlobals(fun = calc_frac_with_zero, merge = FALSE)$variables
 findGlobals(fun = get_subset_for_plotting, merge = FALSE)$variables
 findGlobals(fun = create_data_subsets, merge = FALSE)$variables
 findGlobals(fun = find_nearest_vector, merge = FALSE)$variables
