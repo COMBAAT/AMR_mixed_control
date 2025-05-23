@@ -239,6 +239,24 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
 #   dplyr, ggplot2
 #
 #-------------------------------------------------------------------------------
+ymax_function <- function(y_var) {
+  if (y_var == "R0sen") {
+    ymax <- 20.0
+  } else if (y_var == "RiskE") {
+    ymax <- 8.0
+  } else if (y_var == "RiskA") {
+    ymax <- 8.0
+  } else if (y_var == "Incidence") {
+    ymax <- 800
+  } else if (y_var == "prevalence") {
+    ymax <- 0.8
+  } else if (y_var == "No_trt_cat") {
+    ymax <- 800
+  } else {
+    ymax <- 1.0
+  }
+  return(ymax)
+}
 
 plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
                                                     this_vector_measure, this_vector_measure_value) {
@@ -260,7 +278,8 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     xlab(this_xlab) +
     ylab(this_ylab) +
     labs(shape = my_label(this_vector_measure), colour = my_label("prop_cattle_with_insecticide")) +
-    my_theme()
+    my_theme() + 
+    coord_cartesian(ylim = c(0, ymax_function(y_var))) 
   p
 }
 
@@ -287,7 +306,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
   this_xlab <- my_label("prop_cattle_with_insecticide")
   this_ylab <- my_label(y_var)
   
-  desired_vector <- c(0, 0.2, 0.4, 0.6, 0.8, 0.91) # desired values
+  desired_vector <- c(0, 0.2, 0.4, 0.6, 0.8, 0.9) # desired values, used to include 0.91
   actual_vector <- unique(df$treat_prop)
   nearest_vector <- find_nearest_vector(desired_vector, actual_vector)
 
@@ -295,7 +314,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
     mutate_at(c("treat_prop", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
     filter(
       prop_cattle_with_insecticide <= 0.5,
-      #treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.91),
+      #treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.9),
       treat_prop %in% nearest_vector,
       NW %in% this_NW_set,
       get(this_vector_measure) == this_vector_measure_value
