@@ -96,7 +96,7 @@ calculate_R_from_row_of_df <- function(params, this_row) {
   Rres <- R_calc_sen_or_res(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
   Rsen2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "yes", basic = "no")
   Rres2 <- R_calc_sen_or_res2(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive = "no", basic = "no")
-  c("Rsen" = Rsen, "Rres" = Rres, "Rsen2" = Rsen, "Rres2" = Rres)
+  c("Rsen" = Rsen, "Rres" = Rres, "Rsen2" = Rsen2, "Rres2" = Rres2)
 }
 
 #-------------------------------------------------------------------------------
