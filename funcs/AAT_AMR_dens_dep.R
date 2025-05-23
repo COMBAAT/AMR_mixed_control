@@ -108,25 +108,35 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   gamma_v <- parms["gamma_v"]
   ten2fed <- parms["ten2fed"]
 
-  # Total infected cattle
-  Is_cattle <- CIs + CTs + PIs + PTs + PPs #+ WIs
-  Ir_cattle <- CIr + CTr + PIr + PTr + PPr #+ WIr
-
   # Population total ----
+  Is_cattle <- CIs + CTs + PIs + PTs + PPs
+  Ir_cattle <- CIr + CTr + PIr + PTr + PPr
   C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEsX + CErX
   P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
   W <- WS + WEs + WEr + WIs + WIr
   V <- VSt + VSf + VEs + VEr + VIs + VIr
   NC <- P + C
   N <- C + P + W
+  
+  # Population fractions
+  Is_cattle_frac <- calc_frac_with_zero(Is_cattle, NC)
+  Ir_cattle_frac <- calc_frac_with_zero(Ir_cattle, NC)
+  WS_frac <- calc_frac_with_zero(WS, W)
+  WIs_frac <- calc_frac_with_zero(WIs, W)
+  WIr_frac <- calc_frac_with_zero(WIr, W)
+  CS_frac <- calc_frac_with_zero(CS, NC)
+  PS_frac <- calc_frac_with_zero(PS, NC)
+  PF_frac <- calc_frac_with_zero(PF, NC)
+  
+  
 
   # Cattle without long-lasting drug treatment ----
 
   dCS.dt <-
     birth_c * (1 - prop_prophylaxis_at_birth) * NC +
     waning_from_PS * PS -
-    biterate * prob_infection_to_host * (CS / NC) * VIs * bite_frac_cattle(NC, N) -
-    biterate * prob_infection_to_host * fit_adj * (CS / NC) * VIr * bite_frac_cattle(NC, N) -
+    biterate * prob_infection_to_host * CS_frac * VIs * bite_frac_cattle(NC, N) -
+    biterate * prob_infection_to_host * fit_adj * CS_frac * VIr * bite_frac_cattle(NC, N) -
     proph_ongoing * CS +
     sigma_c * CIs +
     sigma_c * CIr +
@@ -136,7 +146,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     
 
   dCEs.dt <-
-    biterate * prob_infection_to_host * (CS / NC) * VIs * bite_frac_cattle(NC, N) -
+    biterate * prob_infection_to_host * CS_frac * VIs * bite_frac_cattle(NC, N) -
     gamma_c * CEs +
     waning_from_PE * PEs -
     proph_ongoing * CEs -
@@ -149,7 +159,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * CEsX
 
   dCEr.dt <-
-    biterate * prob_infection_to_host * fit_adj * (CS / NC) * VIr * bite_frac_cattle(NC, N) -
+    biterate * prob_infection_to_host * fit_adj * CS_frac * VIr * bite_frac_cattle(NC, N) -
     gamma_c * CEr +
     waning_from_PE * PEr -
     proph_ongoing * CEr -
@@ -194,7 +204,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 # Cattle with long lasting drug treatment ----
   
   dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * NC - # Adding new prophylactically treated cattle
-    biterate * prob_infection_to_host * fit_adj * (PF / NC) * VIr * bite_frac_cattle(NC, N) + 
+    biterate * prob_infection_to_host * fit_adj * PF_frac * VIr * bite_frac_cattle(NC, N) + 
     sigma_st * PPs + 
     sigma_c * PPr - 
     waning_F2S * PF + # waning from fully protected to partially protected
@@ -208,8 +218,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
   dPS.dt <- 
     waning_F2S * PF - # waning from fully protected to partially protected
-    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * (PS / NC) * VIs * bite_frac_cattle(NC, N) - 
-    biterate * prob_infection_to_host * fit_adj * (PS / NC) * VIr * bite_frac_cattle(NC, N) - 
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_frac * VIs * bite_frac_cattle(NC, N) - 
+    biterate * prob_infection_to_host * fit_adj * PS_frac * VIr * bite_frac_cattle(NC, N) - 
     proph_ongoing * PS +
     sigma_c * PIs + 
     sigma_c * PIr + 
@@ -220,7 +230,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     
 
   dPEs.dt <-
-    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * (PS / NC) * VIs * bite_frac_cattle(NC, N) - 
+    biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_frac * VIs * bite_frac_cattle(NC, N) - 
     gamma_c * PEs - 
     emergence_p * PEs -
     waning_from_PE * PEs - 
@@ -235,8 +245,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     death_c * PEsX 
 
   dPEr.dt <-
-    biterate * prob_infection_to_host * fit_adj * (PS / NC) * VIr * bite_frac_cattle(NC, N) + 
-    biterate * prob_infection_to_host * fit_adj * (PF / NC) * VIr * bite_frac_cattle(NC, N) - 
+    biterate * prob_infection_to_host * fit_adj * PS_frac * VIr * bite_frac_cattle(NC, N) + 
+    biterate * prob_infection_to_host * fit_adj * PF_frac * VIr * bite_frac_cattle(NC, N) - 
     gamma_c * PEr + 
     emergence_p * PEs -
     waning_from_PE * PEr - 
@@ -312,19 +322,19 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dWS.dt <- birth_w * W -
     #biterate * prob_infection_to_host * WS * VIs / N -
     #biterate * (prob_infection_to_host * fit_adj) * WS * VIr / N +
-    biterate * prob_infection_to_host * (WS / W) * VIs * bite_frac_wildlife(W, N) -
-    biterate * (prob_infection_to_host * fit_adj) * (WS / W) * VIr * bite_frac_wildlife(W, N) +
+    biterate * prob_infection_to_host * WS_frac * VIs * bite_frac_wildlife(W, N) -
+    biterate * (prob_infection_to_host * fit_adj) * WS_frac * VIr * bite_frac_wildlife(W, N) +
     sigma_w * WIs +
     sigma_w * WIr -
     death_w * WS
 
   dWEs.dt <-
-    biterate * prob_infection_to_host * (WS / W) * VIs * bite_frac_wildlife(W, N) -
+    biterate * prob_infection_to_host * WS_frac * VIs * bite_frac_wildlife(W, N) -
     gamma_w * WEs -
     death_w * WEs
 
   dWEr.dt <-
-    biterate * (prob_infection_to_host * fit_adj) * (WS / W) * VIr * bite_frac_wildlife(W, N) -
+    biterate * (prob_infection_to_host * fit_adj) * WS_frac * VIr * bite_frac_wildlife(W, N) -
     gamma_w * WEr -
     death_w * WEr
 
@@ -337,32 +347,32 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dVSt.dt <- birth_v * V * (1 - V / K) -
     #prob_infection_to_vector * biterate * VSt * Is / N -
     #prob_infection_to_vector * biterate * VSt * Ir / N -
-    prob_infection_to_vector * biterate * VSt * (Is_cattle / NC) * bite_frac_cattle(NC, N) -
-    prob_infection_to_vector * biterate * VSt * (Ir_cattle / NC) * bite_frac_cattle(NC, N) -
-    prob_infection_to_vector * biterate * VSt * (WIs / W) * bite_frac_wildlife(W, N) -
-    prob_infection_to_vector * biterate * VSt * (WIr / W) * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSt * Is_cattle_frac * bite_frac_cattle(NC, N) -
+    prob_infection_to_vector * biterate * VSt * Ir_cattle_frac * bite_frac_cattle(NC, N) -
+    prob_infection_to_vector * biterate * VSt * WIs_frac * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSt * WIr_frac * bite_frac_wildlife(W, N) -
     ten2fed * VSt -
     death_v * VSt
 
   dVSf.dt <- ten2fed * VSt -
-    prob_infection_to_vector * biterate * VSf * (Is_cattle / NC) * bite_frac_cattle(NC, N) -
-    prob_infection_to_vector * biterate * VSf * (Ir_cattle / NC) * bite_frac_cattle(NC, N) -
-    prob_infection_to_vector * biterate * VSf * (WIs / W) * bite_frac_wildlife(W, N) -
-    prob_infection_to_vector * biterate * VSf * (WIr / W) * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSf * Is_cattle_frac * bite_frac_cattle(NC, N) -
+    prob_infection_to_vector * biterate * VSf * Ir_cattle_frac * bite_frac_cattle(NC, N) -
+    prob_infection_to_vector * biterate * VSf * WIs_frac * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSf * WIr_frac * bite_frac_wildlife(W, N) -
     death_v * VSf
 
   dVEs.dt <- 
-    prob_infection_to_vector * biterate * VSt * (Is_cattle / NC) * bite_frac_cattle(NC, N) +
-    prob_infection_to_vector * biterate * VSf * (Is_cattle / NC) * bite_frac_cattle(NC, N) +
-    prob_infection_to_vector * biterate * VSt * (WIs / W) * bite_frac_wildlife(W, N) +
-    prob_infection_to_vector * biterate * VSf * (WIs / W) * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSt * Is_cattle_frac * bite_frac_cattle(NC, N) +
+    prob_infection_to_vector * biterate * VSf * Is_cattle_frac * bite_frac_cattle(NC, N) +
+    prob_infection_to_vector * biterate * VSt * WIs_frac * bite_frac_wildlife(W, N) +
+    prob_infection_to_vector * biterate * VSf * WIs_frac * bite_frac_wildlife(W, N) -
     gamma_v * VEs - death_v * VEs
 
   dVEr.dt <-
-    prob_infection_to_vector * biterate * VSt * (Ir_cattle / NC) * bite_frac_cattle(NC, N) +
-    prob_infection_to_vector * biterate * VSf * (Ir_cattle / NC) * bite_frac_cattle(NC, N) +
-    prob_infection_to_vector * biterate * VSt * (WIr / W) * bite_frac_wildlife(W, N) +
-    prob_infection_to_vector * biterate * VSf * (WIr / W) * bite_frac_wildlife(W, N) -
+    prob_infection_to_vector * biterate * VSt * Ir_cattle_frac * bite_frac_cattle(NC, N) +
+    prob_infection_to_vector * biterate * VSf * Ir_cattle_frac * bite_frac_cattle(NC, N) +
+    prob_infection_to_vector * biterate * VSt * WIr_frac * bite_frac_wildlife(W, N) +
+    prob_infection_to_vector * biterate * VSf * WIr_frac * bite_frac_wildlife(W, N) -
     gamma_v * VEr - death_v * VEr
 
   dVIs.dt <- gamma_v * VEs - death_v * VIs

@@ -81,23 +81,39 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
   # Define matrix of transmission
   # Order the elements of the infectiuos subsystem 1 CE, 2 CEX, 3 CI, 4 CT, 5 PE, 6 PEX, 7 PI, 8 PT, 9 PP, 10 WE, 11 WI, 12 VE, 13 VI
   Transmission <- matrix(0, size_of_infectious_subsystem, size_of_infectious_subsystem)
+  
+  Nc_frac <- calc_frac_with_zero(Nc, NC)
+  Npsus_frac <- calc_frac_with_zero(Npsus, NC)
+  Nw_frac <- calc_frac_with_zero(Nw, NW)
+  Nv_div_NC <- calc_frac_with_zero(Nv, NC)
+  Nv_div_NW <- calc_frac_with_zero(Nv, NW)
 
   # CE equation
-  Transmission[1, 13] <- biterate * prob_infection_to_host * Nc / NH
+  #Transmission[1, 13] <- biterate * prob_infection_to_host * Nc / NH
+  #Transmission[1, 13] <- biterate * prob_infection_to_host * (Nc / NC) * bite_frac_cattle(NC, NH)
+  Transmission[1, 13] <- biterate * prob_infection_to_host * Nc_frac * bite_frac_cattle(NC, NH)
 
   # PE equation
-  Transmission[5, 13] <- biterate * prob_infection_to_host * Npsus / NH
+  #Transmission[5, 13] <- biterate * prob_infection_to_host * Npsus / NH
+  #Transmission[5, 13] <- biterate * prob_infection_to_host * (Npsus / NC) * bite_frac_cattle(NC, NH)
+  Transmission[5, 13] <- biterate * prob_infection_to_host * Npsus_frac * bite_frac_cattle(NC, NH)
 
   # WE equation
-  Transmission[10, 13] <- biterate * prob_infection_to_host * Nw / NH
+  #Transmission[10, 13] <- biterate * prob_infection_to_host * Nw / NH
+  #Transmission[10, 13] <- biterate * prob_infection_to_host * (Nw / NW) * bite_frac_wildlife(NW, NH)
+  Transmission[10, 13] <- biterate * prob_infection_to_host * Nw_frac * bite_frac_wildlife(NW, NH)
 
   # VE equation
-  Transmission[12, 3] <- biterate * prob_infection_to_vector * Nv / NH
-  Transmission[12, 4] <- biterate * prob_infection_to_vector * Nv / NH
-  Transmission[12, 7] <- biterate * prob_infection_to_vector * Nv / NH
-  Transmission[12, 8] <- biterate * prob_infection_to_vector * Nv / NH
-  Transmission[12, 9] <- biterate * prob_infection_to_vector * Nv / NH
-  Transmission[12, 11] <- biterate * prob_infection_to_vector * Nv / NH
+  #Transmission[12, 3] <- biterate * prob_infection_to_vector * Nv / NH
+  #Transmission[12, 3] <- biterate * prob_infection_to_vector * (Nv / NC) * bite_frac_cattle(NC, NH)
+  Transmission[12, 3] <- biterate * prob_infection_to_vector * Nv_div_NC * bite_frac_cattle(NC, NH)
+  Transmission[12, 4] <- biterate * prob_infection_to_vector * Nv_div_NC * bite_frac_cattle(NC, NH)
+  Transmission[12, 7] <- biterate * prob_infection_to_vector * Nv_div_NC * bite_frac_cattle(NC, NH)
+  Transmission[12, 8] <- biterate * prob_infection_to_vector * Nv_div_NC * bite_frac_cattle(NC, NH)
+  Transmission[12, 9] <- biterate * prob_infection_to_vector * Nv_div_NC * bite_frac_cattle(NC, NH)
+  #Transmission[12, 11] <- biterate * prob_infection_to_vector * Nv / NH
+  #Transmission[12, 11] <- biterate * prob_infection_to_vector * (Nv / NW) * bite_frac_wildlife(NW, NH)
+  Transmission[12, 11] <- biterate * prob_infection_to_vector * Nv_div_NW * bite_frac_wildlife(NW, NH)
 
 
   NGM <- -Transmission %*% Inv_sigma

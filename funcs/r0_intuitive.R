@@ -36,6 +36,8 @@
 
 R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive, basic) {
   NH <- params["NH"]
+  NC <- params["NC"]
+  NW <- params["NW"]
   
   biterate <- params["biterate"]
   prob_infection_to_host <- params["prob_infection_to_host"]
@@ -50,6 +52,13 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   gamma_v <- params["gamma_v"]
   death_v <- params["death_v"]
   
+  Nc_frac <- calc_frac_with_zero(Nc, NC)
+  Nps_frac <- calc_frac_with_zero(Nps, NC)
+  Nps_Npf_frac <- calc_frac_with_zero(Nps + Npf, NC)
+  Nw_frac <- calc_frac_with_zero(Nw, NW)
+  Nv_div_NC <- calc_frac_with_zero(Nv, NC)
+  Nv_div_NW <- calc_frac_with_zero(Nv, NW)
+  
   if (is_strain_sensitive == "yes") {
     sigma_treated <- sigma_st
   }
@@ -60,7 +69,9 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
     prob_infection_to_host <- prob_infection_to_host * fit_adj
   }
   
-  rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v)
+  #rate_vectors_infected <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v)
+  rate_vectors_infected_by_cattle <- biterate * prob_infection_to_vector * Nv_div_NC * gamma_v / (gamma_v + death_v) * bite_frac_cattle(NC, NH)
+  #rate_vectors_infected_by_cattle <- biterate * prob_infection_to_vector * Nv / NH * gamma_v / (gamma_v + death_v) 
   
   #transition_probabilities <- create_named_vector_of_transition_probabilities(params, is_strain_sensitive)
   transition_probabilities <- create_named_vector_of_all_transition_probabilities(params, is_strain_sensitive)
@@ -68,34 +79,37 @@ R_calc_sen_or_res <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive,
   
   # transmission via C - cattle with no prophylaxis
   # from exposed host to infected vector
-  RVC <- calculate_RVC(rate_vectors_infected, time_in_state, transition_probabilities)
+  RVC <- calculate_RVC(rate_vectors_infected_by_cattle, time_in_state, transition_probabilities)
   RVC <- as.numeric(RVC)
   
   # from infected vector to exposed host
-  RCV <- biterate * prob_infection_to_host * (Nc / NH) * 1 / (death_v)
+  #RCV <- biterate * prob_infection_to_host * (Nc / NH) * 1 / (death_v)
+  RCV <- biterate * prob_infection_to_host * Nc_frac * 1 / (death_v) * bite_frac_cattle(NC, NH)
   RCV <- as.numeric(RCV)
   
   # transmission via P - cattle with prophylaxis
   # from exposed P to infected vector
-  RVP <- calculate_RVP(rate_vectors_infected, time_in_state, transition_probabilities)
+  RVP <- calculate_RVP(rate_vectors_infected_by_cattle, time_in_state, transition_probabilities)
   RVP <- as.numeric(RVP)
   
   # from infected vector to exposed P
   if (is_strain_sensitive == "yes") {
-    RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / NH * 1 / (death_v)
+    #RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps / NH * 1 / (death_v)
+    RPV <- biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * Nps_frac * 1 / (death_v) * bite_frac_cattle(NC, NH)
   }
   if (is_strain_sensitive == "no") {
-    RPV <- biterate * prob_infection_to_host * ((Nps + Npf) / NH) * 1 / (death_v)
+    #RPV <- biterate * prob_infection_to_host * ((Nps + Npf) / NH) * 1 / (death_v)
+    RPV <- biterate * prob_infection_to_host * Nps_Npf_frac * 1 / (death_v) * bite_frac_cattle(NC, NH)
   }
   RPV <- as.numeric(RPV)
   
   # transmission via W
   # from infected wildlife to infected vector
-  RVW <- biterate * prob_infection_to_vector * Nv / NH * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v)
+  RVW <- biterate * prob_infection_to_vector * Nv_div_NW * 1 / (sigma_w + death_w) * gamma_v / (gamma_v + death_v) * bite_frac_wildlife(NW, NH)
   RVW <- as.numeric(RVW)
   
   # from infected vector to infected wildlife
-  RWV <- biterate * prob_infection_to_host * Nw / NH * gamma_w / (gamma_w + death_w) * 1 / (death_v)
+  RWV <- biterate * prob_infection_to_host * Nw_frac * gamma_w / (gamma_w + death_w) * 1 / (death_v) * bite_frac_wildlife(NW, NH)
   RWV <- as.numeric(RWV)
   
   reproduction_number <- RCV * RVC + RPV * RVP + RWV * RVW
