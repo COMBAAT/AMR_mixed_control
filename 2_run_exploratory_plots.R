@@ -48,6 +48,8 @@ tic()
 
 ## ---- Execute model
 number_of_scenarios <- nrow(scenarios_df)
+
+
 for (row in 1:number_of_scenarios) {
   print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
 
@@ -152,6 +154,6 @@ if (number_of_scenarios > 1) {
     geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 }
 
-all_scenarios_summary %>% select(starts_with("R0sen"), treatment_type)
+all_scenarios_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"), starts_with("Rr"), prop_cattle_with_insecticide, treatment_type) #%>% glimpse()
 
 toc()
