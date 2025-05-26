@@ -19,8 +19,8 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/April11_quick_proph.Rda")
-  folder_name <- "output/April11_quick_proph/"
+  load("output/Mar28quick_proph.Rda")
+  folder_name <- "output/Mar28quick_proph_replot/"
   dir.create(folder_name)
 }
 
@@ -34,7 +34,7 @@ subset <- create_data_subsets(test, ttype)
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
 use_cc <- TRUE
-mainvecpop <- TRUE
+mainvecpop <- FALSE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
 
@@ -62,23 +62,23 @@ subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_c
 
 # Generate plots ---------------------------------------------------------------
 # Identify the boundary where R0 closest to 1
-subset_for_plotting <- subset_for_plotting %>%
-  group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>% 
+subset_for_invasion_plots <- subset_for_plotting %>%
+  group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>%
   mutate(R0sen_gt_1 = ifelse(R0sen_final > 1, "R0sen > 1", "R0sen < 1")) %>%
-  mutate(R0sen_temp = case_when(R0sen_final < 1 ~ 0, TRUE ~ R0sen_final)) %>% 
+  mutate(R0sen_temp = case_when(R0sen_final < 1 ~ 0, TRUE ~ R0sen_final)) %>%
   mutate(closest_to_1_location = which.min(abs(R0sen_temp - 1)),
          closest_to_1_value = prop_cattle_with_insecticide[closest_to_1_location]) %>% ungroup()
 
-subset_for_plotting <- subset_for_plotting %>% 
+subset_for_invasion_plots <- subset_for_invasion_plots %>%
   mutate(closest_true_false = ifelse(closest_to_1_value == prop_cattle_with_insecticide, TRUE, FALSE
   ))
 
 # Plot the results
-restricted_subset <- subset_for_plotting #%>% filter(R0sen > 0, ratio > 1)
+restricted_subset <- subset_for_invasion_plots #%>% filter(R0sen > 0, ratio > 1)
 plot_invasion_landscape(1, restricted_subset)
-restricted_subset <- subset_for_plotting %>% filter(R0sen > 0, ratio > 1)
+restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
 plot_invasion_landscape(1, restricted_subset)
-#restricted_subset <- subset_for_plotting %>% filter(prevalence > 0)
+#restricted_subset <- subset_for_invasion_plots %>% filter(prevalence > 0)
 plot_other_landscape(0.3, restricted_subset, "prevalence")
 plot_other_landscape(0.3, restricted_subset, "ratio")
 
@@ -109,6 +109,7 @@ write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv")
 
 # Plot R0 versus wildlife faceted by treat_prop
 df <- subset_for_plotting
+#df <- df %>% mutate(colour_var = .data[[this_vector_measure]]) 
 df$colour_var <- df[, this_vector_measure]
 df %>%
   mutate_at(c("prop_cattle_with_insecticide", "treat_prop", this_vector_measure, "colour_var"), as.factor) %>%
