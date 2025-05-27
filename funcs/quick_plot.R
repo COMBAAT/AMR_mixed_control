@@ -332,6 +332,10 @@ quick_plot2 <- function(df) {
 #-------------------------------------------------------------------------------
 
 quick_plot <- function(df, include_resistant_strains = FALSE) {
+  # subsample the dataframe to reduce the number of ponts being plot to 100
+  new_size <- 2000 
+  df <- df[sample(nrow(df), size = new_size, replace = TRUE), ]
+  
   new_df <- pivot_longer(df, !time, names_to = "Status", values_to = "Number")
   new_df <- new_df %>% mutate(Animal_type = str_sub(Status, 1, 1))
   new_df <- new_df %>% mutate(Resistant_infection = str_detect(Status, "r$")) # checks if string ends in "r"
