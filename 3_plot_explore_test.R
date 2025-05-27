@@ -76,8 +76,8 @@ subset_for_invasion_plots <- subset_for_invasion_plots %>%
 # Plot the results
 restricted_subset <- subset_for_invasion_plots #%>% filter(R0sen > 0, ratio > 1)
 plot_invasion_landscape(1, restricted_subset)
-restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
-plot_invasion_landscape(1, restricted_subset)
+#restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
+#plot_invasion_landscape(1, restricted_subset)
 #restricted_subset <- subset_for_invasion_plots %>% filter(prevalence > 0)
 plot_other_landscape(0.3, restricted_subset, "prevalence")
 plot_other_landscape(0.3, restricted_subset, "ratio")
