@@ -169,7 +169,7 @@ calculate_vector_death_rate <- function(d, qf, qn, pi) {
 #       - NC: Population size of cattle.
 #       - prop_prophylaxis_at_birth: Proportion of animals receiving prophylaxis at birth.
 #       - proph_ongoing: Proportion of ongoing prophylaxis.
-#       - treatment_type: Type of treatment (e.g., "quick", "proph").
+#       - treatment_type: Type of treatment (e.g., "curative", "longlasting").
 #       - dose_adj: Dose adjustment factor.
 #       - emergence: Emergence rate of resistance.
 #       - option: Any additional scenario-specific options.
@@ -229,13 +229,13 @@ set_parameters <- function(this_scenario) {
 
   treatment <- treat_prop * (sigma_c + death_c) / (1 - treat_prop)
 
-  if (treatment_type == "quick") {
+  if (treatment_type == "curative") {
     treatment_q <- treatment
     treatment_p <- 0
     emergence_p <- 0
     emergence_q <- emergence
   }
-  if (treatment_type == "proph") {
+  if (treatment_type == "longlasting") {
     treatment_q <- 0
     treatment_p <- treatment
     emergence_p <- emergence

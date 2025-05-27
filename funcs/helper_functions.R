@@ -383,8 +383,8 @@ get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophyla
 create_data_subsets <- function(test, option) {
   if (option == 1) {
     subset <- test %>%
-      filter(proph_ongoing == 0, treatment_type == "quick") %>%
-      mutate(label = "responsive_quick") %>%
+      filter(proph_ongoing == 0, treatment_type == "curative") %>%
+      mutate(label = "responsive_curative") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$treat_prop)) <= 1) {
@@ -396,8 +396,8 @@ create_data_subsets <- function(test, option) {
   }
   if (option == 2) {
     subset <- test %>%
-      filter(proph_ongoing == 0, treatment_type == "proph") %>%
-      mutate(label = "responsive_proph") %>%
+      filter(proph_ongoing == 0, treatment_type == "longlasting") %>%
+      mutate(label = "responsive_longlasting") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$treat_prop)) <= 1) {

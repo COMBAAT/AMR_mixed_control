@@ -27,8 +27,8 @@ if (load_latest_file == TRUE) {
 test <- test #%>% filter(R0sen <= 2)
 
 
-plot_titles <- c("Curative drug", "Prophylactic drug", "Ongoing prophylaxis")
-labels <- c("responsive_quick", "responsive_proph", "proh_ongoing")
+plot_titles <- c("Curative drug", "Longlasting drug", "Ongoing prophylaxis")
+labels <- c("responsive_curative", "responsive_longlasting", "proph_ongoing")
 data_subsets <- list()
 use_cc <- TRUE
 mainvecpop <- TRUE

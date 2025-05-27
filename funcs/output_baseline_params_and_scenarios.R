@@ -73,10 +73,10 @@ add_treatment_type_in_numeric_form <- function(scenarios_df) {
   scenarios_df$proph_treatment_on <- 0
   #scenarios_df$both_treatment_on <- 0
 
-  if ("quick" %in% unique(scenarios_df$treatment_type)) {
+  if ("curative" %in% unique(scenarios_df$treatment_type)) {
     scenarios_df$quick_treatment_on <- 1
   }
-  if ("proph" %in% unique(scenarios_df$treatment_type)) {
+  if ("longlasting" %in% unique(scenarios_df$treatment_type)) {
     scenarios_df$proph_treatment_on <- 1
   }
   scenarios_df
