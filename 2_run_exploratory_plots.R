@@ -124,7 +124,6 @@ save(test, baseline_parameters, scenarios_df, file = filename)
 
 # some exploratory plots showing final simulation in scenario set
 R0_and_R_trajectories(expanded_output)
-quick_plot3(expanded_output)
 
 
 if (number_of_scenarios > 1) {
@@ -157,3 +156,5 @@ if (number_of_scenarios > 1) {
 all_scenarios_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"), starts_with("Rr"), prop_cattle_with_insecticide, treatment_type) #%>% glimpse()
 
 toc()
+
+quick_plot3(expanded_output)
