@@ -157,4 +157,4 @@ all_scenarios_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"
 
 toc()
 
-quick_plot3(expanded_output)
+quick_plot(expanded_output)

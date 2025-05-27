@@ -331,9 +331,14 @@ quick_plot2 <- function(df) {
 #
 #-------------------------------------------------------------------------------
 
-quick_plot3 <- function(df) {
+quick_plot <- function(df, include_resistant_strains = FALSE) {
   new_df <- pivot_longer(df, !time, names_to = "Status", values_to = "Number")
   new_df <- new_df %>% mutate(Animal_type = str_sub(Status, 1, 1))
+  new_df <- new_df %>% mutate(Resistant_infection = str_detect(Status, "r$")) # checks if string ends in "r"
+  
+  if (include_resistant_strains == FALSE) {
+    new_df <- new_df %>% filter(Resistant_infection == FALSE)
+  }
 
   these_colours <- c(
     "CS" = "blue", "CEs" = "orange", "CEr" = "orange",
@@ -345,36 +350,45 @@ quick_plot3 <- function(df) {
     "VIs" = "red", "VIr" = "red", "Cattle_total" = "pink", "Vector_total" = "black",
     "Wildlife_total" = "black"
   )
+  logical_vector <- grepl(pattern = "r$", names(these_colours))
+  linetype_vector <- ifelse(logical_vector, "dotted", "solid")
+  names(linetype_vector) <- names(these_colours)
+  # now create a vector of linetypes with a dashed linetype for the resistant strains
+  
   plot_C <- new_df %>%
     filter(Animal_type == "C") %>%
     ggplot() +
-    geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
+    geom_line(aes(x = time, y = Number, colour = Status, linetype = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle, no prophylaxis")
+    scale_linetype_manual(" ", values = linetype_vector) +
+    ggtitle("Cattle, no longlasting drug")
 
   plot_P <- new_df %>%
     filter(Animal_type == "P") %>%
     ggplot() +
-    geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
+    geom_line(aes(x = time, y = Number, colour = Status, linetype = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
-    ggtitle("Cattle with prophylaxis")
+    scale_linetype_manual(" ", values = linetype_vector) +
+    ggtitle("Cattle with longlasting drug")
 
   plot_W <- new_df %>%
     filter(Animal_type == "W") %>%
     ggplot() +
-    geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
+    geom_line(aes(x = time, y = Number, colour = Status, linetype = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
+    scale_linetype_manual(" ", values = linetype_vector) +
     ggtitle("Wildlife")
 
   plot_V <- new_df %>%
     filter(Animal_type == "V") %>%
     ggplot() +
-    geom_line(aes(x = time, y = Number, colour = Status), linewidth = 1.5) +
+    geom_line(aes(x = time, y = Number, colour = Status, linetype = Status), linewidth = 1.5) +
     xlab("Time (days)") +
     scale_color_manual(" ", values = these_colours) +
+    scale_linetype_manual(" ", values = linetype_vector) +
     ggtitle("Vector")
 
   plot_C + plot_P + plot_W + plot_V
