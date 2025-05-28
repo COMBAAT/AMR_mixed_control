@@ -214,6 +214,7 @@ set_parameters <- function(this_scenario) {
   emergence <- this_scenario$emergence
   option <- this_scenario$option
   maintain_vector_pop <- this_scenario$maintain_vector_pop
+  prob_death_from_disease <- this_scenario$prob_death_from_disease
   
   NH <- NC + NW
 

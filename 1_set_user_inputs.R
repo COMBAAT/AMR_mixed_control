@@ -11,7 +11,7 @@ get_user_inputs <- function() {
     use_root_functions = FALSE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "May27b",
+    general_descriptor = "May28",
     current_descriptor = "curative_longlasting"
   )
   user_inputs
@@ -20,7 +20,7 @@ get_user_inputs <- function() {
 create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 5000
-  treatment_type <- c("curative", "longlasting") # quick, proph or both
+  treatment_type <- c("curative") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
   carrying_capacity <- c(10000, 6000, 2000)
@@ -29,7 +29,7 @@ create_multiple_scenarios <- function() {
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.05)
+  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.1)
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not)
   prop_prophylaxis_at_birth <- c(0.0)
   proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
@@ -38,12 +38,14 @@ create_multiple_scenarios <- function() {
   dose_adj <- 1.0
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
+  prob_death_from_disease <- 0.0
   
   # create grids of parameters combinations and then combine
   tb1 <- expand_grid(
     emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing,
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
+    prob_death_from_disease = prob_death_from_disease,
     treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
@@ -72,8 +74,8 @@ create_multiple_scenarios <- function() {
 
 create_single_scenario <- function() {
   days_per_year <- set_days_per_year()
-  max_time <- 5000
-  treatment_type <- c("curative") # curative or longlasting
+  max_time <- 3000
+  treatment_type <- c("longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- 100
   use_carrying_capacity <- TRUE # whether to use carrying capacity or host_vector_ratio
@@ -90,12 +92,14 @@ create_single_scenario <- function() {
   dose_adj <- 1.0
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
+  prob_death_from_disease <- 0.1
   
   # create grids of parameters combinations and then combine
   tb1 <- expand_grid(
     emergence = emergence,
     dose_adj = dose_adj, proph_ongoing = proph_ongoing,
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
+    prob_death_from_disease = prob_death_from_disease,
     treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,

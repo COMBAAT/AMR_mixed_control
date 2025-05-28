@@ -92,6 +92,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   waning_from_PS <- parms["waning_from_PS"]
   waning_F2S <- parms["waning_F2S"]
   partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
+  prob_death_from_disease <- parms["prob_death_from_disease"]
 
   ## ----- Wildlife
   birth_w <- parms["birth_w"]
@@ -138,6 +139,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * CS_frac * VIs * bite_frac_cattle(NC, N) -
     biterate * prob_infection_to_host * fit_adj * CS_frac * VIr * bite_frac_cattle(NC, N) -
     proph_ongoing * CS +
+    prob_death_from_disease * sigma_c * PIs +
+    prob_death_from_disease * sigma_c * PIr +
     sigma_c * CIs +
     sigma_c * CIr +
     sigma_st * CTs +
@@ -221,8 +224,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_frac * VIs * bite_frac_cattle(NC, N) - 
     biterate * prob_infection_to_host * fit_adj * PS_frac * VIr * bite_frac_cattle(NC, N) - 
     proph_ongoing * PS +
-    sigma_c * PIs + 
-    sigma_c * PIr + 
+    (1 - prob_death_from_disease) * sigma_c * PIs + 
+    (1 - prob_death_from_disease) * sigma_c * PIr + 
     sigma_st * PTs + 
     sigma_c * PTr - 
     waning_from_PS * PS - 
