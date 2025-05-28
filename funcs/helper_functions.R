@@ -502,6 +502,17 @@ bite_frac_wildlife <- function(NW, N) {
 }
 
 
+simplify_outputs <- function(df) {
+  
+  
+  reduced_df <- df %>% select(-starts_with("R0"), -starts_with("Rres"), -starts_with("Rsen"))
+  reduced_df <- reduced_df %>% select(NC, NW, NV, treatment_type, treat_prop, prop_cattle_with_insecticide, 
+                                      proph_ongoing, ends_with("final"), "prevalence", "Incidence")
+  reduced_df
+}
+
+
+
 findGlobals(fun = calc_frac_with_zero, merge = FALSE)$variables
 findGlobals(fun = get_subset_for_plotting, merge = FALSE)$variables
 findGlobals(fun = create_data_subsets, merge = FALSE)$variables
