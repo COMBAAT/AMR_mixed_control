@@ -7,11 +7,11 @@ set_days_per_year <- function() {
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = FALSE,
-    use_root_functions = FALSE,
+    multiple_scenarios = TRUE,
+    use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "May28",
+    general_descriptor = "May29",
     current_descriptor = "curative_longlasting"
   )
   user_inputs
@@ -20,16 +20,16 @@ get_user_inputs <- function() {
 create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   max_time <- 5000
-  treatment_type <- c("curative") # curative or longlasting
+  treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
   carrying_capacity <- c(10000, 6000, 2000)
   host_vector_ratio <- seq(10, 50, by = 20)
-  treat_propA <- seq(0.0, 0.9, by = 0.1)
+  treat_propA <- seq(0.0, 0.9, by = 0.05)
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB)
   # do not set prop_cattle_with_insecticide to 1 as generates infinite mortality and an error
-  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.1)
+  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.025)
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not)
   prop_prophylaxis_at_birth <- c(0.0)
   proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
