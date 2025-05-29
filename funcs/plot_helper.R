@@ -479,8 +479,12 @@ plot_invasion_landscape <- function(prev_threshold, subset_for_plotting) {
 }
 
 
-plot_other_landscape <- function(prev_threshold, subset_for_plotting, colour_var) {
+plot_other_landscape <- function(subset_for_plotting, colour_var) {
   subset_for_plotting <- subset_for_plotting %>% mutate(colour_var = .data[[colour_var]])
+  
+  #subset_for_plotting <- subset_for_plotting %>% group_by(NW, get(this_vector_measure)) %>%
+  #  summarise(max = max(prevalence)) %>%
+  #              ungroup()
   
   plot <- subset_for_plotting %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
@@ -507,7 +511,7 @@ plot_other_landscape <- function(prev_threshold, subset_for_plotting, colour_var
     theme_bw()
   
   output_label <- "plot_type16_other_panel"
-  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, "_prev_threshold_", prev_threshold, ".pdf")
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, "_var_", colour_var, ".pdf")
   ggsave(
     filename = output_filename,
     width = 1.2 * my_pdfwidth(), height = 1.2 * my_pdfheight()
