@@ -302,11 +302,17 @@ set_parameters <- function(this_scenario) {
   incubation <-  baseline_params["vector_incubation_period"]
   gamma_v <- death_v_no_insecticide * exp(-death_v_no_insecticide * incubation) / (1 - exp(-death_v_no_insecticide * incubation))  # fixed original formulation
 
+  
   if (maintain_vector_pop == TRUE) {
+    # birth rate increases with death rate to maintain vector population
     birth_v <- birth_adj * death_v 
   } else {
+    # birth rate does not change with death rate
     birth_v <- birth_adj * death_v_no_insecticide
   }
+  
+  # the baseline vector population is the vector population in the absence of any impact of insecticide
+  equil_vector_pop_baseline <- max(0, K * (1 - 1 / birth_adj))
   
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
   NV <- equil_vector_pop
@@ -316,7 +322,8 @@ set_parameters <- function(this_scenario) {
   ## ----- Parameters output
   derived_params <- cbind(
     biterate, NH,
-    NV, PF, PS, CS, VSt, VSf, equil_vector_pop,
+    NV, PF, PS, CS, VSt, VSf, 
+    equil_vector_pop, equil_vector_pop_baseline,
     birth_c, death_c, gamma_c, sigma_c,
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
