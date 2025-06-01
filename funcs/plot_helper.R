@@ -511,7 +511,7 @@ plot_other_landscape <- function(subset_for_plotting, colour_var) {
     theme_bw()
   
   output_label <- "plot_type16_other_panel"
-  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, "_var_", colour_var, ".pdf")
+  output_filename <- paste0(folder_name, output_label,"_var_", colour_var, "_ttype", ttype, "_spec_", spec, ".pdf")
   ggsave(
     filename = output_filename,
     width = 1.2 * my_pdfwidth(), height = 1.2 * my_pdfheight()
