@@ -425,7 +425,7 @@ create_data_subsets <- function(test, option) {
 
 show_scenarios <- function(scenarios_df) {
   scenario_choice <- scenarios_df %>%
-    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -treatment_type, -proph_ongoing, -host_vector_ratio, -hosts) %>%
+    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -treatment_type, -proph_ongoing, -K_host_ratio, -hosts) %>%
     distinct() %>% 
     arrange(desc(use_carrying_capacity))
   #print("Scenarios choice")
@@ -508,6 +508,7 @@ simplify_outputs <- function(df) {
   reduced_df <- df %>% select(-starts_with("R0"), -starts_with("Rres"), -starts_with("Rsen"))
   reduced_df <- reduced_df %>% select(NC, NW, NV, treatment_type, treat_prop, prop_cattle_with_insecticide, 
                                       proph_ongoing, ends_with("final"), "prevalence", "Incidence")
+  reduced_df <- reduced_df %>% select(-contains("r_final"))
   reduced_df
 }
 
