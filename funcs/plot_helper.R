@@ -56,7 +56,7 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "prop_cattle_with_insecticide" & split_across_lines == "other") this_label <- "Insecticide coverage \n "
   if (variable == "NW") this_label <- "Wildlife"
   if (variable == "K") this_label <- "Carrying capacity"
-  if (variable == "host_vector_ratio") this_label <- "Vector host ratio"
+  if (variable == "K_host_ratio") this_label <- "Vector host ratio"
   if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
   if (variable == "Rres_final") this_label <- "Rres at equilibrium"
   if (variable == "Rsen_final") this_label <- "Rsen at equilibrium"
