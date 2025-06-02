@@ -30,8 +30,8 @@ test <- test #%>% filter(R0sen <= 2)
 plot_titles <- c("Curative drug", "Longlasting drug", "Ongoing prophylaxis")
 labels <- c("responsive_curative", "responsive_longlasting", "proph_ongoing")
 data_subsets <- list()
-use_cc <- TRUE
-mainvecpop <- TRUE
+use_cc <- FALSE # whether to use carrying capacity or not
+mainvecpop <- FALSE
 spec <- paste0("_", use_cc, "_", mainvecpop)
 for (option in 1:2) {
   subset <- create_data_subsets(test, option)
@@ -41,7 +41,7 @@ for (option in 1:2) {
   # adjust fitness post simulation, if desired
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
   #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, use_cc, mainvecpop, fit_adj_new = 0.6)
-  subset_for_plotting <- subset_for_plotting #%>% mutate(K = host_vector_ratio)
+  subset_for_plotting <- subset_for_plotting 
   data_subsets[[option]] <- subset_for_plotting
 }
 
@@ -53,9 +53,9 @@ if (use_cc == TRUE) {
   data_subsets[[2]] <- data_subsets[[2]]
 } else {
   this_vector_measure_value <- 30
-  this_vector_measure <- "host_vector_ratio"
-  data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = host_vector_ratio)
-  data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = host_vector_ratio)
+  this_vector_measure <- "K_host_ratio"
+  data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = K_host_ratio)
+  data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = K_host_ratio)
 }
 this_NW <- 100
 R0_threshold <- 1.0
