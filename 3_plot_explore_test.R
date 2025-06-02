@@ -19,12 +19,10 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/Mar28quick_proph.Rda")
-  folder_name <- "output/Mar28quick_proph_replot/"
+  load("output/June2curative_longlasting.Rda")
+  folder_name <- "output/June2curative_longlasting/"
   dir.create(folder_name)
 }
-
-test <- test %>% filter(prevalence <= 1) # fix fudge
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 ttype = 1
@@ -33,7 +31,7 @@ subset <- create_data_subsets(test, ttype)
 # subset further by scenario if additional parameters varied, default is first row
 scenario_choice <- show_scenarios(scenarios_df)
 scenario_choice
-use_cc <- TRUE
+use_cc <- FALSE
 mainvecpop <- FALSE
 spec <- paste0(use_cc, "_", mainvecpop)
 subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
@@ -44,12 +42,12 @@ subset_for_plotting <- add_competition_and_invasion_columns(subset_for_plotting)
 
 # Specify K and NW for plotting
 if (use_cc == TRUE) {
-  subset_for_plotting <- subset_for_plotting %>% mutate(Baseline_vector_population = K / 2) # fix fudge
+  subset_for_plotting <- subset_for_plotting #%>% mutate(Baseline_vector_population = equil_vector_pop_baseline) 
   this_vector_measure <- "Baseline_vector_population"
   this_vector_measure_value <- 3000
 } else {
-  subset_for_plotting <- subset_for_plotting %>% mutate(Baseline_vector_host_ratio = host_vector_ratio / 2) # fix fudge
-  #this_host_vector_ratio <- 30
+  subset_for_plotting <- subset_for_plotting #%>% mutate(Baseline_vector_host_ratio = equil_vector_pop_baseline / hosts) 
+  #this_K_host_ratio <- 30
   this_vector_measure_value <- 15
   this_vector_measure <- "Baseline_vector_host_ratio"
 }
@@ -126,10 +124,10 @@ df %>%
 
 output_label <- "plot_type0_R0sen"
 output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-ggsave(
-  filename = output_filename,
-  width = my_pdfwidth(), height = my_pdfheight()
-)
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
 
 # ----------------------------------------
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
@@ -156,10 +154,10 @@ lhs + rhs + plot_layout(ncol = 2, guides = "collect", axis_titles = "collect")
 
 output_label <- paste0("plot_type0_Rres_Rsen_ratio")
 output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-ggsave(
-  filename = output_filename,
-  width = my_pdfwidth(), height = my_pdfheight()
-)
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW
@@ -188,10 +186,10 @@ for (y_var in y_vars) {
                                                                     this_vector_measure, this_vector_measure_value)
   output_label <- paste0("plot_type2_", y_var)
   output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-  ggsave(
-    filename = output_filename,
-    width = my_pdfwidth(), height = my_pdfheight()
-  )
+  # ggsave(
+  #   filename = output_filename,
+  #   width = my_pdfwidth(), height = my_pdfheight()
+  # )
 }
 
 # ----------------------------------------
@@ -207,10 +205,10 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight(
 )
 output_label <- paste0("plot_type3_", y_var)
 output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-ggsave(
-  filename = output_filename,
-  width = my_pdfwidth(), height = my_pdfheight()
-)
+# ggsave(
+#   filename = output_filename,
+#   width = my_pdfwidth(), height = my_pdfheight()
+# )
 
 # ----------------------------------------
 
