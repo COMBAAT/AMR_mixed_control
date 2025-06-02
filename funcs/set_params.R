@@ -215,6 +215,7 @@ set_parameters <- function(this_scenario) {
   option <- this_scenario$option
   maintain_vector_pop <- this_scenario$maintain_vector_pop
   prob_death_from_disease <- this_scenario$prob_death_from_disease
+  hosts <- this_scenario$hosts
   
   NH <- NC + NW
 
@@ -313,6 +314,8 @@ set_parameters <- function(this_scenario) {
   
   # the baseline vector population is the vector population in the absence of any impact of insecticide
   equil_vector_pop_baseline <- max(0, K * (1 - 1 / birth_adj))
+  Baseline_vector_population = equil_vector_pop_baseline
+  Baseline_vector_host_ratio = equil_vector_pop_baseline / hosts
   
   equil_vector_pop <- max(0, K * (1 - death_v / birth_v))
   NV <- equil_vector_pop
@@ -323,7 +326,9 @@ set_parameters <- function(this_scenario) {
   derived_params <- cbind(
     biterate, NH,
     NV, PF, PS, CS, VSt, VSf, 
-    equil_vector_pop, equil_vector_pop_baseline,
+    equil_vector_pop, 
+    equil_vector_pop_baseline,
+    Baseline_vector_population, Baseline_vector_host_ratio,
     birth_c, death_c, gamma_c, sigma_c,
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
