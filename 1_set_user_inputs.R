@@ -128,38 +128,6 @@ create_single_scenario <- function() {
   df
 }
 
-
-
-
-create_single_scenario_OLD <- function() {
-  days_per_year <- set_days_per_year()
-  max_time <- 5000
-  treatment_type <- "curative" # quick or proph
-  cattle_number <- 100
-  wildlife_number <- 250
-  treat_prop <- 0.5
-  carrying_capacity <- 10000
-  maintain_vector_pop <- TRUE
-  prop_cattle_with_insecticide <- 0.0
-  prop_prophylaxis_at_birth <- 0.1 
-  proph_ongoing <- 0 / days_per_year
-  fit_adj <- 0.95
-  birth_adj <- 2.0
-  dose_adj <- 1.0
-  emergence <- 0.0
-  partial_susceptibility_proph_cattle <- 0.5
-
-  df <- expand.grid(
-    NC = cattle_number, emergence = emergence,
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing, partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
-    treat_prop = treat_prop, NW = wildlife_number, K = carrying_capacity, maintain_vector_pop = maintain_vector_pop,
-    fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
-    birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
-    treatment_type = treatment_type, max_time = max_time
-  )
-  df
-}
-
 findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
 findGlobals(fun = create_single_scenario, merge = FALSE)$variables
 findGlobals(fun = set_days_per_year, merge = FALSE)$variables
