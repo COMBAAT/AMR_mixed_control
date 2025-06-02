@@ -57,7 +57,7 @@ library(codetools)
 #-------------------------------------------------------------------------------
 
 get_variables <- function() {
-  cattle_no_prophylaxis <- c("CS", "CEs", "CEr", "CIs", "CIr", "CTs", "CTr", "CEsX", "CErX")
+  cattle_no_prophylaxis <- c("CS", "CEs", "CEr", "CIs", "CIr", "CTs", "CTr", "CEXs", "CEXr")
   cattle_with_prophylaxis <- c("PF", "PS", "PEs", "PEr", "PIs", "PIr", "PTs", "PTr", "PPs", "PPr", "PEsX", "PErX")
   wildlife <- c("WS", "WEs", "WEr", "WIs", "WIr")
   vectors <- c("VSt", "VSf", "VEs", "VEr", "VIs", "VIr")

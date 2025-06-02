@@ -36,8 +36,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   CIr <- init["CIr"] # Infected (drug resistant strain)
   CTs <- init["CTs"] # Treated (drug sensitive strain)
   CTr <- init["CTr"] # Treated (drug resistant strain)
-  CEsX <- init["CEsX"] # Exposed (drug sensitive strain)
-  CErX <- init["CErX"] # Exposed (drug resistant strain)
+  CEXs <- init["CEXs"] # Exposed (drug sensitive strain)
+  CEXr <- init["CEXr"] # Exposed (drug resistant strain)
   # CR  <- init["CR"] # Recovered
 
   # P - Prophylactically treated cattle
@@ -112,7 +112,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   # Population total ----
   Is_cattle <- CIs + CTs + PIs + PTs + PPs
   Ir_cattle <- CIr + CTr + PIr + PTr + PPr
-  C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEsX + CErX
+  C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEXs + CEXr
   P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
   W <- WS + WEs + WEr + WIs + WIr
   V <- VSt + VSf + VEs + VEr + VIs + VIr
@@ -155,11 +155,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CEs -
     death_c * CEs
 
-  dCEsX.dt <-
+  dCEXs.dt <-
     proph_ongoing * CEs -
-    sigma_st * CEsX -
-    gamma_c * CEsX -
-    death_c * CEsX
+    sigma_st * CEXs -
+    gamma_c * CEXs -
+    death_c * CEXs
 
   dCEr.dt <-
     biterate * prob_infection_to_host * fit_adj * CS_frac * VIr * bite_frac_cattle(NC, N) -
@@ -168,11 +168,11 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CEr -
     death_c * CEr
 
-  dCErX.dt <-
+  dCEXr.dt <-
     proph_ongoing * CEr -
-    sigma_c * CErX -
-    gamma_c * CErX -
-    death_c * CErX
+    sigma_c * CEXr -
+    gamma_c * CEXr -
+    death_c * CEXr
 
   dCIs.dt <- gamma_c * CEs -
     treatment_q * CIs -
@@ -213,8 +213,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_F2S * PF + # waning from fully protected to partially protected
     proph_ongoing * PS +
     proph_ongoing * CS +
-    sigma_st * CEsX +
-    sigma_c * CErX +
+    sigma_st * CEXs +
+    sigma_c * CEXr +
     sigma_st * PEsX +
     sigma_c * PErX -
     death_c * PF
@@ -304,7 +304,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_from_PP * PPs +
     proph_ongoing * PIs +
     proph_ongoing * CIs +
-    gamma_c * CEsX +
+    gamma_c * CEXs +
     gamma_c * PEsX -
     death_c * PPs
 
@@ -315,7 +315,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_from_PP * PPr + 
     proph_ongoing * PIr +
     proph_ongoing * CIr +
-    gamma_c * CErX +
+    gamma_c * CEXr +
     gamma_c * PErX -
     death_c * PPr
 
@@ -383,11 +383,17 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   dVIr.dt <- gamma_v * VEr - death_v * VIr
 
   # Model output ----
+  # dX <- c(
+  #   dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt, dCEXs.dt, dCEXr.dt,
+  #   dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt, dPEsX.dt, dPErX.dt,
+  #   dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt,
+  #   dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt
+  # )
   dX <- c(
-    dCS.dt, dCEs.dt, dCEr.dt, dCIs.dt, dCIr.dt, dCTs.dt, dCTr.dt, dCEsX.dt, dCErX.dt,
-    dPF.dt, dPS.dt, dPEs.dt, dPEr.dt, dPIs.dt, dPIr.dt, dPTs.dt, dPTr.dt, dPPs.dt, dPPr.dt, dPEsX.dt, dPErX.dt,
-    dWS.dt, dWEs.dt, dWEr.dt, dWIs.dt, dWIr.dt,
-    dVSt.dt, dVSf.dt, dVEs.dt, dVEr.dt, dVIs.dt, dVIr.dt
+    dCS.dt, dCEs.dt, 0, dCIs.dt, 0, dCTs.dt, 0, dCEXs.dt, 0,
+    dPF.dt, dPS.dt, dPEs.dt, 0, dPIs.dt, 0, dPTs.dt, 0, dPPs.dt, 0, dPEsX.dt, 0,
+    dWS.dt, dWEs.dt, 0, dWIs.dt, 0,
+    dVSt.dt, dVSf.dt, dVEs.dt, 0, dVIs.dt, 0
   )
   list(dX)
 }
