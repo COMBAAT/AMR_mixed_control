@@ -160,3 +160,6 @@ all_simulations_summary %>% select(time_final, starts_with("R0"), starts_with("R
 toc()
 
 quick_plot(expanded_output)
+
+df <- simplify_outputs(all_simulations_summary)
+glimpse(df)
