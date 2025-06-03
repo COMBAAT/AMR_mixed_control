@@ -380,9 +380,9 @@ get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophyla
 }
 
 
-create_data_subsets <- function(test, option) {
+create_data_subsets <- function(df, option) {
   if (option == 1) {
-    subset <- test %>%
+    subset <- df %>%
       filter(proph_ongoing == 0, treatment_type == "curative") %>%
       mutate(label = "responsive_curative") %>%
       distinct()
@@ -395,7 +395,7 @@ create_data_subsets <- function(test, option) {
     }
   }
   if (option == 2) {
-    subset <- test %>%
+    subset <- df %>%
       filter(proph_ongoing == 0, treatment_type == "longlasting") %>%
       mutate(label = "responsive_longlasting") %>%
       distinct()
@@ -408,7 +408,7 @@ create_data_subsets <- function(test, option) {
     }
   }
   if (option == 3) {
-    subset <- test %>%
+    subset <- df %>%
       filter(treat_prop == 0) %>% 
       mutate(coverage = PF_final / All_cows_final, treat_prop = coverage,
              label = "proph_ongoing") %>%
@@ -465,9 +465,9 @@ find_nearest_vector <- function(desired_vector, actual_vector) {
 
 
 
-get_subset_for_plotting <- function(scenarios_df, test, option, use_cc, mainvecpop, fit_adj_new = 0.6) {
+get_subset_for_plotting <- function(scenarios_df, df, option, use_cc, mainvecpop, fit_adj_new = 0.6) {
   # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-  subset <- create_data_subsets(test, option)
+  subset <- create_data_subsets(df, option)
   
   # subset further by scenario if addiotnal parameters varied, default is first row
   selected_row <- 1
