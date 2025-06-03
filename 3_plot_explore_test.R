@@ -26,7 +26,7 @@ if (load_latest_file == TRUE) {
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 ttype = 1
-subset <- create_data_subsets(test, ttype)
+subset <- create_data_subsets(saved_simulations, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
 scenario_choice <- show_scenarios(scenarios_df)

@@ -24,7 +24,7 @@ if (load_latest_file == TRUE) {
   dir.create(path)
 }
 
-test <- test #%>% filter(R0sen <= 2)
+saved_simulations <- saved_simulations #%>% filter(R0sen <= 2)
 
 
 plot_titles <- c("Curative drug", "Longlasting drug", "Ongoing prophylaxis")
@@ -34,13 +34,13 @@ use_cc <- FALSE # whether to use carrying capacity or not
 mainvecpop <- FALSE
 spec <- paste0("_", use_cc, "_", mainvecpop)
 for (option in 1:2) {
-  subset <- create_data_subsets(test, option)
+  subset <- create_data_subsets(saved_simulations, option)
   scenario_choice <- show_scenarios(scenarios_df)
   print(scenario_choice)
   subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
   # adjust fitness post simulation, if desired
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
-  #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, test, option, use_cc, mainvecpop, fit_adj_new = 0.6)
+  #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, saved_simulations, option, use_cc, mainvecpop, fit_adj_new = 0.6)
   subset_for_plotting <- subset_for_plotting 
   data_subsets[[option]] <- subset_for_plotting
 }
