@@ -339,11 +339,11 @@ get_latest_Rda_file <- function() {
 
 merge_two_Rda_files <- function(file1, file2, merged_file) {
   load(file1)
-  test1 <- test
+  df1 <- saved_simulations
   scenarios_df1 <- scenarios_df
   baseline_parameters1 <- baseline_parameters
   load(file2)
-  test2 <- test
+  df2 <- saved_simulations
   scenarios_df2 <- scenarios_df
   baseline_parameters2 <- baseline_parameters
   
@@ -351,11 +351,11 @@ merge_two_Rda_files <- function(file1, file2, merged_file) {
     stop("Baseline parameters do not match")
   }
   
-  test <- distinct(rbind(test1, test2))
+  df <- distinct(rbind(df1, df2))
   scenarios_df <- distinct(rbind(scenarios_df1, scenarios_df2))
   
   filename <- paste0("output/", merged_file)
-  save(test, scenarios_df, baseline_parameters, file = filename)
+  save(df, scenarios_df, baseline_parameters, file = filename)
 }
 
 get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
