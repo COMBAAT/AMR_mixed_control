@@ -18,19 +18,18 @@ get_user_inputs <- function() {
 }
 
 create_multiple_scenarios <- function() {
+  max_time <- 5
   treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
   K_host_ratio <- seq(10, 50, by = 20)      # carrying capacity per host
-  treat_propA <- seq(0.0, 0.9, by = 0.1)
+  treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
-  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.05)
+  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.1)
   
-  carrying_capacity <- c(10000, 6000, 2000) # carrying capacity of vector population
   days_per_year <- set_days_per_year()
-  max_time <- 100
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
   prop_prophylaxis_at_birth <- c(0.0)
   proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
@@ -40,6 +39,7 @@ create_multiple_scenarios <- function() {
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
   prob_death_from_disease <- 0.0
+  carrying_capacity <- c(10000, 6000, 2000) # carrying capacity of vector population
   
   # create grids of parameters combinations and then combine
   tb1 <- expand_grid(
@@ -74,6 +74,7 @@ create_multiple_scenarios <- function() {
 
 
 create_single_scenario <- function() {
+  max_time <- 3000
   treatment_type <- c("curative") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- 100
@@ -83,9 +84,6 @@ create_single_scenario <- function() {
   prop_cattle_with_insecticide <- 0.0
   
   days_per_year <- set_days_per_year()
-  max_time <- 3000
-  use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
-  carrying_capacity <- 6000 # carrying capacity of vector population
   maintain_vector_pop <- FALSE # whether to maintain vector population at carrying capacity or not)
   prop_prophylaxis_at_birth <- 0.0
   proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
@@ -95,6 +93,8 @@ create_single_scenario <- function() {
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
   prob_death_from_disease <- 0.1
+  use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
+  carrying_capacity <- 6000 # carrying capacity of vector population
   
   # create grids of parameters combinations and then combine
   tb1 <- expand_grid(
