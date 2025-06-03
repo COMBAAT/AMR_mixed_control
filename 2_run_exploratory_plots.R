@@ -41,7 +41,7 @@ baseline_parameters <- get_baseline_parameters()
 #plot_scenarios(scenarios_df)
 
 # Create empty dataframe to store outputs
-all_scenarios_summary <- data.frame()
+all_simulations_summary <- data.frame()
 
 ## ---- Start run time estimates
 tic()
@@ -104,7 +104,7 @@ for (row in 1:number_of_scenarios) {
   final_state_with_full_scenario <- include_full_scenario(full_scenario, final_state)
   final_state_with_full_scenario <- append_epi_outputs_to_df(final_state_with_full_scenario)
 
-  all_scenarios_summary <- rbind(all_scenarios_summary, final_state_with_full_scenario)
+  all_simulations_summary <- rbind(all_simulations_summary, final_state_with_full_scenario)
 
   print(paste0("final time = ", round(final_state$time, 1), " days"))
   print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
@@ -116,20 +116,20 @@ for (row in 1:number_of_scenarios) {
 }
 
 # add columns indicating outcome of cometition with or invasion by resistant strains
-all_scenarios_summary <- add_competition_and_invasion_columns(all_scenarios_summary)
+all_simulations_summary <- add_competition_and_invasion_columns(all_simulations_summary)
 
 
-# save outputs as dataframe called test
-test <- all_scenarios_summary
+# save outputs as dataframe called saved_simulations
+saved_simulations <- all_simulations_summary
 filename <- get_filename()
-save(test, baseline_parameters, scenarios_df, file = filename)
+save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
 # some exploratory plots showing final simulation in scenario set
 R0_and_R_trajectories(expanded_output)
 
 
 if (number_of_scenarios > 1) {
-  Rplot <- all_scenarios_summary %>%
+  Rplot <- all_simulations_summary %>%
     filter(R0sen < 50) %>%
     mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
     ggplot() +
@@ -142,20 +142,20 @@ if (number_of_scenarios > 1) {
     geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
   Rplot
 
-  all_scenarios_summary %>%
+  all_simulations_summary %>%
     filter(Rsen_final < 100) %>%
     ggplot() +
     geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type))) +
     geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 
-  all_scenarios_summary %>%
+  all_simulations_summary %>%
     filter(Rsen_final < 100) %>%
     ggplot() +
     geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type))) +
     geom_abline(aes(slope = 1, intercept = 0), colour = "black")
 }
 
-all_scenarios_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"), starts_with("Rr"), prop_cattle_with_insecticide, treatment_type) #%>% glimpse()
+all_simulations_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"), starts_with("Rr"), prop_cattle_with_insecticide, treatment_type) #%>% glimpse()
 
 toc()
 
