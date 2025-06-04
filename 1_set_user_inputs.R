@@ -18,7 +18,7 @@ get_user_inputs <- function() {
 }
 
 create_multiple_scenarios <- function() {
-  max_time <- 5000
+  max_time <- 2500
   treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
