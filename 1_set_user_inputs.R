@@ -18,11 +18,11 @@ get_user_inputs <- function() {
 }
 
 create_multiple_scenarios <- function() {
-  max_time <- 5
+  max_time <- 5000
   treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 300)
-  K_host_ratio <- seq(10, 50, by = 20)      # carrying capacity per host
+  K_host_ratio <- 30 #seq(10, 50, by = 20)      # carrying capacity per host
   treat_propA <- seq(0.0, 0.9, by = 0.2)
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
