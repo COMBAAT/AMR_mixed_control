@@ -118,12 +118,6 @@ for (row in 1:number_of_scenarios) {
 # add columns indicating outcome of cometition with or invasion by resistant strains
 all_simulations_summary <- add_competition_and_invasion_columns(all_simulations_summary)
 
-
-# save outputs as dataframe called saved_simulations
-saved_simulations <- all_simulations_summary
-filename <- get_filename()
-save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
-
 toc()
 
 quick_plot(expanded_output)
@@ -131,5 +125,9 @@ quick_plot(expanded_output)
 df <- simplify_outputs(all_simulations_summary)
 glimpse(df)
 
-# Save the simplified outputs to a CSV file
-write.csv(df, file = "simplified_outputs.csv", row.names = FALSE)
+# Outputs to an Rda file
+#saved_simulations <- all_simulations_summary
+saved_simulations <- df
+filename <- get_filename()
+save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+

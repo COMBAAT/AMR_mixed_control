@@ -11,7 +11,7 @@ get_user_inputs <- function() {
     use_root_functions = FALSE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "play",
+    general_descriptor = "June4",
     current_descriptor = "curative_longlasting"
   )
   user_inputs
