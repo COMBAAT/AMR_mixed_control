@@ -27,10 +27,10 @@ create_multiple_scenarios <- function() {
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
-  prop_cattle_with_insecticide <- seq(0.0, 0.5, by = 0.1)
+  prop_cattle_with_insecticide <- 0.0 #seq(0.0, 0.5, by = 0.1)
   
   days_per_year <- set_days_per_year()
-  maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
+  maintain_vector_pop <- c(FALSE) # whether to maintain vector population at carrying capacity or not
   prop_prophylaxis_at_birth <- c(0.0)
   proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
   fit_adj <- 0.8
@@ -39,6 +39,7 @@ create_multiple_scenarios <- function() {
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
   prob_death_from_disease <- 0.0
+  use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
   carrying_capacity <- c(10000, 6000, 2000) # carrying capacity of vector population
   
   # create grids of parameters combinations and then combine
@@ -63,8 +64,15 @@ create_multiple_scenarios <- function() {
     mutate(use_carrying_capacity = FALSE, K = hosts * K_host_ratio) %>% 
     select(NC, NW, hosts, use_carrying_capacity, K_host_ratio, K)
   
-  tb2 <- rbind(tb2a, tb2b)
-  tb2
+  if (TRUE %in% use_carrying_capacity & FALSE %in% use_carrying_capacity) {
+    tb2 <- rbind(tb2a, tb2b)
+  } else {
+    if (TRUE %in% use_carrying_capacity) {
+      tb2 <- tb2a 
+    } else {
+      tb2 <- tb2b
+    }
+  } 
 
   tb <- expand_grid(tb2, tb1)
 
