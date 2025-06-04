@@ -109,9 +109,9 @@ for (row in 1:number_of_scenarios) {
   print(paste0("final time = ", round(final_state$time, 1), " days"))
   print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
   print(paste0("Rsen_final = ", final_state_with_full_scenario$Rsen_final))
-  print(paste0("Rsen2_final = ", final_state_with_full_scenario$Rsen2_final))
-  print(paste0("Rres_final = ", final_state_with_full_scenario$Rres_final))
-  print(paste0("Rres2_final = ", final_state_with_full_scenario$Rres2_final))
+  # print(paste0("Rsen2_final = ", final_state_with_full_scenario$Rsen2_final))
+  # print(paste0("Rres_final = ", final_state_with_full_scenario$Rres_final))
+  # print(paste0("Rres2_final = ", final_state_with_full_scenario$Rres2_final))
   
 }
 
@@ -124,42 +124,12 @@ saved_simulations <- all_simulations_summary
 filename <- get_filename()
 save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
-# some exploratory plots showing final simulation in scenario set
-R0_and_R_trajectories(expanded_output)
-
-
-if (number_of_scenarios > 1) {
-  Rplot <- all_simulations_summary %>%
-    filter(R0sen < 50) %>%
-    mutate(reaches_equilibrium = case_when(time_final < params["max_time"] ~ TRUE, time_final == params["max_time"] ~ FALSE)) %>%
-    ggplot() +
-    geom_point(aes(
-      y = Rsen_final, x = R0sen, colour = as.factor(reaches_equilibrium),
-      shape = as.factor(treatment_type)
-    )) +
-    expand_limits(x = 0, y = 0) +
-    geom_abline(aes(slope = 1, intercept = 0), colour = "black") +
-    geom_abline(aes(slope = 0.0, intercept = 1), colour = "red", linetype = "dashed")
-  Rplot
-
-  all_simulations_summary %>%
-    filter(Rsen_final < 100) %>%
-    ggplot() +
-    geom_point(aes(y = R0sen2, x = R0sen, colour = as.factor(treatment_type))) +
-    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
-
-  all_simulations_summary %>%
-    filter(Rsen_final < 100) %>%
-    ggplot() +
-    geom_point(aes(y = Rsen2_final, x = Rsen_final, colour = as.factor(treatment_type))) +
-    geom_abline(aes(slope = 1, intercept = 0), colour = "black")
-}
-
-all_simulations_summary %>% select(time_final, starts_with("R0"), starts_with("Rs"), starts_with("Rr"), prop_cattle_with_insecticide, treatment_type) #%>% glimpse()
-
 toc()
 
 quick_plot(expanded_output)
 
 df <- simplify_outputs(all_simulations_summary)
 glimpse(df)
+
+# Save the simplified outputs to a CSV file
+write.csv(df, file = "simplified_outputs.csv", row.names = FALSE)
