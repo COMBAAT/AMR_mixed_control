@@ -124,12 +124,12 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this
       prop_cattle_with_insecticide == 0,
       NW %in% this_NW_set
     ) %>%
-    ggplot(aes(treat_prop, y, shape = shape_variable, colour = NW)) +
+    ggplot(aes(treat_prop, y, colour = shape_variable)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
     ylab(this_ylab) +
-    labs(shape = my_label(this_vector_measure), colour = my_label("NW")) +
+    labs(colour = my_label(this_vector_measure)) +
     facet_wrap(~NW) +
     my_theme()
   p
