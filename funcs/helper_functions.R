@@ -351,11 +351,12 @@ merge_two_Rda_files <- function(file1, file2, merged_file) {
     stop("Baseline parameters do not match")
   }
   
-  df <- distinct(rbind(df1, df2))
+  saved_simulations <- distinct(rbind(df1, df2))
   scenarios_df <- distinct(rbind(scenarios_df1, scenarios_df2))
   
-  filename <- paste0("output/", merged_file)
-  save(df, scenarios_df, baseline_parameters, file = filename)
+  #filename <- paste0("output/", merged_file)
+  filename <- merged_file
+  save(saved_simulations, scenarios_df, baseline_parameters, file = filename)
 }
 
 get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophylaxis_at_birth, NC, death_c,
