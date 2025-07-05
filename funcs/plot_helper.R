@@ -44,14 +44,15 @@ my_pointsize <- function() {
 
 
 my_label <- function(variable, split_across_lines = "default") {
+  if (variable == "treat_prop") this_label <- "Case treatment proportion"
+  if (variable == "coverage") this_label <- "Prophylactic coverage"
   if (variable == "R0sen") this_label <- "R0 sensitive"
   if (variable == "prevalence") this_label <- "Prevalence"
   if (variable == "Incidence") this_label <- "Incidence"
-  if (variable == "No_trt_cat") this_label <- "Number treated cattle"
+  if (variable == "No_trt_cat") this_label <- "Number treated"
   if (variable == "Prob_onward_tran") this_label <- "Prob onward transmission"
   if (variable == "RiskE") this_label <- "Risk of emergence and spread"
   if (variable == "RiskA") this_label <- "Risk of emergence"
-  if (variable == "treat_prop") this_label <- "Case treatment \n proportion"
   if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide \n coverage"
   if (variable == "prop_cattle_with_insecticide" & split_across_lines == "other") this_label <- "Insecticide coverage \n "
   if (variable == "NW") this_label <- "Wildlife"
