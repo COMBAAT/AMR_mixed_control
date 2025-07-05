@@ -50,7 +50,8 @@ append_epi_outputs_to_df <- function(df) {
 
   df <- df %>% mutate(
     #No_trt_cat = (treatment_q * CIs_final + treatment_p * PIs_final) * days_per_year,
-    No_trt_cat = (treatment_q * (CIs_final + PIs_final) + treatment_p * (CIs_final + PIs_final)) * days_per_year,
+    No_trt_cat = (treatment_q * (CIs_final + PIs_final) + treatment_p * (CIs_final + PIs_final)) * days_per_year +
+                  proph_ongoing * (All_cows_final - PPs_final - CTs_final - PTs_final) * days_per_year,
     Incidence = gamma_c * (PEs_final + CEs_final) * days_per_year,
     Prob_onward_tran = 1 - dpois(0, Rres_final),
     RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final + CEXs_final + PEsX_final,
