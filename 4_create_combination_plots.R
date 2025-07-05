@@ -47,19 +47,19 @@ for (option in 1:2) {
 
 ################################################################################
 if (use_cc == TRUE) {
-  this_vector_measure <- "K"
+  this_vector_measure <- "Baseline_vector_population"
   this_vector_measure_value <- 6000
   data_subsets[[1]] <- data_subsets[[1]] 
   data_subsets[[2]] <- data_subsets[[2]]
 } else {
-  this_vector_measure_value <- 30
-  this_vector_measure <- "K_host_ratio"
+  this_vector_measure_value <- 20
+  this_vector_measure <- "Baseline_vector_host_ratio"
   data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = K_host_ratio)
   data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = K_host_ratio)
 }
 this_NW <- 100
 R0_threshold <- 1.0
-this_insecticide <- 0.2
+this_insecticide <- 0.0
 ################################################################################
 
 # create the selective advantage plots
