@@ -7,6 +7,7 @@ library(patchwork)
 
 # Source files and function
 source("funcs/plot_helper.R")
+source("plot_helper_extra.R")
 source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
 source("funcs/epi_outputs.R")
@@ -110,27 +111,7 @@ write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv")
 
 # ----------------------------------------
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
-df <- subset_for_plotting
-df$shape_variable <- df[, this_vector_measure]
-lhs <- df %>%
-  mutate_at(c("prop_cattle_with_insecticide", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
-  filter(prop_cattle_with_insecticide == 0.0) %>%
-  ggplot(aes(treat_prop, ratio, colour = NW, shape = shape_variable)) +
-  geom_point(size = my_pointsize()) +
-  geom_line(linewidth = my_linewidth()) +
-  xlab(my_label("treat_prop")) +
-  ylab(my_label("ratio")) +
-  labs(colour = my_label("NW"), shape = my_label(this_vector_measure)) +
-  my_theme()
-
-rhs <- lhs + ylim(c(0, 2)) + 
-  geom_abline(intercept = 1.0, slope = 0, linetype = "dashed")
-rhs
-
-# use patchwork package to stick plots together
-# use guides = collect to remove duplicate legends
-p <- lhs + rhs + plot_layout(ncol = 2, guides = "collect", axis_titles = "collect")
-p
+p <- plot_type0_ratio(subset_for_plotting, this_vector_measure)
 
 output_label <- paste0("plot_type0_Rres_Rsen_ratio")
 output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
