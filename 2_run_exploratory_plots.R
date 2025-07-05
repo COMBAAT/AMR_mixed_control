@@ -127,7 +127,7 @@ glimpse(df)
 
 # Outputs to an Rda file
 #saved_simulations <- all_simulations_summary
-saved_simulations <- df
+saved_simulations <- all_simulations_summary
 filename <- get_filename()
 save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
