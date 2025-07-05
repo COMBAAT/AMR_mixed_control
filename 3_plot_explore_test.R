@@ -25,7 +25,7 @@ if (load_latest_file == TRUE) {
 }
 
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-ttype = 3
+ttype = 1
 subset <- create_data_subsets(saved_simulations, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
@@ -108,32 +108,6 @@ ggsave(p,
 scenarios_for_output <- get_simplified_scenarios(scenarios_df)
 write.csv(scenarios_for_output, file = paste0(folder_name, output_label, ".csv"))
 
-# Plot R0 versus wildlife faceted by treat_prop
-df <- subset_for_plotting
-#df <- df %>% mutate(colour_var = .data[[this_vector_measure]]) 
-df$colour_var <- df[, this_vector_measure]
-p <- df %>%
-  mutate_at(c("prop_cattle_with_insecticide", "treat_prop", this_vector_measure, "colour_var"), as.factor) %>%
-  filter(prop_cattle_with_insecticide == 0, treat_prop %in% c(0, 0.6, 0.95)) %>%
-  ggplot(aes(NW, R0sen, colour = colour_var)) +
-  geom_point(size = my_pointsize()) +
-  geom_line(linewidth = my_linewidth()) +
-  facet_wrap(~treat_prop) +
-  xlab(my_label("NW")) +
-  ylab(my_label("R0sen")) +
-  labs(colour = my_label(this_vector_measure)) +
-  my_theme()
-p
-
-output_label <- "plot_type0_R0sen"
-output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
-plots[[plot_label]] <- p
-# ggsave(
-#   filename = output_filename,
-#   width = my_pdfwidth(), height = my_pdfheight()
-# )
-
 # ----------------------------------------
 # Plot R resistant/R sensitive versus wildlife faceted by treat_prop
 df <- subset_for_plotting
@@ -162,10 +136,10 @@ output_label <- paste0("plot_type0_Rres_Rsen_ratio")
 output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
 plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
 plots[[plot_label]] <- p
-# ggsave(
-#   filename = output_filename,
-#   width = my_pdfwidth(), height = my_pdfheight()
-# )
+ ggsave(
+   filename = output_filename,
+   width = my_pdfwidth(), height = my_pdfheight()
+ )
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW
