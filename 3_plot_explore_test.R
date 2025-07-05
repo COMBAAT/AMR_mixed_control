@@ -25,6 +25,7 @@ if (load_latest_file == TRUE) {
   dir.create(folder_name)
 }
 
+# Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 ttype = 1
 subset <- create_data_subsets(saved_simulations, ttype)
@@ -42,6 +43,9 @@ subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 subset_for_plotting <- add_competition_and_invasion_columns(subset_for_plotting)
 
 # Specify K and NW for plotting
+this_NW <- 100
+this_NW_set <- c(0, 100, 200)
+
 if (use_cc == TRUE) {
   subset_for_plotting <- subset_for_plotting #%>% mutate(Baseline_vector_population = equil_vector_pop_baseline) 
   this_vector_measure <- "Baseline_vector_population"
@@ -52,17 +56,10 @@ if (use_cc == TRUE) {
   this_vector_measure_value <- 20
   this_vector_measure <- "Baseline_vector_host_ratio"
 }
-this_NW <- 100
-this_NW_set <- c(0, 100, 200)
+
 subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% seq(0, 0.5, 0.1))
 
-
-# Create a list to store all the plots for post processing
-plots <- list()
-
-
-# Generate plots ---------------------------------------------------------------
-# Identify the boundary where R0 closest to 1
+# For invasion plots, Identify the boundary where R0 closest to 1
 subset_for_invasion_plots <- subset_for_plotting %>%
   group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>%
   mutate(R0sen_gt_1 = ifelse(R0sen_final > 1, "R0sen > 1", "R0sen < 1")) %>%
@@ -74,7 +71,14 @@ subset_for_invasion_plots <- subset_for_invasion_plots %>%
   mutate(closest_true_false = ifelse(closest_to_1_value == prop_cattle_with_insecticide, TRUE, FALSE
   ))
 
-# Plot the results
+# -----------------------------------------------------------------------------
+# Create a list to store all the plots for post processing
+plots <- list()
+# -----------------------------------------------------------------------------
+
+# Generate plots ---------------------------------------------------------------
+
+# Invasion plots
 restricted_subset <- subset_for_invasion_plots #%>% filter(R0sen > 0, ratio > 1)
 plot_invasion_landscape(1, restricted_subset)
 #restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
