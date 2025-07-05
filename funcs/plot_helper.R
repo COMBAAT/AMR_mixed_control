@@ -332,11 +332,10 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
 }
 
 #-------------------------------------------------------------------------------
-# Function Name: plot_type6_y_versus_treat_prop_facet_NW_K
+# Function Name: plot_type10_R0sen_versus_Rsen
 #
 # Parameters:
 #   df - Dataframe containing data.
-#   y_var - String, the y-variable to be plotted.
 #
 # Outputs:
 #   Returns a ggplot object.
@@ -345,8 +344,6 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
 #   dplyr, ggplot2
 #
 #-------------------------------------------------------------------------------
-
-
 
 plot_type10_R0sen_versus_Rsen <- function(df) {
   
