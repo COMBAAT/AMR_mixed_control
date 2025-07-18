@@ -350,6 +350,31 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
   p
 }
 
+plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW_ttype3 <- function(df, y_var, this_NW_set, 
+                                                                      this_vector_measure, this_vector_measure_value) {
+  df$y <- df[, y_var]
+  df$shape_variable <- df[, this_vector_measure]
+  this_xlab <- my_label("prop_cattle_with_insecticide")
+  this_ylab <- my_label(y_var)
+  
+  p <- df %>% mutate(proph_frequency = set_days_per_year() * proph_ongoing) %>%
+    mutate_at(c("proph_frequency", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
+    filter(
+      prop_cattle_with_insecticide <= 0.5,
+      NW %in% this_NW_set,
+      get(this_vector_measure) == this_vector_measure_value
+    ) %>%
+    ggplot(aes(prop_cattle_with_insecticide, y, shape = shape_variable, colour = proph_frequency)) +
+    geom_point(size = my_pointsize()) +
+    geom_line(linewidth = my_linewidth()) +
+    xlab(this_xlab) +
+    ylab(this_ylab) +
+    labs(colour = "Doses per year", shape = my_label(this_vector_measure)) +
+    facet_wrap(~NW) +
+    my_theme()
+  p
+}
+
 #-------------------------------------------------------------------------------
 # Function Name: plot_type10_R0sen_versus_Rsen
 #
