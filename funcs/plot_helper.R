@@ -112,10 +112,21 @@ my_theme <- function() {
 #
 #-------------------------------------------------------------------------------
 
+get_x_var <- function(df, ttype) {
+  if (ttype == 3) {
+    x_var = "coverage"
+  } else {
+    x_var = "treat_prop"
+  }
+  x_var
+}
 
-plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this_vector_measure) {
+plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this_vector_measure, ttype) {
+  
+  x_var <- get_x_var(df, ttype) 
+  df$x <- df[, x_var]
   df$y <- df[, y_var]
-  this_xlab <- my_label("treat_prop")
+  this_xlab <- my_label(x_var)
   this_ylab <- my_label(y_var)
   df$shape_variable <- df[, this_vector_measure]
 
@@ -125,7 +136,7 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this
       prop_cattle_with_insecticide == 0,
       NW %in% this_NW_set
     ) %>%
-    ggplot(aes(treat_prop, y, colour = shape_variable)) +
+    ggplot(aes(x, y, colour = shape_variable)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
