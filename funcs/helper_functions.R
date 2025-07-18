@@ -513,6 +513,10 @@ simplify_outputs <- function(df) {
   reduced_df
 }
 
+set_days_per_year <- function() {
+  days_per_year <- 365.25
+  days_per_year
+}
 
 
 findGlobals(fun = calc_frac_with_zero, merge = FALSE)$variables
