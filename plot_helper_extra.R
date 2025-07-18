@@ -1,4 +1,8 @@
-plot_type0_ratio <- function(df, this_vector_measure) {
+plot_type0_ratio <- function(df, this_vector_measure, ttype) {
+  
+  x_var <- get_x_var(df, ttype) 
+  df$x <- df[, x_var]
+  this_xlab <- my_label(x_var)
 
 df$shape_variable <- df[, this_vector_measure]
 lhs <- df %>%
@@ -7,7 +11,7 @@ lhs <- df %>%
   ggplot(aes(treat_prop, ratio, colour = NW, shape = shape_variable)) +
   geom_point(size = my_pointsize()) +
   geom_line(linewidth = my_linewidth()) +
-  xlab(my_label("treat_prop")) +
+  xlab(this_xlab) +
   ylab(my_label("ratio")) +
   labs(colour = my_label("NW"), shape = my_label(this_vector_measure)) +
   my_theme()
