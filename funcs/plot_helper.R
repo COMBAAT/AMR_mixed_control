@@ -482,21 +482,12 @@ plot_invasion_landscape <- function(prev_threshold, subset_for_plotting) {
   colours <- c("turquoise", "olivedrab3", "tomato", "mediumorchid1", "lightgrey")
   names(colours) <- c("Sen outcompetes Res", "No Sen & Res can't invade", "Res outcompetes Sen", "No Sen & Res can invade", prev_threshold_label)
 
-  # subset_for_plotting %>%
-  #   filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
-  #   mutate(Region = case_when(prevalence > prev_threshold ~ prev_threshold_label, TRUE ~ Region)) %>%
-  #   mutate(facet_variable = get(this_vector_measure)) %>% glimpse()
-
   plot <- subset_for_plotting %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(Region = case_when(prevalence > prev_threshold ~ prev_threshold_label, TRUE ~ Region)) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
     ggplot() +
     geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, colour = Region, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
-    #geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, colour = ratio > 1), size = 0.1, show.legend = TRUE) +
-    #geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, colour = Region), show.legend = TRUE) +
-    #geom_point(aes(x = closest_to_1_value, y = treat_prop), shape = 1, size = 2, colour = "black") +
-    # geom_point(aes(x = closest_to_1_value, y = treat_prop), shape = 1, size = 2, colour = "white") +
     scale_color_manual(values = colours) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
     ylab(my_label("treat_prop")) +
@@ -523,10 +514,7 @@ plot_invasion_landscape <- function(prev_threshold, subset_for_plotting) {
 
 plot_other_landscape <- function(subset_for_plotting, colour_var) {
   subset_for_plotting <- subset_for_plotting %>% mutate(colour_var = .data[[colour_var]])
-  
-  #subset_for_plotting <- subset_for_plotting %>% group_by(NW, get(this_vector_measure)) %>%
-  #  summarise(max = max(prevalence)) %>%
-  #              ungroup()
+  #subset_for_plotting$colour_var <- subset_for_plotting[, colour_var]
   
   plot <- subset_for_plotting %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
@@ -534,9 +522,6 @@ plot_other_landscape <- function(subset_for_plotting, colour_var) {
     ggplot() +
     geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, 
                    colour = colour_var, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
-    #scale_colour_gradientn(colours = terrain.colors(15)) 
-    #geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, colour = RiskA), show.legend = TRUE) +
-    #geom_point(aes(x = closest_to_1_value, y = treat_prop), shape = 1, size = 2, colour = "black", show.legend = TRUE) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
     ylab(my_label("treat_prop")) +
     facet_wrap(~ NW + cc_or_vh_ratio, labeller = label_both) +
@@ -547,7 +532,6 @@ plot_other_landscape <- function(subset_for_plotting, colour_var) {
     )) + 
     scale_colour_gradientn(colours = terrain.colors(15)) +
     ylim(c(0,1)) +
-    #scale_colour_gradientn(colours = c("blue", "red")) +
     scale_shape_manual(values = c(4, 16)) +
     labs(colour = my_label(colour_var), shape = my_label("R0sen_gt_1")) +
     theme_bw()
