@@ -277,9 +277,11 @@ ymax_function <- function(y_var) {
 }
 
 plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
-                                                    this_vector_measure, this_vector_measure_value) {
+                                                    this_vector_measure, this_vector_measure_value, ttype) {
+  x_var <- get_x_var(df, ttype) 
+  df$x <- df[, x_var]
   df$y <- df[, y_var]
-  this_xlab <- my_label("treat_prop")
+  this_xlab <- my_label(x_var)
   this_ylab <- my_label(y_var)
   df$shape_variable <- df[, this_vector_measure]
 
