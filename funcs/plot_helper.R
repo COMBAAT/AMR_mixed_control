@@ -209,10 +209,12 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
 #-------------------------------------------------------------------------------
 
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight <- function(
-    df, y_var, threshold_var, threshold, this_NW_set, this_vector_measure, this_vector_measure_value) {
-  df$y <- df[, y_var]
+    df, y_var, threshold_var, threshold, this_NW_set, this_vector_measure, this_vector_measure_value, ttype) {
   df$threshold_var <- df[, threshold_var]
-  this_xlab <- my_label("treat_prop")
+  x_var <- get_x_var(df, ttype) 
+  df$x <- df[, x_var]
+  df$y <- df[, y_var]
+  this_xlab <- my_label(x_var)
   this_ylab <- my_label(y_var)
 
   p <- df %>%
@@ -222,7 +224,7 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
       NW %in% this_NW_set,
       get(this_vector_measure) == this_vector_measure_value
     ) %>%
-    ggplot(aes(treat_prop, y,
+    ggplot(aes(x, y,
       group = interaction(NW, prop_cattle_with_insecticide),
       shape = NW, colour = prop_cattle_with_insecticide
     )) +
