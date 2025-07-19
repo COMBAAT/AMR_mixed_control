@@ -112,7 +112,7 @@ my_theme <- function() {
 #
 #-------------------------------------------------------------------------------
 
-get_x_var <- function(df, ttype) {
+get_treat_var <- function(df, ttype) {
   if (ttype == 3) {
     x_var = "coverage"
   } else {
@@ -123,7 +123,7 @@ get_x_var <- function(df, ttype) {
 
 plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this_vector_measure, ttype) {
   
-  x_var <- get_x_var(df, ttype) 
+  x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   this_xlab <- my_label(x_var)
@@ -166,7 +166,7 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this
 plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df, 
           y_var, this_NW_set, this_vector_measure, this_vector_measure_value, ttype) {
   
-  x_var <- get_x_var(df, ttype) 
+  x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   this_xlab <- my_label(x_var)
@@ -211,7 +211,7 @@ plot_type2_y_versus_treat_prop_facet_prop_cattle_with_insecticide <- function(df
 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight <- function(
     df, y_var, threshold_var, threshold, this_NW_set, this_vector_measure, this_vector_measure_value, ttype) {
   df$threshold_var <- df[, threshold_var]
-  x_var <- get_x_var(df, ttype) 
+  x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   this_xlab <- my_label(x_var)
@@ -278,7 +278,7 @@ ymax_function <- function(y_var) {
 
 plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
                                                     this_vector_measure, this_vector_measure_value, ttype) {
-  x_var <- get_x_var(df, ttype) 
+  x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   this_xlab <- my_label(x_var)

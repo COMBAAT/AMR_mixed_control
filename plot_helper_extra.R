@@ -1,5 +1,5 @@
 plot_type0_ratio <- function(df, this_vector_measure, ttype) {
-  x_var <- get_x_var(df, ttype)
+  x_var <- get_treat_var(df, ttype)
   df$x <- df[, x_var]
   this_xlab <- my_label(x_var)
 
