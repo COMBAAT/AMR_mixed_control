@@ -382,6 +382,7 @@ get_disease_free_equilibrium_for_PF_PS_and_CS <- function(birth_c, prop_prophyla
 
 
 create_data_subsets <- function(df, option) {
+  df <- df %>% mutate(coverage = PF_final / All_cows_final)
   if (option == 1) {
     subset <- df %>%
       filter(proph_ongoing == 0, treatment_type == "curative") %>%
@@ -411,8 +412,7 @@ create_data_subsets <- function(df, option) {
   if (option == 3) {
     subset <- df %>%
       filter(treat_prop == 0) %>% 
-      mutate(coverage = PF_final / All_cows_final, treat_prop = coverage,
-             label = "proph_ongoing") %>%
+      mutate(label = "proph_ongoing", treatment_type == "proph_ongoing") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$proph_ongoing)) <= 1) {
