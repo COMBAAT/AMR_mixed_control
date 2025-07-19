@@ -27,7 +27,7 @@ if (load_latest_file == TRUE) {
 
 # Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-ttype = 1
+ttype = 3
 subset <- create_data_subsets(saved_simulations, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
@@ -41,6 +41,10 @@ subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecp
 # adjust fitness post simulation, if desired
 subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
 subset_for_plotting <- add_competition_and_invasion_columns(subset_for_plotting)
+
+if (ttype == 1) {df_ttype1 <- subset_for_plotting}
+if (ttype == 2) {df_ttype2 <- subset_for_plotting}
+if (ttype == 3) {df_ttype3 <- subset_for_plotting}
 
 # Specify K and NW for plotting
 this_NW <- 100
