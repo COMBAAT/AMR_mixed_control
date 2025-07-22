@@ -9,6 +9,7 @@ library(patchwork)
 # Source files and function
 source("funcs/plot_helper.R")
 source("funcs/helper_functions.R")
+source("funcs/create_combination_plots_helper.R")
 #source("funcs/plots_for_grant_helper.R")
 
 # Load data files --------------------------------------------------------------
