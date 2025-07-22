@@ -129,7 +129,7 @@ plot_type0_ratio <- function(df, this_vector_measure, ttype) {
   lhs <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
     filter(prop_cattle_with_insecticide == 0.0) %>%
-    ggplot(aes(treat_prop, ratio, colour = NW, shape = shape_variable)) +
+    ggplot(aes(x, ratio, colour = NW, shape = shape_variable)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     xlab(this_xlab) +
@@ -325,7 +325,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
       get(this_vector_measure) == this_vector_measure_value,
       NW %in% this_NW_set
     ) %>%
-    ggplot(aes(treat_prop, y, shape = get(this_vector_measure), colour = prop_cattle_with_insecticide)) +
+    ggplot(aes(x, y, shape = get(this_vector_measure), colour = prop_cattle_with_insecticide)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
     #ylim(c(0, y_max)) +
