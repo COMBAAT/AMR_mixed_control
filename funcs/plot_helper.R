@@ -45,7 +45,11 @@ my_pointsize <- function() {
 
 my_label <- function(variable, split_across_lines = "default") {
   if (variable == "treat_prop") this_label <- "Case treatment proportion"
+  if (variable == "treat_prop" & split_across_lines == "other") this_label <- "Case treatment \n proportion"
   if (variable == "coverage") this_label <- "Prophylactic coverage"
+  if (variable == "coverage" & split_across_lines == "other") this_label <- "Prophylactic \n coverage"
+  if (variable == "treatment_type") this_label <- "Treatment type"
+  if (variable == "treatments_per_year") this_label <- "Annual treatments per animal"
   if (variable == "R0sen") this_label <- "R0 sensitive"
   if (variable == "prevalence") this_label <- "Prevalence"
   if (variable == "Incidence") this_label <- "Incidence"
