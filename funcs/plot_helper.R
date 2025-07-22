@@ -487,25 +487,30 @@ plot_type12_yvar_by_NW_and_insectide <- function(df, y_var, ymax, this_NW, this_
 }
 
 
-plot_invasion_landscape <- function(prev_threshold, subset_for_plotting) {
+plot_invasion_landscape <- function(prev_threshold, df, ttype) {
+  
+  y_var <- get_treat_var(df, ttype)
+  df <- as.data.frame(df)
+  df$y <- df[, y_var]
+  
   prev_threshold_label <- paste0("prev > ", prev_threshold)
   colours <- c("turquoise", "olivedrab3", "tomato", "mediumorchid1", "lightgrey")
   names(colours) <- c("Sen outcompetes Res", "No Sen & Res can't invade", "Res outcompetes Sen", "No Sen & Res can invade", prev_threshold_label)
 
-  plot <- subset_for_plotting %>%
+  plot <- df %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(Region = case_when(prevalence > prev_threshold ~ prev_threshold_label, TRUE ~ Region)) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
     ggplot() +
-    geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, colour = Region, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
+    geom_point(aes(x = prop_cattle_with_insecticide, y = y, colour = Region, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
     scale_color_manual(values = colours) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
-    ylab(my_label("treat_prop")) +
+    ylab(my_label(y_var)) +
     facet_wrap(~ NW + cc_or_vh_ratio, labeller = label_both) +
     ggtitle(paste(
-      "Treatment type = ", unique(subset_for_plotting$treatment_type), "; ",
-      "Use carrying capacity = ", unique(subset_for_plotting$use_carrying_capacity), "; ",
-      "Maintain vector pop = ", unique(subset_for_plotting$maintain_vector_pop)
+      "Treatment type = ", unique(df$treatment_type), "; ",
+      "Use carrying capacity = ", unique(df$use_carrying_capacity), "; ",
+      "Maintain vector pop = ", unique(df$maintain_vector_pop)
     )) +
     ylim(c(0,1)) +
     scale_shape_manual(values = c(4, 16)) +
@@ -522,23 +527,26 @@ plot_invasion_landscape <- function(prev_threshold, subset_for_plotting) {
 }
 
 
-plot_other_landscape <- function(subset_for_plotting, colour_var) {
-  subset_for_plotting <- subset_for_plotting %>% mutate(colour_var = .data[[colour_var]])
-  #subset_for_plotting$colour_var <- subset_for_plotting[, colour_var]
+plot_other_landscape <- function(df, colour_var, ttype) {
+  df <- df %>% mutate(colour_var = .data[[colour_var]])
+  #df$colour_var <- df[, colour_var]
+  y_var <- get_treat_var(df, ttype)
+  df <- as.data.frame(df)
+  df$y <- df[, y_var]
   
-  plot <- subset_for_plotting %>%
+  plot <- df %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
     ggplot() +
-    geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, 
+    geom_point(aes(x = prop_cattle_with_insecticide, y = y, 
                    colour = colour_var, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
-    ylab(my_label("treat_prop")) +
+    ylab(my_label(y_var)) +
     facet_wrap(~ NW + cc_or_vh_ratio, labeller = label_both) +
     ggtitle(paste(
-      "Treatment type = ", unique(subset_for_plotting$treatment_type), "; ",
-      "Use carrying capacity = ", unique(subset_for_plotting$use_carrying_capacity), "; ",
-      "Maintain vector pop = ", unique(subset_for_plotting$maintain_vector_pop)
+      "Treatment type = ", unique(df$treatment_type), "; ",
+      "Use carrying capacity = ", unique(df$use_carrying_capacity), "; ",
+      "Maintain vector pop = ", unique(df$maintain_vector_pop)
     )) + 
     scale_colour_gradientn(colours = terrain.colors(15)) +
     ylim(c(0,1)) +
