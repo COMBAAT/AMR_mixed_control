@@ -240,13 +240,29 @@ ggsave(
 
 # Invasion plots
 restricted_subset <- subset_for_invasion_plots #%>% filter(R0sen > 0, ratio > 1)
-plot_invasion_landscape(1, restricted_subset)
+plot_invasion_landscape(1, restricted_subset, ttype)
 #restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
 #plot_invasion_landscape(1, restricted_subset)
 #restricted_subset <- subset_for_invasion_plots %>% filter(prevalence > 0)
-plot_other_landscape(restricted_subset, "prevalence")
-plot_other_landscape(restricted_subset, "ratio")
-plot_other_landscape(restricted_subset, "RiskA")
+plot_other_landscape(restricted_subset, "prevalence", ttype)
+plot_other_landscape(restricted_subset, "ratio", ttype)
+plot_other_landscape(restricted_subset, "RiskA", ttype)
+
+# Extra plot to show relationship bewteen treatment frequency and prophylactic coverage
+if (ttype == 3) {
+  p <- subset_for_plotting %>% filter(prop_cattle_with_insecticide == 0) %>%
+    mutate(NW = as.factor(NW)) %>%
+    ggplot() +
+    geom_point(aes(x = treatments_per_year, y = coverage, 
+                   colour = NW), size = my_pointsize()) +
+    geom_line(aes(x = treatments_per_year, y = coverage, 
+                   colour = NW), linewidth = my_linewidth()) +
+    ylab(my_label("coverage")) +
+    xlab(my_label("treatments_per_year")) +
+    labs(colour = my_label("NW")) +
+    my_theme()
+  ggsave("output/ms_figs/coverage_vs_frequency.pdf", p)
+}
 
 # ----------------------------------------
 if (ttype == 1 & mainvecpop == TRUE) {plots1T = plots}
