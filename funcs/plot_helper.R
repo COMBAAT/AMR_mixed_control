@@ -71,6 +71,27 @@ my_label <- function(variable, split_across_lines = "default") {
   this_label
 }
 
+
+ymax_function <- function(y_var) {
+  if (y_var == "R0sen") {
+    ymax <- 25.0
+  } else if (y_var == "RiskE") {
+    ymax <- 12.5
+  } else if (y_var == "RiskA") {
+    ymax <- 12.5
+  } else if (y_var == "Incidence") {
+    ymax <- 1250
+  } else if (y_var == "prevalence") {
+    ymax <- 1.0
+  } else if (y_var == "No_trt_cat") {
+    ymax <- 1250
+  } else {
+    ymax <- 1.0
+  }
+  return(ymax)
+}
+
+
 my_pdfwidth <- function() {
   8 #7
 }
@@ -143,11 +164,13 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this
     ggplot(aes(x, y, colour = shape_variable)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
+    #ylim(c(0, y_max)) +
     xlab(this_xlab) +
     ylab(this_ylab) +
     labs(colour = my_label(this_vector_measure)) +
     facet_wrap(~NW) +
-    my_theme()
+    my_theme() + 
+    coord_cartesian(ylim = c(0, ymax_function(y_var))) 
   p
 }
 
@@ -261,24 +284,6 @@ plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_higlight 
 #   dplyr, ggplot2
 #
 #-------------------------------------------------------------------------------
-ymax_function <- function(y_var) {
-  if (y_var == "R0sen") {
-    ymax <- 20.0
-  } else if (y_var == "RiskE") {
-    ymax <- 8.0
-  } else if (y_var == "RiskA") {
-    ymax <- 8.0
-  } else if (y_var == "Incidence") {
-    ymax <- 800
-  } else if (y_var == "prevalence") {
-    ymax <- 0.8
-  } else if (y_var == "No_trt_cat") {
-    ymax <- 800
-  } else {
-    ymax <- 1.0
-  }
-  return(ymax)
-}
 
 plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
                                                     this_vector_measure, this_vector_measure_value, ttype) {
@@ -298,6 +303,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     ggplot(aes(treat_prop, y, shape = get(this_vector_measure), colour = prop_cattle_with_insecticide)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
+    #ylim(c(0, y_max)) +
     facet_wrap(~NW) +
     xlab(this_xlab) +
     ylab(this_ylab) +
