@@ -7,7 +7,6 @@ library(patchwork)
 
 # Source files and function
 source("funcs/plot_helper.R")
-source("plot_helper_extra.R")
 source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
 source("funcs/epi_outputs.R")
@@ -27,7 +26,7 @@ if (load_latest_file == TRUE) {
 
 # Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-ttype = 3
+ttype = 2
 subset <- create_data_subsets(saved_simulations, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
