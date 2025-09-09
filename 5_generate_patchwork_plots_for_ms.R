@@ -1,4 +1,6 @@
 # Generating plots for the manuscript
+rm(list = ls()[!grepl("^(plot|df|this_NW|this_vector_measure)", ls())])
+source("funcs/plot_helper.R")
 library(patchwork)
 
 #names(plots3T)
@@ -44,7 +46,7 @@ figX <- figX.1 / figX.2 / figX.3 / figX.4 / figX.5 + plot_layout(guides = 'colle
   theme(legend.position = "bottom") 
 figX
 #ggsave("output/ms_figs/figS1_large.pdf", figX, width = 11, height = 13) # best size
-ggsave("output/ms_figs/figS1_large.pdf", figX, width = 11, height = 13, dpi = 150) 
+ggsave("output/ms_figs/pwS1_large.pdf", figX, width = 11, height = 13, dpi = 150) 
 print("here1")
 
 # ##############################################################################
@@ -86,7 +88,7 @@ figX <- figX.1 / figX.2 / figX.3 / figX.4 / figX.5 + plot_layout(guides = 'colle
   #theme_bw(base_size = 16) & 
   theme(legend.position = "bottom") 
 figX
-ggsave("output/ms_figs/figS2.pdf", figX, width = 11, height = 13) # best size
+#ggsave("output/ms_figs/pwS2.pdf", figX, width = 11, height = 13) # best size
 
 # ##############################################################################
 
@@ -115,7 +117,7 @@ figX <- figX.1 / figX.2 + plot_layout(guides = 'collect', axes = "collect") &
   #theme_bw(base_size = 16) & 
   theme(legend.position = "bottom") 
 figX
-ggsave("output/ms_figs/fig2.pdf", figX, width = 11, height = 6.5) # best size
+ggsave("output/ms_figs/pw2.pdf", figX, width = 11, height = 6.5) # best size
 # ##############################################################################
 # ##############################################################################
 # Figure 2 shows the impact of controls on the epi variables prevalence and incidence
@@ -142,7 +144,7 @@ figX <- figX.1 / figX.2 + plot_layout(guides = 'collect', axes = "collect") &
   #theme_bw(base_size = 16) & 
   theme(legend.position = "bottom") 
 figX
-ggsave("output/ms_figs/fig2_options.pdf", figX, width = 11, height = 6.5) # best size
+ggsave("output/ms_figs/pw2_options.pdf", figX, width = 11, height = 6.5) # best size
 # ##############################################################################
 # Figure S1
 figX.1a <- plots1F$plot_type1_R0sen_ttype1_spec_FALSE_FALSE
@@ -164,7 +166,7 @@ figX <- figX.1 / figX.2 + plot_layout(guides = 'collect', axes = "collect") &
   #theme_bw(base_size = 16) & 
   theme(legend.position = "bottom") 
 figX
-ggsave("output/ms_figs/figS1_small.pdf", figX, width = 11, height = 6.5) # best size
+ggsave("output/ms_figs/pw1_small.pdf", figX, width = 11, height = 6.5) # best size
 
 # ##############################################################################
 
@@ -194,4 +196,100 @@ figX <- figX.1 / figX.2 + plot_layout(guides = 'collect', axes = "collect") &
   #theme_bw(base_size = 16) & 
   theme(legend.position = "bottom") 
 figX
-ggsave("output/ms_figs/fig3.pdf", figX, width = 11, height = 6.5) # best size
+ggsave("output/ms_figs/pw3.pdf", figX, width = 11, height = 6.5) # best size
+
+# ##############################################################################
+# Figure 4 shows the impact of insecticide resistance
+figX.1 <- plots1F$plot_type4vert_RiskA_ttype1_spec_FALSE_FALSE + ggtitle(my_title("curative")) 
+figX.2 <- plots2F$plot_type4vert_RiskA_ttype2_spec_FALSE_FALSE + ggtitle(my_title("longlasting")) +
+  labs(y = NULL) +  # remove axis label
+  theme(
+    axis.text.y = element_blank(),     # remove tick labels
+    axis.ticks.y = element_blank()     # remove tick marks
+  )
+figX.2
+figX.3 <- plots3F$plot_type4vert_RiskA_ttype3_spec_FALSE_FALSE + ggtitle(my_title("ongoing")) +
+  labs(y = NULL) +  # remove axis label
+  theme(
+    axis.text.y = element_blank(),     # remove tick labels
+    axis.ticks.y = element_blank()     # remove tick marks
+  )
+
+figX <- (figX.1 | figX.2 | plot_spacer() | figX.3) + plot_layout(guides = 'collect', axes = "collect", widths = c(1, 1, 0.1, 1)) & 
+  #plot_annotation(tag_levels = 'A') & 
+  #theme_bw(base_size = 16) & 
+  theme(legend.position = "bottom") 
+ggsave("output/ms_figs/pw4.pdf", figX, width = 8.5, height = 8.5) # best size
+
+# ##############################################################################
+# Figure 3 shows the impact of insecticide resistance
+figX.1 <- plots1F$plot_type5_RiskA_ttype1_spec_FALSE_FALSE + ggtitle(my_title("curative", split_across_lines = "other")) + guides(shape = "none")
+figX.2 <- plots2F$plot_type5_RiskA_ttype2_spec_FALSE_FALSE + ggtitle(my_title("longlasting", split_across_lines = "other")) + guides(shape = "none")
+figX.3 <- plots3F$plot_type5_RiskA_ttype3_spec_FALSE_FALSE + ggtitle(my_title("ongoing", split_across_lines = "other")) + guides(shape = "none")
+
+
+figA <- ( (figX.1) / figX.2 ) + plot_layout(guides = 'collect') & 
+  theme(legend.position = "right") 
+figB <- figX.3 & 
+  theme(legend.position = "right") 
+figA
+figB
+fig4 <- figA / figB 
+ggsave("output/ms_figs/use_as_fig4A.pdf", figA, width = 8, height = 6.5) # best size
+ggsave("output/ms_figs/use_as_fig4B.pdf", figB, width = 8, height = 3.5) # best size
+ggsave("output/ms_figs/use_as_fig4.pdf", fig4, width = 8, height = 10) # best size
+
+# ##############################################################################
+# Figure 5 
+
+figX.1 <- plots1F$plot_type4_Rres_final_ttype1_spec_FALSE_FALSE + 
+  ggtitle(my_title("curative", split_across_lines = "other")) + #guides(shape = "none") + 
+  coord_cartesian(ylim = c(0, 5)) +
+  geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5)
+figX.2 <- plots2F$plot_type4_Rres_final_ttype2_spec_FALSE_FALSE + 
+  ggtitle(my_title("longlasting", split_across_lines = "other")) + #guides(shape = "none") + 
+  coord_cartesian(ylim = c(0, 5)) +
+  geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5)
+figX.3 <- plots3F$plot_type4_Rres_final_ttype3_spec_FALSE_FALSE + 
+  ggtitle(my_title("ongoing", split_across_lines = "other")) + #guides(shape = "none") + 
+  coord_cartesian(ylim = c(0, 5)) +
+  geom_segment(x = 0.0, y = 1.0, xend = 12.0, yend = 1.0, colour = "red", linewidth = 0.5)
+
+
+figA <- ( (figX.1) / figX.2 ) + plot_layout(guides = 'collect') & 
+  theme(legend.position = "right") 
+figB <- figX.3 & 
+  theme(legend.position = "right") 
+figA
+figB
+ggsave("output/ms_figs/use_as_fig5A.pdf", figA, width = 8, height = 6.5) # best size
+ggsave("output/ms_figs/use_as_fig5B.pdf", figB, width = 8, height = 3.5) # best size
+
+# ##############################################################################
+# ##############################################################################
+# Figure 5 
+
+figX.1 <- plots1F$plot_type4v2_Rres_final_ttype1_spec_FALSE_FALSE + 
+  ggtitle(my_title("curative", split_across_lines = "other")) + #guides(shape = "none") + 
+coord_cartesian(ylim = c(0, 10)) #+
+  #geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5)
+figX.2 <- plots2F$plot_type4v2_Rres_final_ttype2_spec_FALSE_FALSE + 
+  ggtitle(my_title("longlasting", split_across_lines = "other")) + #guides(shape = "none") + 
+coord_cartesian(ylim = c(0, 10)) #+
+  #geom_segment(x = 0.0, y = 1.0, xend = 1.0, yend = 1.0, colour = "red", linewidth = 0.5)
+figX.3 <- plots3F$plot_type4v2_Rres_final_ttype3_spec_FALSE_FALSE + 
+  ggtitle(my_title("ongoing", split_across_lines = "other")) + #guides(shape = "none") + 
+coord_cartesian(ylim = c(0, 10)) #+
+  #geom_segment(x = 0.0, y = 1.0, xend = 12.0, yend = 1.0, colour = "red", linewidth = 0.5)
+
+
+figA <- ( (figX.1) / figX.2 ) + plot_layout(guides = 'collect') & 
+  theme(legend.position = "right") 
+figB <- figX.3 & 
+  theme(legend.position = "right") 
+figA
+figB
+ggsave("output/ms_figs/use_as_fig5Av2.pdf", figA, width = 8, height = 6.5) # best size
+ggsave("output/ms_figs/use_as_fig5Bv2.pdf", figB, width = 8, height = 3.5) # best size
+
+# ##############################################################################
