@@ -26,7 +26,7 @@ if (load_latest_file == TRUE) {
 
 # Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
-ttype = 2
+ttype = 1
 subset <- create_data_subsets(saved_simulations, ttype)
 
 # subset further by scenario if additional parameters varied, default is first row
@@ -46,7 +46,7 @@ if (ttype == 2) {df_ttype2 <- subset_for_plotting}
 if (ttype == 3) {df_ttype3 <- subset_for_plotting}
 
 # Specify K and NW for plotting
-this_NW <- 100
+this_NW <- 0
 this_NW_set <- c(0, 100, 200)
 
 if (use_cc == TRUE) {
@@ -60,8 +60,6 @@ if (use_cc == TRUE) {
   this_vector_measure <- "Baseline_vector_host_ratio"
 }
 
-subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% seq(0, 0.5, 0.1))
-
 # For invasion plots, Identify the boundary where R0 closest to 1
 subset_for_invasion_plots <- subset_for_plotting %>%
   group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>%
@@ -73,6 +71,10 @@ subset_for_invasion_plots <- subset_for_plotting %>%
 subset_for_invasion_plots <- subset_for_invasion_plots %>%
   mutate(closest_true_false = ifelse(closest_to_1_value == prop_cattle_with_insecticide, TRUE, FALSE
   ))
+
+subset_for_plotting <- as.data.frame(subset_for_invasion_plots)
+
+subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% seq(0, 0.5, 0.1))
 
 # -----------------------------------------------------------------------------
 # Create a list to store all the plots for post processing
@@ -121,10 +123,10 @@ plots[[plot_label]] <- p
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW
-y_vars <- c(
-  "prevalence", "Incidence","R0sen", "Rsen_final", "Rres_final", "ratio", "No_trt_cat", "Prob_onward_tran",
-  "RiskE", "RiskA"
-)
+#y_vars <- c(
+#  "prevalence", "Incidence","R0sen", "Rsen_final", "Rres_final", "ratio", "No_trt_cat", "Prob_onward_tran",
+#  "RiskE", "RiskA"
+#)
 y_vars <- c(
   "prevalence", "Incidence", "No_trt_cat", "RiskA", "RiskE", "R0sen"
 )
@@ -183,7 +185,7 @@ ggsave(
 
 # ----------------------------------------
 # Plot y versus_treat_prop faceted by NW, coloured by prop_cattle_with_insecticide
-#y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE", "Rsen_final", "Rres_final", "R0sen")
+y_vars <- c("Incidence", "prevalence", "No_trt_cat", "RiskA", "RiskE", "Rsen_final", "Rres_final", "R0sen")
 
 for (y_var in y_vars) {
   p <- plot_type4_y_versus_treat_prop_facet_NW(subset_for_plotting_reduced_insecticide, y_var, this_NW_set, 
@@ -196,6 +198,38 @@ for (y_var in y_vars) {
   ggsave(
     filename = output_filename,
     width = my_pdfwidth(), height = my_pdfheight()
+  )
+}
+# ----------------------------------------
+y_vars = c("Rres_final")
+for (y_var in y_vars) {
+  p <- plot_type4v2_y_versus_treat_prop_facet_NW(subset_for_plotting_reduced_insecticide, y_var, this_NW_set, 
+                                                  this_vector_measure, this_vector_measure_value, ttype)
+p
+output_label <- paste0("plot_type4v2_", y_var)
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
+plots[[plot_label]] <- p
+ggsave(
+  filename = output_filename,
+  width = my_pdfwidth(), height = my_pdfheight()
+)
+}
+# ----------------------------------------
+
+y_vars <- c("RiskA")
+for (y_var in y_vars) {
+  p <- plot_type4_y_versus_treat_prop_facet_NW(subset_for_plotting_reduced_insecticide, y_var, this_NW_set, 
+                                               this_vector_measure, this_vector_measure_value, ttype,
+                                               vertical = TRUE)
+  p
+  output_label <- paste0("plot_type4vert_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+  plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
+  plots[[plot_label]] <- p
+  ggsave(
+    filename = output_filename,
+    width = 0.7 * my_pdfwidth(), height = 1.5 * my_pdfheight()
   )
 }
 # ----------------------------------------
@@ -223,6 +257,27 @@ for (y_var in y_vars) {
   )
 }
 
+y_vars <- c("RiskA")
+for (y_var in y_vars) {
+  if (ttype == 3) {
+    plot_type5 <- plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW_ttype3
+  } else {
+    plot_type5 <- plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW
+  }
+  p <- plot_type5(subset_for_plotting, y_var, this_NW_set, this_vector_measure, 
+                  this_vector_measure_value, vertical = TRUE)
+  
+  p
+  output_label <- paste0("plot_type5vert_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+  plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
+  plots[[plot_label]] <- p
+  ggsave(
+    filename = output_filename,
+    width = 0.7 * my_pdfwidth(), height = 1.5 * my_pdfheight()
+  )
+}
+
 # ----------------------------------------
 
 # ----------------------------------------
@@ -239,13 +294,29 @@ ggsave(
 
 # Invasion plots
 restricted_subset <- subset_for_invasion_plots #%>% filter(R0sen > 0, ratio > 1)
-plot_invasion_landscape(1, restricted_subset, ttype)
+p <- plot_invasion_landscape(1, restricted_subset, ttype)
+output_label <- "plot_type15_invasion"
+output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = 1.0 * my_pdfwidth(), height = 1.0 * my_pdfheight()
+)
+plots[[plot_label]] <- p
+
 #restricted_subset <- subset_for_invasion_plots %>% filter(R0sen > 0, ratio > 1)
 #plot_invasion_landscape(1, restricted_subset)
 #restricted_subset <- subset_for_invasion_plots %>% filter(prevalence > 0)
-plot_other_landscape(restricted_subset, "prevalence", ttype)
-plot_other_landscape(restricted_subset, "ratio", ttype)
-plot_other_landscape(restricted_subset, "RiskA", ttype)
+y_vars <- c("prevalence", "ratio", "RiskA")
+for (y_var in y_vars) {
+p <- plot_other_landscape(restricted_subset, y_var, ttype)
+output_label <- "plot_type16_landscape"
+output_filename <- paste0(folder_name, output_label,"_", y_var, "_ttype", ttype, "_spec_", spec, ".pdf")
+ggsave(
+  filename = output_filename,
+  width = 1.0 * my_pdfwidth(), height = 1.0 * my_pdfheight()
+)
+plots[[plot_label]] <- p
+}
 
 # Extra plot to show relationship bewteen treatment frequency and prophylactic coverage
 if (ttype == 3) {
@@ -262,6 +333,24 @@ if (ttype == 3) {
     my_theme()
   ggsave("output/ms_figs/coverage_vs_frequency.pdf", p)
 }
+
+# ----------------------------------------
+y_vars = c("Rres_final")
+for (y_var in y_vars) {
+  p <- plot_type17_y_versus_treat_prop_facet_NW(subset_for_plotting_reduced_insecticide, y_var, this_NW_set, 
+                                                 this_vector_measure, this_vector_measure_value, ttype)
+  p
+  output_label <- paste0("plot_type17_", y_var)
+  output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
+  plot_label <- paste0(output_label, "_ttype", ttype, "_spec_", spec)
+  plots[[plot_label]] <- p
+  ggsave(
+    filename = output_filename,
+    width = my_pdfwidth(), height = 1.5 * my_pdfheight()
+  )
+}
+# ----------------------------------------
+
 
 # ----------------------------------------
 if (ttype == 1 & mainvecpop == TRUE) {plots1T = plots}
