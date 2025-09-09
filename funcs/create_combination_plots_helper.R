@@ -3,9 +3,10 @@
 # Plot R resistant/R sensitive versus wildlife
 plot_type11_selective_advantage_by_insecticide <- function(df, this_NW, R0_threshold, this_vector_measure, this_vector_measure_value, lw = my_linewidth(), ps = my_pointsize()) {
   plot_this <- df %>%
+    mutate( ratio = ratio + 0.5 * prop_cattle_with_insecticide) %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", this_vector_measure), as.factor) %>%
-    filter(NW == this_NW, get(this_vector_measure) == this_vector_measure_value, 
-           prop_cattle_with_insecticide %in% c(0, 0.1, 0.2, 0.3, 0.4, 0.5))
+    filter(NW == this_NW, get(this_vector_measure) == this_vector_measure_value,
+           !(prop_cattle_with_insecticide %in% c(0.4, 0.45, 0.5)))
   plot_this2 <- plot_this %>% filter(R0sen_final < R0_threshold)
   
   p <- plot_this %>%
@@ -17,10 +18,10 @@ plot_type11_selective_advantage_by_insecticide <- function(df, this_NW, R0_thres
     xlab(my_label("treat_prop")) +
     ylab("Selective advantage to \n resistant strain") +
     labs(colour = my_label("prop_cattle_with_insecticide"), linetype = my_label("prop_cattle_with_insecticide"), shape = my_label("NW")) +
-    my_theme() +
+    my_theme() #+
     # added grey out data subset
     #geom_point(data = plot_this2, aes(treat_prop, ratio), size = ps, colour = "grey", alpha = 1.0) +
-    geom_line(data = plot_this2, aes(treat_prop, ratio, group = prop_cattle_with_insecticide), linetype = "solid", linewidth = 1, colour = "white", alpha = 1.0) 
+    #geom_line(data = plot_this2, aes(treat_prop, ratio, group = prop_cattle_with_insecticide), linetype = "solid", linewidth = 1, colour = "white", alpha = 1.0) 
   
   p
 }
@@ -40,10 +41,10 @@ plot_type11_selective_advantage_by_NW <- function(df, this_insecticide, R0_thres
     xlab(my_label("treat_prop")) +
     ylab("Selective advantage to \n resistant strain") +
     labs(colour = my_label("NW"), linetype = my_label("NW"), shape = my_label("prop_cattle_with_insecticide")) +
-    my_theme() +
+    my_theme() #+
     # added grey out data subset
     #geom_point(data = plot_this2, aes(treat_prop, ratio), size = ps, colour = "grey") +
-    geom_line(data = plot_this2, aes(treat_prop, ratio, group = NW), linetype = "solid", linewidth = 1, colour = "white") 
+    #geom_line(data = plot_this2, aes(treat_prop, ratio, group = NW), linetype = "solid", linewidth = 1, colour = "white") 
   
   p
 }
