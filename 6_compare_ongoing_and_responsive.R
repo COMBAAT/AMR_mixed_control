@@ -3,6 +3,7 @@ source("funcs/compare_responsive_and_ongoing_helper.R")
 
 # combine df for each treatment type
 df_all_ttype <- rbind(df_ttype1, df_ttype2, df_ttype3)
+this_NW <- 100
 
 # create dataframe for plotting
 plot_this <- df_all_ttype %>%
@@ -22,9 +23,12 @@ p2 <- p # & theme(legend.position = "bottom")
 p <- plot_type20(plot_this, x_var = "prevalence", y_var = "Risk_per_treatment")
 p3 <- p # & theme(legend.position = "bottom")
 
-p <- (p1 / p2 / p3) + plot_layout(guides = "collect", axes = "collect") & 
+p <- plot_type20(plot_this, x_var = "prevalence", y_var = "Rres_final")
+p4 <- p # & theme(legend.position = "bottom")
+
+p <- (p1 / p2 / p3 / p4) + plot_layout(guides = "collect", axes = "collect") & 
   theme(legend.position = "bottom", legend.justification = "left", legend.title = element_blank())
-ggsave("output/ms_figs/use_as_fig3_plot_type20_panel_compare_treatments_by_prev.pdf", p, width = 7, height = 9)
+ggsave("output/ms_figs/use_as_fig3_plot_type20_panel_compare_treatments_by_prev.pdf", p, width = 7, height = 11)
 
 ################################################################################
 p <- plot_type21(plot_this, x_var = "prevalence", y_var = "No_trt_cat")
@@ -114,12 +118,12 @@ for (plot_type in c(22, 23)) {
   if (plot_type == 23) {
     p <- p +
       plot_annotation(caption = paste0("VHR = ", this_vector_measure_value))
-    plot_name <- paste0("output/ms_figs/use_as_fig2_plot_type ", plot_type, "_panel_compare_treatment_types.pdf")
+    plot_name <- paste0("output/ms_figs/use_as_fig2_plot_type", plot_type, "_panel_compare_treatment_types.pdf")
   }
   if (plot_type == 22) {
     p <- p +
       plot_annotation(caption = paste0("NW = ", this_NW))
-  plot_name <- paste0("output/ms_figs/plot_type ", plot_type, "_panel_compare_treatment_types.pdf")
+  plot_name <- paste0("output/ms_figs/use_as_fig2alt_plot_type", plot_type, "_panel_compare_treatment_types.pdf")
   }
   ggsave(plot_name, p, width = 7.5, height = plot_height)
 }
