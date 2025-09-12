@@ -41,6 +41,7 @@ for (option in 1:2) {
   subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
   # adjust fitness post simulation, if desired
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
+  subset_for_plotting$ratio <- subset_for_plotting$Rres_final
   #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, saved_simulations, option, use_cc, mainvecpop, fit_adj_new = 0.6)
   subset_for_plotting <- subset_for_plotting 
   data_subsets[[option]] <- subset_for_plotting
@@ -49,16 +50,16 @@ for (option in 1:2) {
 ################################################################################
 if (use_cc == TRUE) {
   this_vector_measure <- "Baseline_vector_population"
-  this_vector_measure_value <- 6000
+  #this_vector_measure_value <- 6000
   data_subsets[[1]] <- data_subsets[[1]] 
   data_subsets[[2]] <- data_subsets[[2]]
 } else {
-  this_vector_measure_value <- 20
+  #this_vector_measure_value <- 30
   this_vector_measure <- "Baseline_vector_host_ratio"
   data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = K_host_ratio)
   data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = K_host_ratio)
 }
-this_NW <- 100
+#this_NW <- 0
 R0_threshold <- 1.0
 this_insecticide <- 0.0
 ################################################################################
