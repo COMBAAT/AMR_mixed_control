@@ -6,7 +6,6 @@
 #                 plot_type3_y_versus_treat_prop_facet_prop_cattle_with_insecticide_with_highlight,
 #                 plot_type4_y_versus_treat_prop_facet_NW,
 #                 plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW,
-#                 plot_type6_y_versus_treat_prop_facet_NW_K
 # Description: This script provides utility functions for standardizing plot formatting in R visualizations.
 #              It includes functions to adjust line widths, point sizes, generate appropriate labels for various variables,
 #              and set other plot properties such as PDF dimensions, ensuring consistency across multiple plots.
@@ -433,7 +432,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
   p
 }
 
-plot_type4v2_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
+plot_type6_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
                                                     this_vector_measure, this_vector_measure_value, ttype,
                                                     vertical = FALSE) {
   x_var <- get_treat_var(df, ttype) 
@@ -692,7 +691,7 @@ plot_other_landscape <- function(df, colour_var, ttype) {
 }
 
 
-plot_type17_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
+plot_type7_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, 
                                                       this_vector_measure, this_vector_measure_value, ttype,
                                                       vertical = FALSE) {
   
@@ -709,6 +708,11 @@ plot_type17_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
   
   df <- new_df
   df <- add_competition_and_invasion_columns(df)
+  
+  #df %>% filter(NW == 200, treat_prop > 0.85, prop_cattle_with_insecticide > 0.18, 
+  #              prop_cattle_with_insecticide < 0.22, Baseline_vector_host_ratio == 20) %>% glimpse()
+  #df %>% filter(NW == 200, treat_prop > 0.85, prop_cattle_with_insecticide > 0.18, 
+  #                     prop_cattle_with_insecticide < 0.22, Baseline_vector_host_ratio == 20) %>% select(Region, Rres_final, Rsen_final) %>% print()
   
   x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
@@ -737,6 +741,7 @@ plot_type17_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     ) %>%
     #ggplot(aes(x, y, shape = get(this_vector_measure), colour = prop_cattle_with_insecticide)) +
     ggplot(aes(x, y, shape = Region, linetype = fit_adj_new, colour = Region)) +
+    #ggplot(aes(x, y, shape = NW, linetype = NW, colour = Region)) +
     scale_color_manual(values = colours) +
     
     geom_line(linewidth = 0.5 * my_linewidth(), colour = "grey20") +
@@ -750,7 +755,7 @@ plot_type17_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     #labs(shape = "Control\nefficacy", colour = my_label("prop_cattle_with_insecticide")) +
     labs(shape = "Region", colour = "Region", linetype = my_label("fit_adj_new")) +
     my_theme() + theme(legend.position = this_position) +
-    coord_cartesian(ylim = c(0, 2)) 
+    coord_cartesian(ylim = c(0, 4)) 
   #coord_cartesian(ylim = c(0, 0.25 * ymax_function(y_var))) 
   p
 }
