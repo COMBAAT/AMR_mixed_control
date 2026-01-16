@@ -1,5 +1,5 @@
 
-plot_type20 <- function(df, x_var, y_var) {
+plot_type20 <- function(df, x_var, y_var, this_prop_insecticide) {
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   
@@ -8,7 +8,7 @@ plot_type20 <- function(df, x_var, y_var) {
                                    treatment_type == "curative" ~ "Responsive curative",
                                    treatment_type == "longlasting" ~ "Responsive longlasting",
                                    T ~ treatment_type))
-  p <- df2 %>% filter(prop_cattle_with_insecticide %in% c(0)) %>%
+  p <- df2 %>% filter(prop_cattle_with_insecticide %in% c(this_prop_insecticide)) %>%
     ggplot() +
     geom_point(aes(y = y, x = x,
                    #group = interaction(treatment_type, Baseline_vector_host_ratio),
@@ -24,6 +24,7 @@ plot_type20 <- function(df, x_var, y_var) {
     labs(colour = my_label("treatment_type", split_across_lines = "other"), 
          shape = my_label("treatment_type", split_across_lines = "other")) +
     scale_shape_manual(values = c(4, 19, 1)) +
+    scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4)) +
     facet_wrap(~ NW) +
     my_theme()
   p
@@ -34,12 +35,17 @@ plot_type21 <- function(df, x_var, y_var) {
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   
-  p <- df %>% filter(prop_cattle_with_insecticide %in% c(0, 0.1, 0.2)) %>%
+  my_labeller <- labeller(
+    NW = function(x) paste0(my_label("NW"), ": ", x),
+    prop_cattle_with_insecticide = function(x) paste0("Coverage:", x)
+  )
+  
+  p <- df %>% filter(prop_cattle_with_insecticide %in% c(0, 0.05, 0.1, 0.2)) %>%
     ggplot() + 
     geom_point(aes(y = y, x = x, 
                    group = interaction(treatment_type, Baseline_vector_host_ratio), 
                    shape = treatment_type, 
-                   colour = treatment_type), size = 1.5 * my_pointsize()) +
+                   colour = treatment_type), size = 1.0 * my_pointsize()) +
     geom_line(aes(y = y, x = x, 
                   group = interaction(treatment_type, Baseline_vector_host_ratio), 
                   colour = treatment_type), linewidth = my_linewidth()) +
@@ -49,7 +55,15 @@ plot_type21 <- function(df, x_var, y_var) {
     labs(colour = my_label("treatment_type"), shape = my_label("treatment_type")) +
     scale_shape_manual(values = c(4, 19, 1)) +
     facet_wrap(~ NW + prop_cattle_with_insecticide) +
-    my_theme()
+    scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4)) +
+    scale_y_continuous(breaks = seq(0, ymax_function(y_var), by = ymax_function(y_var)/5)) +
+    my_theme_invasion()
+  p
+  
+  if (y_var == "Rres_final") {
+    p <- p + geom_abline(intercept = 1, slope = 0, colour = "black", linetype = "dashed") +
+      geom_vline(xintercept = 0.15, colour = "purple", linetype = "dashed")
+  }
   p
 }
 
@@ -78,7 +92,8 @@ plot_type22_y_versus_treat_prop_facet_treatment_type <- function(df, y_var, this
     ylab(this_ylab) +
     labs(colour = my_label(this_vector_measure)) +
     my_theme() + 
-    coord_cartesian(ylim = c(0, ymax_function(y_var)), xlim = c(0, xmax_function(x_var))) 
+    coord_cartesian(ylim = c(0, ymax_function(y_var))) +
+    scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4))
   p
 }
 
