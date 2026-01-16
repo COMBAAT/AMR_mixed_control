@@ -13,7 +13,7 @@ library(tidyr)
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
-source("1_set_user_inputs.R")
+#source("1_set_user_inputs.R")
 source("funcs/set_params.R")
 source("funcs/set_inits.R")
 source("funcs/qual_check.R")
@@ -25,6 +25,7 @@ source("funcs/AAT_AMR_dens_dep.R")
 source("funcs/r0_intuitive.R")
 source("funcs/r0_NGM.R")
 source("funcs/r0_helper.R")
+source("1_set_user_inputs.R")
 
 
 
@@ -112,7 +113,7 @@ for (row in 1:number_of_scenarios) {
   # print(paste0("Rsen2_final = ", final_state_with_full_scenario$Rsen2_final))
   # print(paste0("Rres_final = ", final_state_with_full_scenario$Rres_final))
   # print(paste0("Rres2_final = ", final_state_with_full_scenario$Rres2_final))
-  
+  #print(quick_plot(expanded_output))
 }
 
 # add columns indicating outcome of cometition with or invasion by resistant strains
@@ -123,11 +124,16 @@ toc()
 quick_plot(expanded_output)
 
 df <- simplify_outputs(all_simulations_summary)
-glimpse(df)
+#glimpse(df)
 
 # Outputs to an Rda file
 #saved_simulations <- all_simulations_summary
 saved_simulations <- all_simulations_summary
 filename <- get_filename()
-save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+#save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+
+saved_simulations %>% filter(!(treat_prop == 0 & proph_ongoing == 0) ) %>%
+  select(NW, treatment_type, treat_prop, proph_ongoing, prevalence, 
+         Incidence, CS_final, PF_final, PS_final, 
+         RiskA, CIs_final, PEs_final, PIs_final, PPs_final, PEsX_final, CEXs_final) %>% glimpse()
 
