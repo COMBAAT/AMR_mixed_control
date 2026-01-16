@@ -56,7 +56,14 @@ append_epi_outputs_to_df <- function(df) {
     Prob_onward_tran = 1 - dpois(0, Rres_final),
     RiskA = PEs_final + PIs_final + PPs_final + CTs_final + PTs_final + CEXs_final + PEsX_final,
     RiskE = Prob_onward_tran * RiskA,
-    prevalence = (PIs_final + CIs_final) / All_cows_final
+    prevalence = (PIs_final + CIs_final) / All_cows_final,
+    prevalence_new = (PIs_final + PTs_final + PPs_final + CIs_final + CTs_final) / All_cows_final,
+    Incidence_new = gamma_c * (PEs_final + CEs_final + CEXs_final + PEsX_final) * days_per_year,
+    Incidence_C = gamma_c * (CEs_final + CEXs_final) * days_per_year,
+    Incidence_P = gamma_c * (PEs_final + PEsX_final) * days_per_year,
+    prevalence_wildlife = WIs_final / Wildlife_total_final, 
+    prevalence_vectors = VIs_final / Vector_total_final,
+    waning_from_PI =  waning_from_PI * PIs_final * days_per_year
   )
   df
 }
