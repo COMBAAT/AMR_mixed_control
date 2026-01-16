@@ -32,6 +32,75 @@ library(dplyr)
 library(ggplot2)
 library(gghighlight)
 
+# update to remove the gridlines and make background offwhite for contrast
+my_theme <- function() {
+  theme_bw(base_size = 15) +
+    theme(
+      panel.background = element_rect(fill = "#FAFAFA"),
+      plot.background  = element_rect(fill = "#FAFAFA", colour = NA),
+      plot.title = element_text(hjust = 0.5, size = 1.0 * 15),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption = element_text(),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+      #axis.line        = element_line(colour = "#111111")
+    )
+}
+
+my_theme_invasion <- function() {
+  theme_bw(base_size = 20) +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 1.0 * 15),
+      plot.subtitle = element_text(hjust = 0.5),
+      plot.caption = element_text(),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+}
+
+
+projector_cols <- c(
+  "#4D4D4D",  # dark grey (very stable)
+  "#E69F00",  # orange (projects well)
+  "#0072B2",  # strong blue (survives washout)
+  "#009E73",  # bluish green (distinct from blue)
+  "#D55E00",  # vermillion (high contrast)
+  "#CC79A7"   # purple (still separable when faded)
+)
+
+projector_cols_warm_first <- c(
+  "#E69F00",  # orange
+  "#D55E00",  # vermillion
+  "#0072B2",  # strong blue
+  "#009E73",  # bluish green
+  
+  "#4D4D4D",  # dark grey (last)
+  "#CC79A7"  # purple
+)
+
+scale_colour_discrete <- function(...) {
+  scale_colour_manual(values = rep(projector_cols_warm_first, 100), ...)
+}
+
+# scale_colour_discrete <- function(...) {
+#   scale_colour_brewer(palette = "Set1", ...)
+#   #scale_colour_viridis_d(option = "E", ...)
+# }
+scale_color_discrete <- scale_colour_discrete
+
+my_ggsave <- function(plot, filename, width, height) {
+  ggsave(
+    plot = plot,
+    filename = filename,
+    width = width,
+    height = height,
+    device = cairo_pdf,
+    limitsize = TRUE
+  )
+}
+
 # Specify plot formatting ------------------------------------------------------
 my_linewidth <- function() {
   1
@@ -43,6 +112,7 @@ my_pointsize <- function() {
 
 
 my_label <- function(variable, split_across_lines = "default") {
+  this_label <- variable
   if (variable == "fit_adj_new") this_label <- "Relative fitness"
   if (variable == "Risk_per_treatment") this_label <- "Risk per treatment"
   if (variable == "treat_prop") this_label <- "Case treatment proportion"
@@ -53,12 +123,15 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "treatment_type" & split_across_lines == "other") this_label <- "Protocol"
   if (variable == "treatments_per_year") this_label <- "Treatments per year"
   if (variable == "R0sen") this_label <- "R0 sensitive"
-  if (variable == "prevalence") this_label <- "Prevalence"
+  if (variable == "prevalence") this_label <- "Prevalence in cattle"
+  if (variable == "prevalence_wildlife") this_label <- "Prevalence in wildlife"
+  if (variable == "prevalence_vectors") this_label <- "Prevalence in vectors"
   if (variable == "Incidence") this_label <- "Incidence"
+  if (variable == "Incidence_new") this_label <- "Incidence_new"
   if (variable == "No_trt_cat") this_label <- "Number treated"
   if (variable == "Prob_onward_tran") this_label <- "Prob onward transmission"
   if (variable == "RiskE") this_label <- "Risk of emergence and spread"
-  if (variable == "RiskA") this_label <- "Risk of emergence"
+  if (variable == "RiskA") this_label <- "Selection opportunity"
   if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide coverage"
   if (variable == "prop_cattle_with_insecticide" & split_across_lines == "other") this_label <- "Insecticide coverage \n "
   if (variable == "NW") this_label <- "Wildlife"
@@ -73,6 +146,10 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "curative") this_label <- "responsive curative"
   if (variable == "longlasting") this_label <- "responsive longlasting"
   if (variable == "proph_ongoing") this_label <- "ongoing longlasting"
+  if (variable == "responsive_curative") this_label <- "Responsive curative"
+  if (variable == "responsive_longlasting") this_label <- "Responsive longlasting"
+  if (variable == "proph_ongoing") this_label <- "Ongoing longlasting"
+  if (variable == "label") this_label <- "Treatment protocol"
   this_label
 }
 
@@ -86,6 +163,29 @@ my_title <- function(variable, split_across_lines = "default") {
   this_title
 }
 
+add_fancy_title <- function(p, line1, line2, line3) {
+  if (line1 != "") {
+    p <- p +
+      labs(
+        title = paste0(
+          "<span style='font-size:20pt;'>", line1, "</span><br>",
+          "<span style='font-size:16pt;'>", line2, "</span><br>",
+          "<span style='font-size:16pt;'>", line3, "</span>"
+        )
+      ) +
+      theme(plot.title = element_markdown(hjust = 0.5))
+    p
+  } else {
+    p <- p +
+      labs(
+        title = paste0(
+          "<span style='font-size:16pt;'>", line3, "</span>"
+        )
+      ) +
+      theme(plot.title = element_markdown(hjust = 0.5))
+  }
+  p
+}
 
 ymax_function <- function(y_var) {
   if (y_var == "R0sen") {
@@ -97,13 +197,17 @@ ymax_function <- function(y_var) {
   } else if (y_var == "treatments_per_year") {
     ymax <- 12
   } else if (y_var == "RiskA") {
-    ymax <- 12.5
+    ymax <- 10
   } else if (y_var == "Incidence") {
     ymax <- 1250
   } else if (y_var == "prevalence") {
     ymax <- 1.0
+  } else if (y_var == "prevalence_vectors") {
+    ymax <- 0.1
   } else if (y_var == "No_trt_cat") {
     ymax <- 1250
+  } else if (y_var == "Rres_final") {
+    ymax <- 10
   } else {
     ymax <- 1.0
   }
@@ -147,17 +251,18 @@ my_theme_old <- function() {
     )
 }
 
-my_theme <- function() {
-  theme_grey(base_size = 15) +
-    theme(
-      plot.title = element_text(hjust = 0.5, size = 1.0 * 15),
-      plot.subtitle = element_text(hjust = 0.5),
-      plot.caption = element_text(),
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      panel.grid.major = element_blank()
-      #panel.grid.minor = element_blank()
-    )
-}
+# my_theme <- function() {
+#   theme_grey(base_size = 15) +
+#     theme(
+#       plot.title = element_text(hjust = 0.5, size = 1.0 * 15),
+#       plot.subtitle = element_text(hjust = 0.5),
+#       plot.caption = element_text(),
+#       axis.text.x = element_text(angle = 45, hjust = 1),
+#       panel.grid.major = element_blank()
+#       #panel.grid.minor = element_blank()
+#     )
+# }
+
 
 
 # Specify plot functions -------------------------------------------------------
@@ -427,8 +532,9 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     ylab(this_ylab) +
     scale_shape_manual(values = c(4, 16)) +
     labs(shape = "Control\nefficacy", colour = my_label("prop_cattle_with_insecticide")) +
-    my_theme() + theme(legend.position = this_position)
-  coord_cartesian(ylim = c(0, ymax_function(y_var))) 
+    my_theme() + theme(legend.position = this_position) +
+    scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4)) +
+    coord_cartesian(ylim = c(0, ymax_function(y_var))) 
   p
 }
 
@@ -454,28 +560,66 @@ plot_type6_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     this_position = "right"
   }
   
-  p <- df %>%
+  plot_this <- df %>%
     mutate_at(c("prop_cattle_with_insecticide", "NW", this_vector_measure), as.factor) %>%
     filter(
       get(this_vector_measure) == this_vector_measure_value,
       NW %in% this_NW_set
-    ) %>%
-    #ggplot(aes(x, y, shape = get(this_vector_measure), colour = prop_cattle_with_insecticide)) +
-    ggplot(aes(x, y, shape = Region, linetype = prop_cattle_with_insecticide, colour = Region)) +
+    )
+   insecticide_vec <- unique(plot_this$prop_cattle_with_insecticide)
+   x_vec <- sort(unique(plot_this$x))
+   n_x <- length(x_vec)
+   
+   # set label position
+   if (x_var == "treat_prop") {
+     this_by = 2
+     this_nudge = 0.075
+     this_end = 11
+     df_test <- data.frame(x = x_vec[n_x - seq(1, this_end, by = this_by) ],
+                           prop_cattle_with_insecticide = insecticide_vec) 
+   } else {
+     this_nudge = 0
+     n_positions <- length(insecticide_vec)
+     positions <- sort(sample(x_vec, n_positions), decreasing = TRUE)
+     positions <- c(12, 10, 8, 6, 4, 2)
+     df_test <- data.frame(x = positions,
+                           prop_cattle_with_insecticide = insecticide_vec) 
+   }
+   
+   df_labels <- inner_join(df_test, plot_this) %>% 
+     mutate(label = prop_cattle_with_insecticide, 
+            x_location = x - this_nudge,
+            y_location = Rres_final)
+   # end set labels
+  
+  p <- plot_this %>%
+    ggplot(aes(x, y)) +
     scale_color_manual(values = colours) +
+    geom_line(aes(x, y, linetype = prop_cattle_with_insecticide, colour = Region), 
+              linewidth = 0.5 * my_linewidth(), colour = "grey20") +
     
-    geom_line(linewidth = 0.5 * my_linewidth(), colour = "grey20") +
     geom_abline(aes(intercept = 1, slope = 0), colour = "red") +
-    geom_point(size = 1.0 * my_pointsize()) +
-    #ylim(c(0, y_max)) +
+    geom_point(aes(shape = Region, colour = Region), size = 1.0 * my_pointsize()) +
+    
+    
+    # ggplot(aes(x, y, shape = Region, linetype = prop_cattle_with_insecticide, colour = Region)) +
+    # scale_color_manual(values = colours) +
+    # geom_line(linewidth = 0.5 * my_linewidth(), colour = "grey20") +
+    # 
+    # geom_abline(aes(intercept = 1, slope = 0), colour = "red") +
+    # geom_point(size = 1.0 * my_pointsize()) +
+    geom_label(data = df_labels, aes(x = x_location, y = y_location, label = label),
+                     nudge_x = 0.0,
+                     na.rm = TRUE, colour = "blue", size = 2) +
     facet_wrap(~NW, ncol = this_ncol) +
     xlab(this_xlab) +
     ylab(this_ylab) +
     scale_shape_manual(values = c(1, 1, 16, 16)) +
-    #labs(shape = "Control\nefficacy", colour = my_label("prop_cattle_with_insecticide")) +
     labs(shape = "Region", colour = "Region", linetype = my_label("prop_cattle_with_insecticide")) +
-    my_theme() + theme(legend.position = this_position)
-  coord_cartesian(ylim = c(0, ymax_function(y_var))) 
+    my_theme() + theme(legend.position = this_position) +
+    coord_cartesian(ylim = c(0, ymax_function(y_var)), xlim = c(0, xmax_function(x_var))) +
+    scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4))
+    
   p
 }
 
@@ -520,7 +664,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var,
   p <- df %>%
     mutate_at(c("treat_prop", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
     filter(
-      prop_cattle_with_insecticide <= 0.5,
+      #prop_cattle_with_insecticide <= 0.5,
       #treat_prop %in% c(0, 0.2, 0.4, 0.6, 0.8, 0.9),
       treat_prop %in% nearest_vector,
       NW %in% this_NW_set,
@@ -557,7 +701,7 @@ plot_type5_y_versus_prop_cattle_with_insecticide_facet_NW_ttype3 <- function(df,
   p <- df %>% mutate(proph_frequency = set_days_per_year() * proph_ongoing) %>%
     mutate_at(c("proph_frequency", "NW", this_vector_measure, "shape_variable"), as.factor) %>%
     filter(
-      prop_cattle_with_insecticide <= 0.5,
+      #prop_cattle_with_insecticide <= 0.5,
       NW %in% this_NW_set,
       get(this_vector_measure) == this_vector_measure_value,
       proph_frequency %in% c(0, 1, 2, 3, 6, 8)
@@ -606,64 +750,54 @@ plot_type10_R0sen_versus_Rsen <- function(df) {
   p
 }
 
-
-plot_invasion_landscape <- function(prev_threshold, df, ttype) {
-  
-  y_var <- get_treat_var(df, ttype)
-  df <- as.data.frame(df)
-  df$y <- df[, y_var]
-  
-  ymax <- ymax_function(y_var)
-  
-  prev_threshold_label <- paste0("prev > ", prev_threshold)
-  colours <- c("turquoise", "olivedrab3", "tomato", "mediumorchid1", "lightgrey")
-  names(colours) <- c("Sen outcompetes Res", "No Sen & Res can't invade", "Res outcompetes Sen", "No Sen & Res can invade", prev_threshold_label)
-
-  plot <- df %>%
-    filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
-    mutate(Region = case_when(prevalence > prev_threshold ~ prev_threshold_label, TRUE ~ Region)) %>%
-    mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
-    ggplot() +
-    geom_point(aes(x = prop_cattle_with_insecticide, y = y, colour = Region, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
-    scale_color_manual(values = colours) +
-    xlab(my_label("prop_cattle_with_insecticide", "other")) +
-    ylab(my_label(y_var)) +
-    facet_wrap(~ NW + cc_or_vh_ratio, labeller = label_both) +
-    # ggtitle(paste(
-    #   "Treatment type = ", unique(df$treatment_type), "; ",
-    #   "Use carrying capacity = ", unique(df$use_carrying_capacity), "; ",
-    #   "Maintain vector pop = ", unique(df$maintain_vector_pop)
-    # )) +
-    ggtitle(paste(
-      "Treatment type = ", unique(df$treatment_type)
-    )) +
-    ylim(c(0, ymax)) +
-    scale_shape_manual(values = c(1, 16)) +
-    labs(shape = my_label("R0sen_gt_1")) +
-    theme_bw()
-    #my_theme()
-
-  plot
-}
+my_labeller <- labeller(
+  NW = function(x) paste0(my_label("NW"), ": ", x),
+  cc_or_vh_ratio = function(x) paste0("Vector host ratio:", x)
+)
 
 
-plot_other_landscape <- function(df, colour_var, ttype) {
+
+plot_other_landscape <- function(df, colour_var, max_value, ttype, panel_type = "all") {
   df <- df %>% mutate(colour_var = .data[[colour_var]])
   #df$colour_var <- df[, colour_var]
   y_var <- get_treat_var(df, ttype)
   df <- as.data.frame(df)
   df$y <- df[, y_var]
-  ymax <- ymax_function(y_var)
   
-  plot <- df %>%
+  all_levels <- c("R0sen > 1", "R0sen < 1", "R0sen = 0")
+  
+  df$R0sen_gt_1 <- factor(df$R0sen_gt_1, levels = all_levels)
+  
+  
+    if (panel_type == "single") {
+    plot_this <- df %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
-    ggplot() +
+    filter(Baseline_vector_host_ratio == 20, NW == 100)
+    pt_size = 5.0
+    contour_label_size = 0.5
+    contour_linewidth <- 1.0
+    } else {
+      plot_this <- df %>%
+      filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
+        mutate(cc_or_vh_ratio = get(this_vector_measure))
+      pt_size = 2.0
+      contour_label_size = 0.5
+      contour_linewidth <- 1.0
+    }
+    
+    plot <- plot_this %>% ggplot() +
     geom_point(aes(x = prop_cattle_with_insecticide, y = y, 
-                   colour = colour_var, shape = R0sen_gt_1), size = 2, show.legend = TRUE) +
+                   colour = colour_var, shape = R0sen_gt_1), size = 4, show.legend = TRUE) +
+      # geom_contour(data = plot_this, aes(
+      #   x = prop_cattle_with_insecticide,
+      #   y = y, z = RiskA), colour = "grey30", linewidth = contour_linewidth) +
+      # geom_label_contour(data = plot_this, aes(
+      #   x = prop_cattle_with_insecticide,
+      #   y = y, z = RiskA), colour = "grey30", label.size = contour_label_size) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
     ylab(my_label(y_var)) +
-    facet_wrap(~ NW + cc_or_vh_ratio, labeller = label_both) +
+    facet_wrap(~ NW + cc_or_vh_ratio, labeller = my_labeller) +
     # ggtitle(paste(
     #   "Treatment type = ", unique(df$treatment_type), "; ",
     #   "Use carrying capacity = ", unique(df$use_carrying_capacity), "; ",
@@ -672,20 +806,27 @@ plot_other_landscape <- function(df, colour_var, ttype) {
     ggtitle(paste(
       "Treatment type = ", my_label(unique(df$treatment_type))
     )) + 
-    scale_colour_gradientn(colours = terrain.colors(15)) +
-    ylim(c(0, ymax)) +
-    scale_shape_manual(values = c(4, 16)) +
+    scale_colour_gradientn(colours = terrain.colors(15), limits = c(0, max_value)) +
+    #ylim(c(0, ymax)) +
+    scale_y_continuous(breaks = seq(0, ymax_function(y_var), by = ymax_function(y_var) / 4)) +
+    scale_shape_manual(values = c(16, 1, 4), drop = FALSE) +
     labs(colour = my_label(colour_var), shape = my_label("R0sen_gt_1")) +
-    #my_theme()
-    theme_bw()
+    my_theme_invasion()
   
-  # output_label <- "plot_type16_other"
-  # output_filename <- paste0(folder_name, output_label, "_ttype", ttype, "_spec_", spec, ".pdf")
-  # ggsave(
-  #   filename = output_filename,
-  #   width = 0.9 * my_pdfwidth(), height = 0.9 * my_pdfheight()
-  # )
-  # plot
+  if (mainvecpop == F) {
+    plan = "Collective"
+  } else {
+    plan = "Local"
+  }
+  if (panel_type != "single") {
+    plot <- plot + ggtitle(paste0(
+      "Treatment type: ", my_label(unique(df$label)), "    Insecticide delivery: ", plan
+    )) 
+  } else {
+    plot <- plot + ggtitle(paste0(
+      "Treatment type: ", my_label(unique(df$label))
+    )) 
+  }
   
   plot
 }
@@ -758,6 +899,176 @@ plot_type7_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     coord_cartesian(ylim = c(0, 4)) 
   #coord_cartesian(ylim = c(0, 0.25 * ymax_function(y_var))) 
   p
+}
+
+
+rescale_fitness_and_Rres <- function(df, new_fitness) {
+  current_fitness <- unique(df$fit_adj_new)
+  rescale <- new_fitness / current_fitness
+  new_df <- df %>% mutate(fit_adj_new = fit_adj_new * rescale, Rres_final = Rres_final * rescale)
+  new_df
+}
+
+create_df_with_all_fitnesses <- function(df, fitness_vec) {
+  new_df <- data.frame()
+  for (fitness in fitness_vec) {
+    rescaled_df <- rescale_fitness_and_Rres(df, fitness)
+    new_df <- rbind(new_df, rescaled_df)
+  }
+  new_df
+}
+
+plot_type8 <- function(df, ttype) {
+  fitness_vec <- seq(0.4, 1.0, by = 0.05)
+  new_df <- create_df_with_all_fitnesses(df, fitness_vec)
+  
+  if (ttype != 3) {
+  plot_this <- new_df %>%
+    filter(Rres_final < 1) %>%
+    group_by(NW, prop_cattle_with_insecticide, fit_adj_new) %>%
+    summarise(max_drug_use = max(treat_prop))
+  } else {
+    plot_this <- new_df %>%
+      filter(Rres_final < 1) %>%
+      group_by(NW, prop_cattle_with_insecticide, fit_adj_new) %>%
+      summarise(max_drug_use = max(treatments_per_year))
+  }
+  
+  p <- plot_this %>%
+    # filter(NW == 100) %>%
+    #filter(prop_cattle_with_insecticide < 0.25) %>%
+    mutate(NW = as.factor(NW)) %>%
+    mutate(prop_cattle_with_insecticide = as.factor(prop_cattle_with_insecticide)) %>%
+    ggplot(aes(
+      y = max_drug_use, x = fit_adj_new,
+      colour = prop_cattle_with_insecticide
+    )) +
+    geom_point() +
+    geom_line() +
+    geom_vline(xintercept = 0.8, linetype = "dashed") +
+    facet_wrap(~NW) +
+    labs(colour = my_label("prop_cattle_with_insecticide")) +
+    xlab(my_label("fit_adj_new")) + ylab("Maximum treatment") +
+    my_theme()
+  
+  p
+}
+
+
+
+plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop, 
+                                    panel_type = "all", with_contours = FALSE, with_grey = TRUE) {
+  
+  #df <- df %>% mutate(Region = case_when(R0sen < 1e-06 ~ "R0_eq_0", TRUE ~ Region))
+  all_levels <- c("R0sen > 1", "R0sen < 1", "R0sen = 0")
+  
+  df$R0sen_gt_1 <- factor(df$R0sen_gt_1, levels = all_levels)
+  
+  y_var <- get_treat_var(df, ttype)
+  df <- as.data.frame(df)
+  df$y <- df[, y_var]
+
+  ymax <- ymax_function(y_var)
+
+  prev_threshold_label <- paste0("prev > ", prev_threshold)
+  colours <- c("turquoise", "olivedrab3", "tomato", "mediumorchid1", "grey80")
+  names(colours) <- c("Sen outcompetes Res", "No Sen & Res can't invade", "Res outcompetes Sen", "No Sen & Res can invade", "R0_eq_0")
+
+  if (panel_type == "single") {
+  plot_this <- df %>%
+    # filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
+    filter(near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
+    mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
+    filter(Baseline_vector_host_ratio == 20, NW == 100)
+  pt_size = 4.0
+  stroke_size = 1.25
+  contour_label_size = 0.5
+  contour_linewidth <- 1.0
+  } else {
+    plot_this <- df %>%
+      # filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
+      filter(near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
+      mutate(cc_or_vh_ratio = get(this_vector_measure))
+    pt_size = 2.0
+    stroke_size = 1.0
+    contour_label_size = 0.5
+    contour_linewidth <- 1.0
+  }
+
+  plot <- ggplot() +
+    geom_point(data = plot_this, aes(
+      x = prop_cattle_with_insecticide, y = y, colour = Region,
+      shape = R0sen_gt_1
+    ), size = pt_size, stroke = stroke_size, show.legend = TRUE) +
+    # geom_contour(data = plot_this, aes(
+    #   x = prop_cattle_with_insecticide, 
+    #   y = y, z = prevalence), colour = "grey30", linewidth = contour_linewidth) +
+    # geom_label_contour(data = plot_this, aes(
+    #   x = prop_cattle_with_insecticide, 
+    #   y = y, z = prevalence), colour = "grey30", label.size = contour_label_size) +
+    scale_color_manual(values = colours) +
+    xlab(my_label("prop_cattle_with_insecticide", "other")) +
+    ylab(my_label(y_var)) +
+    facet_wrap(~ NW + cc_or_vh_ratio, labeller = my_labeller) +
+    ylim(c(0, ymax)) +
+    # scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4)) +
+    scale_y_continuous(breaks = seq(0, ymax_function(y_var), by = ymax_function(y_var) / 4)) +
+    scale_shape_manual(values = c(16, 1, 4), drop = FALSE) +
+    labs(shape = my_label("R0sen_gt_1")) +
+    my_theme_invasion()
+  
+  if (with_contours == TRUE) {
+  plot <- plot + geom_contour(data = plot_this, aes(
+       x = prop_cattle_with_insecticide, 
+       y = y, z = prevalence), colour = "grey30", linewidth = contour_linewidth) +
+    # geom_text(
+    #   stat = "contour",
+    #   aes(label = after_stat(level)),
+    #   size = 3
+    # )
+     geom_label_contour(data = plot_this, aes(
+        x = prop_cattle_with_insecticide, 
+        y = y, z = prevalence), colour = "grey30", label.size = contour_label_size)
+  }
+  
+  with_grey <- TRUE
+  if (with_grey == TRUE) {
+    plot_this_grey <- plot_this %>% filter(R0sen < 1e-06)
+    plot <- plot + geom_point(data = plot_this_grey, aes(
+      x = prop_cattle_with_insecticide, y = y
+    ), colour = "grey90", shape = 4, size = pt_size, stroke = 1.0)
+  }
+  
+  if (mainvecpop == F) {
+    plan = "Collective"
+  } else {
+    plan = "Local"
+  }
+  if (panel_type != "single") {
+    plot <- plot + ggtitle(paste0(
+         "Treatment type: ", my_label(unique(df$label)), "    Insecticide delivery: ", plan
+       )) 
+  } else {
+    plot <- plot + ggtitle(paste0(
+      "Treatment type: ", my_label(unique(df$label))
+    )) 
+  }
+
+  plot
+}
+
+
+get_subset <- function(df_ttype1, df_ttype2, df_ttype3, ttype) {
+  if (ttype == 1) {
+    df <- df_ttype1_F
+  }
+  if (ttype == 2) {
+    df <- df_ttype2_F
+  }
+  if (ttype == 3) {
+    df <- df_ttype3_F
+  }
+  df
 }
 
 
