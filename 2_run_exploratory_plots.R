@@ -130,7 +130,7 @@ df <- simplify_outputs(all_simulations_summary)
 #saved_simulations <- all_simulations_summary
 saved_simulations <- all_simulations_summary
 filename <- get_filename()
-#save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
 saved_simulations %>% filter(!(treat_prop == 0 & proph_ongoing == 0) ) %>%
   select(NW, treatment_type, treat_prop, proph_ongoing, prevalence, 
