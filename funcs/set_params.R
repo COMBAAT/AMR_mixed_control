@@ -80,9 +80,11 @@ get_baseline_parameters <- function() {
   cattle_lifespan <- 5 * days_per_year # 1000 for Hargrove
   cattle_incubation_period <- 15 # 0.0001 for Hargrove
   cattle_infection_period <- 100
-  cattle_proph_full_protection_period <- 60
+  cattle_proph_full_protection_period <- 80
   cattle_proph_partial_protection_period <- 30
   cattle_treatment_period <- 3 # 0.1 for Hargrove
+  
+  #cfr = 0.01 # case fatality rate
 
   wildlife_lifespan <- 1 * days_per_year
   wildlife_infection_period <- cattle_infection_period
@@ -228,8 +230,12 @@ set_parameters <- function(this_scenario) {
   death_c <- birth_c
   death_p <- death_c
 
-
-  treatment <- treat_prop * (sigma_c + death_c) / (1 - treat_prop)
+  #calculate death rate due to disease and treatment rate accounting for cfr
+  cfr_eff <- (1 - treat_prop) * prob_death_from_disease
+  death_dis <- cfr_eff / (1 - cfr_eff - treat_prop) * (sigma_c + death_c + proph_ongoing)
+  treatment <- treat_prop / (1 - cfr_eff - treat_prop) * (sigma_c + death_c + proph_ongoing)
+  
+  #treatment <- treat_prop * (sigma_c + death_c) / (1 - treat_prop)
 
   if (treatment_type == "curative") {
     treatment_q <- treatment
@@ -333,7 +339,7 @@ set_parameters <- function(this_scenario) {
     birth_w, death_w, gamma_w, sigma_w,
     birth_v, death_v, gamma_v, ten2fed,
     treatment_p, treatment_q, sigma_st,
-    emergence_p, emergence_q, 
+    emergence_p, emergence_q, death_dis,
     #waning_from_partial_protection, 
     waning_from_PE, 
     waning_from_PP, 
