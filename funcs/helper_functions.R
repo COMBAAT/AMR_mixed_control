@@ -386,8 +386,8 @@ create_data_subsets <- function(df, option) {
                       treatments_per_year = proph_ongoing * set_days_per_year())
   if (option == 1) {
     subset <- df %>%
-      filter(proph_ongoing == 0, treatment_type == "curative") %>%
-      mutate(label = "responsive_curative") %>%
+      filter(proph_ongoing == 0, treatment_type == "curative" | treatment_type == "quick" ) %>%
+      mutate(laXbel = "responsive_curative") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$treat_prop)) <= 1) {
@@ -400,7 +400,7 @@ create_data_subsets <- function(df, option) {
   if (option == 2) {
     subset <- df %>%
       filter(proph_ongoing == 0, treatment_type == "longlasting") %>%
-      mutate(label = "responsive_longlasting") %>%
+      mutate(laXbel = "responsive_longlasting") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$treat_prop)) <= 1) {
@@ -413,7 +413,7 @@ create_data_subsets <- function(df, option) {
   if (option == 3) {
     subset <- df %>%
       filter(treat_prop == 0) %>% 
-      mutate(label = "proph_ongoing", treatment_type = "proph_ongoing") %>%
+      mutate(laXbel = "proph_ongoing", treatment_type = "proph_ongoing") %>%
       distinct()
     n <- nrow(subset)
     if (length(unique(subset$proph_ongoing)) <= 1) {
