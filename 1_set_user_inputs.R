@@ -10,7 +10,7 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "Jan_extra_insecticide",
+    general_descriptor = "Jan_test",
     current_descriptor = "_2"
   )
   user_inputs
@@ -24,7 +24,7 @@ create_multiple_scenarios <- function() {
   K_host_ratio <- c(30, 50, 70)     # carrying capacity per host
   treat_propA <- seq(0.0, 0.9, by = 0.1)
   treat_propB <- seq(0.91, 0.99, by = 0.02)
-  treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
+  treat_prop <- c(0, 0.5) #c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
   #prop_cattle_with_insecticide <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6) #c(seq(0.0, 0.95, by = 0.05), 0.99)
   prop_cattle_with_insecticide <- c(0.35, 0.45, 0.55)
@@ -32,7 +32,7 @@ create_multiple_scenarios <- function() {
   days_per_year <- set_days_per_year()
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
   prop_prophylaxis_at_birth <- c(0.0)
-  proph_ongoing <- c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9) / days_per_year
+  proph_ongoing <- c(0, 6) / days_per_year #c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9) / days_per_year
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
