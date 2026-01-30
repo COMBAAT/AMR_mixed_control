@@ -92,7 +92,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   waning_from_PS <- parms["waning_from_PS"]
   waning_F2S <- parms["waning_F2S"]
   partial_susceptibility_proph_cattle <- parms["partial_susceptibility_proph_cattle"]
-  prob_death_from_disease <- parms["prob_death_from_disease"]
+  death_dis <- parms["death_dis"]
 
   ## ----- Wildlife
   birth_w <- parms["birth_w"]
@@ -139,8 +139,10 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * prob_infection_to_host * CS_frac * VIs * bite_frac_cattle(NC, N) -
     biterate * prob_infection_to_host * fit_adj * CS_frac * VIr * bite_frac_cattle(NC, N) -
     proph_ongoing * CS +
-    prob_death_from_disease * sigma_c * PIs +
-    prob_death_from_disease * sigma_c * PIr +
+    death_dis * PIs +
+    death_dis * PIr +
+    death_dis * CIs +
+    death_dis * CIr +
     sigma_c * CIs +
     sigma_c * CIr +
     sigma_st * CTs +
@@ -180,7 +182,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CIs -
     sigma_c * CIs +
     waning_from_PI * PIs -
-    death_c * CIs
+    death_c * CIs -
+    death_dis * CIs
     
 
   dCIr.dt <- gamma_c * CEr -
@@ -189,7 +192,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     proph_ongoing * CIr -
     sigma_c * CIr +
     waning_from_PI * PIr -
-    death_c * CIr
+    death_c * CIr -
+    death_dis * CIr
     
 
   dCTs.dt <- treatment_q * CIs -
@@ -224,8 +228,10 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_frac * VIs * bite_frac_cattle(NC, N) - 
     biterate * prob_infection_to_host * fit_adj * PS_frac * VIr * bite_frac_cattle(NC, N) - 
     proph_ongoing * PS +
-    (1 - prob_death_from_disease) * sigma_c * PIs + 
-    (1 - prob_death_from_disease) * sigma_c * PIr + 
+    #(1 - death_dis) * sigma_c * PIs + 
+    #(1 - death_dis) * sigma_c * PIr + 
+    sigma_c * PIs + 
+    sigma_c * PIr + 
     sigma_st * PTs + 
     sigma_c * PTr - 
     waning_from_PS * PS - 
@@ -271,7 +277,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_from_PI * PIs +
     waning_from_PP * PPs - 
     proph_ongoing * PIs -
-    death_c * PIs 
+    death_c * PIs -
+    death_dis * PIs
 
   dPIr.dt <- gamma_c * PEr - 
     treatment_q * PIr - 
@@ -281,7 +288,8 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
     waning_from_PI * PIr + 
     waning_from_PP * PPr - 
     proph_ongoing * PIr -
-    death_c * PIr
+    death_c * PIr -
+    death_dis * PIr
 
   dPTs.dt <- treatment_q * PIs - 
     sigma_st * PTs - 
