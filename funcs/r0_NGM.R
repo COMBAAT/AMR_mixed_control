@@ -31,7 +31,7 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
 
   # CI equation
   Sigma[3, 1] <- gamma_c # from CE
-  Sigma[3, 3] <- -(death_c + sigma_c + treatment_p + treatment_q + proph_ongoing) # death, reovery or treatment of CI
+  Sigma[3, 3] <- -(death_c + sigma_c + death_dis + treatment_p + treatment_q + proph_ongoing) # death, reovery or treatment of CI
   Sigma[3, 7] <- waning_from_PI # waning from PI to CI
 
   # CT equation
@@ -48,7 +48,7 @@ R_calc_sen_or_res2 <- function(params, Nc, Npf, Nps, Nw, Nv, is_strain_sensitive
 
   # PI equation
   Sigma[7, 5] <- gamma_c # from PE
-  Sigma[7, 7] <- -(death_c + sigma_c + treatment_p + treatment_q + proph_ongoing + waning_from_PI) # death, recovery or treatment of PI
+  Sigma[7, 7] <- -(death_c + sigma_c + death_dis + treatment_p + treatment_q + proph_ongoing + waning_from_PI) # death, recovery or treatment of PI
   Sigma[7, 9] <- +waning_from_PP # waning from PP to PI
 
   # PT equation
