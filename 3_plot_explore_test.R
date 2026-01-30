@@ -20,8 +20,8 @@ if (load_latest_file == TRUE) {
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/Aug01_merged2.Rda")
-  folder_name <- "output/Aug01_merged2/"
+  load("output/Oct24prevalence_newBtest.Rda")
+  folder_name <- "output/test_scripts/"
   dir.create(folder_name)
 }
 
@@ -33,7 +33,7 @@ saved_simulations <- saved_simulations %>%
 # Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 #ttype = 3
-which_ttypes <- c(1)
+which_ttypes <- c(1:3)
 which_mainvecpop <- c(F, T)
 which_fit_adj <- c(0.8) #c(0.6, 0.8, 0.95)
  for (ttype in which_ttypes) {
@@ -42,8 +42,8 @@ which_fit_adj <- c(0.8) #c(0.6, 0.8, 0.95)
      for (this_fit_adj in which_fit_adj) {
        
 include_plot_type1 <- TRUE
-include_plot_type2 <- FALSE
-include_plot_type3 <- FALSE
+include_plot_type2 <- TRUE
+include_plot_type3 <- TRUE
 include_plot_type4 <- TRUE
 include_plot_type5 <- TRUE
 include_plot_type6 <- TRUE
@@ -88,7 +88,7 @@ if (use_cc == TRUE) {
 } else {
   subset_for_plotting <- subset_for_plotting #%>% mutate(Baseline_vector_host_ratio = equil_vector_pop_baseline / hosts) 
   #this_K_host_ratio <- 30
-  this_vector_measure_value <- 30
+  this_vector_measure_value <- 25
   this_vector_measure <- "Baseline_vector_host_ratio"
 }
 
@@ -108,7 +108,13 @@ subset_for_invasion_plots <- subset_for_invasion_plots %>%
 
 subset_for_plotting <- as.data.frame(subset_for_invasion_plots)
 
-subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% filter(prop_cattle_with_insecticide %in% seq(0, 0.5, 0.1))
+subset_for_plotting_reduced_insecticide <- subset_for_plotting %>% 
+filter(!near(prop_cattle_with_insecticide, 0.05), !near(prop_cattle_with_insecticide, 0.15), 
+       !near(prop_cattle_with_insecticide, 0.25), !near(prop_cattle_with_insecticide, 0.35),
+       !near(prop_cattle_with_insecticide, 0.45), !near(prop_cattle_with_insecticide, 0.55), 
+       !near(prop_cattle_with_insecticide, 0.65), !near(prop_cattle_with_insecticide, 0.75),
+       !near(prop_cattle_with_insecticide, 0.85), !near(prop_cattle_with_insecticide, 0.95), 
+       !near(prop_cattle_with_insecticide, 0.91), !near(prop_cattle_with_insecticide, 0.6)) 
 
 # -----------------------------------------------------------------------------
 # Create a list to store all the plots for post processing
