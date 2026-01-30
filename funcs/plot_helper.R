@@ -31,7 +31,19 @@
 library(dplyr)
 library(ggplot2)
 library(gghighlight)
-source("funcs/plot_settings.R")
+#source("funcs/plot_settings.R")
+
+my_ggsave <- function(plot, filename, width, height) {
+  ggsave(
+    plot = plot,
+    filename = filename,
+    width = width,
+    height = height,
+    units = "in",
+    device = cairo_pdf,
+    limitsize = FALSE
+  )
+}
 
 # update to remove the gridlines and make background offwhite for contrast
 my_theme <- function() {
@@ -110,6 +122,9 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "responsive_longlasting") this_label <- "Responsive longlasting"
   if (variable == "proph_ongoing") this_label <- "Ongoing longlasting"
   if (variable == "label") this_label <- "Treatment protocol"
+  if (variable == "BCR_scenario") this_label <- "Benefit cost ratio"
+  if (variable == "sum_averted_production_losses") this_label <- "Avoided losses \n USD per 100 cattle"
+  if (variable == "treat_insecticide_cost") this_label <- "Treatment costs \n USD per 100 cattle"
   this_label
 }
 
@@ -419,7 +434,7 @@ plot_type4_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     this_ncol <- 1
     this_position = "bottom"
   } else {
-    this_ncol <- 3
+    this_ncol <- length(this_NW_set)
     this_position = "right"
   }
 
@@ -767,11 +782,11 @@ plot_other_landscape <- function(df, colour_var, max_value, ttype, panel_type = 
   }
   if (panel_type != "single") {
     plot <- plot + ggtitle(paste0(
-      "Treatment type: ", my_label(unique(df$label)), "    Insecticide delivery: ", plan
+      "Treatment type: ", my_label(unique(df$laXbel)), "    Insecticide delivery: ", plan
     )) 
   } else {
     plot <- plot + ggtitle(paste0(
-      "Treatment type: ", my_label(unique(df$label))
+      "Treatment type: ", my_label(unique(df$laXbel))
     )) 
   }
   
@@ -926,7 +941,7 @@ plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop,
     # filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     filter(near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
-    filter(Baseline_vector_host_ratio == 20, NW == 100)
+    filter(Baseline_vector_host_ratio == this_vector_measure_value, NW == 100)
   pt_size = 4.0
   stroke_size = 1.25
   contour_label_size = 0.5
@@ -993,11 +1008,11 @@ plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop,
   }
   if (panel_type != "single") {
     plot <- plot + ggtitle(paste0(
-         "Treatment type: ", my_label(unique(df$label)), "    Insecticide delivery: ", plan
+         "Treatment type: ", my_label(unique(df$laXbel)), "    Insecticide delivery: ", plan
        )) 
   } else {
     plot <- plot + ggtitle(paste0(
-      "Treatment type: ", my_label(unique(df$label))
+      "Treatment type: ", my_label(unique(df$laXbel))
     )) 
   }
 
