@@ -63,7 +63,9 @@ append_epi_outputs_to_df <- function(df) {
     Incidence_P = gamma_c * (PEs_final + PEsX_final) * days_per_year,
     prevalence_wildlife = WIs_final / Wildlife_total_final, 
     prevalence_vectors = VIs_final / Vector_total_final,
-    waning_from_PI =  waning_from_PI * PIs_final * days_per_year
+    waning_from_PI =  waning_from_PI * PIs_final * days_per_year,
+    Deaths_due_disease = death_dis * (CIs_final + PIs_final) * days_per_year,
+    Deaths_due_disease2 = prob_death_from_disease * (1 - treat_prop) * Incidence_new
   )
   df
 }
