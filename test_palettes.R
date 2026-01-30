@@ -68,6 +68,24 @@ projector_cols <- c(
   "#CC79A7"   # purple (still separable when faded)
 )
 
+projector_cols_warm_first <- c(
+  "#E69F00",  # orange
+  "#D55E00",  # vermillion
+  "#0072B2",  # strong blue
+  "#009E73",  # bluish green
+  "#4D4D4D",  # dark grey (last)
+  "#CC79A7"  # purple
+)
+
+projector6 <- c(
+  "#E69F00", # orange  (very stable)
+  "#D55E00", # vermillion (very stable)
+  "#0072B2", # blue (stable)
+  "#005B4F", # deep teal (stronger than #009E73 on projectors)
+  "#4D4D4D",  # dark grey (stable)
+  "#8B3A62" # dark purple/magenta (holds up better than #CC79A7)
+)
+
 # Example data: 6 trajectories
 df <- expand.grid(
   x = seq(0, 10, length.out = 100),
@@ -76,9 +94,9 @@ df <- expand.grid(
 df$y <- with(df, as.numeric(group) + sin(x))
 
 base_plot <- ggplot(df, aes(x, y, colour = group)) +
-  geom_line(linewidth = 1.4) +
+  geom_line(linewidth = 4) +
   my_theme() +
-  theme(legend.position = "right")
+  theme(legend.position = "none")
 
 p_default <- base_plot +
   scale_colour_discrete() +
@@ -108,7 +126,15 @@ p_okabe_projector <- base_plot +
   scale_colour_manual(values = projector_cols) +
   ggtitle("Projector optimised")
 
+p_okabe_projector_warm_first <- base_plot +
+  scale_colour_manual(values = projector_cols_warm_first) +
+  ggtitle("Projector warm first")
+
+p_okabe_projector6 <- base_plot +
+  scale_colour_manual(values = projector6) +
+  ggtitle("Projector 6")
 
 
-
-(p_default | p_dark2) / (p_okabe_projector | p_okabe) / (p_okabe_brown | p_okabe_grey)
+p <- (p_default | p_okabe_projector6) / (p_okabe_projector_warm_first | p_okabe) / (p_okabe_brown | p_okabe_grey)
+p
+ggsave(plot = p, file = "test_palettes.pdf", height = 10, width = 6)
