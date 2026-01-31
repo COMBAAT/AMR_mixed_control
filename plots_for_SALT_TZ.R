@@ -132,7 +132,7 @@ y_var <- "Incidence"
 y_max <- 1000
 plot_this$y <- plot_this[, y_var]
 
-for (highlight_groups in 6:6){
+for (highlight_groups in 1:6){
   cols <- make_cols_highlight(highlight_props = props_all[1:highlight_groups], 
                               props_all = props_all,
                               base_cols = base_cols)
@@ -336,15 +336,18 @@ df_slope_2.5$y <- 2.5 * df_slope_2.5$x
 df_slope_2.5
 
 all_data_for_frontier <- all_data_with_cost_analysis %>%
-  filter(treat_prop < 0.6) %>% 
+  #filter(treat_prop < 0.6) %>% 
   #filter(treatments_per_year < 7) %>%
-  filter(K_variable == 50) 
+  filter(K_variable == 50) %>%
+  #filter(prevalence < 0.1) %>%
+  filter(maintain_vector_pop == main_vec)
+
 
 all_data_BCR_max <- all_data_for_frontier %>%
   group_by(NW, treatment_type) %>% 
   summarise(BCR_max = max(BCR_scenario, na.rm = TRUE))
 
-p <- all_data_for_frontier %>% filter(prevalence < 0.1) %>%
+p <- all_data_for_frontier %>%
   mutate_at(c("prop_cattle_with_insecticide", "NW"), as.factor) %>%
   ggplot() +
   geom_point(aes(x = treat_insecticide_cost, y = sum_averted_production_losses, 
