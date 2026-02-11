@@ -57,11 +57,4 @@ output/
 .DS_Store
 
 # useful folder
-for_deletion/
-useful/
-old/
-fertility_model/
-messages.R
-test.csv
-ggplot_shapes.R
-gghighlight_tutorial.R
+not_for_github/
