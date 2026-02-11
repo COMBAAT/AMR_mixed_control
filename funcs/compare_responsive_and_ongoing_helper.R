@@ -68,7 +68,7 @@ plot_type21 <- function(df, x_var, y_var) {
 }
 
 
-plot_type22_y_versus_treat_prop_facet_treatment_type <- function(df, y_var, this_NW_set, this_vector_measure, ttype) {
+plot_type22 <- function(df, y_var, this_NW_set, this_vector_measure, ttype) {
   
   x_var <- get_treat_var(df, ttype) 
   df$x <- df[, x_var]
@@ -97,7 +97,7 @@ plot_type22_y_versus_treat_prop_facet_treatment_type <- function(df, y_var, this
   p
 }
 
-plot_type23_y_versus_treat_prop_facet_treatment_type <- function(df, y_var, this_vector_measure, 
+plot_type23 <- function(df, y_var, this_vector_measure, 
                                                                  this_vector_measure_value,
                                                                  this_NW_set, ttype) {
   
