@@ -97,14 +97,7 @@ subset_for_invasion_plots <- subset_for_plotting %>%
   group_by(treat_prop, NW, K, use_carrying_capacity, maintain_vector_pop) %>%
   mutate(R0sen_gt_1 = case_when(R0sen_final > 1 ~ "R0sen > 1", 
                                 R0sen_final < 1 & R0sen_final > 1e-06 ~ "R0sen < 1",
-                                R0sen_final <= 1e-06 ~ "R0sen = 0")) %>%
-  mutate(R0sen_temp = case_when(R0sen_final < 1 ~ 0, TRUE ~ R0sen_final)) %>%
-  mutate(closest_to_1_location = which.min(abs(R0sen_temp - 1)),
-         closest_to_1_value = prop_cattle_with_insecticide[closest_to_1_location]) %>% ungroup()
-
-subset_for_invasion_plots <- subset_for_invasion_plots %>%
-  mutate(closest_true_false = ifelse(closest_to_1_value == prop_cattle_with_insecticide, TRUE, FALSE
-  ))
+                                R0sen_final <= 1e-06 ~ "R0sen = 0"))
 
 subset_for_plotting <- as.data.frame(subset_for_invasion_plots)
 
