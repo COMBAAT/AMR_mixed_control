@@ -33,7 +33,7 @@ source("1_set_user_inputs.R")
 # View inputs
 user_inputs <- get_user_inputs()
 if (user_inputs$multiple_scenarios == TRUE) {
-  scenarios_df <- create_multiple_scenarios()
+  scenarios_df <- create_multiple_scenarios_new()
 } else {
   scenarios_df <- create_single_scenario()
 }
