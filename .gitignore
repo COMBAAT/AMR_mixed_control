@@ -57,6 +57,7 @@ output/
 .DS_Store
 
 # useful folder
+for_deletion/
 useful/
 old/
 fertility_model/
