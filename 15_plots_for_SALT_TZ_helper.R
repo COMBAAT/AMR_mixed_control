@@ -61,8 +61,8 @@ make_cols_highlight <- function(highlight_props,
 ###############################################################################
 get_core_plot <- function(df, ttype, y_max, x_var_label, x_breaks, x_labs, plot_titles) {
   p <- ggplot(df) +
-    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide), size = my_pt_size) +
-    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide), linewidth = my_line_width) +
+    geom_jitter(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), size = my_pt_size) +
+    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), linewidth = my_line_width) +
     coord_cartesian(ylim = c(0, y_max)) +
     scale_x_continuous(breaks = x_breaks, labels = x_labs) +
     labs(colour = "Insecticide \n coverage") +
@@ -90,12 +90,12 @@ get_Rres_plot <- function(df, ttype, y_max, x_var_label, x_breaks, x_labs, plot_
       alpha = rectangle_alpha,
       inherit.aes = FALSE
     ) +
-    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide), size = my_pt_size) +
-    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide), linewidth = my_line_width) +
+    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), size = my_pt_size) +
+    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), linewidth = my_line_width) +
     coord_cartesian(ylim = c(0, y_max)) +
     scale_x_continuous(breaks = x_breaks, labels = x_labs) +
     labs(colour = "Insecticide \n coverage") +
-    ylab(my_label(y_var)) + xlab(x_var_label) +
+    ylab("Resistant strain spread (R)") + xlab(x_var_label) +
     scale_colour_manual(values = cols, limits = names(base_cols), drop = FALSE) +
     ggtitle(plot_titles[ttype]) +
     my_theme_SALT_TZ()
@@ -117,16 +117,16 @@ get_BCR_plot <- function(df, ttype, y_max, x_var_label, x_breaks, x_labs, plot_t
       alpha = alpha_rectangle,
       inherit.aes = FALSE
     ) +
-    geom_rect(
-      xmin = -Inf, xmax = Inf, ymin = 1, ymax = 2.5,
-      fill = "grey90",
-      alpha = alpha_rectangle,
-      inherit.aes = FALSE
-    ) +
-    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide), size = my_pt_size) +
-    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide), linewidth = my_line_width) +
+    # geom_rect(
+    #   xmin = -Inf, xmax = Inf, ymin = 1, ymax = 2.5,
+    #   fill = "grey90",
+    #   alpha = alpha_rectangle,
+    #   inherit.aes = FALSE
+    # ) +
+    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), size = my_pt_size) +
+    geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), linewidth = my_line_width) +
     geom_abline(aes(slope = 0, intercept = 1), linetype = "dashed") +
-    geom_abline(aes(slope = 0, intercept = 2.5), linetype = "dashed") +
+    #geom_abline(aes(slope = 0, intercept = 2.5), linetype = "dashed") +
     coord_cartesian(ylim = c(0, y_max)) +
     scale_x_continuous(breaks = x_breaks, labels = x_labs) +
     labs(colour = "Insecticide \n coverage") +
@@ -179,5 +179,6 @@ plot_panel_by_treatment_type <- function(plot_this, y_var, y_max, rectangle = FA
       )
     )
   p
+  #plots[[1]]
 }
 ###############################################################################
