@@ -533,26 +533,26 @@ plot_type6_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
    n_x <- length(x_vec)
    
    # set label position
-   if (x_var == "treat_prop") {
-     this_by = 2
-     this_nudge = 0.075
-     this_end = 11
-     df_test <- data.frame(x = x_vec[n_x - seq(1, this_end, by = this_by) ],
-                           prop_cattle_with_insecticide = insecticide_vec) 
-   } else {
-     this_nudge = 0
-     n_positions <- length(insecticide_vec)
-     positions <- sort(sample(x_vec, n_positions), decreasing = TRUE)
-     positions <- c(12, 10, 8, 6, 4, 2)
-     df_test <- data.frame(x = positions,
-                           prop_cattle_with_insecticide = insecticide_vec) 
-   }
-   
-   df_labels <- inner_join(df_test, plot_this) %>% 
-     mutate(label = prop_cattle_with_insecticide, 
-            x_location = x - this_nudge,
-            y_location = Rres_final)
-   # end set labels
+   # if (x_var == "treat_prop") {
+   #   this_by = 2
+   #   this_nudge = 0.075
+   #   this_end = 11
+   #   df_test <- data.frame(x = x_vec[n_x - seq(1, this_end, by = this_by) ],
+   #                         prop_cattle_with_insecticide = insecticide_vec) 
+   # } else {
+   #   this_nudge = 0
+   #   n_positions <- length(insecticide_vec)
+   #   positions <- sort(sample(x_vec, n_positions), decreasing = TRUE)
+   #   positions <- c(12, 10, 8, 6, 4, 2)
+   #   df_test <- data.frame(x = positions,
+   #                         prop_cattle_with_insecticide = insecticide_vec) 
+   # }
+   # 
+   # df_labels <- inner_join(df_test, plot_this) %>% 
+   #   mutate(label = prop_cattle_with_insecticide, 
+   #          x_location = x - this_nudge,
+   #          y_location = Rres_final)
+   # # end set labels
   
   p <- plot_this %>%
     ggplot(aes(x, y)) +
@@ -563,16 +563,9 @@ plot_type6_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set,
     geom_abline(aes(intercept = 1, slope = 0), colour = "red") +
     geom_point(aes(shape = Region, colour = Region), size = 1.0 * my_pointsize()) +
     
-    
-    # ggplot(aes(x, y, shape = Region, linetype = prop_cattle_with_insecticide, colour = Region)) +
-    # scale_color_manual(values = colours) +
-    # geom_line(linewidth = 0.5 * my_linewidth(), colour = "grey20") +
-    # 
-    # geom_abline(aes(intercept = 1, slope = 0), colour = "red") +
-    # geom_point(size = 1.0 * my_pointsize()) +
-    geom_label(data = df_labels, aes(x = x_location, y = y_location, label = label),
-                     nudge_x = 0.0,
-                     na.rm = TRUE, colour = "blue", size = 2) +
+    # geom_label(data = df_labels, aes(x = x_location, y = y_location, label = label),
+    #                  nudge_x = 0.0,
+    #                  na.rm = TRUE, colour = "blue", size = 2) +
     facet_wrap(~NW, ncol = this_ncol) +
     xlab(this_xlab) +
     ylab(this_ylab) +
