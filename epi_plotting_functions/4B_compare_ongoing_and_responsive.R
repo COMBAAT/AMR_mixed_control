@@ -100,7 +100,7 @@ get_subset <- function(df_ttype1, df_ttype2, df_ttype3, ttype) {
     plots_var <- list()
     for (ttype in 1:3) {
       plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
-        p <- plot_type22_y_versus_treat_prop_facet_treatment_type(plot_this, y_var,
+        p <- plot_type22(plot_this, y_var,
           this_NW_set = this_NW,
           this_vector_measure = this_vector_measure, ttype)
       plots_var[[ttype]] <- p
@@ -122,7 +122,7 @@ get_subset <- function(df_ttype1, df_ttype2, df_ttype3, ttype) {
     plot_height <- 12
     p <- p +
       plot_annotation(caption = paste0("NW = ", this_NW))
-  plot_name <- paste0("output/ms_figs/4B_use_as_figX1_plot_type22_panel_compare_treatment_types.pdf")
+  plot_name <- paste0("output/ms_figs/4B_use_as_figX1_plot_type22_panel_compare_treatment_protocols.pdf")
   my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 
 ################################

@@ -33,7 +33,7 @@ for (i in 1:n_vars) {
   plots_var <- list()
   for (ttype in 1:3) {
     plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
-    p <- plot_type23_y_versus_treat_prop_facet_treatment_type(
+    p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
       this_vector_measure_value,
@@ -58,7 +58,7 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_fig2_plot_type", 23, "_panel_compare_treatment_types_NEW.pdf")
+plot_name <- paste0("output/ms_figs/4A_use_as_fig2_plot_type", 23, "_panel_compare_treatment_protocols_NEW.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 
 ################################
@@ -73,7 +73,7 @@ for (i in 1:n_vars) {
   plots_var <- list()
   for (ttype in 1:3) {
     plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
-    p <- plot_type23_y_versus_treat_prop_facet_treatment_type(
+    p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
       this_vector_measure_value,
@@ -101,7 +101,7 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_fig3_plot_type", 23, "_panel_compare_treatment_types_NEW2.pdf")
+plot_name <- paste0("output/ms_figs/4A_use_as_fig3_plot_type", 23, "_panel_compare_treatment_protocols_NEW2.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 ################################
 
@@ -114,7 +114,7 @@ for (i in 1:n_vars) {
   plots_var <- list()
   for (ttype in 1:3) {
     plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
-    p <- plot_type23_y_versus_treat_prop_facet_treatment_type(
+    p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
       this_vector_measure_value,
@@ -142,6 +142,6 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_figX3_plot_type", 23, "_panel_compare_treatment_types_NEW3.pdf")
+plot_name <- paste0("output/ms_figs/4A_use_as_figX3_plot_type", 23, "_panel_compare_treatment_protocols_NEW3.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 ################################
