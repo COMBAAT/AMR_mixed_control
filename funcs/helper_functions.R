@@ -427,7 +427,8 @@ create_data_subsets <- function(df, option) {
 
 show_scenarios <- function(scenarios_df) {
   scenario_choice <- scenarios_df %>%
-    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -treatment_type, -proph_ongoing, -K_host_ratio, -hosts) %>%
+    select(-NW, -K, -treat_prop, -prop_cattle_with_insecticide, -treatment_type, -treatment_code, -laXbel,
+           -proph_ongoing, -treatments_per_year, -K_host_ratio, -hosts) %>%
     distinct() %>% 
     arrange(desc(use_carrying_capacity))
   #print("Scenarios choice")
@@ -435,9 +436,11 @@ show_scenarios <- function(scenarios_df) {
   #print(scenario_choice)
 }
 
-select_scenario <- function(scenario_choice, subset, use_cc, mainvecpop) {
+select_scenario <- function(scenario_choice, subset, mainvecpop) {
   scenario_choice_filtered <- scenario_choice %>% 
-    filter(use_carrying_capacity == use_cc, maintain_vector_pop == mainvecpop)
+    filter(
+      #use_carrying_capacity == use_cc, 
+      maintain_vector_pop == mainvecpop)
   subset_for_plotting <- left_join(scenario_choice_filtered, subset)
   subset_for_plotting
 }
@@ -467,13 +470,13 @@ find_nearest_vector <- function(desired_vector, actual_vector) {
 
 
 
-get_subset_for_plotting <- function(scenarios_df, df, option, use_cc, mainvecpop, fit_adj_new = 0.6) {
+get_subset_for_plotting <- function(scenarios_df, df, option, mainvecpop, fit_adj_new = 0.6) {
   # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
   subset <- create_data_subsets(df, option)
   
   # subset further by scenario if addiotnal parameters varied, default is first row
   selected_row <- 1
-  subset_for_plotting <- subset #select_scenario(scenarios_df, subset, use_cc, mainvecpop)
+  subset_for_plotting <- subset
   
   # Adjust fitness post simulation
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = fit_adj_new)
