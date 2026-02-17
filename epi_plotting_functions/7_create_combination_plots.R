@@ -25,43 +25,35 @@ if (load_latest_file == TRUE) {
   dir.create(path)
 }
 
-saved_simulations <- saved_simulations #%>% filter(R0sen <= 2)
+saved_simulations <- saved_simulations 
 
+################################################################################
+mainvecpop <- FALSE
+this_vector_measure_value <- 25
+this_vector_measure <- "Baseline_vector_host_ratio"
+this_NW <- 100
+R0_threshold <- 1.0
+this_insecticide <- 0.0
 
+################################################################################
 plot_titles <- c("Curative drug", "Longlasting drug", "Ongoing prophylaxis")
 labels <- c("responsive_curative", "responsive_longlasting", "proph_ongoing")
 data_subsets <- list()
-use_cc <- FALSE # whether to use carrying capacity or not
-mainvecpop <- FALSE
-spec <- paste0("_", use_cc, "_", mainvecpop)
+#use_cc <- FALSE # whether to use carrying capacity or not
+spec <- paste0("_", mainvecpop)
 for (option in 1:2) {
-  subset <- create_data_subsets(saved_simulations, option)
+  #subset <- create_data_subsets(saved_simulations, option)
+  subset <- saved_simulations %>% filter(treatment_code == option)
   scenario_choice <- show_scenarios(scenarios_df)
   print(scenario_choice)
-  subset_for_plotting <- select_scenario(scenario_choice, subset, use_cc, mainvecpop)
+  subset_for_plotting <- select_scenario(scenario_choice, subset, mainvecpop)
   # adjust fitness post simulation, if desired
   subset_for_plotting <- adjust_fitness(subset_for_plotting, fit_adj_new = 0.8)
   subset_for_plotting$ratio <- subset_for_plotting$Rres_final
-  #data_subsets[[option]] <- get_subset_for_plotting(scenarios_df, saved_simulations, option, use_cc, mainvecpop, fit_adj_new = 0.6)
   subset_for_plotting <- subset_for_plotting 
   data_subsets[[option]] <- subset_for_plotting
 }
 
-################################################################################
-if (use_cc == TRUE) {
-  this_vector_measure <- "Baseline_vector_population"
-  #this_vector_measure_value <- 6000
-  data_subsets[[1]] <- data_subsets[[1]] 
-  data_subsets[[2]] <- data_subsets[[2]]
-} else {
-  #this_vector_measure_value <- 30
-  this_vector_measure <- "Baseline_vector_host_ratio"
-  data_subsets[[1]] <- data_subsets[[1]] #%>% mutate(K = K_host_ratio)
-  data_subsets[[2]] <- data_subsets[[2]] #%>% mutate(K = K_host_ratio)
-}
-this_NW <- 100
-R0_threshold <- 1.0
-this_insecticide <- 0.0
 ################################################################################
 
 # create the selective advantage plots
@@ -84,7 +76,6 @@ for (plot_choice in c("by_insecticide", "by_NW")) {
 }
 
 ################################################################################
-################################################################################
 p4_plots <- list()
 p5_plots <- list()
 panel_plots <- list()
@@ -105,3 +96,5 @@ my_ggsave(plot = panel_both, filename = paste0(path, "panel_both_", "incidence",
 
 panel_final <- wrap_elements(panel_both) + wrap_elements(pSA_inset_both) + plot_layout(guides = "collect", axes = "collect", widths = c(2, 1.5))
 my_ggsave(plot = panel_final, filename = paste0(path, "panel_figureX_with_", "incidence", spec, ".pdf"), width = 12.2, height = 9.0)
+
+################################################################################
