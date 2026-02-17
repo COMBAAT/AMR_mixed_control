@@ -92,6 +92,8 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "coverage") this_label <- "Prophylactic coverage"
   if (variable == "coverage" & split_across_lines == "other") this_label <- "Prophylactic \n coverage"
   if (variable == "treatment_type") this_label <- "Treatment type"
+  if (variable == "laXbel") this_label <- "Treatment type"
+  if (variable == "laXbel" & split_across_lines == "other") this_label <- "Treatment type"
   if (variable == "treatment_type" & split_across_lines == "other") this_label <- "Protocol"
   if (variable == "treatments_per_year") this_label <- "Treatments per year"
   if (variable == "R0sen") this_label <- "R0 sensitive"
@@ -245,7 +247,7 @@ plot_type0_ratio <- function(df, this_vector_measure, ttype) {
     labs(colour = my_label("NW"), shape = my_label(this_vector_measure)) +
     my_theme()
   
-  rhs <- lhs + ylim(c(0, 2)) +
+  rhs <- lhs + coord_cartesian(ylim = c(0, 2)) +
     geom_abline(intercept = 1.0, slope = 0, linetype = "dashed")
   rhs
   
@@ -728,7 +730,7 @@ plot_other_landscape <- function(df, colour_var, max_value, ttype, panel_type = 
     plot_this <- df %>%
     filter(near(treat_prop, 0.95) | near(treat_prop, 0.99) | treat_prop <= 0.9) %>%
     mutate(cc_or_vh_ratio = get(this_vector_measure)) %>%
-    filter(Baseline_vector_host_ratio == 20, NW == 100)
+      filter(Baseline_vector_host_ratio == this_vector_measure_value, NW == 100)
     pt_size = 5.0
     contour_label_size = 0.5
     contour_linewidth <- 1.0
