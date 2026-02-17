@@ -197,7 +197,7 @@ get_baseline_scenarios <- function(test, scenarios_df, option) {
     test_augmented <- left_join(test, baseline_df, by = my_cols, relationship = "many-to-many")
   } else if (option == 3) { # Fixed by LM
     
-    my_cols <- c("NW", "K")
+    my_cols <- c("NW", "K", "maintain_vector_pop")
     
     baseline_df <- test %>%
       filter(proph_ongoing == 0, prop_cattle_with_insecticide == 0) %>%
@@ -224,8 +224,14 @@ get_baseline_scenarios <- function(test, scenarios_df, option) {
         Xmilk_revenue_herd_baseline = Xmilk_revenue_herd,
         Xcalf_revenue_herd_baseline = Xcalf_revenue_herd
       )
-    
+    baseline_df %>%
+      count(across(all_of(my_cols))) %>%
+      filter(n > 1) %>% print()
+    print(paste0("baseline_df has this many rows ", nrow(baseline_df)))
+    print(paste0("test has this many rows ", nrow(test)))
     test_augmented <- left_join(test, baseline_df, by = my_cols, relationship = "many-to-many")
+    print(paste0("test augmented has this many rows ", nrow(test_augmented)))
+    test_augmented
   }
 }
 
@@ -256,6 +262,7 @@ economic_analysis <- function(df, system, option) {
                                  treat_prop, prop_cattle_with_insecticide, proph_ongoing) # Added by LM
   
   df <- get_baseline_scenarios(df, scenarios_df, option) # Get baseline scenarios and merge with treatment scenarios
+  print(paste0("line 261, df has this many rows ", nrow(df)))
   #glimpse(df[, tail(names(df), 15)])
   
   if (option == 1) {
