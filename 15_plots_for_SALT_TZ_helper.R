@@ -61,7 +61,7 @@ make_cols_highlight <- function(highlight_props,
 ###############################################################################
 get_core_plot <- function(df, ttype, y_max, x_var_label, x_breaks, x_labs, plot_titles) {
   p <- ggplot(df) +
-    geom_jitter(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), size = my_pt_size) +
+    geom_point(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), size = my_pt_size) +
     geom_line(aes(x = x, y = y, colour = prop_cattle_with_insecticide_factor), linewidth = my_line_width) +
     coord_cartesian(ylim = c(0, y_max)) +
     scale_x_continuous(breaks = x_breaks, labels = x_labs) +
