@@ -7,7 +7,7 @@ source("funcs/helper_functions.R")
 source("funcs/epi_outputs.R")
 source("funcs/plot_helper.R")
 source("funcs/plot_settings.R")
-source("plots_for_TZ_helper.R")
+source("15_plots_for_SALT_TZ_helper.R")
 source("funcs/plot_settings.R")
 
 # Cost analysis scripts
@@ -66,21 +66,28 @@ corrected_data <- corrected_data %>%
   rename(CEsX_final = CEXs_final, CErX_final = CEXr_final)
 
 data_for_analysis <- corrected_data
+table(data_for_analysis$treatment_code)
+data_for_analysis <- data_for_analysis %>% filter(treatments_per_year < 6.5)
 # end temporary fix ------------------------------------------------------------
 
 # subset and rejoin ------------------------------------------------------------
 subsets <- list()
 for (ttype in 1:3){
-  subset <- create_data_subsets(data_for_analysis, ttype)
+  #subset <- create_data_subsets(data_for_analysis, ttype)
+  subset <- data_for_analysis %>% filter(treatment_code == ttype)
   print(nrow(subset))
-  subset$treatment_code <- ttype
+  #subset$treatment_code <- ttype
   subsets[[ttype]] <- subset
 }
-all_data_no_cost_analysis <- data.frame(rbind(subsets[[1]], subsets[[2]], subsets[[3]])) 
+all_data_no_cost_analysis <- data.frame(rbind(subsets[[1]], subsets[[2]], subsets[[3]]))
+all_data_no_cost_analysis <- saved_simulations
 # end subset and rejoin --------------------------------------------------------
 
 ###############################################################################
 # add on cost analyses ---------------------------------------------------------
+nrow(subsets[[1]])
+nrow(subsets[[2]])
+nrow(subsets[[3]])
 for (option in 1:3){
   system <- "Agro-pastoral" #"Agro-pastoral" or "Dairy"
   this_subset <- subsets[[option]]
@@ -93,6 +100,12 @@ for (option in 1:3){
   if (option == 2){cost_df2 <- this_cost_df}
   if (option == 3){cost_df3 <- this_cost_df}
 }
+nrow(subsets[[1]])
+nrow(subsets[[2]])
+nrow(subsets[[3]])
+nrow(cost_df1)
+nrow(cost_df2)
+nrow(cost_df3)
 
 all_data_with_cost_analysis <- rbind(cost_df1, cost_df2, cost_df3)
 
