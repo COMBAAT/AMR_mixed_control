@@ -1,26 +1,11 @@
-rm(list = ls()[!grepl("^(plot|df|this_NW_set|this_vector_measure)", ls())])
+rm(list = ls()[!grepl("^(plot|df|this_NW_set|this_vector_measure|saved_simulations)", ls())])
 source("funcs/plot_helper.R")
 source("funcs/compare_responsive_and_ongoing_helper.R")
 
-# combine df for each treatment type
-df_all_ttype <- rbind(df_ttype1_F, df_ttype2_F, df_ttype3_F,
-                      df_ttype1_T, df_ttype2_T, df_ttype3_T)
-this_NW <- 100
-this_prop_insecticide = 0.0
+#this_NW_set <- c(0, 100, 200)
+#this_vector_measure <- "Baseline_vector_host_ratio"
 
-df_all_ttype <- df_all_ttype #%>% 
-  #mutate(RiskA = PIs_final + PPs_final + CTs_final + PTs_final)
-
-# create dataframe for plotting
-plot_this <- df_all_ttype %>%
-  filter(
-    maintain_vector_pop == F,
-    Baseline_vector_host_ratio %in% c(this_vector_measure_value)
-  ) %>%
-  mutate(prop_cattle_with_insecticide = as.factor(prop_cattle_with_insecticide),
-         Risk_per_treatment = case_when(No_trt_cat > 0 ~ RiskA/No_trt_cat, T ~ NA))
-
-
+# Plotting uses saved_simulations and this_vector_measure; plot functions read in but do not use this_NW_set
 
 
 ################################
@@ -31,16 +16,16 @@ plots_row <- list()
 for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
-  for (ttype in 1:3) {
-    plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
+  for (this_ttype in 1:3) {
+    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
-      this_vector_measure,
+      this_vector_measure, 
       this_vector_measure_value,
       this_NW_set,
-      ttype
+      this_ttype
     )
-    plots_var[[ttype]] <- p
+    plots_var[[this_ttype]] <- p
   }
   if (i == 1) {
     p1 <- plots_var[[1]] + ggtitle(my_title("curative"))
@@ -71,19 +56,19 @@ plots_row <- list()
 for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
-  for (ttype in 1:3) {
-    plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
+  for (this_ttype in 1:3) {
+    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
       this_vector_measure_value,
       this_NW_set,
-      ttype
+      this_ttype
     )
     if (y_var == "Rres_final") {
       p <- p + geom_hline(yintercept = 1.0, linetype = "dashed")
     }
-    plots_var[[ttype]] <- p
+    plots_var[[this_ttype]] <- p
   }
   if (i == 1) {
     p1 <- plots_var[[1]] + ggtitle(my_title("curative"))
@@ -112,19 +97,19 @@ plots_row <- list()
 for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
-  for (ttype in 1:3) {
-    plot_this <- get_subset(df_ttype1_F, df_ttype2_F, df_ttype3_F, ttype)
+  for (this_ttype in 1:3) {
+    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
       this_vector_measure_value,
       this_NW_set,
-      ttype
+      this_ttype
     )
     if (y_var == "Rres_final") {
       p <- p + geom_hline(yintercept = 1.0, linetype = "dashed")
     }
-    plots_var[[ttype]] <- p
+    plots_var[[this_ttype]] <- p
   }
   if (i == 1) {
     p1 <- plots_var[[1]] + ggtitle(my_title("curative"))
