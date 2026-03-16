@@ -13,21 +13,21 @@ source("funcs/output_baseline_params_and_scenarios.R")
 source("funcs/epi_outputs.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- TRUE
+load_latest_file <- FALSE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
   folder_name <- gsub(".Rda", "/", latest_file)
   dir.create(folder_name)
 } else {
-  load("output/11Feb2026_test2.Rda")
+  load("output/6Mar2026_test1.Rda")
   folder_name <- "output/test_scripts/"
   dir.create(folder_name)
 }
 
 # Set plotting defaults
 this_NW_set <- c(0, 100, 200)
-this_vector_measure_value <- 25
+this_vector_measure_value <- 20
 this_vector_measure <- "Baseline_vector_host_ratio"
                                                                                             
 # Create data subsets --------------------------------------------------------------
@@ -263,13 +263,15 @@ my_ggsave(plot = p,
 
  if (include_plot_type15 == TRUE) {
 # Invasion plots
-prev_threshold <- 1
+prev_threshold <- 1.0
 restricted_subset <- subset_for_invasion_plots %>% 
   filter(!near(treat_prop, 0.05), !near(treat_prop, 0.15), !near(treat_prop, 0.25), !near(treat_prop, 0.35),
          !near(treat_prop, 0.45), !near(treat_prop, 0.55), !near(treat_prop, 0.65), !near(treat_prop, 0.75),
          !near(treat_prop, 0.85), !near(treat_prop, 0.95), !near(treat_prop, 0.91)) 
 
-p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop)
+#p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop)
+with_contours = TRUE
+p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop, panel_type = "all", with_contours)
 plot_label <- paste0("plot_type15_invasion_", prev_threshold, common_details_with_fitness)
 output_filename <- paste0(folder_name, plot_label, ".pdf")
 my_ggsave(plot = p,
@@ -278,7 +280,7 @@ my_ggsave(plot = p,
 )
 plots[[plot_label]] <- p
 
-with_contours = FALSE
+with_contours = TRUE
 p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop, panel_type = "single", with_contours)
 plot_label <- paste0("plot_type15_invasion_", prev_threshold, common_details_with_fitness, "_single_panel", "_with_contours_", with_contours)
 output_filename <- paste0(folder_name, plot_label, ".pdf")
