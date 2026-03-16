@@ -45,12 +45,40 @@ my_ggsave <- function(plot, filename, width, height) {
   )
 }
 
+
+# projector_cols_warm_first <- c(
+#   "#E69F00",  # orange
+#   "#D55E00",  # vermillion
+#   "#0072B2",  # strong blue
+#   "#009E73",  # bluish green
+#   "#4D4D4D",  # dark grey (last)
+#   "#CC79A7"  # purple
+# )
+# 
+# projector6 <- c(
+#   "#E69F00", # orange  (very stable)
+#   "#D55E00", # vermillion (very stable)
+#   "#0072B2", # blue (stable)
+#   "#005B4F", # deep teal (stronger than #009E73 on projectors)
+#   "#4D4D4D",  # dark grey (stable)
+#   "#8B3A62" # dark purple/magenta (holds up better than #CC79A7)
+# )
+# 
+# scale_colour_discrete <- function(...) {
+#   scale_colour_manual(values = rep(projector_cols_warm_first, 100), ...)
+# }
+# 
+# scale_color_discrete <- scale_colour_discrete
+
+
 # update to remove the gridlines and make background offwhite for contrast
 my_theme <- function() {
   theme_bw(base_size = 15) +
     theme(
-      panel.background = element_rect(fill = "#FAFAFA"),
-      plot.background  = element_rect(fill = "#FAFAFA", colour = NA),
+      panel.background = element_rect(fill = "white"),
+      plot.background  = element_rect(fill = "white", colour = NA),
+      #panel.background = element_rect(fill = "#FAFAFA"),
+      # plot.background  = element_rect(fill = "#FAFAFA", colour = NA),
       plot.title = element_text(hjust = 0.5, size = 1.0 * 15),
       plot.subtitle = element_text(hjust = 0.5),
       plot.caption = element_text(),
@@ -98,6 +126,7 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "treatments_per_year") this_label <- "Treatments per year"
   if (variable == "R0sen") this_label <- "R0 sensitive"
   if (variable == "prevalence") this_label <- "Prevalence in cattle"
+  if (variable == "prevalence_new") this_label <- "Prevalence in cattle"
   if (variable == "prevalence_wildlife") this_label <- "Prevalence in wildlife"
   if (variable == "prevalence_vectors") this_label <- "Prevalence in vectors"
   if (variable == "Incidence") this_label <- "Incidence"
@@ -172,7 +201,7 @@ ymax_function <- function(y_var) {
   } else if (y_var == "treat_prop") {
     ymax <- 1
   } else if (y_var == "treatments_per_year") {
-    ymax <- 12
+    ymax <- 8
   } else if (y_var == "RiskA") {
     ymax <- 10
   } else if (y_var == "Incidence") {
@@ -193,7 +222,7 @@ ymax_function <- function(y_var) {
 
 xmax_function <- function(x_var) {
   if (x_var == "treatments_per_year") {
-    xmax <- 12
+    xmax <- 8
   } else {
     xmax <- 1
   }
@@ -285,6 +314,7 @@ get_treat_var <- function(df, ttype) {
 plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this_vector_measure, ttype) {
   
   x_var <- get_treat_var(df, ttype) 
+  xmax <- xmax_function(x_var)
   df$x <- df[, x_var]
   df$y <- df[, y_var]
   this_xlab <- my_label(x_var)
@@ -300,7 +330,7 @@ plot_type1_y_versus_treat_prop_facet_NW <- function(df, y_var, this_NW_set, this
     ggplot(aes(x, y, colour = shape_variable)) +
     geom_point(size = my_pointsize()) +
     geom_line(linewidth = my_linewidth()) +
-    #ylim(c(0, y_max)) +
+    xlim(c(0, xmax)) +
     xlab(this_xlab) +
     ylab(this_ylab) +
     labs(colour = my_label(this_vector_measure)) +
@@ -957,17 +987,12 @@ plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop,
       x = prop_cattle_with_insecticide, y = y, colour = Region,
       shape = R0sen_gt_1
     ), size = pt_size, stroke = stroke_size, show.legend = TRUE) +
-    # geom_contour(data = plot_this, aes(
-    #   x = prop_cattle_with_insecticide, 
-    #   y = y, z = prevalence), colour = "grey30", linewidth = contour_linewidth) +
-    # geom_label_contour(data = plot_this, aes(
-    #   x = prop_cattle_with_insecticide, 
-    #   y = y, z = prevalence), colour = "grey30", label.size = contour_label_size) +
     scale_color_manual(values = colours) +
     xlab(my_label("prop_cattle_with_insecticide", "other")) +
     ylab(my_label(y_var)) +
     facet_wrap(~ NW + cc_or_vh_ratio, labeller = my_labeller) +
-    ylim(c(0, ymax)) +
+    coord_cartesian(ylim = c(0, ymax)) +
+    #ylim(c(0, ymax)) +
     # scale_x_continuous(breaks = seq(0, xmax_function(x_var), by = xmax_function(x_var)/4)) +
     scale_y_continuous(breaks = seq(0, ymax_function(y_var), by = ymax_function(y_var) / 4)) +
     scale_shape_manual(values = c(16, 1, 4), drop = FALSE) +
@@ -977,15 +1002,11 @@ plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop,
   if (with_contours == TRUE) {
   plot <- plot + geom_contour(data = plot_this, aes(
        x = prop_cattle_with_insecticide, 
-       y = y, z = prevalence), colour = "grey30", linewidth = contour_linewidth) +
-    # geom_text(
-    #   stat = "contour",
-    #   aes(label = after_stat(level)),
-    #   size = 3
-    # )
-     geom_label_contour(data = plot_this, aes(
-        x = prop_cattle_with_insecticide, 
-        y = y, z = prevalence), colour = "grey30", label.size = contour_label_size)
+       y = y, z = prevalence), colour = "grey30", linewidth = contour_linewidth) #+
+     # geom_label_contour(data = plot_this, aes(
+     #   x = prop_cattle_with_insecticide,
+     #   y = y, z = prevalence), colour = "grey30", label.size = contour_label_size, 
+     #   breaks = c(0.1, 0.2, 0.3))
   }
   
   with_grey <- TRUE
