@@ -47,6 +47,7 @@ my_label <- function(variable) {
   this_label <- variable
   if(variable == "R0sen") this_label <- "R0 sensitive"
   if(variable == "prevalence") this_label <- "Prevalence"
+  if(variable == "prevalence_new") this_label <- "Prevalence"
   if(variable == "prevalence_baseline") this_label <- "Prevalence at baseline"
   if(variable == "Incidence") this_label <- "Incidence"
   if(variable == "No_trt_cat") this_label <- "Total Number of AAT treated"
