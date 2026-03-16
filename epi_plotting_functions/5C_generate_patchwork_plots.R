@@ -16,27 +16,27 @@ names(plots2F)[grepl("plot_type1", names(plots2F))]
 
 ############################################
 this_font_size = 16
-figX.1 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.1 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 #figX.1 <- plots1F$plot_type15_invasion_1_ttype1_spec_FALSE_FALSE_vector_value_20_fit_adj_0.6_single_panel
 figX.1 <- add_fancy_title(figX.1, "Collective insecticide", "", "Relative fitness 0.6" )
 
-figX.2 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.2 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 #figX.2 <- plots1T$plot_type15_invasion_1_ttype1_spec_FALSE_TRUE_vector_value_20_fit_adj_0.6_single_panel 
 figX.2 <- add_fancy_title(figX.2, "Local insecticide", "", "Relative fitness 0.6" )
 
-figX.3 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE 
+figX.3 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE 
 #figX.3 <- plots1F$plot_type15_invasion_1_ttype1_spec_FALSE_FALSE_vector_value_20_fit_adj_0.8_single_panel 
 figX.3 <- add_fancy_title(figX.3, "", "", "Relative fitness 0.8" )
 
-figX.4 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE
+figX.4 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE
 #figX.4 <- plots1T$plot_type15_invasion_1_ttype1_spec_FALSE_TRUE_vector_value_20_fit_adj_0.8_single_panel
 figX.4 <- add_fancy_title(figX.4, "", "", "Relative fitness 0.8" )
 
-figX.5 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.5 <- plots1F$plot_type15_invasion_1_treatment_code1_mainvecpop_FALSE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 #figX.5 <- plots1F$plot_type15_invasion_1_ttype1_spec_FALSE_FALSE_vector_value_20_fit_adj_0.95_single_panel 
 figX.5 <- add_fancy_title(figX.5, "", "", "Relative fitness 0.95" )
 
-figX.6 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.6 <- plots1T$plot_type15_invasion_1_treatment_code1_mainvecpop_TRUE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 figX.6 <- add_fancy_title(figX.6, "", "", "Relative fitness 0.95" )
 
 
@@ -52,27 +52,27 @@ my_ggsave(plot = figB, filename = "output/ms_figs/5pC_use_as_fig7a.pdf", width =
 ############################################
 
 this_font_size = 16
-figX.1 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.1 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 #figX.1 <- plots2F$plot_type15_invasion_1_ttype2_spec_FALSE_FALSE_vector_value_20_fit_adj_0.6_single_panel
 figX.1 <- add_fancy_title(figX.1, "Collective insecticide", "", "Relative fitness 0.6" )
 
-figX.2 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.2 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 #figX.2 <- plots2T$plot_type15_invasion_1_ttype2_spec_FALSE_TRUE_vector_value_20_fit_adj_0.6_single_panel 
 figX.2 <- add_fancy_title(figX.2, "Local insecticide", "", "Relative fitness 0.6" )
 
-figX.3 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE 
+figX.3 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE 
 #figX.3 <- plots2F$plot_type15_invasion_1_ttype2_spec_FALSE_FALSE_vector_value_20_fit_adj_0.8_single_panel 
 figX.3 <- add_fancy_title(figX.3, "", "", "Relative fitness 0.8" )
 
-figX.4 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE
+figX.4 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE
 #figX.4 <- plots2T$plot_type15_invasion_1_ttype2_spec_FALSE_TRUE_vector_value_20_fit_adj_0.8_single_panel
 figX.4 <- add_fancy_title(figX.4, "", "", "Relative fitness 0.8" )
 
-figX.5 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.5 <- plots2F$plot_type15_invasion_1_treatment_code2_mainvecpop_FALSE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 #figX.5 <- plots2F$plot_type15_invasion_1_ttype2_spec_FALSE_FALSE_vector_value_20_fit_adj_0.95_single_panel 
 figX.5 <- add_fancy_title(figX.5, "", "", "Relative fitness 0.95" )
 
-figX.6 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.6 <- plots2T$plot_type15_invasion_1_treatment_code2_mainvecpop_TRUE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 #figX.6 <- plots2T$plot_type15_invasion_1_ttype2_spec_FALSE_TRUE_vector_value_20_fit_adj_0.95_single_panel
 figX.6 <- add_fancy_title(figX.6, "", "", "Relative fitness 0.95" )
 
@@ -88,26 +88,26 @@ my_ggsave(plot = figB, filename = "output/ms_figs/5pC_use_as_fig7b.pdf", width =
 
 ############################################
 this_font_size = 16
-figX.1 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.1 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 figX.1 <- add_fancy_title(figX.1, "Collective insecticide", "", "Relative fitness 0.6" )
 
-figX.2 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_25_fit_adj_0.6_single_panel_with_contours_FALSE
+figX.2 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_20_fit_adj_0.6_single_panel_with_contours_TRUE
 #figX.2 <- plots3T$plot_type15_invasion_1_ttype3_spec_FALSE_TRUE_vector_value_20_fit_adj_0.6_single_panel 
 figX.2 <- add_fancy_title(figX.2, "Local insecticide", "", "Relative fitness 0.6" )
 
-figX.3 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE 
+figX.3 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE 
 #figX.3 <- plots3F$plot_type15_invasion_1_ttype3_spec_FALSE_FALSE_vector_value_20_fit_adj_0.8_single_panel 
 figX.3 <- add_fancy_title(figX.3, "", "", "Relative fitness 0.8" )
 
-figX.4 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_25_fit_adj_0.8_single_panel_with_contours_FALSE
+figX.4 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_20_fit_adj_0.8_single_panel_with_contours_TRUE
 #figX.4 <- plots3T$plot_type15_invasion_1_ttype3_spec_FALSE_TRUE_vector_value_20_fit_adj_0.8_single_panel
 figX.4 <- add_fancy_title(figX.4, "", "", "Relative fitness 0.8" )
 
-figX.5 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.5 <- plots3F$plot_type15_invasion_1_treatment_code3_mainvecpop_FALSE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 #figX.5 <- plots3F$plot_type15_invasion_1_ttype3_spec_FALSE_FALSE_vector_value_20_fit_adj_0.95_single_panel 
 figX.5 <- add_fancy_title(figX.5, "", "", "Relative fitness 0.95" )
 
-figX.6 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_25_fit_adj_0.95_single_panel_with_contours_FALSE
+figX.6 <- plots3T$plot_type15_invasion_1_treatment_code3_mainvecpop_TRUE_vector_value_20_fit_adj_0.95_single_panel_with_contours_TRUE
 #figX.6 <- plots3T$plot_type15_invasion_1_ttype3_spec_FALSE_TRUE_vector_value_20_fit_adj_0.95_single_panel
 figX.6 <- add_fancy_title(figX.6, "", "", "Relative fitness 0.95" )
 
