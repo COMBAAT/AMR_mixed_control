@@ -56,8 +56,7 @@ plot_type21 <- function(df, x_var, y_var) {
   p
   
   if (y_var == "Rres_final") {
-    p <- p + geom_abline(intercept = 1, slope = 0, colour = "black", linetype = "dashed") +
-      geom_vline(xintercept = 0.15, colour = "purple", linetype = "dashed")
+    p <- p + geom_abline(intercept = 1, slope = 0, colour = "black", linetype = "dashed") 
   }
   p
 }
