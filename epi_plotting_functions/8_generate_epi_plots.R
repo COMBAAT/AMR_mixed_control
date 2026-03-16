@@ -14,4 +14,4 @@ source("epi_plotting_functions/5C_generate_patchwork_plots.R")
 
 source("epi_plotting_functions/7_create_combination_plots.R")
 
-
+source("epi_plotting_functions/4D_generate_panel.R")
