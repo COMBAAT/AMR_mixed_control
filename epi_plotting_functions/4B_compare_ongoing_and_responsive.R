@@ -77,7 +77,7 @@ pC <- pC & theme(legend.position = "bottom")
 my_ggsave(plot = pC, filename = "output/ms_figs/4B_plot_type21_RiskA_versus_prev_facet_prop_insect_NW.pdf", width = 6, height = 9)
 
 combined <- pC + pB + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
-my_ggsave(plot = combined, filename = "output/ms_figs/4B_plot_type21_combined_versus_prev_facet_prop_insect_NW.pdf", width = 12, height = 9)
+my_ggsave(plot = combined, filename = "output/ms_figs/4B_plot_type21_combined_versus_prev_facet_prop_insect_NW.pdf", width = 13, height = 9.5)
 
 ################################################################################
 
