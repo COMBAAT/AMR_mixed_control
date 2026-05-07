@@ -6,99 +6,35 @@ library(codetools)
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = TRUE,
-    use_root_functions = TRUE,
+    multiple_scenarios = FALSE,
+    use_root_functions = FALSE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "17Feb2026",
-    current_descriptor = "_test1"
+    general_descriptor = "15Mar2026",
+    current_descriptor = "_n6_test1"
   )
   user_inputs
 }
 
-create_multiple_scenarios <- function() {
+
+
+create_multiple_scenarios_new <- function() {
   max_time <- 3500
   treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
   wildlife_number <- c(0, 100, 200)
-  K_host_ratio <- c(30, 50, 70)     # carrying capacity per host
-  treat_propA <- seq(0.0, 0.9, by = 0.1)
-  treat_propB <- seq(0.91, 0.99, by = 0.02)
-  treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
-  # do not set prop_cattle_with_insecticide to 1
-  #prop_cattle_with_insecticide <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6) #c(seq(0.0, 0.95, by = 0.05), 0.99)
-  prop_cattle_with_insecticide <- seq(0, 0.6, by = 0.1)
-  
-  days_per_year <- set_days_per_year()
-  maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
-  prop_prophylaxis_at_birth <- c(0.0)
-  proph_ongoing <- c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9) / days_per_year
-  fit_adj <- 0.8
-  birth_adj <- 2.0
-  dose_adj <- 1.0
-  emergence <- 0.0
-  partial_susceptibility_proph_cattle <- 0.5
-  prob_death_from_disease <- 0.01
-  use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
-  carrying_capacity <- c(5000) # carrying capacity of vector population
-  
-  # create grids of parameters combinations and then combine
-  tb1 <- expand_grid(
-    emergence = emergence,
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing,
-    partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
-    prob_death_from_disease = prob_death_from_disease,
-    treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
-    fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
-    birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
-    treatment_type = treatment_type, max_time = max_time
-  )
-  tb1 <- tb1 %>% filter(!(treat_prop > 0 & proph_ongoing > 0), !(treatment_type == "curative" & proph_ongoing > 0))
-
-  tb_hosts <- expand_grid(NC = cattle_number, NW = wildlife_number) %>% mutate(hosts = NC + NW)
-  
-  tb2a <- expand_grid(tb_hosts, K = carrying_capacity) %>%
-    mutate(use_carrying_capacity = TRUE, K_host_ratio = K / hosts) %>% 
-    select(NC, NW, hosts, use_carrying_capacity, K_host_ratio, K)
-  
-  tb2b <- expand_grid(tb_hosts, K_host_ratio = K_host_ratio) %>%
-    mutate(use_carrying_capacity = FALSE, K = hosts * K_host_ratio) %>% 
-    select(NC, NW, hosts, use_carrying_capacity, K_host_ratio, K)
-  
-  if (TRUE %in% use_carrying_capacity & FALSE %in% use_carrying_capacity) {
-    tb2 <- rbind(tb2a, tb2b)
-  } else {
-    if (TRUE %in% use_carrying_capacity) {
-      tb2 <- tb2a 
-    } else {
-      tb2 <- tb2b
-    }
-  } 
-
-  tb <- expand_grid(tb2, tb1)
-
-  df <- as.data.frame(tb) %>% mutate(treatment_type = as.factor(treatment_type))
-  df
-}
-
-
-create_multiple_scenarios_new <- function() {
-  max_time <- 2500
-  treatment_type <- c("curative", "longlasting") # curative or longlasting
-  cattle_number <- 100
-  wildlife_number <- c(0, 100, 200)
-  K_host_ratio <- c(30, 50, 70)     # carrying capacity per host
-  treat_propA <- seq(0.0, 0.9, by = 0.1)
+  K_host_ratio <- 40 #c(20, 40, 60)     # carrying capacity per host
+  treat_propA <- seq(0.0, 0.9, by = 0.05)
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
   #prop_cattle_with_insecticide <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6) #c(seq(0.0, 0.95, by = 0.05), 0.99)
-  prop_cattle_with_insecticide <- seq(0, 0.5, by = 0.1)
+  prop_cattle_with_insecticide <- c(0.0, 0.1, 0.2, 0.3) #c(seq(0, 0.95, by = 0.05), 0.99)
   
   days_per_year <- set_days_per_year()
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
   prop_prophylaxis_at_birth <- c(0.0)
-  treatments_per_year <- seq(1, 9, by = 1)
+  treatments_per_year <- seq(0, 9, by = 1)
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
@@ -140,62 +76,64 @@ create_multiple_scenarios_new <- function() {
   df
 }
 
-create_single_scenario <- function() {
-  max_time <- 10000
+
+create_single_scenario_new <- function() {
+  max_time <- 3500
   treatment_type <- c("curative") # curative or longlasting
   cattle_number <- 100
-  wildlife_number <- 100
-  K_host_ratio <- 40 # carrying capacity per host
-  treat_prop <- 0
-  # do not set prop_cattle_with_insecticide to 1
-  prop_cattle_with_insecticide <- 0.0
+  wildlife_number <- 0
+  K_host_ratio <- 40 #c(20, 40, 60)     # carrying capacity per host
+  treat_prop <- 0.0
+  prop_cattle_with_insecticide <- 0.2
   
   days_per_year <- set_days_per_year()
-  maintain_vector_pop <- TRUE # whether to maintain vector population at carrying capacity or not)
-  prop_prophylaxis_at_birth <- 0.0
-  proph_ongoing <- 0 / days_per_year # c(0, 2, 4) / days_per_year
+  maintain_vector_pop <- c(TRUE) # whether to maintain vector population at carrying capacity or not
+  prop_prophylaxis_at_birth <- c(0.0)
+  treatments_per_year <- 0
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
   emergence <- 0.0
   partial_susceptibility_proph_cattle <- 0.5
-  prob_death_from_disease <- 0.0
-  use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
-  carrying_capacity <- 6000 # carrying capacity of vector population
+  prob_death_from_disease <- 0.01
+  #use_carrying_capacity <- FALSE # whether to use carrying capacity or K_host_ratio
+  #carrying_capacity <- c(5000) # carrying capacity of vector population
   
   # create grids of parameters combinations and then combine
-  tb1 <- expand_grid(
+  responsive_treatment <- expand_grid(treatment_type = treatment_type, treat_prop = treat_prop, treatments_per_year = 0) %>%
+    mutate(laXbel = case_when(treatment_type == "curative" ~ "responsive_curative",
+                              treatment_type == "longlasting" ~ "responsive_longlasting"),
+           treatment_code = case_when(treatment_type == "curative" ~ 1, 
+                                      treatment_type == "longlasting" ~ 2))
+  
+  prophylatic_treatment <- expand_grid(treatment_type = "longlasting", treat_prop = 0, treatments_per_year = treatments_per_year) %>%
+    mutate(laXbel = "proph_ongoing", treatment_code = 3)
+  
+  all_treatments <- rbind(responsive_treatment, prophylatic_treatment) %>% 
+    mutate(proph_ongoing = treatments_per_year / days_per_year) 
+  
+  tb0 <- expand_grid(
     emergence = emergence,
-    dose_adj = dose_adj, proph_ongoing = proph_ongoing,
+    dose_adj = dose_adj,
     partial_susceptibility_proph_cattle = partial_susceptibility_proph_cattle,
     prob_death_from_disease = prob_death_from_disease,
-    treat_prop = treat_prop, maintain_vector_pop = maintain_vector_pop,
+    NC = cattle_number, NW = wildlife_number,
+    K_host_ratio = K_host_ratio, 
+    maintain_vector_pop = maintain_vector_pop,
     fit_adj = fit_adj, prop_cattle_with_insecticide = prop_cattle_with_insecticide,
     birth_adj = birth_adj, prop_prophylaxis_at_birth = prop_prophylaxis_at_birth,
-    treatment_type = treatment_type, max_time = max_time
+    max_time = max_time
   )
+  tb <- expand_grid(tb0, all_treatments) %>% 
+    mutate(use_carrying_capacity = FALSE, hosts = NC + NW, K = hosts * K_host_ratio) 
   
-  tb_hosts <- expand_grid(NC = cattle_number, NW = wildlife_number) %>% mutate(hosts = NC + NW)
-  
-  tb2a <- expand_grid(tb_hosts, K = carrying_capacity) %>%
-    mutate(use_carrying_capacity = TRUE, K_host_ratio = K / hosts) %>% 
-    select(NC, NW, hosts, use_carrying_capacity, K_host_ratio, K)
-  
-  tb2b <- expand_grid(tb_hosts, K_host_ratio = K_host_ratio) %>%
-    mutate(use_carrying_capacity = FALSE, K = hosts * K_host_ratio) %>% 
-    select(NC, NW, hosts, use_carrying_capacity, K_host_ratio, K)
-  
-  if (use_carrying_capacity == TRUE) {
-    tb2 <- tb2a 
-  } else {
-    tb2 <- tb2b
-  }
-  
-  tb <- expand_grid(tb2, tb1)
-  
-  df <- as.data.frame(tb) %>% mutate(treatment_type = as.factor(treatment_type))
+  df <- as.data.frame(tb) %>% mutate(treatment_type = as.factor(treatment_type), laXbel = as.factor(laXbel))
+  df <- df[1,]
   df
 }
+
+
+
 
 findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
 findGlobals(fun = create_single_scenario, merge = FALSE)$variables
