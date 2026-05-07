@@ -34,21 +34,21 @@ this_vector_measure <- "Baseline_vector_host_ratio"
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 which_ttypes <- c(1:3)
 which_mainvecpop <- c(T, F)
-which_fit_adj <- c(0.6, 0.8, 0.95)
+which_fit_adj <- c(0.8)
  for (this_ttype in which_ttypes) {
    for (mainvecpop in which_mainvecpop) {
      plots <- list()
      for (this_fit_adj in which_fit_adj) {
 
-include_plot_type1 <- TRUE
-include_plot_type2 <- TRUE
-include_plot_type3 <- TRUE
-include_plot_type4 <- TRUE
-include_plot_type5 <- TRUE
-include_plot_type6 <- TRUE
-include_plot_type7 <- TRUE
-include_plot_type8 <- TRUE
-include_plot_type10 <- TRUE
+include_plot_type1 <- FALSE
+include_plot_type2 <- FALSE
+include_plot_type3 <- FALSE
+include_plot_type4 <- FALSE
+include_plot_type5 <- FALSE
+include_plot_type6 <- FALSE
+include_plot_type7 <- FALSE
+include_plot_type8 <- FALSE
+include_plot_type10 <- FALSE
 include_plot_type15 <- TRUE
 include_plot_type16 <- TRUE
 
@@ -270,7 +270,7 @@ restricted_subset <- subset_for_invasion_plots %>%
          !near(treat_prop, 0.85), !near(treat_prop, 0.95), !near(treat_prop, 0.91)) 
 
 #p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop)
-with_contours = TRUE
+with_contours = FALSE
 p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop, panel_type = "all", with_contours)
 plot_label <- paste0("plot_type15_invasion_", prev_threshold, common_details_with_fitness)
 output_filename <- paste0(folder_name, plot_label, ".pdf")
@@ -280,7 +280,7 @@ my_ggsave(plot = p,
 )
 plots[[plot_label]] <- p
 
-with_contours = TRUE
+with_contours = FALSE
 p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop, panel_type = "single", with_contours)
 plot_label <- paste0("plot_type15_invasion_", prev_threshold, common_details_with_fitness, "_single_panel", "_with_contours_", with_contours)
 output_filename <- paste0(folder_name, plot_label, ".pdf")
