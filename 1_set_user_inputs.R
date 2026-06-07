@@ -6,11 +6,11 @@ library(codetools)
 
 get_user_inputs <- function() {
   user_inputs <- list(
-    multiple_scenarios = FALSE,
-    use_root_functions = FALSE,
+    multiple_scenarios = TRUE,
+    use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "15Mar2026",
+    general_descriptor = "07May2026",
     current_descriptor = "_n6_test1"
   )
   user_inputs
@@ -22,14 +22,14 @@ create_multiple_scenarios_new <- function() {
   max_time <- 3500
   treatment_type <- c("curative", "longlasting") # curative or longlasting
   cattle_number <- 100
-  wildlife_number <- c(0, 100, 200)
-  K_host_ratio <- 40 #c(20, 40, 60)     # carrying capacity per host
+  wildlife_number <- 100 #c(0, 100, 200)
+  K_host_ratio <- c(20, 40, 60)     # carrying capacity per host
   treat_propA <- seq(0.0, 0.9, by = 0.05)
   treat_propB <- seq(0.91, 0.99, by = 0.04)
-  treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
+  treat_prop <- 0.2 #c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
   #prop_cattle_with_insecticide <- c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6) #c(seq(0.0, 0.95, by = 0.05), 0.99)
-  prop_cattle_with_insecticide <- c(0.0, 0.1, 0.2, 0.3) #c(seq(0, 0.95, by = 0.05), 0.99)
+  prop_cattle_with_insecticide <- 0.0 #c(seq(0, 0.95, by = 0.05), 0.99)
   
   days_per_year <- set_days_per_year()
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
@@ -135,7 +135,7 @@ create_single_scenario_new <- function() {
 
 
 
-findGlobals(fun = create_multiple_scenarios, merge = FALSE)$variables
-findGlobals(fun = create_single_scenario, merge = FALSE)$variables
+findGlobals(fun = create_multiple_scenarios_new, merge = FALSE)$variables
+findGlobals(fun = create_single_scenario_new, merge = FALSE)$variables
 findGlobals(fun = set_days_per_year, merge = FALSE)$variables
 findGlobals(fun = get_user_inputs, merge = FALSE)$variables
