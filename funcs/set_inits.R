@@ -172,6 +172,18 @@ set_inital_conditions2 <- function(params, initial_sensitive_infections, initial
   return(inits)
 }
 
+adjust_inits <- function(inits) {
+  inits2 <- inits
+  inits2["PF1"] <- inits2["PF"] / 6
+  inits2["PF2"] <- inits2["PF"] / 6
+  inits2["PF3"] <- inits2["PF"] / 6
+  inits2["PF4"] <- inits2["PF"] / 6
+  inits2["PF5"] <- inits2["PF"] / 6
+  inits2["PF6"] <- inits2["PF"] / 6
+  inits2 <- inits2[names(inits2) != "PF"]
+  inits2
+}
+
 findGlobals(fun = get_variables, merge = FALSE)$variables
 findGlobals(fun = initialise_variables_with_zeros, merge = FALSE)$variables
 findGlobals(fun = set_inital_conditions2, merge = FALSE)$variables
