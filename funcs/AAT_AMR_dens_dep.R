@@ -41,7 +41,12 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   # CR  <- init["CR"] # Recovered
 
   # P - Prophylactically treated cattle
-  PF <- init["PF"] # Susceptible Fully protected
+  PF1 <- init["PF1"] # Susceptible Fully protected
+  PF2 <- init["PF2"] # Susceptible Fully protected
+  PF3 <- init["PF3"] # Susceptible Fully protected
+  PF4 <- init["PF4"] # Susceptible Fully protected
+  PF5 <- init["PF5"] # Susceptible Fully protected
+  PF6 <- init["PF6"] # Susceptible Fully protected
   PS <- init["PS"] # Susceptible
   PEs <- init["PEs"] # Exposed (drug sensitive strain)
   PEr <- init["PEr"] # Exposed (drug resistant strain)
@@ -113,7 +118,9 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   Is_cattle <- CIs + CTs + PIs + PTs + PPs
   Ir_cattle <- CIr + CTr + PIr + PTr + PPr
   C <- CS + CEs + CEr + CIs + CIr + CTs + CTr + CEXs + CEXr
-  P <- PF + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX
+  PF_all  <- PF1 + PF2 + PF3 + PF4 + PF5 + PF6
+  P <- PF_all + PS + PEs + PEr + PIs + PIr + PTs + PTr + PPs + PPr + PEsX + PErX 
+    
   W <- WS + WEs + WEr + WIs + WIr
   V <- VSt + VSf + VEs + VEr + VIs + VIr
   NC <- P + C
@@ -127,7 +134,7 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   WIr_frac <- calc_frac_with_zero(WIr, W)
   CS_frac <- calc_frac_with_zero(CS, NC)
   PS_frac <- calc_frac_with_zero(PS, NC)
-  PF_frac <- calc_frac_with_zero(PF, NC)
+  PF_frac <- calc_frac_with_zero(PF_all, NC)
   
   
 
@@ -210,21 +217,28 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
 
 # Cattle with long lasting drug treatment ----
   
-  dPF.dt <- birth_c * (prop_prophylaxis_at_birth) * NC - # Adding new prophylactically treated cattle
+  dPF1.dt <- birth_c * (prop_prophylaxis_at_birth) * NC - # Adding new prophylactically treated cattle
     biterate * prob_infection_to_host * fit_adj * PF_frac * VIr * bite_frac_cattle(NC, N) + 
     sigma_st * PPs + 
     sigma_c * PPr - 
-    waning_F2S * PF + # waning from fully protected to partially protected
+    6.0 * waning_F2S * PF1 + # waning from fully protected to partially protected
     proph_ongoing * PS +
     proph_ongoing * CS +
     sigma_st * CEXs +
     sigma_c * CEXr +
     sigma_st * PEsX +
     sigma_c * PErX -
-    death_c * PF
+    death_c * PF1
+  
+  dPF2.dt <- 6.0 * waning_F2S * PF1 - 6.0 * waning_F2S * PF2 - death_c * PF2
+  dPF3.dt <- 6.0 * waning_F2S * PF2 - 6.0 * waning_F2S * PF3 - death_c * PF3
+  dPF4.dt <- 6.0 * waning_F2S * PF3 - 6.0 * waning_F2S * PF4 - death_c * PF4
+  dPF5.dt <- 6.0 * waning_F2S * PF4 - 6.0 * waning_F2S * PF5 - death_c * PF5
+  dPF6.dt <- 6.0 * waning_F2S * PF5 - 6.0 * waning_F2S * PF6 - death_c * PF6
+  
 
   dPS.dt <- 
-    waning_F2S * PF - # waning from fully protected to partially protected
+    6.0 * waning_F2S * PF6 - # waning from fully protected to partially protected
     biterate * partial_susceptibility_proph_cattle * prob_infection_to_host * PS_frac * VIs * bite_frac_cattle(NC, N) - 
     biterate * prob_infection_to_host * fit_adj * PS_frac * VIr * bite_frac_cattle(NC, N) - 
     proph_ongoing * PS +
@@ -399,9 +413,10 @@ AAT_AMR_dens_dep <- function(times, init, parms) {
   # )
   dX <- c(
     dCS.dt, dCEs.dt, 0, dCIs.dt, 0, dCTs.dt, 0, dCEXs.dt, 0,
-    dPF.dt, dPS.dt, dPEs.dt, 0, dPIs.dt, 0, dPTs.dt, 0, dPPs.dt, 0, dPEsX.dt, 0,
+    dPS.dt, dPEs.dt, 0, dPIs.dt, 0, dPTs.dt, 0, dPPs.dt, 0, dPEsX.dt, 0,
     dWS.dt, dWEs.dt, 0, dWIs.dt, 0,
-    dVSt.dt, dVSf.dt, dVEs.dt, 0, dVIs.dt, 0
+    dVSt.dt, dVSf.dt, dVEs.dt, 0, dVIs.dt, 0,
+    dPF1.dt, dPF2.dt, dPF3.dt, dPF4.dt, dPF5.dt, dPF6.dt
   )
   list(dX)
 }
