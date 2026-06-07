@@ -11,6 +11,10 @@ library(stringr)
 library(tictoc)
 library(tidyr)
 
+library(future)
+library(furrr)
+
+
 ## ------------------------------------------------------ LOAD FUNCTIONS
 
 #source("1_set_user_inputs.R")
@@ -27,6 +31,9 @@ source("funcs/r0_NGM.R")
 source("funcs/r0_helper.R")
 source("1_set_user_inputs.R")
 
+source("run_helper.R")
+
+
 
 
 ## ----
@@ -35,14 +42,14 @@ user_inputs <- get_user_inputs()
 if (user_inputs$multiple_scenarios == TRUE) {
   scenarios_df <- create_multiple_scenarios_new()
 } else {
-  scenarios_df <- create_single_scenario()
+  scenarios_df <- create_single_scenario_new()
 }
 baseline_parameters <- get_baseline_parameters()
 #plot_baseline_parameters(baseline_parameters)
 #plot_scenarios(scenarios_df)
 
 # Create empty dataframe to store outputs
-all_simulations_summary <- data.frame()
+#all_simulations_summary <- data.frame()
 
 ## ---- Start run time estimates
 tic()
@@ -50,71 +57,27 @@ tic()
 ## ---- Execute model
 number_of_scenarios <- nrow(scenarios_df)
 
-
+results <- vector("list", number_of_scenarios)
 for (row in 1:number_of_scenarios) {
-  print(paste0("runnng scenario ", row, ", ", "total scenarios = ", nrow(scenarios_df)))
-
-  this_scenario <- scenarios_df[row, ]
-  params <- set_parameters(this_scenario)
-  full_scenario <- merge_params_into_this_scenario(this_scenario, params)
-  full_scenario <- append_descriptor(full_scenario, descriptor = user_inputs$current_descriptor)
-  full_scenario <- move_populations_first(full_scenario)
-
-  # Add R0 to full_scenario
-  # R0sen2 and R0res2 are calculated using the next generation matrix method as a check
-  R0sen_and_R0res <- calculate_R0(params)
-  R0sen <- R0sen_and_R0res["R0sen"]
-  R0res <- R0sen_and_R0res["R0res"]
-  R0sen2 <- R0sen_and_R0res["R0sen2"]
-  R0res2 <- R0sen_and_R0res["R0res2"]
-  full_scenario$R0sen <- R0sen
-  full_scenario$R0sen2 <- R0sen2
-  full_scenario$R0res <- R0res
-  full_scenario$R0res2 <- R0res2
-
-  ## Make the simulation time dependent on R0 value
-  ## Only run full simulation if R0 >= 1.0
-  if (R0sen < 1.0) {
-    # if R0 < 1, set inits to disease free equilibrium and exit simulation after 0.1 day
-    inits <- set_inital_conditions2(params, initial_sensitive_infections = 0, initial_resistant_infections = 0)
-    times <- seq(0, 0.1, 0.1)
-  } else {
-    # if R0 >= 1.0 run full simulation
-    inits <- set_inital_conditions2(params, initial_sensitive_infections = 1, initial_resistant_infections = 0)
-    times <- seq(0, this_scenario$max_time, 1)
-  }
-
-  ## RUN MODEL ----
-  # use rootfunc option to exit simulation when Rsen < 1.01 or Number infected cattle < 1e-5
-  if (user_inputs$use_root_functions == TRUE) {
-    time_trajectory <- ode(
-      y = inits, parms = params, func = AAT_AMR_dens_dep, times = times,
-      rootfunc = my_rootfun, events = list(root = TRUE, terminalroot = c(1, 2))
-    )
-  } else {
-    time_trajectory <- ode(y = inits, parms = params, func = AAT_AMR_dens_dep, times = times, method = "daspk")
-  }
-  time_trajectory <- as.data.frame(time_trajectory)
-
-  expanded_output <- add_population_totals(time_trajectory)
-  expanded_output <- add_R_trajectories(params, expanded_output)
-  expanded_output <- add_R0(params, expanded_output)
-
-  final_state <- tail(expanded_output, 1)
-  final_state <- append_suffix_to_column_names(final_state, "_final")
-  final_state_with_full_scenario <- include_full_scenario(full_scenario, final_state)
-  final_state_with_full_scenario <- append_epi_outputs_to_df(final_state_with_full_scenario)
-
-  all_simulations_summary <- rbind(all_simulations_summary, final_state_with_full_scenario)
-
-  print(paste0("final time = ", round(final_state$time, 1), " days"))
-  print(paste0("R0 = ", final_state_with_full_scenario$R0sen))
-  print(paste0("Rsen_final = ", final_state_with_full_scenario$Rsen_final))
-  # print(paste0("Rsen2_final = ", final_state_with_full_scenario$Rsen2_final))
-  # print(paste0("Rres_final = ", final_state_with_full_scenario$Rres_final))
-  # print(paste0("Rres2_final = ", final_state_with_full_scenario$Rres2_final))
-  #print(quick_plot(expanded_output))
+  message("running scenario ", row, " of ", number_of_scenarios)
+  results[[row]] <- run_one_scenario(row, scenarios_df, user_inputs)
 }
+results_df <- as.data.frame(data.table::rbindlist(results))
+toc()
+
+plan(sequential)
+#plan(multisession, workers = 4)
+tic()
+results2 <- future_map(
+  1:number_of_scenarios,
+  function(row) {
+    run_one_scenario(row, scenarios_df, user_inputs)
+  }
+)
+results2_df <- as.data.frame(data.table::rbindlist(results2))
+toc()
+
+all_simulations_summary <- results_df
 
 # add columns indicating outcome of cometition with or invasion by resistant strains
 all_simulations_summary <- add_competition_and_invasion_columns(all_simulations_summary)
@@ -130,7 +93,7 @@ df <- simplify_outputs(all_simulations_summary)
 #saved_simulations <- all_simulations_summary
 saved_simulations <- all_simulations_summary
 filename <- get_filename()
-save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+#save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
 saved_simulations %>% filter(!(treat_prop == 0 & proph_ongoing == 0) ) %>%
   select(NW, treatment_type, treat_prop, proph_ongoing, prevalence, 
