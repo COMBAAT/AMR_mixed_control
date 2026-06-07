@@ -46,12 +46,18 @@ scale_colour_discrete <- function(...) {
   scale_colour_manual(values = rep(projector_cols_warm_first, 100), ...)
 }
 
+scale_fill_discrete <- function(...) {
+  scale_fill_manual(values = rep(projector_cols_warm_first, 100), ...)
+}
+
 # scale_colour_discrete <- function(...) {
 #   scale_colour_brewer(palette = "Set1", ...)
 #   #scale_colour_viridis_d(option = "E", ...)
 # }
 
 scale_color_discrete <- scale_colour_discrete
+
+scale_fill_discrete <- scale_fill_discrete
 
 
 my_theme <- function() {
