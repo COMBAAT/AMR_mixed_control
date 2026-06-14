@@ -43,7 +43,7 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_fig2_plot_type", 23, "_panel_compare_treatment_protocols_NEW.pdf")
+plot_name <- paste0("output/ms_figs/4A_main_fig2_outcomes_by_treatment_protocol_and_wildlife.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 
 ################################
@@ -86,7 +86,7 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_fig3_plot_type", 23, "_panel_compare_treatment_protocols_NEW2.pdf")
+plot_name <- paste0("output/ms_figs/4A_main_fig3_outcomes_by_treatment_protocol_and_wildlife.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 ################################
 
@@ -127,6 +127,6 @@ p <- plots_row[[1]] / plots_row[[2]] / plots_row[[3]] +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
 plot_height <- 8.5
-plot_name <- paste0("output/ms_figs/4A_use_as_figX3_plot_type", 23, "_panel_compare_treatment_protocols_NEW3.pdf")
+plot_name <- paste0("output/ms_figs/4A_spare_additional_outcomes_by_treatment_protocol_and_wildlife.pdf")
 my_ggsave(plot = p, filename = plot_name, width = 7.5, height = plot_height)
 ################################

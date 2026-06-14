@@ -13,7 +13,7 @@ source("funcs/output_baseline_params_and_scenarios.R")
 source("funcs/epi_outputs.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- FALSE
+load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
@@ -34,7 +34,7 @@ this_vector_measure <- "Baseline_vector_host_ratio"
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 which_ttypes <- c(1:3)
 which_mainvecpop <- c(T, F)
-which_fit_adj <- c(0.8)
+which_fit_adj <- c(0.8, 0.6, 0.95)
  for (this_ttype in which_ttypes) {
    for (mainvecpop in which_mainvecpop) {
      plots <- list()
@@ -44,8 +44,8 @@ include_plot_type1 <- FALSE
 include_plot_type2 <- FALSE
 include_plot_type3 <- FALSE
 include_plot_type4 <- FALSE
-include_plot_type5 <- FALSE
-include_plot_type6 <- FALSE
+include_plot_type5 <- TRUE
+include_plot_type6 <- TRUE
 include_plot_type7 <- FALSE
 include_plot_type8 <- FALSE
 include_plot_type10 <- FALSE
@@ -280,7 +280,7 @@ my_ggsave(plot = p,
 )
 plots[[plot_label]] <- p
 
-with_contours = FALSE
+with_contours = TRUE
 p <- plot_invasion_landscape(prev_threshold, restricted_subset, this_ttype, mainvecpop, panel_type = "single", with_contours)
 plot_label <- paste0("plot_type15_invasion_", prev_threshold, common_details_with_fitness, "_single_panel", "_with_contours_", with_contours)
 output_filename <- paste0(folder_name, plot_label, ".pdf")

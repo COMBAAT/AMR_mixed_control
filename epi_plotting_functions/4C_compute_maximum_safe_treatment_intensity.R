@@ -122,8 +122,10 @@ p_ongoing <- best_points_ongoing %>%
   ylab(my_label("treatments_per_year")) + my_theme()
 p_ongoing
   
-(p_responsive / p_ongoing) + plot_layout(heights = c(2,1), axes = "collect_y", guides = "collect") 
-
+p <- (p_responsive / p_ongoing) + plot_layout(heights = c(2,1), axes = "collect_y", guides = "collect")
+p
+plot_name <- paste0("output/ms_figs/4C_main_fig13_max_treatment_intensity.pdf")
+my_ggsave(plot = p, filename = plot_name, width = 7.5, height = 9)
 
 
 
