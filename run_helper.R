@@ -1,4 +1,4 @@
-run_one_scenario <- function(row, scenarios_df, user_inputs) {
+run_one_scenario <- function(row, scenarios_df, user_inputs, return_trajectory = FALSE) {
   
   this_scenario <- scenarios_df[row, ]
   params <- set_parameters(this_scenario)
@@ -66,5 +66,14 @@ run_one_scenario <- function(row, scenarios_df, user_inputs) {
   # print(paste0("Rres2_final = ", final_state_with_full_scenario$Rres2_final))
   #print(quick_plot(expanded_output))
   
-  final_state_with_full_scenario
+  if (return_trajectory == TRUE) {
+    
+    return(list(
+      summary = final_state_with_full_scenario,
+      trajectory = expanded_output
+    ))
+  } else {
+    
+    return(final_state_with_full_scenario)
+  }
 }
