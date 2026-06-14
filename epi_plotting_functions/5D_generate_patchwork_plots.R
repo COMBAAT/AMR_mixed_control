@@ -47,7 +47,7 @@ row3 <- (figX.5 + plot_spacer() + figX.6) + plot_layout(widths = c(1, 0.1, 1))
 figB <- row1 / row2 / row3 + plot_layout(guides = 'collect')
 figB <- figB + plot_annotation(title = "Responsive curative treatment",
                                theme = theme(plot.title = element_text(size = 24, hjust = 0.4)))
-my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_fig7a.pdf", width = 14, height = 14) # best size
+my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_figSXa_invasion_plot.pdf", width = 14, height = 14) # best size
 
 ############################################
 
@@ -84,7 +84,7 @@ row3 <- (figX.5 + plot_spacer() + figX.6) + plot_layout(widths = c(1, 0.1, 1))
 figB <- row1 / row2 / row3 + plot_layout(guides = 'collect')
 figB <- figB + plot_annotation(title = "Responsive longlasting treatment",
                                theme = theme(plot.title = element_text(size = 24, hjust = 0.4)))
-my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_fig7b.pdf", width = 14, height = 14) # best size
+my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_figSXb_invasion_plot.pdf", width = 14, height = 14) # best size
 
 ############################################
 this_font_size = 16
@@ -119,6 +119,6 @@ row3 <- (figX.5 + plot_spacer() + figX.6) + plot_layout(widths = c(1, 0.1, 1))
 figB <- row1 / row2 / row3 + plot_layout(guides = 'collect')
 figB <- figB + plot_annotation(title = "Ongoing longlasting treatment",
                                theme = theme(plot.title = element_text(size = 24, hjust = 0.4)))
-my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_fig7c.pdf", width = 14, height = 14) # best size
+my_ggsave(plot = figB, filename = "output/ms_figs/5D_supp_mat_figSXc_invasion_plot.pdf", width = 14, height = 14) # best size
 
 ############################################

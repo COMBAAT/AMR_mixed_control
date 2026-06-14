@@ -43,6 +43,6 @@ row2 <- (figX.3 + plot_spacer() + figX.4) + plot_layout(widths = c(1, 0.15, 1))
 row3 <- (figX.5 + plot_spacer() + figX.6) + plot_layout(widths = c(1, 0.15, 1))
 
 figB <- row1 / row2 / row3 + plot_layout(guides = 'collect')
-my_ggsave(plot = figB, filename = "output/ms_figs/5C_main_fig5.pdf", width = 14.5, height = 14) # best size
+my_ggsave(plot = figB, filename = "output/ms_figs/5C_main_fig5_invasion_plots.pdf", width = 14.5, height = 14) # best size
 
 
