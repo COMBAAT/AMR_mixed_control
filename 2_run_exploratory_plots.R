@@ -13,6 +13,8 @@ library(tidyr)
 
 library(future)
 library(furrr)
+library(progressr)
+handlers(global = TRUE)
 
 
 ## ------------------------------------------------------ LOAD FUNCTIONS
@@ -56,25 +58,31 @@ tic()
 
 ## ---- Execute model
 number_of_scenarios <- nrow(scenarios_df)
+number_of_scenarios
 
-results <- vector("list", number_of_scenarios)
-for (row in 1:number_of_scenarios) {
-  message("running scenario ", row, " of ", number_of_scenarios)
-  results[[row]] <- run_one_scenario(row, scenarios_df, user_inputs)
-}
-results_df <- as.data.frame(data.table::rbindlist(results))
-toc()
+# results <- vector("list", number_of_scenarios)
+# for (row in 1:number_of_scenarios) {
+#   message("running scenario ", row, " of ", number_of_scenarios)
+#   results[[row]] <- run_one_scenario(row, scenarios_df, user_inputs)
+# }
+# results_df <- as.data.frame(data.table::rbindlist(results))
+# toc()
 
 plan(sequential)
-#plan(multisession, workers = 4)
+plan(multisession, workers = 4)
 tic()
-results2 <- future_map(
-  1:number_of_scenarios,
-  function(row) {
-    run_one_scenario(row, scenarios_df, user_inputs)
-  }
-)
-results2_df <- as.data.frame(data.table::rbindlist(results2))
+with_progress({
+  p <- progressor(steps = number_of_scenarios)
+  
+  results2 <- future_map(
+    1:number_of_scenarios,
+    function(row) {
+      p(sprintf("scenario %d of %d", row, number_of_scenarios))
+      run_one_scenario(row, scenarios_df, user_inputs, return_trajectory = FALSE)
+    }
+  )
+})
+results_df <- as.data.frame(data.table::rbindlist(results2))
 toc()
 
 all_simulations_summary <- results_df
@@ -82,9 +90,7 @@ all_simulations_summary <- results_df
 # add columns indicating outcome of cometition with or invasion by resistant strains
 all_simulations_summary <- add_competition_and_invasion_columns(all_simulations_summary)
 
-toc()
-
-quick_plot(expanded_output)
+#quick_plot(expanded_output)
 
 df <- simplify_outputs(all_simulations_summary)
 #glimpse(df)
@@ -93,7 +99,7 @@ df <- simplify_outputs(all_simulations_summary)
 #saved_simulations <- all_simulations_summary
 saved_simulations <- all_simulations_summary
 filename <- get_filename()
-#save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
+save(saved_simulations, baseline_parameters, scenarios_df, file = filename)
 
 saved_simulations %>% filter(!(treat_prop == 0 & proph_ongoing == 0) ) %>%
   select(NW, treatment_type, treat_prop, proph_ongoing, prevalence, 
