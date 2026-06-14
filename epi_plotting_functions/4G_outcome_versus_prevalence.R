@@ -1,5 +1,5 @@
 
-source("4D_plot_helper.R")
+source("epi_plotting_functions/4G_plot_helper.R")
 #########################################
 for_plotting <- saved_simulations %>% 
   mutate(treat_percentage = 100 * treat_prop,
@@ -29,7 +29,7 @@ y_vars <- c("Rres_final", "RiskA", "PF_final", "PIs_final", "CIs_final")
 for(mainvecpop in c(TRUE, FALSE)) {
   for (y_var in y_vars) {
     p <- plot_treatment_comparison_panel(y_var, plot_this1, mainvecpop)
-    filename = paste0(y_var,"_", mainvecpop, ".pdf")
+    filename = paste0("4G_spare_", y_var,"_", mainvecpop, ".pdf")
     plot_name <- paste0("output/ms_figs/", filename)
     my_ggsave(plot = p, filename = plot_name, width = 8, height = 9)
   }
@@ -40,7 +40,7 @@ for(mainvecpop in c(TRUE, FALSE)) {
   p_combined <- p_RiskA + p_Rres + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
   p_combined
   
-  filename = paste0("Use_as_figSX_combined_", mainvecpop, ".pdf")
+  filename = paste0("4G_spare_figSX_combined_", mainvecpop, ".pdf")
   plot_name <- paste0("output/ms_figs/", filename)
   my_ggsave(plot = p_combined, filename = plot_name, width = 12, height = 9)
 }

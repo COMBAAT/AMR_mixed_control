@@ -1,5 +1,5 @@
 
-source("4E_plot_helper.R")
+source("epi_plotting_functions/4E_plot_helper.R")
 #########################################
 
 for_plotting <- saved_simulations %>% 
@@ -62,7 +62,7 @@ p2
 
 pA <- p1 + p2 + plot_layout(guides = 'collect') 
 pA
-filename = paste0("Use_as_fig7_responsive_", "Insecticide_strategy_", this_insecticide_strategy, ".pdf")
+filename = paste0("4E_main_fig7_responsive_", "Insecticide_strategy_", this_insecticide_strategy, ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = pA, filename = plot_name, width = 8, height = 8)
 
@@ -85,7 +85,7 @@ p2
 
 pB <- p1 + p2 + plot_layout(guides = 'collect') 
 pB
-filename = paste0("Use_as_fig8_preventive_", "Insecticide_strategy_", this_insecticide_strategy, ".pdf")
+filename = paste0("4E_main_fig8_preventive_", "Insecticide_strategy_", this_insecticide_strategy, ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = pB, filename = plot_name, width = 8, height = 6)
 #########################################
@@ -118,7 +118,7 @@ test_all_filtered <- test_all %>% filter(NW == 100, prop_cattle_with_insecticide
 p <- plot_boundary_by_fitness(test_all_filtered)
 p
 
-filename = paste0("Use_as_fig9_boundary_by_fitness", ".pdf")
+filename = paste0("4E_main_fig9_boundary_by_fitness", ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = p, filename = plot_name, width = 7, height = 7)
 #########################################
@@ -128,7 +128,7 @@ my_ggsave(plot = p, filename = plot_name, width = 7, height = 7)
 p <- plot_boundary_by_wildlife(plot_this2)
 p
 
-filename = paste0("Use_as_fig11_boundary_by_wildlife", ".pdf")
+filename = paste0("4E_main_fig11_boundary_by_wildlife", ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = p, filename = plot_name, width = 7, height = 7)
 
@@ -161,7 +161,7 @@ p1 <- plot_boundary_responsive_play(plot_this_filtered, treat_prop_thresh, all_l
 p1 <- p1 + ggtitle(paste0("Case treatment\nproportion < ", treat_prop_thresh))
 p1
 
-filename = paste0("Use_as_fig10_Number_treatments", ".pdf")
+filename = paste0("4E_main_fig10_Number_treatments", ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = p1, filename = plot_name, width = 10, height = 8)
 
@@ -191,7 +191,7 @@ p1 <- plot_boundary_responsive_tidy(plot_this_filtered, treat_prop_thresh, num_r
 p1 <- p1 + ggtitle(paste0("Case treatment\nproportion < ", treat_prop_thresh))
 p1
 
-filename = paste0("Use_as_fig12_Wildlife_and_RiskA_0.95", ".pdf")
+filename = paste0("4E_main_fig12_Wildlife_and_RiskA_0.95", ".pdf")
 plot_name <- paste0("output/ms_figs/", filename)
 my_ggsave(plot = p1, filename = plot_name, width = 10, height = 8)
 
