@@ -23,7 +23,7 @@ legend <- cowplot::get_legend(figA_with_legend)
 figAB <- ( (figX.1) / figX.2 / figX.3 ) + plot_layout(guides = 'collect') & 
   theme(legend.position = "none", axis.text = element_text(size = 10)) 
 figAB_with_legend <- (figAB + cowplot::ggdraw(legend)) + plot_layout(ncol = 2)
-my_ggsave(plot = figAB_with_legend, filename = "output/ms_figs/5B_spare_figX6.pdf", width = 8.5, height = 8.5) # best size
+my_ggsave(plot = figAB_with_legend, filename = "output/ms_figs/5G_spare_figX6.pdf", width = 8.5, height = 8.5) # best size
 
 # ##############################################################################
 figX.1 <- plots1T$plot_type6_Rres_final_treatment_code1_mainvecpop_TRUE_vector_value_20_fit_adj_0.8 + 
@@ -48,6 +48,6 @@ legend <- cowplot::get_legend(figA_with_legend)
 figAB <- ( (figX.1) / figX.2 / figX.3 ) + plot_layout(guides = 'collect') & 
   theme(legend.position = "none", axis.text = element_text(size = 10)) 
 figAB_with_legend <- (figAB + cowplot::ggdraw(legend)) + plot_layout(ncol = 2)
-my_ggsave(plot = figAB_with_legend, filename = "output/ms_figs/5B_spare_figX6B.pdf", width = 8.5, height = 8.5) # best size
+my_ggsave(plot = figAB_with_legend, filename = "output/ms_figs/5G_spare_figX6B.pdf", width = 8.5, height = 8.5) # best size
 
 # ##############################################################################
