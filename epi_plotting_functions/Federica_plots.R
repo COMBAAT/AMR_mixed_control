@@ -152,7 +152,8 @@ head(plot_merged, 20)
           hjust = 1
     ))
 
- ggsave("for_federica.pdf", p, height = 5, width = 10)
+ p
+ my_ggsave(p, "output/ms_figs/for_federica.pdf", height = 5, width = 10)
 #############################################
 
  plot_this_filtered <- plot_this1 %>% 

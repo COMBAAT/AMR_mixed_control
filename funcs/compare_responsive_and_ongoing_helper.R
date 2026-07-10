@@ -111,7 +111,24 @@ plot_type23 <- function(df, y_var, this_vector_measure,
     labs(colour = my_label("NW")) +
     my_theme() + 
     coord_cartesian(ylim = c(0, ymax), xlim = c(0, xmax))  +
-    scale_x_continuous(breaks = seq(0, xmax, length.out = 5))
+    scale_x_continuous(breaks = seq(0, xmax, length.out = 5)) #+
+    
+    # theme(
+    #   panel.grid.major = element_line(
+    #     colour = "grey90",
+    #     linewidth = 0.35
+    #   ),
+    #   panel.grid.minor = element_blank(),
+    #   panel.border = element_rect(
+    #     colour = "grey25",
+    #     fill = NA,
+    #     linewidth = 0.6
+    #   ),
+    #   plot.background = element_rect(
+    #     fill = "white",
+    #     colour = NA
+    #   )
+    # )
   p
 }
 

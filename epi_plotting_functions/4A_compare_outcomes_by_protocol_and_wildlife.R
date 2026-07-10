@@ -1,13 +1,11 @@
-rm(list = ls()[!grepl("^(plot|df|this_NW_set|this_vector_measure|saved_simulations)", ls())])
+
 source("funcs/plot_helper.R")
 source("funcs/compare_responsive_and_ongoing_helper.R")
 
-#this_NW_set <- c(0, 100, 200)
-#this_vector_measure <- "Baseline_vector_host_ratio"
-
 # Plotting uses saved_simulations and this_vector_measure; plot functions read in but do not use this_NW_set
-
-
+desired_treatments_per_year <- round(seq(0, 9, by = 0.5), 3)
+df_filtered_by_treatments_per_year <- saved_simulations %>%
+  filter( round(treatments_per_year, 3) %in% desired_treatments_per_year)
 ################################
 plots_row <- list()
 y_vars <- c("R0sen", "prevalence", "Incidence")
@@ -17,7 +15,7 @@ for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
   for (this_ttype in 1:3) {
-    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
+    plot_this <- df_filtered_by_treatments_per_year %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
       this_vector_measure, 
@@ -57,7 +55,7 @@ for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
   for (this_ttype in 1:3) {
-    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
+    plot_this <- df_filtered_by_treatments_per_year %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,
@@ -98,7 +96,7 @@ for (i in 1:n_vars) {
   y_var <- y_vars[i]
   plots_var <- list()
   for (this_ttype in 1:3) {
-    plot_this <- saved_simulations %>% filter(treatment_code == this_ttype)
+    plot_this <- df_filtered_by_treatments_per_year %>% filter(treatment_code == this_ttype)
     p <- plot_type23(
       plot_this, y_var,
       this_vector_measure,

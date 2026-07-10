@@ -1,4 +1,4 @@
-rm(list = ls()[!grepl("^(plot|df|this_NW_set|this_vector_measure|saved_simulations)", ls())])
+
 source("funcs/plot_helper.R")
 source("funcs/compare_responsive_and_ongoing_helper.R")
 

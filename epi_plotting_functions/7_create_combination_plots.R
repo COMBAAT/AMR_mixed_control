@@ -12,25 +12,9 @@ source("funcs/helper_functions.R")
 source("funcs/create_combination_plots_helper.R")
 #source("funcs/plots_for_grant_helper.R")
 
-# Load data files --------------------------------------------------------------
-load_latest_file <- TRUE
-if (load_latest_file == TRUE) {
-  latest_file <- get_latest_Rda_file()
-  load(latest_file)
-  path <- gsub(".Rda", "/", latest_file)
-  dir.create(path)
-} else {
-  load("output/April11_quick_proph.Rda")
-  path <- "output/April11_quick_proph//"
-  dir.create(path)
-}
-
-saved_simulations <- saved_simulations 
-
+path <- "output/ms_figs/"
 ################################################################################
 mainvecpop <- FALSE
-this_vector_measure_value <- 20
-this_vector_measure <- "Baseline_vector_host_ratio"
 this_NW <- 100
 R0_threshold <- 1.0
 this_insecticide <- 0.0

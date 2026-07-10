@@ -8,27 +8,8 @@ library(metR)
 
 # Source files and function
 source("funcs/plot_helper.R")
-source("funcs/helper_functions.R")
 source("funcs/output_baseline_params_and_scenarios.R")
 source("funcs/epi_outputs.R")
-
-# Load data files --------------------------------------------------------------
-load_latest_file <- TRUE
-if (load_latest_file == TRUE) {
-  latest_file <- get_latest_Rda_file()
-  load(latest_file)
-  folder_name <- gsub(".Rda", "/", latest_file)
-  dir.create(folder_name)
-} else {
-  load("output/6Mar2026_test1.Rda")
-  folder_name <- "output/test_scripts/"
-  dir.create(folder_name)
-}
-
-# Set plotting defaults
-this_NW_set <- c(0, 100, 200)
-this_vector_measure_value <- 20
-this_vector_measure <- "Baseline_vector_host_ratio"
                                                                                             
 # Create data subsets --------------------------------------------------------------
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)

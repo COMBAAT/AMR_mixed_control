@@ -56,3 +56,30 @@ prop_time_short_pregnancy <- DPF * pPF / denom2
 vec3 <- c(prop_time_fallow, prop_time_lactating, prop_time_normal_pregnancy, prop_time_short_pregnancy)
 vec3
 sum(vec3)
+
+
+
+##############################################################################
+days_infected <- 15
+vec_L <- rep("L", 30)
+vec_P <- rep("P", 20)
+vec_combined <- c(vec_L, vec_P)
+vec_long <- rep(vec_combined, 10000)
+vec_long
+
+ans <- c()
+start_state <- c()
+for (i in 1:10000) {
+  start_inf_position <- sample(1:length(vec_long), 1)
+  start_state <- c(start_state, vec_long[start_inf_position])
+  end_inf_position <- start_inf_position + (days_infected-1)
+  chunk <- vec_long[start_inf_position:end_inf_position]
+  chunk
+  days_lactating_and_infected <- sum(chunk == "L")
+  days_lactating_and_infected
+  ans <- c(ans, days_lactating_and_infected)
+}
+ans
+start_state
+sum(ans[ans > 0]) / sum(start_state == "L")
+
