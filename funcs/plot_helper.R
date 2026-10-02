@@ -137,11 +137,13 @@ my_label <- function(variable, split_across_lines = "default") {
   if (variable == "RiskA") this_label <- "Selection opportunity"
   if (variable == "prop_cattle_with_insecticide") this_label <- "Insecticide coverage"
   if (variable == "prop_cattle_with_insecticide" & split_across_lines == "other") this_label <- "Insecticide coverage \n "
+  if (variable == "prop_insecticide_percent") this_label <- "Cattle with insecticide coverage (%)"
   if (variable == "NW") this_label <- "Wildlife"
   if (variable == "K") this_label <- "Carrying capacity"
   if (variable == "K_host_ratio") this_label <- "Vector host ratio"
   if (variable == "ratio") this_label <- "Selective advantage \n to resistant strain"
   if (variable == "Rres_final") this_label <- "Rres at equilibrium"
+  if (variable == "Rres_final") this_label <- "Transmission potential"
   if (variable == "Rsen_final") this_label <- "Rsen at equilibrium"
   if (variable == "R0sen_gt_1") this_label <- "R0sen with control"
   if (variable == "Baseline_vector_population") this_label <- "Vector number"
@@ -203,7 +205,7 @@ ymax_function <- function(y_var) {
   } else if (y_var == "treatments_per_year") {
     ymax <- 8
   } else if (y_var == "RiskA") {
-    ymax <- 10
+    ymax <- 8
   } else if (y_var == "Incidence") {
     ymax <- 1250
   } else if (y_var == "prevalence") {
@@ -213,7 +215,7 @@ ymax_function <- function(y_var) {
   } else if (y_var == "No_trt_cat") {
     ymax <- 1250
   } else if (y_var == "Rres_final") {
-    ymax <- 10
+    ymax <- 8
   } else {
     ymax <- 1.0
   }
@@ -803,7 +805,7 @@ plot_other_landscape <- function(df, colour_var, max_value, ttype, panel_type = 
   if (mainvecpop == F) {
     plan = "Collective"
   } else {
-    plan = "Local"
+    plan = "Individual"
   }
   if (panel_type != "single") {
     plot <- plot + ggtitle(paste0(
@@ -1020,7 +1022,7 @@ plot_invasion_landscape <- function(prev_threshold, df, ttype, mainvecpop,
   if (mainvecpop == F) {
     plan = "Collective"
   } else {
-    plan = "Local"
+    plan = "Individual"
   }
   if (panel_type != "single") {
     plot <- plot + ggtitle(paste0(
