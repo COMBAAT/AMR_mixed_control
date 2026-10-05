@@ -16,13 +16,13 @@ plot_y_versus_prop_cattle_with_insecticide_facet_NW <- function(df, y_var, this_
       NW %in% this_NW_set,
       get(this_vector_measure) == this_vector_measure_value
     ) %>%
-    ggplot(aes(prop_cattle_with_insecticide, y, colour = treat_prop)) +
-    geom_point(size = 1) +
-    geom_line(linewidth = 1) +
-    xlab(this_xlab) +
+    ggplot(aes(x = treat_percentage, y, colour = treat_prop)) +
+    geom_point(size = 0.8) +
+    geom_line(linewidth = 0.8) +
+    xlab("Cattle with insecticide coverage (%)") +
     ylab(this_ylab) +
     ylim(0, ymax_function(y_var)) +
-    xlim(0, 0.8) +
+    xlim(0, 80) +
     labs(colour = my_label("treat_prop", split_across_lines = "other")) +
     facet_wrap(~NW, ncol = 3) +
     my_theme() + theme(legend.position = "bottom")
@@ -48,10 +48,10 @@ plot_y_versus_prop_cattle_with_insecticide_facet_NW_ttype3 <- function(df, y_var
       get(this_vector_measure) == this_vector_measure_value,
       proph_frequency %in% c(0, 1, 2, 3, 6, 8)
     ) %>%
-    ggplot(aes(prop_cattle_with_insecticide, y, colour = proph_frequency)) +
+    ggplot(aes(x = treat_percentage, y, colour = proph_frequency)) +
     geom_point(size = 1) +
     geom_line(linewidth = 1) +
-    xlab(this_xlab) +
+    xlab("Cattle with insecticide coverage (%)") +
     ylab(this_ylab) +
     ylim(0, ymax_function(y_var)) +
     labs(colour = "Doses per year") +

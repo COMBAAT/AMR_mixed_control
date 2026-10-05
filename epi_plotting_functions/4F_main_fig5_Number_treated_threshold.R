@@ -4,6 +4,7 @@ source("epi_plotting_functions/4F_plot_helper.R")
 
 for_plotting <- saved_simulations %>% 
   mutate(treat_percentage = 100 * treat_prop,
+         prop_insecticide_percent = 100 * prop_cattle_with_insecticide,
          No_trt_cat_curtailed = case_when(No_trt_cat > 100 ~ 105, TRUE ~ No_trt_cat),
          Number_treated = cut(No_trt_cat_curtailed, 
                               breaks = c(0, 10, seq(20, 105 + 20, by = 20)), include.lowest = TRUE),
@@ -13,7 +14,7 @@ for_plotting <- saved_simulations %>%
          Strategy = as.factor(treatment_code),
          facet_label = paste0("Wildlife: ", NW, "\nInsecticide: ", Insecticide),
          prevalence = prevalence_new,
-         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Cooperative",
+         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Collective",
                                           maintain_vector_pop == TRUE ~ "Individual"))
 
 # Define the full set of levels once, from the full plotting data
@@ -62,6 +63,19 @@ treat_prop_thresh <- 0.25
 p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "treat_prop", treat_prop_thresh)
 p3 <- p3 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
 
+treat_prop_thresh <- 200
+p1 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+p1 <- p1 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+
+treat_prop_thresh <- 100
+p2 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+p2 <- p2 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+
+treat_prop_thresh <- 50
+p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+p3 <- p3 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+
+
 pA <- p1 + p2 +p3 + plot_layout(guides = 'collect', axes = 'collect') 
 pA
 filename = paste0("4F_main_fig5A_responsive_", "Insecticide_strategy_", 
@@ -79,22 +93,22 @@ plot_this_filtered <- plot_this1 %>%
          NW == 100, prop_cattle_with_insecticide <= 0.8, Insecticide_strategy == this_insecticide_strategy,
          round(treatments_per_year, 3) %in% desired_treatments_per_year)
 
-treat_freq_thresh <- 6
+treat_freq_thresh <- 1
 p1 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "treatments_per_year", treat_freq_thresh) 
 p1 <- p1 + ggtitle(paste0("Max herd treatment\nfrequency ", treat_freq_thresh, " per year"))
 
 
-treat_freq_thresh <- 3
+treat_freq_thresh <- 0.5
 p2 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "treatments_per_year", treat_freq_thresh)
 p2 <- p2 + ggtitle(paste0("Max herd treatment\nfrequency ", treat_freq_thresh, " per year"))
 
 
-treat_freq_thresh <- 1
+treat_freq_thresh <- 0.25
 p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "treatments_per_year", treat_freq_thresh)
 p3 <- p3 + ggtitle(paste0("Max herd treatment\nfrequency ", treat_freq_thresh, " per year"))
 
 
-pB <- p1 + p2 + p3 + plot_layout(guides = 'collect') 
+pB <- p1 + p2 + p3 + plot_layout(guides = 'collect', axes = 'collect') 
 pB
 filename = paste0("4F_main_fig5B_ongoing_", "Insecticide_strategy_", 
                   this_insecticide_strategy, "_Number_treated.pdf")

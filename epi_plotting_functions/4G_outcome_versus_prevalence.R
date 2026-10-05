@@ -8,7 +8,7 @@ for_plotting <- saved_simulations %>%
          Strategy = as.factor(treatment_code),
          facet_label = paste0("Wildlife: ", NW, "\nInsecticide: ", Insecticide),
          prevalence = prevalence_new,
-         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Cooperative",
+         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Collective",
                                           maintain_vector_pop == TRUE ~ "Individual"))
 
 subset_for_plotting <- for_plotting %>% 

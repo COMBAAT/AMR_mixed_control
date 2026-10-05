@@ -8,8 +8,8 @@ source("epi_plotting_functions/Federica_plots_helper_function.R")
 # Settings
 ########################################################
 
-this_insecticide_strategy <- "Individual"
-this_baseline_vector_host_ratio <- 30
+this_insecticide_strategy <- "Collective"
+this_baseline_vector_host_ratio <- 20
 #this_wildlife <- 200
 max_insecticide <- 0.95
 
@@ -21,8 +21,16 @@ unique(saved_simulations$prop_cattle_with_insecticide)
 table(saved_simulations$prop_cattle_with_insecticide)
 
 nrow(saved_simulations)
+if (this_insecticide_strategy == "Individual") {
 df <- saved_simulations %>% 
-  filter(round(prop_cattle_with_insecticide, 3) %in% round(c(seq(0, 1.0, by = 0.05), 0.99), 3))
+  filter(round(prop_cattle_with_insecticide, 3) %in% round(c(seq(0, 1.0, by = 0.05)), 3))
+x_max <- 100
+}
+if (this_insecticide_strategy == "Collective") {
+  df <- saved_simulations %>% filter(round(prop_cattle_with_insecticide, 3) %in% round(c(seq(0, 1.0, by = 0.02), 0.99), 3)) %>% 
+    filter(prop_cattle_with_insecticide <= 0.5)
+  x_max <- 50
+}
 nrow(df)
 table(df$prop_cattle_with_insecticide)
 default_fitness <- unique(df$fit_adj)
@@ -69,15 +77,19 @@ for_plotting <- df_all_fitnesses %>%
     Strategy = as.factor(treatment_code),
     prevalence = prevalence_new,
     Insecticide_strategy = case_when(
-      maintain_vector_pop == FALSE ~ "Cooperative",
+      maintain_vector_pop == FALSE ~ "Collective",
       maintain_vector_pop == TRUE ~ "Individual"
     ),
     Fitness = factor(
       fit_adj_new,
       levels = c(0.9, 0.8, 0.7, 0.6, 0.5)
     ),
+    treatment_label = case_when(
+      laXbel == "proph_ongoing" ~ "Longlasting\nongoing",
+      laXbel == "responsive_curative" ~ "Responsive\ncurative",
+      laXbel == "responsive_longlasting" ~ "Responsive\nlonglasting"
+    )
   )
-
 
 subset_for_plotting <- for_plotting %>% 
   filter(Baseline_vector_host_ratio == this_baseline_vector_host_ratio)
@@ -102,7 +114,7 @@ plot_this_ongoing <- subset_for_plotting %>%
     treatments_per_year < treatments_per_year_thresh
   )
 
-
+max_RiskA <- 0.5
 ########################################################
 # 1.Responsive treatment strategies with treat prop on bdry
 ########################################################
@@ -111,17 +123,13 @@ variable_name <- "treat_prop"
 this_fitness <- 0.8
 plot_this3 <- plot_this_responsive %>% 
   filter(fit_adj_new == this_fitness) %>% mutate(
-facet_label = case_when(
-  laXbel == "proph_ongoing" ~ "Longlasting ongoing",
-  laXbel == "responsive_curative" ~ "Responsive curative",
-  laXbel == "responsive_longlasting" ~ "Responsive longlasting"
-),
-facet_label = paste0(facet_label, "\nWildlife ", NW)
+facet_label = paste0(treatment_label, "\nWildlife ", NW)
 )
 
 plot_merged_responsive <- make_plot_merged(
   plot_this3 = plot_this3,
   variable_name = variable_name,
+  group_vars = c("Wildlife", "treatment_label"),
   Rres_threshold = 1
 )
 
@@ -131,15 +139,17 @@ p_responsive <- make_safe_plot_original(
   plot_merged = plot_merged_responsive, 
   plot_this3 = plot_this3,
   fill_label = "Max recommended\ncase treatment\nproportion",
-  fill_as_factor = FALSE
+  fill_as_factor = FALSE,
+  facet_type = "grid2",
+  max_RiskA = max_RiskA
 ) +
 scale_fill_viridis_c(
   option = "plasma"
 )
 
-p_responsive
+p_responsive <- p_responsive + ggtitle(paste0(this_insecticide_strategy, " insecticide strategy"))
 
-plot_name <- "9_guidelines_responsive_strategy_by_treat_prop"
+plot_name <- "9A_guidelines_responsive_strategy_by_treat_prop"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
                     "_fitness_", this_fitness, ".pdf")
@@ -147,7 +157,7 @@ my_ggsave(
   p_responsive,
   file_name,
   height = 7,
-  width = 10
+  width = 13
 )
 
 ##################################################################
@@ -158,17 +168,13 @@ variable_name <- "No_trt_cat_curtailed"
 this_fitness <- 0.8
 plot_this3 <- plot_this_responsive %>% 
   filter(fit_adj_new == this_fitness) %>% mutate(
-    facet_label = case_when(
-      laXbel == "proph_ongoing" ~ "Longlasting ongoing",
-      laXbel == "responsive_curative" ~ "Responsive curative",
-      laXbel == "responsive_longlasting" ~ "Responsive longlasting"
-    ),
-    facet_label = paste0(facet_label, "\nWildlife ", NW)
+    facet_label = paste0(treatment_label, "\nWildlife ", NW)
   )
 
 plot_merged_responsive <- make_plot_merged(
   plot_this3 = plot_this3,
   variable_name = variable_name,
+  group_vars = c("Wildlife", "treatment_label"),
   Rres_threshold = 1
 )
 
@@ -178,16 +184,19 @@ p_responsive <- make_safe_plot_original(
   plot_merged = plot_merged_responsive,
   plot_this3 = plot_this3,
   fill_label = "Max recommended\nnumber of\ntreatments",
-  fill_as_factor = FALSE
+  fill_as_factor = FALSE,
+  facet_type = "grid2",
+  max_RiskA = max_RiskA,
+  x_max = x_max
 ) +
   scale_fill_viridis_c(
     option = "plasma",
     direction = -1 
   )
 
-p_responsive
+p_responsive <- p_responsive + ggtitle(paste0(this_insecticide_strategy, " insecticide strategy"))
 
-plot_name <- "9_guidelines_for_responsive_strategy_by_treatments_deliveredA"
+plot_name <- "9A_guidelines_for_responsive_strategy_by_treatments_deliveredA"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy,
                     "_fitness_", this_fitness, ".pdf")
@@ -195,7 +204,7 @@ my_ggsave(
   p_responsive,
   file_name,
   height = 7,
-  width = 10
+  width = 13
 )
 
 
@@ -207,17 +216,13 @@ variable_name <- "Number_treated"
 this_fitness <- 0.8
 plot_this3 <- plot_this_responsive %>% 
   filter(fit_adj_new == this_fitness) %>% mutate(
-    facet_label = case_when(
-      laXbel == "proph_ongoing" ~ "Longlasting ongoing",
-      laXbel == "responsive_curative" ~ "Responsive curative",
-      laXbel == "responsive_longlasting" ~ "Responsive longlasting"
-    ),
-    facet_label = paste0(facet_label, "\nWildlife ", NW)
+    facet_label = paste0(treatment_label, "\nWildlife ", NW)
   )
 
 plot_merged_responsive <- make_plot_merged(
   plot_this3 = plot_this3,
   variable_name = variable_name,
+  group_vars = c("Wildlife", "treatment_label"),
   Rres_threshold = 1
 )
 
@@ -227,16 +232,19 @@ p_responsive <- make_safe_plot_original(
   plot_merged = plot_merged_responsive,
   plot_this3 = plot_this3,
   fill_label = "Max recommended\nnumber of\ntreatments",
-  fill_as_factor = FALSE
+  fill_as_factor = FALSE,
+  facet_type = "grid2",
+  max_RiskA = max_RiskA,
+  x_max = x_max
 ) +
   scale_fill_viridis_d(
     option = "plasma",
     direction = -1 
   )
 
-p_responsive
+p_responsive <- p_responsive + ggtitle(paste0(this_insecticide_strategy, " insecticide strategy"))
 
-plot_name <- "9_guidelines_for_responsive_strategy_by_treatments_deliveredB"
+plot_name <- "9A_guidelines_for_responsive_strategy_by_treatments_deliveredB"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy,
                     "_fitness_", this_fitness, ".pdf")
@@ -244,7 +252,7 @@ my_ggsave(
   p_responsive,
   file_name,
   height = 7,
-  width = 10
+  width = 13
 )
 
 ##########################################################################
@@ -255,17 +263,13 @@ variable_name <- "Number_treated"
 this_fitness <- 0.8
 plot_this3 <- plot_this_ongoing %>% 
   filter(fit_adj_new == this_fitness) %>% mutate(
-    facet_label = case_when(
-      laXbel == "proph_ongoing" ~ "Longlasting ongoing",
-      laXbel == "responsive_curative" ~ "Responsive curative",
-      laXbel == "responsive_longlasting" ~ "Responsive longlasting"
-    ),
-    facet_label = paste0(facet_label, "\nWildlife ", NW)
+    facet_label = paste0(treatment_label, "\nWildlife ", NW)
   )
 
 plot_merged_ongoing <- make_plot_merged(
   plot_this3 = plot_this3,
   variable_name = variable_name,
+  group_vars = c("Wildlife", "treatment_label"),
   Rres_threshold = 1
 )
 
@@ -276,7 +280,10 @@ p_ongoing <- make_safe_plot_original(
   plot_merged = plot_merged_ongoing,
   plot_this3 = plot_this3,
   fill_label = "Max recommended\nnumber of\ntreatments",
-  fill_as_factor = TRUE
+  fill_as_factor = TRUE,
+  facet_type = "grid2",
+  max_RiskA = max_RiskA,
+  x_max = x_max
  ) +
   scale_fill_viridis_d(
     option = "plasma",
@@ -285,23 +292,30 @@ p_ongoing <- make_safe_plot_original(
 
 p_ongoing
 
-plot_name <- "9_guidelines_for_ongoing_strategy_by_treatments_delivered"
+plot_name <- "9A_guidelines_for_ongoing_strategy_by_treatments_delivered"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
                     "_fitness_", this_fitness, ".pdf")
 my_ggsave(
   p_ongoing,
   file_name,
-  height = 7,
-  width = 10
+  height = 4.5,
+  width = 13
 )
 
 ##############################################################
 ########################################################
 # 5.Responsive treatment by fitness and wildlife
 ########################################################
+for (this_treatment_code in c(1:2)) {
 variable_name <- "treat_prop"
-code <- 1
+code <- this_treatment_code
+if (code == 1) {
+  this_ggtitle = "Responsive curative drug treatment & insecticide"
+}
+if (code == 2) {
+  this_ggtitle = "Responsive longlasting drug treatment & insecticide"
+}
 plot_this3 <- plot_this_responsive %>% 
   filter(treatment_code == code, fit_adj_new %in% c(0.9, 0.7, 0.5))
 
@@ -312,14 +326,18 @@ plot_merged_responsive <- make_plot_merged(
   Rres_threshold = 1
 )
 
-head(plot_merged_responsive, 20)
+head(plot_merged_responsive)
 
 p_responsive <- make_safe_plot_original(
   plot_merged = plot_merged_responsive, 
   plot_this3 = plot_this3,
   fill_label = "Max recommended\ncase treatment\nproportion",
   fill_as_factor = FALSE,
-  facet_type = "grid"
+  facet_type = "grid1",
+  add_points = TRUE,
+  max_RiskA = max_RiskA,
+  x_max = x_max,
+  this_ggtitle = this_ggtitle
 ) +
   scale_fill_viridis_c(
     option = "plasma"
@@ -327,58 +345,23 @@ p_responsive <- make_safe_plot_original(
 
 p_responsive
 
-plot_name <- "8_guidelines_responsive_strategy_by_treat_prop"
+plot_name <- "8A_guidelines_by_treat_prop"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
-                    "_all_fitness", "code_", code, ".pdf")
+                    "_all_fitness", "code_", code, "_max_RiskA_", max_RiskA, "_grid1", ".pdf")
 my_ggsave(
   p_responsive,
   file_name,
-  height = 9,
-  width = 11
+  height = 7,
+  width = 13
 )
-
+}
 ##############################################################################
-variable_name <- "treat_prop"
-code <- 2
-plot_this3 <- plot_this_responsive %>% 
-  filter(treatment_code == code, fit_adj_new %in% c(0.9, 0.7, 0.5))
 
-plot_merged_responsive <- make_plot_merged(
-  plot_this3 = plot_this3,
-  variable_name = variable_name,
-  group_vars = c("Wildlife", "Fitness"),
-  Rres_threshold = 1
-)
-
-head(plot_merged_responsive, 20)
-
-p_responsive <- make_safe_plot_original(
-  plot_merged = plot_merged_responsive, 
-  plot_this3 = plot_this3,
-  fill_label = "Max recommended\ncase treatment\nproportion",
-  fill_as_factor = FALSE,
-  facet_type = "grid"
-) +
-  scale_fill_viridis_c(
-    option = "plasma"
-  )
-
-p_responsive
-
-plot_name <- "8_guidelines_responsive_strategy_by_treat_prop"
-file_name <- paste0("output/ms_figs/", plot_name, "_",
-                    this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
-                    "_all_fitness", "code_", code, ".pdf")
-my_ggsave(
-  p_responsive,
-  file_name,
-  height = 9,
-  width = 11
-)
 ##############################################################################
 variable_name <- "treatments_per_year"
 code <- 3
+this_ggtitle = "Longlasting ongoing drug treatment & insecticide"
 plot_this3 <- plot_this_ongoing %>% 
   filter(treatment_code == code, fit_adj_new %in% c(0.9, 0.7, 0.5))
 
@@ -394,23 +377,126 @@ head(plot_merged_ongoing, 20)
 p_ongoing <- make_safe_plot_original(
   plot_merged = plot_merged_ongoing, 
   plot_this3 = plot_this3,
-  fill_label = "Max recommended\nherd treatments\nper year",
+  fill_label = "Max recommended treatments\nper animal per year",
   fill_as_factor = FALSE,
-  facet_type = "grid"
+  facet_type = "grid1",
+  max_RiskA = max_RiskA,
+  x_max = x_max,
+  this_ggtitle = this_ggtitle
 ) +
   scale_fill_viridis_c(
     option = "plasma"
   )
 
-p_ongoing
+#p_ongoing
 
-plot_name <- "8_guidelines_responsive_strategy_by_treat_prop"
+plot_name <- "8A_guidelines_by_treatments_per_animal"
 file_name <- paste0("output/ms_figs/", plot_name, "_",
                     this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
-                    "_all_fitness", "code_", code, ".pdf")
+                    "_all_fitness", "code_", code, "_max_RiskA_", max_RiskA, "_grid1", ".pdf")
 my_ggsave(
   p_ongoing,
   file_name,
-  height = 9,
-  width = 11
+  height = 7,
+  width = 13
+)
+
+
+########################################################
+# 5.Responsive treatment by treatment label and wildlife
+########################################################
+for (this_treatment_code in c(1:2)) {
+  variable_name <- "Number_treated"
+  code <- this_treatment_code
+  if (code == 1) {
+    this_ggtitle = "Responsive curative drug treatment & insecticide"
+  }
+  if (code == 2) {
+    this_ggtitle = "Responsive longlasting drug treatment & insecticide"
+  }
+  plot_this3 <- plot_this_responsive %>% 
+    filter(treatment_code == code, fit_adj_new %in% c(0.9, 0.7, 0.5))
+  
+  plot_merged_responsive <- make_plot_merged(
+    plot_this3 = plot_this3,
+    variable_name = variable_name,
+    group_vars = c("Wildlife", "Fitness"),
+    Rres_threshold = 1
+  )
+  
+  head(plot_merged_responsive)
+  
+  p_responsive <- make_safe_plot_original(
+    plot_merged = plot_merged_responsive, 
+    plot_this3 = plot_this3,
+    fill_label = "Max recommended number\nof treatments per year",
+    fill_as_factor = FALSE,
+    facet_type = "grid1",
+    add_points = TRUE,
+    max_RiskA = max_RiskA,
+    x_max = x_max,
+    this_ggtitle = this_ggtitle
+  ) +
+    scale_fill_viridis_d(
+      option = "plasma",
+      direction = -1 
+    )
+  
+  p_responsive
+  
+  plot_name <- "8B_guidelines_by_number_treated"
+  file_name <- paste0("output/ms_figs/", plot_name, "_",
+                      this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
+                      "_all_fitness", "code_", code, "_max_RiskA_", max_RiskA, "_grid1", ".pdf")
+  my_ggsave(
+    p_responsive,
+    file_name,
+    height = 7,
+    width = 13
+  )
+}
+##############################################################################
+
+##############################################################################
+variable_name <- "Number_treated"
+code <- 3
+this_ggtitle = "Longlasting ongoing drug treatment & insecticide"
+plot_this3 <- plot_this_ongoing %>% 
+  filter(treatment_code == code, fit_adj_new %in% c(0.9, 0.7, 0.5))
+
+plot_merged_ongoing <- make_plot_merged(
+  plot_this3 = plot_this3,
+  variable_name = variable_name,
+  group_vars = c("Wildlife", "Fitness"),
+  Rres_threshold = 1
+)
+
+head(plot_merged_ongoing, 20)
+
+p_ongoing <- make_safe_plot_original(
+  plot_merged = plot_merged_ongoing, 
+  plot_this3 = plot_this3,
+  fill_label = "Max recommended treatments\n per year",
+  fill_as_factor = FALSE,
+  facet_type = "grid1",
+  max_RiskA = max_RiskA,,
+  x_max = x_max,
+  this_ggtitle = this_ggtitle
+) +
+  scale_fill_viridis_d(
+    option = "plasma",
+    direction = -1 
+  )
+
+p_ongoing
+
+plot_name <- "8B_guidelines_by_number_treated"
+file_name <- paste0("output/ms_figs/", plot_name, "_",
+                    this_baseline_vector_host_ratio, "_", this_insecticide_strategy, 
+                    "_all_fitness", "code_", code, "_max_RiskA_", max_RiskA, "_grid1", ".pdf")
+my_ggsave(
+  p_ongoing,
+  file_name,
+  height = 7,
+  width = 13
 )

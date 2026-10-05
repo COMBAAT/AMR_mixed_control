@@ -1,9 +1,11 @@
 
 source("epi_plotting_functions/4F_plot_helper.R")
+source("funcs/plot_helper.R")
 #########################################
 
 for_plotting <- saved_simulations %>% 
   mutate(treat_percentage = 100 * treat_prop,
+         prop_insecticide_percent = 100 * prop_cattle_with_insecticide,
          No_trt_cat_curtailed = case_when(No_trt_cat > 100 ~ 105, TRUE ~ No_trt_cat),
          Number_treated = cut(No_trt_cat_curtailed, 
                               breaks = c(0, 10, seq(20, 105 + 20, by = 20)), include.lowest = TRUE),
@@ -13,7 +15,7 @@ for_plotting <- saved_simulations %>%
          Strategy = as.factor(treatment_code),
          facet_label = paste0("Wildlife: ", NW, "\nInsecticide: ", Insecticide),
          prevalence = prevalence_new,
-         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Cooperative",
+         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Collective",
                                           maintain_vector_pop == TRUE ~ "Individual"))
 
 # Define the full set of levels once, from the full plotting data
@@ -90,7 +92,7 @@ p3 <- plot_boundary_tidy_Rres(plot_this_filtered, "treatments_per_year", treat_f
 p3 <- p3 + ggtitle(paste0("Max herd treatment\nfrequency ", treat_freq_thresh, " per year"))
 
 
-pB <- p1 + p2 + p3 + plot_layout(guides = 'collect') 
+pB <- p1 + p2 + p3 + plot_layout(guides = 'collect', axes = 'collect') 
 pB
 filename = paste0("4F_main_fig7B_ongoing_", "Insecticide_strategy_", 
                   this_insecticide_strategy, "_Rres.pdf")

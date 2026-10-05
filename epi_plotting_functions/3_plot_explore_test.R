@@ -15,21 +15,21 @@ source("funcs/epi_outputs.R")
 # select quick treatment (1), responsive treatment with prophylactic drug (2), ongoing prophylactic treatment (3)
 which_ttypes <- c(1:3)
 which_mainvecpop <- c(T, F)
-which_fit_adj <- c(0.8, 0.6, 0.95)
+which_fit_adj <- c(0.8)
  for (this_ttype in which_ttypes) {
    for (mainvecpop in which_mainvecpop) {
      plots <- list()
      for (this_fit_adj in which_fit_adj) {
 
-include_plot_type1 <- FALSE
-include_plot_type2 <- FALSE
-include_plot_type3 <- FALSE
-include_plot_type4 <- FALSE
+include_plot_type1 <- TRUE
+include_plot_type2 <- TRUE
+include_plot_type3 <- TRUE
+include_plot_type4 <- TRUE
 include_plot_type5 <- TRUE
 include_plot_type6 <- TRUE
-include_plot_type7 <- FALSE
-include_plot_type8 <- FALSE
-include_plot_type10 <- FALSE
+include_plot_type7 <- TRUE
+include_plot_type8 <- TRUE
+include_plot_type10 <- TRUE
 include_plot_type15 <- TRUE
 include_plot_type16 <- TRUE
 

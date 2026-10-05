@@ -18,7 +18,7 @@ scenarios$number <- 1:nrow(scenarios)
 new <- left_join(df_all, scenarios)
 nrow(new)
 
-new <- new %>% mutate(Collective_or_local = case_when(maintain_vector_pop == TRUE ~ "Local",
+new <- new %>% mutate(Collective_or_Individual = case_when(maintain_vector_pop == TRUE ~ "Individual",
                                                       maintain_vector_pop == FALSE ~ "Collective"),
                       Protocol = case_when(laXbel == "responsive_curative" ~ "Responsive curative",
                                            laXbel == "responsive_longlasting" ~ "Responsive longlasting",
@@ -100,7 +100,7 @@ p_responsive <- best_points_responsive %>%
   geom_point(aes(x = prop_cattle_with_insecticide, y = treat_prop, 
                  size = NW, 
                  colour = Baseline_vector_host_ratio)) +
-  facet_wrap(~ Protocol + Collective_or_local) +
+  facet_wrap(~ Protocol + Collective_or_Individual) +
   xlim(0, 1) + ylim(-0.1, 1) +
   labs(colour = my_label("Baseline_vector_host_ratio"), size = my_label("Wildlife")) +
   xlab(my_label("prop_cattle_with_insecticide")) +
@@ -115,7 +115,7 @@ p_ongoing <- best_points_ongoing %>%
   geom_point(aes(x = prop_cattle_with_insecticide, y = treatments_per_year, 
                  size = NW, 
                  colour = Baseline_vector_host_ratio)) +
-  facet_wrap(~ Protocol + Collective_or_local) +
+  facet_wrap(~ Protocol + Collective_or_Individual) +
   xlim(0, 1) + ylim(-1, 6) +
   labs(colour = my_label("Baseline_vector_host_ratio"), size = my_label("Wildlife")) +
   xlab(my_label("prop_cattle_with_insecticide")) +

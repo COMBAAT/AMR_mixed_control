@@ -13,7 +13,7 @@ for_plotting <- saved_simulations %>%
          Strategy = as.factor(treatment_code),
          facet_label = paste0("Wildlife: ", NW, "\nInsecticide: ", Insecticide),
          prevalence = prevalence_new,
-         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Cooperative",
+         Insecticide_strategy = case_when(maintain_vector_pop == FALSE ~ "Collective",
                                           maintain_vector_pop == TRUE ~ "Individual"))
 
 # Define the full set of levels once, from the full plotting data
@@ -47,7 +47,7 @@ subset_for_plotting <- for_plotting %>%
 #########################################
 #Responsive mode 
 #########################################
-this_insecticide_strategy <- "Cooperative"
+this_insecticide_strategy <- "Collective"
 this_insecticide_strategy <- "Individual"
 
 plot_this1 <- subset_for_plotting %>%

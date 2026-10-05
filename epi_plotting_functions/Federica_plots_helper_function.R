@@ -53,43 +53,14 @@ make_plot_merged <- function(
   return(plot_merged)
 }
 
-make_plot_merged_old <- function(plot_this3, variable_name, Rres_threshold = 1) {
-  
-  plot_boundary <- plot_this3 %>%
-    filter(Rres_final < Rres_threshold) %>% 
-    group_by(prop_cattle_with_insecticide, facet_label) %>% 
-    slice_min(order_by = prevalence_new, with_ties = FALSE) %>%
-    arrange(prop_cattle_with_insecticide)
-  
-  plot_maximum_prevalence <- plot_this3 %>% 
-    group_by(prop_cattle_with_insecticide, facet_label) %>%
-    slice_max(order_by = prevalence_new, with_ties = FALSE) %>%
-    arrange(prop_cattle_with_insecticide)
-  
-  plot_minimum_prevalence <- plot_this3 %>% 
-    group_by(prop_cattle_with_insecticide, facet_label) %>%
-    slice_min(order_by = prevalence_new, with_ties = FALSE) %>%
-    arrange(prop_cattle_with_insecticide)
-  
-  plot_merged <- data.frame(
-    #NW = plot_boundary$NW,
-    boundary_prevalence = plot_boundary$prevalence_new,
-    upper_prevalence = plot_maximum_prevalence$prevalence_new,
-    lower_prevalence = plot_minimum_prevalence$prevalence_new,
-    prop_insecticide = plot_boundary$prop_cattle_with_insecticide,
-    boundary_value = plot_boundary[[variable_name]],
-    facet_label = plot_boundary$facet_label
-  ) %>%
-    mutate(prop_insecticide_percent = 100 * prop_insecticide)
-  
-  return(plot_merged)
-}
 
 make_safe_plot_original <- function(plot_merged, plot_this3, fill_label, 
                                     fill_as_factor = FALSE,
-                                    facet_type = "wrap") {
-  
-  #plot_this3_Rres_gte_1 <- plot_this3 %>% filter(Rres_final >= 1)
+                                    facet_type = "wrap",
+                                    add_points = FALSE,
+                                    max_RiskA = 1,
+                                    x_max = 100,
+                                    this_ggtitle = "") {
   
   plot_merged_reduced <- plot_merged %>%
     filter(boundary_prevalence > 1e-6)
@@ -99,8 +70,15 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
       mutate(boundary_value = as.factor(boundary_value))
   }
   
-  zone_label1 <- "Recommended"
-  zone_label2 <- "May promote resistance"
+  plot_RiskA_lt_threshold <- plot_this3 %>% filter(RiskA < max_RiskA)
+  
+  zone_label1 <- "Recommended strategies"
+  zone_label2 <- "Strategies that may promote resistance"
+  zone_label3 <- "Strategies with lower selection"
+  
+  recommended_colour <- "#238B45"  # dark green
+  low_selection_colour <- "#74C476" # medium-light green
+  risk_colour <- "#D0D0D0"          # neutral grey 
   
   formatted_title <- "<span style='color:green4;'>Recommended</span> combinations of interventions to <br> reduce prevalence
  and <span style='color:green4;'>limit the spread of resistance </span>."
@@ -114,7 +92,7 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
         ymax = upper_prevalence,
         alpha = zone_label1
       ),
-      fill = "green4"
+      fill = recommended_colour
     ) +
     geom_ribbon(
       aes(
@@ -123,7 +101,14 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
         ymax = boundary_prevalence,
         alpha = zone_label2
       ),
-      fill = "grey80"
+      fill = risk_colour          #"grey80"
+    ) +
+    geom_point(data = plot_RiskA_lt_threshold, 
+               aes(y = prevalence_new,
+                   x = prop_insecticide_percent,
+                   alpha = zone_label3),
+               colour = low_selection_colour, #"green2", 
+               size = 0.6
     ) +
     geom_point(
       aes(
@@ -131,7 +116,7 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
         y = upper_prevalence,
         shape = "Insecticide only"
       ),
-      colour = "green4",
+      colour = recommended_colour, #"green4",
       fill = "white",
       stroke = 1
     ) +
@@ -146,25 +131,27 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
       colour = "black"
     ) +
     scale_alpha_manual(
-      values = setNames(c(1, 1), c(zone_label1, zone_label2))
+      values = setNames(c(1, 1, 1), c(zone_label1, zone_label2, zone_label3)),
+      breaks = c(zone_label1, zone_label3, zone_label2)
     ) +
     scale_shape_manual(
       values = setNames(c(21), c("Insecticide only"))
     ) +
     labs(
       x = "Cattle with insecticide coverage (%)",
-      y = "Prevalence\nachieved\nwith\nintegrated\ncontrol",
+      #y = "Prevalence\nachieved\nwith\nintegrated\ncontrol",
+      y = "Cattle prevalence under\nintegrated control",
+      #y = this_ylab,
       fill = fill_label,
       alpha = "Intervention outcome",
       shape = NULL
     ) +
+    ggtitle(this_ggtitle) +
     guides(
       fill = guide_legend(order = 3),
-      alpha = guide_legend(order = 1),
+      alpha = guide_legend(order = 1, override.aes = list(size = 3)),
       shape = guide_legend(order = 2)
-    ) +
-    ggtitle(formatted_title) +
-    #facet_wrap(~ facet_label) +
+      ) +
     my_theme() + 
     theme(
       legend.spacing.y = unit(0.3, "cm"),
@@ -172,18 +159,19 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
       legend.margin = margin(0, 0, 0, 0),
       plot.title = element_markdown(),
       axis.title.y = element_text(
-        angle = 0,
-        vjust = 0.5,
-        hjust = 1
-      )
+         angle = 0,
+        vjust = 0.5
+         #hjust = 1
+       )
     ) +
-    xlim(0, 100) + ylim(0, 0.8)
+    xlim(0, x_max) + 
+    ylim(0, 0.8)
   
   if (facet_type == "wrap") {
     p <- p + facet_wrap(~ facet_label)
   }
   
-  if (facet_type == "grid") {
+  if (facet_type == "grid1") {
     p <- p + facet_grid(
       rows = vars(Fitness),
       cols = vars(Wildlife),
@@ -191,16 +179,40 @@ make_safe_plot_original <- function(plot_merged, plot_this3, fill_label,
         Fitness = function(x) paste("Fitness\n", x),
         Wildlife = function(x) paste("Wildlife\n", x)
       )
-    ) +
-    theme(
-        strip.placement = "outside",
-        strip.text.y = element_text(angle = 0, face = "plain"),
-        strip.text.x = element_text(face = "bold")
+    )
+  }
+    if (facet_type == "grid2") {
+      p <- p + facet_grid(
+        rows = vars(treatment_label),
+        cols = vars(Wildlife),
+        labeller = labeller(
+          Fitness = function(x) paste("Regimen\n", x),
+          Wildlife = function(x) paste("Wildlife\n", x)
+        )
       )
+    }
+      
+    if (facet_type %in% c("grid1", "grid2")) {
+    p <- p + theme(
+      strip.placement = "outside",
+      axis.title = element_text(size = 16),
+      axis.text = element_text(size = 14),
+      
+      legend.title = element_text(size = 15),
+      legend.text = element_text(size = 13),
+      
+      strip.text.x = element_text(size = 15, face = "plain"),
+      strip.text.y = element_text(size = 15, angle = 0, face = "plain"),
+      
+      axis.title.y = element_text(
+        size = 16,
+        angle = 0,
+        vjust = 0.5
+      )
+    )
   }
   
   return(p)
 }
-
 
 
