@@ -40,7 +40,7 @@ data_with_K_selection <- data_with_K_selection %>%
     cov_lt_0.3 = prop_cattle_with_insecticide < 0.3, 
     Rres_gt_1 = case_when(Rres_final > 1 ~ "yes", TRUE ~ "no"),
     Insecticide_strategy = 
-             case_when(maintain_vector_pop == FALSE ~ "Cooperative",
+             case_when(maintain_vector_pop == FALSE ~ "Collective",
                        maintain_vector_pop == TRUE ~ "Individual"),
     NW_jitter = case_when(Baseline_vector_host_ratio == 15 ~ NW - 10,
                                    Baseline_vector_host_ratio == 25 ~ NW,
