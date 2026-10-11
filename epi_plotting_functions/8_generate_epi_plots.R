@@ -4,7 +4,7 @@ library(metR)
 source("funcs/helper_functions.R")
 
 # Load data files --------------------------------------------------------------
-load_latest_file <- FALSE
+load_latest_file <- TRUE
 if (load_latest_file == TRUE) {
   latest_file <- get_latest_Rda_file()
   load(latest_file)
@@ -20,6 +20,8 @@ if (load_latest_file == TRUE) {
 this_NW_set <- c(0, 100, 200)
 this_vector_measure_value <- 20
 this_vector_measure <- "Baseline_vector_host_ratio"
+
+saved_simulations <- saved_simulations %>% filter(NW %in% this_NW_set)
 
 # generate main text plots
 source("epi_plotting_functions/4A_compare_outcomes_by_protocol_and_wildlife.R") # fig 2 and 3
