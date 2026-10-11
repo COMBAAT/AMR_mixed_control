@@ -58,3 +58,7 @@ output/
 
 # useful folder
 not_for_github/
+
+# personal to-do list
+/TODO.md
+
