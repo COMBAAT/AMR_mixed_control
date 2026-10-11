@@ -29,7 +29,7 @@ run_one_scenario <- function(row, scenarios_df, user_inputs, return_trajectory =
     # if R0 >= 1.0 run full simulation
     inits <- set_inital_conditions2(params, initial_sensitive_infections = 1, initial_resistant_infections = 0)
     inits2 <- adjust_inits(inits)
-    times <- seq(0, this_scenario$max_time, 1)
+    times <- c(0, this_scenario$max_time/2, this_scenario$max_time) # seq(0, this_scenario$max_time, 1)
   }
   
   ## RUN MODEL ----
