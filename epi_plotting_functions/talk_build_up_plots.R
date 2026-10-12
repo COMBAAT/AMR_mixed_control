@@ -1,11 +1,14 @@
 # =========================================================
 # Build-up plots for talks: single-panel versions of main figs 5-7
+# (fig 5: number treated, fig 6: selection opportunity, fig 7: Rres)
 #
 # Each call to plot_build_up() draws ONE panel at a given stage:
 #   stage 1: insecticide only
 #   stage 2: + all drug-treatment scenarios (grey)
 #   stage 3: + Rres = 1 threshold line
-#   stage 4: drug points coloured by the chosen outcome
+#   stage 4: drug points with Rres > 1 coloured by the chosen outcome,
+#            the rest still grey (introduces where resistance can invade)
+#   stage 5: all drug points coloured by the chosen outcome
 #            (Rres_final, RiskA or No_trt_cat)
 #
 # Axes, panel size and legend position are fixed across stages, so the
@@ -80,7 +83,7 @@ outcome_scale <- function(outcome) {
 
 # ---- main plotting function ----------------------------------------------
 plot_build_up <- function(plot_data,
-                          stage = 4,
+                          stage = 5,
                           outcome = "Rres_final",
                           variable = "treat_prop",
                           variable_thresh = 0.95,
@@ -122,8 +125,17 @@ plot_build_up <- function(plot_data,
   # stage 2+: drug scenarios
   if (stage >= 2) {
     if (stage >= 4) {
+      # stage 4 colours only the points where resistance can invade;
+      # the legend is the same as stage 5 so the panel doesn't move
+      coloured <- if (stage == 4) filter(drugs, Rres_final > 1) else drugs
+      if (stage == 4) {
+        p <- p +
+          geom_point(data = filter(drugs, Rres_final <= 1),
+                     aes(prop_insecticide_percent, prevalence),
+                     colour = col_drug_grey, size = 2.6)
+      }
       p <- p +
-        geom_point(data = drugs,
+        geom_point(data = coloured,
                    aes(prop_insecticide_percent, prevalence,
                        colour = .data[[outcome]]),
                    size = 2.6) +
@@ -206,7 +218,7 @@ plot_build_up <- function(plot_data,
 
 # ---- save a full series ---------------------------------------------------
 save_build_up_series <- function(plot_data, name, outcome = "Rres_final",
-                                 stages = 1:4, ...) {
+                                 stages = 1:5, ...) {
   for (s in stages) {
     p <- plot_build_up(plot_data, stage = s, outcome = outcome, ...)
     f <- paste0(talk_folder, name, "_stage", s, ".pdf")
@@ -236,8 +248,12 @@ load(data_file)
 dat_resp_cur <- prepare_talk_data(saved_simulations, this_treatment_code = 1)
 
 save_build_up_series(dat_resp_cur, "responsive_curative_Rres",
-                     outcome = "Rres_final", stages = 1:4)
+                     outcome = "Rres_final", stages = 1:5)
 
 # Same panel recoloured for selection opportunity (fig 6A) - final stage only
 save_build_up_series(dat_resp_cur, "responsive_curative_RiskA",
-                     outcome = "RiskA", stages = 4)
+                     outcome = "RiskA", stages = 5)
+
+# Same panel recoloured for number of drug treatments (fig 5A) - final stage only
+save_build_up_series(dat_resp_cur, "responsive_curative_Number_treated",
+                     outcome = "No_trt_cat", stages = 5)
