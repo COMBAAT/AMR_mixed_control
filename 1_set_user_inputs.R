@@ -10,8 +10,8 @@ get_user_inputs <- function() {
     use_root_functions = TRUE,
     append_current_time_to_output_file = FALSE,
     folder = "output/",
-    general_descriptor = "11Oct2026",
-    current_descriptor = "_n6_high_insecticide_resolution"
+    general_descriptor = "12Oct2026",
+    current_descriptor = "_n6_low_insecticide_resolution_before"
   )
   user_inputs
 }
@@ -28,13 +28,13 @@ create_multiple_scenarios_new <- function() {
   treat_propB <- seq(0.91, 0.99, by = 0.04)
   treat_prop <- c(treat_propA, treat_propB) # treatment proportion of cattle with trypanocides
   # do not set prop_cattle_with_insecticide to 1
-  prop_cattle_with_insecticide <- seq(0.0, 0.99, by = 0.01)
+  prop_cattle_with_insecticide <- seq(0.0, 0.99, by = 0.1)
   #prop_cattle_with_insecticide <- c(0, 0.4, 0.5, 0.6) #seq(0, 0.99, by = 0.05)
   
   days_per_year <- set_days_per_year()
   maintain_vector_pop <- c(TRUE, FALSE) # whether to maintain vector population at carrying capacity or not
   prop_prophylaxis_at_birth <- c(0.0)
-  treatments_per_year <- c(seq(0, 9, by = 0.05))
+  treatments_per_year <- c(seq(0, 9, by = 1)) #c(seq(0, 9, by = 0.05))
   fit_adj <- 0.8
   birth_adj <- 2.0
   dose_adj <- 1.0
