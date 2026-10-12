@@ -63,17 +63,17 @@ treat_prop_thresh <- 0.25
 p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "treat_prop", treat_prop_thresh)
 p3 <- p3 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
 
-treat_prop_thresh <- 200
-p1 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
-p1 <- p1 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
-
-treat_prop_thresh <- 100
-p2 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
-p2 <- p2 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
-
-treat_prop_thresh <- 50
-p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
-p3 <- p3 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+# treat_prop_thresh <- 200
+# p1 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+# p1 <- p1 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+# 
+# treat_prop_thresh <- 100
+# p2 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+# p2 <- p2 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
+# 
+# treat_prop_thresh <- 50
+# p3 <- plot_boundary_tidy_Number_treated(plot_this_filtered, "No_trt_cat", treat_prop_thresh) 
+# p3 <- p3 + ggtitle(paste0("Maximum proportion\nof cases treated: ", treat_prop_thresh))
 
 
 pA <- p1 + p2 +p3 + plot_layout(guides = 'collect', axes = 'collect') 
